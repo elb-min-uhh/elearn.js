@@ -855,7 +855,7 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
 	color: white;
 	background: #888;
 	margin: -5px 0 0;
-	text-align: center;
+	text-align: left;
 	padding: 10px 60px 10px;
 	border-radius: 0 0 5px 5px;
 	border-bottom: 15px solid #888;
