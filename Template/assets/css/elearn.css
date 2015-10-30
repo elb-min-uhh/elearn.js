@@ -1078,8 +1078,10 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
   }
   
   #navigation {
-	font-size: 1em;
-  	display:none;
+  	display:none !important;
+  }
+  .skip-arrows {
+    display: none !important;
   }
   h2 {page-break-before:always;}
 }
