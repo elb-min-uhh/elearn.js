@@ -223,7 +223,7 @@ function showSectionOverview() {
 	overviewShown = !overviewShown;
 	if(!overviewShown) {
 		$('.section-overview').hide();
-		$('#btnExp').removeClass("mirrorY");
+		$('#btnExpSym').removeClass("mirrorY");
 		if(!allShown) {
 		    setDirectionButtonsEnabledIdx(visSection);
 		}
@@ -234,7 +234,7 @@ function showSectionOverview() {
 	else {
 		justOpenedOverview = true;
 		$('.section-overview').show();
-		$('#btnExp').addClass("mirrorY");
+		$('#btnExpSym').addClass("mirrorY");
 		setDirectionButtonsEnabled(false);
 	}
 }
@@ -246,6 +246,7 @@ function showSectionOverview() {
 $(document).on("click", function(e){
 	if(!$(e.target).is(".section-overview *")
 		&& !$(e.target).is("#btnExp")
+		&& !$(e.target).is("#btnExp *")
 		&& overviewShown) {
 		showSectionOverview();
 	}

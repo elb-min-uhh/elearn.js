@@ -76,16 +76,7 @@ body {
 	margin-top: -5px;
 }
 
-#nav-title {
-	pointer-events: none;
-    margin-left: 5px;
-    max-width: calc(100% - 130px - 142px - 5px);
-    overflow:hidden;
-    white-space:nowrap;
-    float:left;
-}
-
-#btnAll,#btnExp,#btnMenu, #btnHelpSym {
+#btnAll,#btnExpSym,#btnMenu, #btnHelpSym {
 	color: rgb(204,204,204);
 	font-size: 180%;
 	display: inline-block;
@@ -107,6 +98,23 @@ body {
 #btnAllText {
       margin-left: 5px;
       float: left;
+}
+
+#btnExp {
+    width: calc(100% - 100px - 142px - 5px);
+    overflow:hidden;
+    white-space:nowrap;
+}
+
+#btnExpSym {
+    float: left;
+    width: 22px;
+    display: inline-block;
+}
+
+#nav-title {
+    margin-left: 5px;
+    float:left;
 }
 
 #btnHelp {
@@ -137,7 +145,7 @@ body {
     float: right;
 }
 
-#btnAllCon:hover *, #btnExp:hover, #btnMenu:hover, #btnHelp:hover * {
+#btnAllCon:hover *, #btnExp:hover *, #btnMenu:hover, #btnHelp:hover * {
 	text-decoration: none;
 	color: #fff;
 }
@@ -1052,8 +1060,8 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     #btnAllText, #btnHelpText {
     	display:none;
     }
-    #nav-title {
-        max-width: calc(100% - 30px - 142px - 5px);
+    #btnExp {
+        width: calc(100% - - 142px - 5px);
     }
     #btnHelp {
     	margin-right: 0;
