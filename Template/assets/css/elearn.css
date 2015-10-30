@@ -748,12 +748,12 @@ div.slider-nav ul.img-gallery li {
 	border-right: 5px solid #444;
 	box-sizing: border-box;
 	opacity: 0.5;
+	overflow: hidden;
 	cursor: pointer;
 }
 
-div.slider-nav ul.img-gallery li img{
-    height: 100%;
-    width: 100%;
+div.slider-nav ul.img-gallery li img {
+    max-width: none;
 }
 
 div.slider-nav ul.img-gallery li:hover{

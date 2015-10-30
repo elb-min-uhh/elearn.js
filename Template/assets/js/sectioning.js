@@ -668,6 +668,33 @@ function resizeNavigationSliders() {
             height: liHeight + "px",
             transform: "translate3d(" + x + "px, 0px, 0px)"
         });
+        // Set Image Size
+        var alerted = false;
+        // Zur korrekten größen Berechnung muss das zurückgesetzt werden.
+        ul.children('li').find('img').css({"width":"", "height":""});
+        ul.children('li').find('img').each(function(i,e) {
+            var img = $(this);
+            getImageSize(img, function(width, height){
+                if(liHeight > 0) {
+                    var ratio = width/height;
+                    if(ratio > 4/3) {
+                        var newWidth = (liHeight * ratio);
+                        var leftPx = liWidth/2 - newWidth/2;
+                        img.css("height", "100%");
+                        img.css("width", 75*ratio + "%");
+                        img.css("left", leftPx + "px");
+                        img.css("top", "");
+                    }
+                    else if(ratio < 4/3) {
+                        img.css("width", "100%");
+                        var topPx = liHeight/2 - (liWidth * (1/ratio))/2;
+                        img.css("height", "");
+                        img.css("left", "");
+                        img.css("top", topPx + "px");
+                    }
+                }
+            });
+        });
         slider.css("height", liHeight + "px");
     });
 }
