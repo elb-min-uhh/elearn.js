@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<meta name="keywords" content="Key, Words">
+		<meta name="description" content="Hier Beschreibung einfügen">
+		<meta name="author" content="Name Autor">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" type="text/css" href="assets/css/elearn.css">
+		
+		
+		<link rel="stylesheet" type="text/css" href="assets/css/quiz.css">
+		
+		<script type="text/javascript" src="assets/js/min.js"></script> <!-- von Uni verwendetes JQuery -->
+		<script type="text/javascript" src="assets/js/md5.js"></script> <!-- stellt die JS-Funktion 'encryptMD5(str)' zur Verfügung, mit der sich Strings verschlüsseln lassen -->
+		<script type="text/javascript" src="assets/js/quiz.js"></script> <!-- Quiz Script -->
+		<script type="text/javascript" src="assets/js/jquery.qrcode.min.js"></script> <!-- QR-Code Generator -->
+		<script type="text/javascript" src="assets/js/sectioning.js"></script> <!-- Sectioning -->
+		<script>
+		    window.onload = function() {
+                showAllSections();
+                showSection(0);
+            }
+        </script>
+		
+		<title>Name</title>
+	</head>
+	<body>
+		<div id="wrap">
+            <!-- Arrow Left and Right -->
+			<div class='skip-arrows'>
+				<div onclick='javascript: showPrev();' id='btnPrev' class="icon-back before-padding btn"></div>
+				<div onclick='javascript: showNext();' id='btnNext' class="icon-next before-padding btn"></div>
+			</div>
+            
+			<!-- Container for Overview -->
+            <div class='section-overview'></div>
+            
+			<div id="navigation">
+				<!-- Grey Top Menu-bar - Reihenfolge wichtig -->
+				<div id="nav-bar">
+					<div onclick='javascript: showAllSections();' id='btnAllCon' class ='btn' title="Zeige/verstecke Bereiche"><div class="icon-font" id='btnAll'>s</div><div id="btnAllText">Ansicht</div></div>
+					<div onclick='javascript: showSectionOverview();' id='btnExp' class ='icon-font btn' title="Inhaltsverzeichnis">c</div>
+					<div id="nav-title">Name des Moduls</div>
+					<div onclick='javascript: toggleSideMenu(isSideMenuVisible());' id='btnMenu' class ='icon-font btn' title="Menü">m</div>
+                    <div onclick='javascript: startHelp();' id='btnHelp' class ='btn' title="Zeige/verstecke Bereiche"><div class="icon-font" id='btnHelpSym'>q</div><div id="btnHelpText">Hilfe</div></div>
+					<div style="clear:both"></div>
+				</div>
+				
+				<!-- Touch Gesture Elements -->
+				<div class='touchScroll' id='rightTouch'><div><p>n</p></div></div>
+				<div class='touchScroll' id='leftTouch'><div><p>b</p></div></div>
+
+				<!-- Progress bar -->
+				<div id='progressback'><div id='progressbar'></div></div>
+				
+				<!-- SIDE MENU -->
+				<div class='menu-wrap'></div>
+			</div>
+            <div id="qr_overlay"><div id="qrcode"></div></div>
+            
+            
+            <!-- Page Info -->
+            <div class="lb-wrap" id="info">
+                <div class="lightbox">
+                    <h3>Info Titel</h2>
+                    <table>
+                        <tr>
+                            <td>Version:</td><td>0.1</td>
+                        </tr>
+                        <tr>
+                            <td>Autor:</td><td>eLearning Büro</td>
+                        </tr>
+                        <tr>
+                            <td>Institution:</td><td>Universität Hamburg</td>
+                        </tr>
+                        <tr>
+                            <td>Lizenz:</td><td>abc</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+			<div class="page">
+                <section name="Titel">
+                    <h2 id="toc_0">Titel des Moduls</h2>
+
+                    <p><img src="assets/img/img_typografie_und_raster_start.png" alt="Typografie und Raster 01"></p>
+                </section>
+                
+                <!-- Slider/Karussel Beispiele -->
+                <section name="Slider">
+					<h2 id="test">Slider</h2>
+                    
+                    Automatische Höhenanpassung <br>
+                    Loop aktiviert (Vom letzten zum ersten und umgekehrt) <br>
+                    Navigationsleiste mit Vorschaubildern <br>
+					<div class="slider preview-nav loop">
+						<ul class="img-gallery" id="x">
+							<li><img src="assets/img/img_sichtbaresLicht.png" alt="Sichtbares Licht" /><p>Test text test text</p></li>
+                            <li><img src="assets/img/img_farbe_farbwirkungen.png" alt="Farbwirkungen" /></li>
+                            <li><img src="assets/img/img_additives_farbmodell_01.png" alt="Sichtbares Licht" /></li>
+							<li><img src="assets/img/img_farbeansichkontrast.png" alt="Farbe-an-sich-Kontrast" /></li>
+							<li><img src="assets/img/img_hell_dunkel_kontrast.png" alt="Hell-Dunkel-Kontrast" /></li>
+							<li><img src="assets/img/img_kaltwarmkontrast.png" alt="Kalt-Warm-Kontrast" /></li>
+						</ul>
+					</div>
+						
+                    <br>
+                    Höhe variabel, mit max-height
+                    <div class="slider">
+                        <ul class="img-gallery" style="max-height: 300px">
+                            <li><img src="assets/img/img_sichtbaresLicht.png" alt="Sichtbares Licht" /></li>
+                            <li><img src="assets/img/img_farbe_farbwirkungen.png" alt="Farbwirkungen" /></li>
+                            <li><img src="assets/img/img_additives_farbmodell_01.png" alt="Sichtbares Licht" /></li>
+                        </ul>
+                    </div>
+                    <br>
+                    Höhe fest, vorgegeben durch höchstes Bild
+                    <div class="slider preview-nav">
+                        <ul class="img-gallery fixed-size">
+                            <li><img src="assets/img/img_sichtbaresLicht.png" alt="Sichtbares Licht" /></li>
+                            <li><img src="assets/img/img_farbe_farbwirkungen.png" alt="Farbwirkungen" /></li>
+                            <li><img src="assets/img/img_additives_farbmodell_01.png" alt="Sichtbares Licht" /></li>
+							<li><img src="assets/img/img_farbeansichkontrast.png" alt="Farbe-an-sich-Kontrast" /></li>
+							<li><img src="assets/img/img_hell_dunkel_kontrast.png" alt="Hell-Dunkel-Kontrast" /></li>
+							<li><img src="assets/img/img_kaltwarmkontrast.png" alt="Kalt-Warm-Kontrast" /></li>
+                        </ul>
+                    </div>
+                    <br>
+                    Höhe fest, vorgegeben durch max-height
+                    <div class="slider">
+                        <ul class="img-gallery fixed-size" style="max-height: 200px">
+                            <li><img src="assets/img/img_sichtbaresLicht.png" alt="Sichtbares Licht" /></li>
+                            <li><img src="assets/img/img_farbe_farbwirkungen.png" alt="Farbwirkungen" /></li>
+                            <li><img src="assets/img/img_additives_farbmodell_01.png" alt="Sichtbares Licht" /></li>
+                        </ul>
+                    </div>
+                    
+                </section>
+                
+                <!-- Quizelemente -->
+                <section name="Quiz">
+                
+                    <!-- FRAGE 1 -->
+                    <div class="question">
+                        <h4>Freitext Frage</h4> <!-- Fragentext -->
+
+                        <!-- 
+                        Feld für Lösung 
+                        Kann in diesem Fall so kopiert werden, da Freitext.
+                        -->
+                        <div class="answers">
+                            <label>Lösung: <input type="text" name="q"/></label> 
+                        </div>
+
+                        <!-- Feedback für eine richtige Antwort -->
+                        <div class="feedback correct">
+                            Richtig
+                        </div>
+
+                        <!-- Feedback für eine falsche Antwort -->
+                        <div class="feedback incorrect">
+                            Falsch
+                        </div>
+
+                        <!-- richtige Antwortmöglichkeiten in md5 verschlüsselter Form -->
+                        <!-- eine der unverschlüsselten Antworten muss eingegeben werden -->
+                        <a class="ans">693da517cf61c81742ef090221bfd5d6</a> <!-- "antwort" -->
+                        <a class="ans">e1874c4c3623fb7cae62903a2d96b378</a> <!-- "Antwort" -->
+                    </div>
+                    <!-- Buttons die angezeigt werden. Beide müssen für das Skript vorhanden sein -->
+                    <button class="quizButton">Lösen</button><button class="quizButton weiter">Zurücksetzen</button>
+                    
+                    
+                    <!-- FRAGE 2 -->
+                    <div class="question">
+                        <h4>Fragentext 1</h4>
+
+                        <div class="answers">
+                            <!-- Checkboxen zur Auswahl -->
+                            <!-- checkbox = Mehrfachauswahl, radio = Einfachauswahl -->
+                            <label><input type="checkbox" name="q" value="Antwort 1"/>Antwort 1</label>
+                            <label><input type="checkbox" name="q" value="Antwort 2"/>Antwort 2</label>
+                        </div>
+
+                        <div class="feedback correct">
+                            Richtig
+                        </div>
+
+                        <div class="feedback incorrect">
+                            Falsch
+                        </div>
+
+                        <!-- Der value Wert der richtigen Antwort in md5 verschlüsselt -->
+                        <a class="ans">bf59e4d5669c89516bbd3f3732b15180</a> <!-- "Antwort 1" -->
+                    </div>
+                    <button class="quizButton">Lösen</button><button class="quizButton weiter">Zurücksetzen</button>
+                    
+                    
+                    <!-- FRAGE 3 -->
+                    <div class="question">
+                        <h4>Wozu gehört dieses Bild?</h4>
+                        <img src="assets/img/img_farbeansichkontrast.png"/>
+
+                        <div class="answers" style="line-height: 0;">
+                            <!-- Bilder anstatt Texte innerhalb der Auswahl -->
+                            <label class="img_radio"><input type="radio" name="q" value="arrow_r_d.png"/><img src ="assets/img/img_hell_dunkel_kontrast.png" style="max-width: 250px;"/></label>
+                            <label class="img_radio"><input type="radio" name="q" value="arrow_r.png"/><img src ="assets/img/img_kaltwarmkontrast.png" style="max-width: 250px;"/></label>
+                        </div>
+
+                        <div class="feedback correct">
+                            Richtig
+                        </div>
+
+                        <div class="feedback incorrect">
+                            Falsch
+                        </div>
+
+                        <a class="ans">df1f01be3dda24652d83495bcdc904ad</a> <!-- "arrow_r.png" -->
+                    </div>
+                    <button class="quizButton">Lösen</button><button class="quizButton weiter">Zurücksetzen</button>
+                </section>
+            </div>
+		</div>
+	</body>
+</html>
