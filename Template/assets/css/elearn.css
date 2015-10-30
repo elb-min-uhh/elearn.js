@@ -853,10 +853,11 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
 	display: none;
 	position: relative;
 	color: white;
-	background: #444;
-	margin: -5px 0 5px;
+	background: #888;
+	margin: -5px 0 0;
 	text-align: center;
 	padding: 10px 60px 10px;
+	border-radius: 0 0 5px 5px;
 	border-bottom: 15px solid #888;
 }
 
