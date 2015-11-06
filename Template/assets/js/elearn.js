@@ -935,7 +935,7 @@ function addTouchToSections() {
 	        while(!p.is("body") && !p.is("label")) {
 	            p = p.parent();
 	        }
-	        if(!p.is("label")) preventDefault();
+	        if(!p.is("label")) event.preventDefault();
 	    }
 		clickedAlready = true;
 	});
