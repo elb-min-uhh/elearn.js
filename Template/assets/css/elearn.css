@@ -101,19 +101,33 @@ body {
 }
 
 #btnExp {
+    position: relative;
     width: calc(100% - 100px - 142px - 5px);
     overflow:hidden;
     white-space:nowrap;
 }
 
+#btnExp:before {
+    content: " ";
+    height: 100%;
+    width: 10px;
+    position: absolute;
+    right: 0;
+    background: -webkit-linear-gradient(right, #666666, rgba(102, 102, 102, 0)); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, #666666, rgba(102, 102, 102, 0)); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, #666666, rgba(102, 102, 102, 0)); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to left, #666666, rgba(102, 102, 102, 0)); /* Standard syntax */
+}
+
 #btnExpSym {
+    position: absolute;
     float: left;
     width: 22px;
     display: inline-block;
 }
 
 #nav-title {
-    margin-left: 5px;
+    margin-left: 25px;
     float:left;
 }
 
@@ -1062,7 +1076,7 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     	display:none;
     }
     #btnExp {
-        width: calc(100% - - 142px - 5px);
+        width: calc(100% - 142px - 5px);
     }
     #btnHelp {
     	margin-right: 0;
