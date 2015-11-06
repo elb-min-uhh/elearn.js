@@ -1,8 +1,10 @@
 /*
-* v0.4 JavaScript SectionSort - by Arne Westphal
+* v0.5 JavaScript SectionSort - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 */
+
+var VERSION_NR = "0.5"
 
 var visSection = 0;
 var allShown = false;
@@ -16,6 +18,7 @@ var navigationTitle = "";
 // --------------------------------------------------------------------------------------
 
 $(document).ready(function() {
+    initiateInfo();
     initiateSections();
     showAllSections();
     initiateSideMenu();
@@ -295,6 +298,29 @@ function toggleSideMenu(isVisible) {
 */
 function isSideMenuVisible() {
 	return ($('#sideMenu').css('right') == (0 + "px"));
+}
+
+
+/**
+* Initialisiert den footer des Info Bereichs.
+*/
+function initiateInfo() {
+    $('#info').find('.lightbox').append('<div class="elearn-info">'
+        + 'Benutzt das eLearn.js Script Version ' + VERSION_NR + '. '
+        + '<br>'
+        + 'Erstellt vom eLearning Büro der MIN-Fakultät der Universität Hamburg. '
+        + '<a href="https://www.min.uni-hamburg.de/de/imprint.html">Impressum</a>'
+        + '</div>');
+    $('#info').find('.lightbox').append("<div class='support'><small>Dieses "
+        + "Vorhaben wird innerhalb "
+        + "des gemeinsamen Bund-Länder-Programms für bessere Studienbedingungen "
+        + "und mehr Qualität in der Lehre aus Mitteln des Bundesministerium für "
+        + "Bildung und Forschung unter dem Förderkennzeichen 01PL12033 "
+        + "gefördert. Die Verantwortung für den Inhalt dieser Veröffentlichung "
+        + "liegt bei den Autor/-innen.</small>"
+        + '<img src="assets/img/logo-bmbf.gif" alt="Logo vom Bundesministerium für Bildung und Forschung">'
+        + '<div style="clear: both;">'
+        +"</div>");
 }
 
 /**
