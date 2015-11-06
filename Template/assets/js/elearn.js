@@ -1,5 +1,5 @@
 /*
-* v0.5 JavaScript SectionSort - by Arne Westphal
+* v0.5 JavaScript eLearn.js - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 */
