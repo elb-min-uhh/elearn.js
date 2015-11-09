@@ -195,7 +195,7 @@ function getCorrectForText(labels, c) {
 */
 function getCorrectAnswers(div) {
 	var c = [];
-	div.children('a.ans').each(function(i) {
+	div.find('a.ans').each(function(i) {
 		c[c.length] = $(this).html();
 	});
 	return c;
