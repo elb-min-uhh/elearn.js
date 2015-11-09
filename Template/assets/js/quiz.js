@@ -21,6 +21,9 @@ function init() {
 	// Keine Tastaturnavigation
 	keyAllowed = false;
 	
+    // Buttons hinzufügen
+    $('div.question').after('<button class="quizButton">Lösen</button><button class="quizButton weiter">Zurücksetzen</button>');
+	
 	// Hide Feedbacks
 	$("div.question").children("div.feedback").hide();
 	
