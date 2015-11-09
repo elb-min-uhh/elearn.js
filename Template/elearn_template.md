@@ -168,14 +168,12 @@ Auf dieser Seite sind einige Quiz-Fragen Beispielhaft dargestellt.
 
 <!-- richtige Antwortmöglichkeiten in md5 verschlüsselter Form -->
 <!-- eine der unverschlüsselten Antworten muss eingegeben werden -->
-<a class="ans">4c4ad5fca2e7a3f74dbb1ced00381aa4</a> <!-- "antwort" -->
+    <a class="ans">4c4ad5fca2e7a3f74dbb1ced00381aa4</a> <!-- "antwort" -->
     <a class="ans">2182a74bab7188d959e795d9301e87ff</a> <!-- "Antwort" -->
     <a class="ans">590fc197fe73db0aa2ec03687a372eea</a> <!-- "Antwort" -->
     <a class="ans">686155af75a60a0f6e9d80c1f7edd3e9</a> <!-- "Antwort" -->
     <a class="ans">c7a628cba22e28eb17b5f5c6ae2a266a</a> <!-- "Antwort" -->
 </div>
-<!-- Buttons die angezeigt werden. Beide müssen für das Skript vorhanden sein -->
-<button class="quizButton">Lösen</button><button class="quizButton weiter">Zurücksetzen</button>
 
 
 <!-- FRAGE 2 -->
@@ -197,12 +195,11 @@ Auf dieser Seite sind einige Quiz-Fragen Beispielhaft dargestellt.
         In deiner Antwort ist mindest ein Ordner, der nicht unbedingt benötigt wird.
 </div>
 <!-- Der value Wert der richtigen Antwort in md5 verschlüsselt -->
- <a class="ans">b5ceb729a1b347aa357790e1588c88b3</a> <!-- "Antwort 1" -->
+    <a class="ans">b5ceb729a1b347aa357790e1588c88b3</a> <!-- "Antwort 1" -->
     <a class="ans">1fd302a9c89fc92eead418857a7e5a07</a> <!-- "Antwort 1" -->
     <a class="ans">4fc364339b2127eb81c13ab986a27085</a> <!-- "Antwort 1" -->
     <a class="ans">a66ed4f718095c6e9d9d13a5d5ad60a3</a> <!-- "Antwort 1" -->
 </div>
-<button class="quizButton">Lösen</button><button class="quizButton weiter">Zurücksetzen</button>
 
 Es existieren auch noch andere Fragetypen, diese sind in der Dokumentation vom qiuz.js beschrieben.
 
