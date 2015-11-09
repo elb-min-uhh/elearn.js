@@ -102,15 +102,15 @@ function submitAns(button) {
 
 	if(correct === -1) {
 		deleteLabelColoring(labels);
-		div.children("div.feedback").filter(".noselection").show();
 		div.children("div.feedback").filter(".correct").hide();
 		div.children("div.feedback").filter(".incorrect").hide();
+		div.children("div.feedback").filter(".noselection").show();
 		return;
 	}
 	else if(correct) {
 		div.children("div.feedback").filter(".noselection").hide();
-		div.children("div.feedback").filter(".correct").show();
 		div.children("div.feedback").filter(".incorrect").hide();
+		div.children("div.feedback").filter(".correct").show();
 	}
 	else {
 		div.children("div.feedback").filter(".noselection").hide();
