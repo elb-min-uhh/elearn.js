@@ -15,7 +15,7 @@
 		<script type="text/javascript" src="assets/js/md5.js"></script> <!-- stellt die JS-Funktion 'encryptMD5(str)' zur Verfügung, mit der sich Strings verschlüsseln lassen -->
 		<script type="text/javascript" src="assets/js/quiz.js"></script> <!-- Quiz Script -->
 		<script type="text/javascript" src="assets/js/jquery.qrcode.min.js"></script> <!-- QR-Code Generator -->
-		<script type="text/javascript" src="assets/js/sectioning.js"></script> <!-- Sectioning -->
+		<script type="text/javascript" src="assets/js/elearn.js"></script> <!-- eLearn.js -->
 		<script>
 		    window.onload = function() {
                 showAllSections();
@@ -62,21 +62,7 @@
             <!-- Page Info -->
             <div class="lb-wrap" id="info">
                 <div class="lightbox">
-                    <h3>Info Titel</h2>
-                    <table>
-                        <tr>
-                            <td>Version:</td><td>0.1</td>
-                        </tr>
-                        <tr>
-                            <td>Autor:</td><td>eLearning Büro</td>
-                        </tr>
-                        <tr>
-                            <td>Institution:</td><td>Universität Hamburg</td>
-                        </tr>
-                        <tr>
-                            <td>Lizenz:</td><td>abc</td>
-                        </tr>
-                    </table>
+                    <!-- Hier kann man jetzt alles an Inhalt reinpacken -->
                 </div>
             </div>
 
@@ -151,7 +137,7 @@
 
                     <div class="slider preview-nav">
                         <ul class="img-gallery fixed-size">
-                            <li><img src="assets/img/img_sichtbaresLicht.png" alt="Sichtbares Licht" /></li>
+                            <li><img src="assets/img/img_sichtbaresLicht.png" alt="Sichtbares Licht" /><p>Test text test text</p></li>
                             <li><img src="assets/img/img_farbe_farbwirkungen.png" alt="Farbwirkungen" /></li>
                             <li><img src="assets/img/img_additives_farbmodell_01.png" alt="Sichtbares Licht" /></li>
                         <li><img src="assets/img/img_farbeansichkontrast.png" alt="Farbe-an-sich-Kontrast" /></li>
@@ -164,7 +150,7 @@
                               
                     <div class="slider">
                         <ul class="img-gallery fixed-size" style="max-height: 200px">
-                            <li><img src="assets/img/img_sichtbaresLicht.png" alt="Sichtbares Licht" /></li>
+                            <li><img src="assets/img/img_sichtbaresLicht.png" alt="Sichtbares Licht" /><p>Test text test text</p></li>
                             <li><img src="assets/img/img_farbe_farbwirkungen.png" alt="Farbwirkungen" /></li>
                             <li><img src="assets/img/img_additives_farbmodell_01.png" alt="Sichtbares Licht" /></li>
                         </ul>
@@ -260,6 +246,8 @@
                         <a class="ans">686155af75a60a0f6e9d80c1f7edd3e9</a> <!--javaScript-->
                         <a class="ans">65e232ed43477b2f5cb4413023548fce</a> <!--html5-->
                     </div>
+
+                    <!-- Buttons die angezeigt werden. Beide müssen für das Skript vorhanden sein -->
                     
                     <button class="quizButton">Lösen</button><button class="quizButton weiter">Zurücksetzen</button></p>
 
@@ -292,6 +280,7 @@
                         <a class="ans">4fc364339b2127eb81c13ab986a27085</a> 
                         <a class="ans">a66ed4f718095c6e9d9d13a5d5ad60a3</a> 
                     </div>
+
                     <button class="quizButton">Lösen</button><button class="quizButton weiter">Zurücksetzen</button></p>
 
                     <p>Es existieren auch noch andere Fragetypen, diese sind in der Dokumentation vom qiuz.js beschrieben.</p>
@@ -311,6 +300,7 @@
 
                         <p>Zillgens, C. (2013). Responsive Webdesign: reaktionsfähige Websites gestalten und umsetzen. München: Hanser.</p>
                     </div>
+
 
                     <script type="text/x-mathjax-config">
                     if (typeof MathJaxListener !== 'undefined') {

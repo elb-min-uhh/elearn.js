@@ -12,6 +12,7 @@
 	font-family: TheSansUHH,sans-serif;
 	font-size:120%;
 	font-style: normal;
+	font-weight: normal;
 	background: rgb(240,240,240);
 	margin: 0 -1em 0;
 	padding: 0.3em 1em 0.3em;
@@ -81,11 +82,13 @@
 }
 
 .question label.img_radio:hover img {
-    border: 2px solid #dcdcdc;
+    padding: 0;
+    border: 7px solid #dcdcdc;
 }
 
 .question label.img_radio:not(.wrong):not(.right) input:checked + img {
-    border: 2px solid #CAE8F0;
+    padding: 0;
+    border: 7px solid #CAE8F0;
 }
 
 .question label.img_radio.right, .question label.img_radio.wrong {
@@ -93,25 +96,25 @@
 }
 
 .question label.img_radio.right img{
-    border: 2px solid rgb(240,255,240);
-    padding: 5px;
+    border: 7px solid rgb(200,255,200);
+    padding: 0;
     border-radius: 4px;
     margin:3px;
 }
 
 .question label.img_radio.right:hover img{
-    border: 2px solid rgb(230,245,230);
+    border: 7px solid rgb(200,245,200);
 }
 
 .question label.img_radio.wrong img{
-    border: 2px solid rgb(255,240,240);
-    padding: 5px;
+    border: 7px solid rgb(255,200,200);
+    padding: 0;
     border-radius: 4px;
     margin:3px;
 }
 
 .question label.img_radio.wrong:hover img{
-    border: 2px solid rgb(245,230,230);
+    border: 2px solid rgb(245,200,200);
 }
 
 
