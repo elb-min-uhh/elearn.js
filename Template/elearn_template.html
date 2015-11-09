@@ -1,0 +1,250 @@
+<!DOCTYPE html><html>
+
+<head>
+<meta charset="utf-8">
+<title>elearn_template</title>
+
+</head>
+<body>
+<h1 id="toc_0">Template elearn.js</h1>
+
+<p><strong>Name des Autors</strong><br>
+Institution des Autors<br>
+cc by-sa | 2015</p>
+
+<p><img src="assets/img/md_illu_prod.png" alt="Titelbild"></p>
+
+</section><section name="Textebenen">
+
+<h2 id="toc_1">Überschrift 2. Ordnung</h2>
+
+<blockquote>
+<p>Dies ist nur eine Template-Datei. Eine Erklärung und Dokumentation finden Sie im <a href="www.uni-hamburg.de">Whitepaper „Digitale Skripte“</a>. </p>
+</blockquote>
+
+<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. </p>
+
+<h3 id="toc_2">Überschrift dritter Ordung</h3>
+
+<p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.   </p>
+
+<h4 id="toc_3">Und hier ist die vierte Ordnung</h4>
+
+<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+
+<h5 id="toc_4">Wenn man noch eine fünfte Ebene braucht</h5>
+
+<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
+
+</section><section name="Abbildungen">
+
+<h3 id="toc_5">Bilder</h3>
+
+<p>Bilder können als einzelne Abbildungen oder als Galerien eingebunden werden.</p>
+
+<p><img src="assets/img/md_illu_v3.png" alt="Bild Beschreibung"></p>
+
+<p class="abbildung"><strong>Abb.:</strong> Dies ist ein einfaches Bild, mit einer angepassten Bildunterschrift.</p>
+
+<p>Für die Galerien wird das elearn.js benötigt. es bietet verschiedene Varianten. Das erste Beispiel zeigt eine Slideshow mit Vorschau und Loop-Funktion.</p>
+
+<div class="slider preview-nav loop">
+    <ul class="img-gallery" id="x">
+        <li><img src="assets/img/img_sichtbaresLicht.png" alt="Sichtbares Licht" /><p>Dies ist eine Bildunterschrift.</p></li>
+        <li><img src="assets/img/img_farbe_farbwirkungen.png" alt="Farbwirkungen" /></li>
+        <li><img src="assets/img/img_additives_farbmodell_01.png" alt="Sichtbares Licht" /></li>
+        <li><img src="assets/img/img_farbeansichkontrast.png" alt="Farbe-an-sich-Kontrast" /></li>
+        <li><img src="assets/img/img_hell_dunkel_kontrast.png" alt="Hell-Dunkel-Kontrast" /></li>
+        <li><img src="assets/img/img_kaltwarmkontrast.png" alt="Kalt-Warm-Kontrast" /></li>
+    </ul>
+</div>
+
+<p>Diese Variante funktioniert auch sehr gut, wenn das JavaScript fehlt bzw. im Druck.</p>
+
+<p>Das nächste Beispiel ist von der Höhe variabel, hat aber eine maximale höhe und keine Vorschau-Bilder.</p>
+
+<div class="slider">
+        <ul class="img-gallery" style="max-height: 300px">
+        <li><img src="assets/img/img_sichtbaresLicht.png" alt="Sichtbares Licht" /></li>
+        <li><img src="assets/img/img_farbe_farbwirkungen.png" alt="Farbwirkungen" /></li>
+        <li><img src="assets/img/img_additives_farbmodell_01.png" alt="Sichtbares Licht" /></li>
+    </ul>
+</div>
+
+<p>Hier ist die Höhe vorgegeben durch das höchste Bild, der Rahmen springt dadurch nicht.</p>
+
+<div class="slider preview-nav">
+    <ul class="img-gallery fixed-size">
+        <li><img src="assets/img/img_sichtbaresLicht.png" alt="Sichtbares Licht" /></li>
+        <li><img src="assets/img/img_farbe_farbwirkungen.png" alt="Farbwirkungen" /></li>
+        <li><img src="assets/img/img_additives_farbmodell_01.png" alt="Sichtbares Licht" /></li>
+    <li><img src="assets/img/img_farbeansichkontrast.png" alt="Farbe-an-sich-Kontrast" /></li>
+    <li><img src="assets/img/img_hell_dunkel_kontrast.png" alt="Hell-Dunkel-Kontrast" /></li>
+    <li><img src="assets/img/img_kaltwarmkontrast.png" alt="Kalt-Warm-Kontrast" /></li>
+    </ul>
+ </div>
+
+Hier ist die maximale Höhe fest vorgegeben. 
+          
+<div class="slider">
+    <ul class="img-gallery fixed-size" style="max-height: 200px">
+        <li><img src="assets/img/img_sichtbaresLicht.png" alt="Sichtbares Licht" /></li>
+        <li><img src="assets/img/img_farbe_farbwirkungen.png" alt="Farbwirkungen" /></li>
+        <li><img src="assets/img/img_additives_farbmodell_01.png" alt="Sichtbares Licht" /></li>
+    </ul>
+</div>
+
+</section><section name="Medien">
+
+<h3 id="toc_6">Medieneinbindung</h3>
+
+<p>Hier sollen vor allem Video und Audio-Einbindung demonstriert werden. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
+
+<h4 id="toc_7">Videos als Asset</h4>
+
+<p>Hier wird ein Video eingebuundn, welches sich direkt im Asset-Ordner des Skrips befindet. Diese Lösung ist nur für relativ kurze Videos empfehlenswert (max. fünf Minuten).</p>
+
+<p><video preload="auto" controls="controls">
+    <source src="assets/img/beispiel-video.mp4" type="video/mpeg">
+           Dein Browser unterstützt kein HTML5-Video. Um dir das Video dennoch ansehen zu können,
+           folge einfach diesem <a href="assets/img/beispiel-video.mp4">Link</a>.
+</video></p>
+
+<h4 id="toc_8">Videos von einem Streaming Server</h4>
+
+<p>Hier ist ein Video von eineme Streamin-Server als iFrame eingebunden.</p>
+
+<iframe src='https://lecture2go.uni-hamburg.de/liferay-jedi-theme/javascript/strobe/embed.html?src=https://fms.rrz.uni-hamburg.de/vod/_definst_/mp4:8l2gbal1768/64.280_werz_2013-06-26_16-15.mp4/manifest.f4m&poster=https://lecture2go.uni-hamburg.de/images/64.280_werz_2013-06-26_16-15.jpg' class='strobemediaplayback-video-player' type='text/html' width='500' height='250'> </iframe>
+
+<h4 id="toc_9">Audio-Files</h4>
+
+<p>Da Audio-Dateien als mp3s in der Regel nicht so groß sind, dass ein Streaming-Server benötigt wird, können diese aus dem Assets-Ordner progressiv als Download eingebunden wrden. Hier ein Beispiel:</p>
+
+<p><audio preload="auto" controls="controls">
+    <source src="assets/img/beispiel-audio.mp3" type="audio/mpeg">
+           Dein Browser unterstützt kein HTML5-Audio. Um dir das Audio-File dennoch anhören zu können,
+           folge einfach diesem <a href="img/beispiel-audio.mp3">Link</a>.
+</audio></p>
+
+</section><section name="Mathematische Formeln">
+
+<h3 id="toc_10">Mathematische Formeln</h3>
+
+<p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.   </p>
+
+<h4 id="toc_11">Formeldarstellung via MathJax</h4>
+
+<p>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. </p>
+
+<p>\(
+M = \begin{bmatrix}
+       \frac{5}{6} &amp; \frac{1}{6} &amp; 0           \\[0.3em]
+       \frac{5}{6} &amp; 0           &amp; \frac{1}{6} \\[0.3em]
+       0           &amp; \frac{5}{6} &amp; \frac{1}{6}
+     \end{bmatrix}
+\)</p>
+
+<p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.   </p>
+
+<p>\(P\left(A=2\middle|\frac{A^2}{B}&gt;4\right)\)</p>
+
+<p>At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur</p>
+
+</section><section name="Quiz">
+
+<h3 id="toc_12">Quizfragen</h3>
+
+<p>Auf dieser Seite sind einige Quiz-Fragen Beispielhaft dargestellt.
+<div class="question">
+<h4>Auf welcher Technologie basieren die digitaen Skripte? </h4> &lt;!-- Fragentext --&gt;
+&lt;!--
+    Feld für Lösung
+    Kann in diesem Fall so kopiert werden, da Freitext.
+    --&gt;
+    <div class="answers">
+        <label>Lösung: <input type="text" name="q"/></label>
+    </div></p>
+
+<!-- Feedback für eine richtige Antwort -->
+
+<div class="feedback correct">
+     Deine Antwort ist richtig. 
+</div>
+
+<!-- Feedback für eine falsche Antwort -->
+
+<div class="feedback incorrect">
+        Leider nein, scheue DIr doch nochmal die Dokumentation an.
+    </div>
+
+<!-- richtige Antwortmöglichkeiten in md5 verschlüsselter Form -->
+
+<!-- eine der unverschlüsselten Antworten muss eingegeben werden -->
+
+<p><a class="ans">4c4ad5fca2e7a3f74dbb1ced00381aa4</a> &lt;!-- &quot;antwort&quot; --&gt;
+    <a class="ans">2182a74bab7188d959e795d9301e87ff</a> &lt;!-- &quot;Antwort&quot; --&gt;
+    <a class="ans">590fc197fe73db0aa2ec03687a372eea</a> &lt;!-- &quot;Antwort&quot; --&gt;
+    <a class="ans">686155af75a60a0f6e9d80c1f7edd3e9</a> &lt;!-- &quot;Antwort&quot; --&gt;
+    <a class="ans">c7a628cba22e28eb17b5f5c6ae2a266a</a> &lt;!-- &quot;Antwort&quot; --&gt;
+</div>
+&lt;!-- Buttons die angezeigt werden. Beide müssen für das Skript vorhanden sein --&gt;
+<button class="quizButton">Lösen</button><button class="quizButton weiter">Zurücksetzen</button></p>
+
+<!-- FRAGE 2 -->
+
+<div class="question">
+    <h4>Welche Unterordner werden in der Dateistruktur von digitalen skripten erwartet?</h4>
+    <div class="answers">
+     <!-- Checkboxen zur Auswahl -->
+<!-- checkbox = Mehrfachauswahl, radio = Einfachauswahl -->
+        <label><input type="checkbox" name="q" value="Frage2-1"/>assets</label>
+        <label><input type="checkbox" name="q" value="Frage2-2"/>movies</label>
+        <label><input type="checkbox" name="q" value="Frage2-3"/>img</label>
+        <label><input type="checkbox" name="q" value="Frage2-4"/>css</label>
+         <label><input type="checkbox" name="q" value="Frage2-5"/>lang</label>
+</div>
+
+<div class="feedback correct">
+        Genau, das sind zwar nicht alle Ordner, die wir brauchen, aber ein paaar wichtige.
+</div>
+
+<div class="feedback incorrect">
+        In deiner Antwort ist mindest ein Ordner, der nicht unbedingt benötigt wird.
+</div>
+
+<!-- Der value Wert der richtigen Antwort in md5 verschlüsselt -->
+
+<p><a class="ans">b5ceb729a1b347aa357790e1588c88b3</a> &lt;!-- &quot;Antwort 1&quot; --&gt;
+    <a class="ans">1fd302a9c89fc92eead418857a7e5a07</a> &lt;!-- &quot;Antwort 1&quot; --&gt;
+    <a class="ans">4fc364339b2127eb81c13ab986a27085</a> &lt;!-- &quot;Antwort 1&quot; --&gt;
+    <a class="ans">a66ed4f718095c6e9d9d13a5d5ad60a3</a> &lt;!-- &quot;Antwort 1&quot; --&gt;
+</div>
+<button class="quizButton">Lösen</button><button class="quizButton weiter">Zurücksetzen</button></p>
+
+<p>Es existieren auch noch andere Fragetypen, diese sind in der Dokumentation vom qiuz.js beschrieben.</p>
+
+</section><section name="Literatur">
+
+<h3 id="toc_13">Literatur</h3>
+
+<p>Adapt learning community. (o. J.). Abgerufen 11. September 2015, von <a href="https://community.adaptlearning.org">https://community.adaptlearning.org</a></p>
+
+<p>H5P – Create, share and reuse interactive HTML5 content in your browser. (o. J.). Abgerufen 11. September 2015, von <a href="https://h5p.org">https://h5p.org</a></p>
+
+<p>The Ultimate List of HTML5 eLearning Authoring Tools. (o. J.). Abgerufen von <a href="http://elearningindustry.com/the-ultimate-list-of-html5-elearning-authoring-tools">http://elearningindustry.com/the-ultimate-list-of-html5-elearning-authoring-tools</a></p>
+
+<p>Wenz, C. (2014). JavaScript: das umfassende Handbuch  (11. Aufl). Bonn: Galileo Press.</p>
+
+<p>Zillgens, C. (2013). Responsive Webdesign: reaktionsfähige Websites gestalten und umsetzen. München: Hanser.</p>
+
+<script type="text/x-mathjax-config">
+if (typeof MathJaxListener !== 'undefined') {
+  MathJax.Hub.Register.StartupHook('End', function () {
+    MathJaxListener.invokeCallbackForKey_('End');
+  });
+}
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>

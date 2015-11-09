@@ -210,6 +210,11 @@ blockquote {
 	margin:2.6em 2em 2.2em 2em;
 }
 
+.lit {
+	margin:1em;
+	text-indent:-1em;
+}
+
 pre {
 	background-color: #eee;
 	padding:1.8em;
