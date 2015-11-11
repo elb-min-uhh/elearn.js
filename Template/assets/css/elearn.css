@@ -121,7 +121,7 @@ body {
 
 #btnExpSym {
     position: absolute;
-    float: left;
+    left: 5px;
     width: 22px;
     display: inline-block;
 }
