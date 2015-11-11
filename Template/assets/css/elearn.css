@@ -1,12 +1,12 @@
 ﻿/*CSS for eLearn.js
-Created by Michael Heinecke 
+Created by Michael Heinecke
 Improved by Arne Westphal
-eLearning-office MIN, Universität Hamburg 
+eLearning-office MIN, Universität Hamburg
 v0.6 150917 cc-by-sa */
 
 
 /*Einbindung der benötigtren Schriften*/
-  
+
 @font-face {
   font-family: 'eLearn-Icons';
   font-style: normal;
@@ -45,7 +45,7 @@ body {
 }
 
 #wrap {
-	min-height:100%;	
+	min-height:100%;
 	vertical-align:center;
 	max-width: 1100px;
 	margin:0em auto 0em auto;
@@ -72,7 +72,7 @@ body {
 }
 
 #nav-bar .btn {
-	padding: 5px; 
+	padding: 5px;
 	margin-top: -5px;
 }
 
@@ -197,6 +197,12 @@ h4 {
 	font-size:1.4em;
 	margin: 1.4em 0em 1.2em 0em;
 	font-style:italic;
+	font-weight:600;
+}
+
+h5 {
+	font-size:1em;
+	margin: 0em;
 	font-weight:600;
 }
 
@@ -359,8 +365,8 @@ a:active {
 
 .navbar {
 	position:relative;
-	text-align: left; 
-	margin-top:12px; 
+	text-align: left;
+	margin-top:12px;
 	margin-bottom:5px;
 	background-color: rgb(240,240,240);
 }
@@ -393,18 +399,18 @@ a:active {
 }
 
 .touchScroll{
-	height:100%; 
+	height:100%;
 	/* background-color: #dcdcdc; */
-	position:fixed; 
+	position:fixed;
 	top:0;
-	z-index:10; 
-	color:#ffffff; 
+	z-index:10;
+	color:#ffffff;
 	/* border:1px solid #888888; */
 }
 
 .touchScroll div {
 	box-shadow: 0 0 3px rgba(0,0,0,0.3);
-	position:relative; 
+	position:relative;
 	top: calc(50% - 25px);
 	margin: auto;
 	background-color: #fff;
@@ -419,7 +425,7 @@ a:active {
 	margin: 0;
 	width: 50px;
 	font-family: eLearn-icons;
-	text-align:center; 
+	text-align:center;
 	font-size:35px;
 	color:#888;
 }
@@ -433,13 +439,13 @@ a:active {
 	max-width:1100px;
 	height:100%;
 	margin:auto;
-	z-index:10; 
+	z-index:10;
 	overflow-x:hidden;
 }
 
 .side-menu {
 	pointer-events: all;
-	height:100%; 
+	height:100%;
 	background-color: rgb(240,240,240);
 	position:absolute;
 	top:0;
@@ -447,8 +453,8 @@ a:active {
 	bottom:0;
 	min-width: 200px;
 	max-width: 40%;
-	z-index:10; 
-	color:rgb(140,140,140); 
+	z-index:10;
+	color:rgb(140,140,140);
 	box-shadow: 0 0 10px rgba(0,0,0,0.4);
 }
 
@@ -500,7 +506,7 @@ button:hover, button:active {
 
 .literatur p {
 	margin-left:2em;
-	text-indent:-2em; 
+	text-indent:-2em;
 }
 
 .logo {
@@ -728,7 +734,7 @@ ul.img-gallery {
     margin: 0;
     padding: 0;
     display: block;
-    transition-duration: 0.5s;
+    transition-duration: 0.25s;
 }
 
 ul.img-gallery:after {
@@ -781,7 +787,7 @@ div.slider-nav ul.img-gallery li.active{
 	opacity: 1;
 }
 
-/* AUSKOMMENTIERT FÜR STATISCHE ANZEIGE - 
+/* AUSKOMMENTIERT FÜR STATISCHE ANZEIGE -
 - Wenn es eingeblendet werden soll muss jeweils statiscch opacity:0 und left/right: -15px*/
 /*
 div.slider-con:hover .slider-back, div.preview-con:hover .slider-back {
@@ -817,13 +823,13 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
 	opacity: 1;
 	position:absolute;
 	top:0;
-	width: 60px; 
+	width: 60px;
 	height:100%;
     transition-duration: 0.25s;
 }
 
 
-.slider-back-area:hover .slider-back, .slider-next-area:hover .slider-next,  
+.slider-back-area:hover .slider-back, .slider-next-area:hover .slider-next,
 	.slider-zoom-area:hover .slider-zoom{
     color: rgba(255, 255, 255, 1);
 }
@@ -952,7 +958,7 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
 
 @media screen and (max-width:940px) {
 	.page {
-		padding: 45px 13% 68px 13%; 
+		padding: 45px 13% 68px 13%;
 	}
 	#navigation {
 		font-size: 0.8em;
@@ -964,7 +970,7 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
 	#btnPrev:before, #tooltipArrowLeft {
 		left:4%;
 	}
-	
+
 	.side-menu {
 		max-width: 50%;
 	}
@@ -978,7 +984,7 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
 		font-size: 0.8em;
 	}
 	.page {
-		padding: 45px 8.5% 68px 8.5%; 
+		padding: 45px 8.5% 68px 8.5%;
 	}
 	h1 {
 		padding:2.8em 0em 1em 0em;
@@ -1003,7 +1009,7 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
 	#btnPrev:before, #tooltipArrowLeft {
 		left:1%;
 	}
-	
+
 	.side-menu {
 		max-width: 65%;
 	}
@@ -1033,7 +1039,7 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
 		font-size: 1em;
 	}
 	.page {
-		padding: 45px 4% 30px 4%; 
+		padding: 45px 4% 30px 4%;
 	}
 	h1 {
 		padding:3.4em 0em 1em 0em;
@@ -1055,7 +1061,7 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
 	#btnNext:before, #btnPrev:before, #tooltipArrowRight, #tooltipArrowLeft {
 		display: none;
 	}
-	
+
 	.side-menu {
 		max-width: 85%;
 	}
@@ -1092,9 +1098,9 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
   	font-size:78%;
   }
   .page {
-  	padding: 45px 8.5% 68px 8.5%; 
+  	padding: 45px 8.5% 68px 8.5%;
   }
-  
+
   #navigation {
   	display:none !important;
   }
