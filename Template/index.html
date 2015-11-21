@@ -8,60 +8,30 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 		<link rel="stylesheet" type="text/css" href="assets/css/elearn.css">
 
-
-		<link rel="stylesheet" type="text/css" href="assets/css/quiz.css">
-
 		<script type="text/javascript" src="assets/js/min.js"></script> <!-- von Uni verwendetes JQuery -->
-		<script type="text/javascript" src="assets/js/md5.js"></script> <!-- stellt die JS-Funktion 'encryptMD5(str)' zur Verfügung, mit der sich Strings verschlüsseln lassen -->
-		<script type="text/javascript" src="assets/js/quiz.js"></script> <!-- Quiz Script -->
-		<script type="text/javascript" src="assets/js/jquery.qrcode.min.js"></script> <!-- QR-Code Generator -->
 		<script type="text/javascript" src="assets/js/elearn.js"></script> <!-- eLearn.js -->
+		
+		<script type="text/javascript" src="assets/js/quiz.js"></script> <!-- Quiz Script -->
+        <link rel="stylesheet" type="text/css" href="assets/css/quiz.css">
+		
+		
 		<script>
 		    window.onload = function() {
-                showAllSections();
-                showSection(0);
+                eLearnJS.showAllSections();
+                eLearnJS.showSection(0);
             }
         </script>
 
 		<title>Name</title>
 	</head>
 	<body>
+	    <!-- #wrap muss bleiben, sonst funktioniert eLearn.js nicht -->
 		<div id="wrap">
-            <!-- Arrow Left and Right -->
-			<div class='skip-arrows'>
-				<div onclick='javascript: showPrev();' id='btnPrev' class="icon-back before-padding btn"></div>
-				<div onclick='javascript: showNext();' id='btnNext' class="icon-next before-padding btn"></div>
-			</div>
-
-			<!-- Container for Overview -->
-            <div class='section-overview'></div>
-
-			<div id="navigation">
-				<!-- Grey Top Menu-bar - Reihenfolge wichtig -->
-				<div id="nav-bar">
-					<div onclick='javascript: showAllSections();' id='btnAllCon' class ='btn' title="Zeige/verstecke Bereiche"><div class="icon-font" id='btnAll'>s</div><div id="btnAllText">Ansicht</div></div>
-					<div onclick='javascript: showSectionOverview();' id='btnExp' class ='btn' title="Inhaltsverzeichnis"><div class="icon-font" id='btnExpSym'>c</div><div id="nav-title">Name des Moduls</div></div>
-					<div onclick='javascript: toggleSideMenu(isSideMenuVisible());' id='btnMenu' class ='icon-font btn' title="Menü">m</div>
-                    <div onclick='javascript: startHelp();' id='btnHelp' class ='btn' title="Zeige/verstecke Bereiche"><div class="icon-font" id='btnHelpSym'>q</div><div id="btnHelpText">Hilfe</div></div>
-					<div style="clear:both"></div>
-				</div>
-
-				<!-- Touch Gesture Elements -->
-				<div class='touchScroll' id='rightTouch'><div><p>n</p></div></div>
-				<div class='touchScroll' id='leftTouch'><div><p>b</p></div></div>
-
-				<!-- Progress bar -->
-				<div id='progressback'><div id='progressbar'></div></div>
-
-				<!-- SIDE MENU -->
-				<div class='menu-wrap'></div>
-			</div>
-            <div id="qr_overlay"><div id="qrcode"></div></div>
-
-
             <!-- Page Info -->
             <div class="lb-wrap" id="info">
                 <div class="lightbox">
+                    <!-- Info zu dieser Seite. -->
+                    <!-- Möglich z.B. Autoren. Version... -->
                     <!-- Hier kann man jetzt alles an Inhalt reinpacken -->
                 </div>
             </div>
