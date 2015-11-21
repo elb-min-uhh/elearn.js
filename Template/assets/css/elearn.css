@@ -673,7 +673,7 @@ QR Overlay
     overflow-y: auto;
     margin: auto;
     background: #fff;
-    max-height: calc(100% - 120);
+    max-height: calc(100% - 120px);
     margin-top: 60px;
     border: 1px solid #b4b4b4;
     -webkit-box-shadow: 0px 0px 25px 0px rgba(0,0,0,0.5);
