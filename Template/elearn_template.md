@@ -1,4 +1,4 @@
-# Template elearn.js 
+# Template elearn.js
 
 **Name des Autors**    
 Institution des Autors     
@@ -6,13 +6,13 @@ cc by-sa | 2015
 
 ![Titelbild](assets/img/md_illu_prod.png)
 
-///Textebenen\\\
+\\\Textebenen///
 
 ## Überschrift 2. Ordnung
 
-> Dies ist nur eine Template-Datei. Eine Erklärung und Dokumentation finden Sie im [Whitepaper „Digitale Skripte“](www.uni-hamburg.de). 
+> Dies ist nur eine Template-Datei. Eine Erklärung und Dokumentation finden Sie im [Whitepaper „Digitale Skripte“](www.uni-hamburg.de).
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. 
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
 ### Überschrift dritter Ordung
 
@@ -26,66 +26,34 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
 
 At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.
 
-///Abbildungen\\\
+\\\Abbildungen///
 
 ### Bilder
 
-Bilder können als einzelne Abbildungen oder als Galerien eingebunden werden.
+Bilder können als einzelne Abbildungen oder als Galerien eingebunden werden.Für die Galerien wird das elearn.js benötigt. es bietet verschiedene Varianten. Das erste Beispiel zeigt eine Slideshow mit Vorschau und Loop-Funktion.
 
-![Bild Beschreibung](assets/img/md_illu_v3.png)
-
-<p class="abbildung"><strong>Abb.:</strong> Dies ist ein einfaches Bild, mit einer angepassten Bildunterschrift.</p>
-
-Für die Galerien wird das elearn.js benötigt. es bietet verschiedene Varianten. Das erste Beispiel zeigt eine Slideshow mit Vorschau und Loop-Funktion.
-
-<div class="slider preview-nav loop">
-    <ul class="img-gallery" id="x">
-        <li><img src="assets/img/img_sichtbaresLicht.png" alt="Sichtbares Licht" /><p>Dies ist eine Bildunterschrift.</p></li>
-        <li><img src="assets/img/img_farbe_farbwirkungen.png" alt="Farbwirkungen" /></li>
-        <li><img src="assets/img/img_additives_farbmodell_01.png" alt="Sichtbares Licht" /></li>
-        <li><img src="assets/img/img_farbeansichkontrast.png" alt="Farbe-an-sich-Kontrast" /></li>
-        <li><img src="assets/img/img_hell_dunkel_kontrast.png" alt="Hell-Dunkel-Kontrast" /></li>
-        <li><img src="assets/img/img_kaltwarmkontrast.png" alt="Kalt-Warm-Kontrast" /></li>
-    </ul>
+<div class="slider preview-nav loop" style="max-height: 500px">
+<ul class="img-gallery" id="x">
+<li><img src="assets/img/paint01.jpg" alt="Altbau" /><p>„Altbau“, Michael Vogt 2015, digitale Ölfarben</p></li>
+<li><img src="assets/img/paint02.jpg" alt="Propaganda" /><p>„Propaganda an der Straßenecke“, micog, Tempura Digitalis</p>"</li>
+<li><img src="assets/img/paint03.jpg" alt="Onsen" /><p>„Onsen“, Hei Ne Ke, Electronic Ink</p></li>
+<li><img src="assets/img/paint04.jpg" alt="Touching Twins" /><p>„Touching Twins“, Mika Neke, Mixed Technique</p></li>
+</ul>
 </div>
 
-Diese Variante funktioniert auch sehr gut, wenn das JavaScript fehlt bzw. im Druck.
+Die Galerie kann mit oder ohne Vorschaubilder sowie mit oder ohne Loop genutzt werden. Hierzu existieren verschiedene Klassen, die dem Slider zugeordnet werden können. Das sieht folgendermaßen aus:
 
-Das nächste Beispiel ist von der Höhe variabel, hat aber eine maximale höhe und keine Vorschau-Bilder.
+* `<div class="slider">` ist ohne Vorschau und ohne Loop
+* `<div class="slider preview-nav">` ist mit Vorschaubildern und ohne Loop
+* `<div class="slider preview-nav loop">` ist mit Vorschaubildern und mit Loop
 
-<div class="slider">
-        <ul class="img-gallery" style="max-height: 300px">
-        <li><img src="assets/img/img_sichtbaresLicht.png" alt="Sichtbares Licht" /></li>
-        <li><img src="assets/img/img_farbe_farbwirkungen.png" alt="Farbwirkungen" /></li>
-        <li><img src="assets/img/img_additives_farbmodell_01.png" alt="Sichtbares Licht" /></li>
-    </ul>
-</div>
+Die Höhe der Gaalerie kann vorgegeben werden, damit der Content unter der Galerie nicht springt. Dies geht in Abhängigkeit des größten Bildes oder einer vorgegebenen maximalen Höhe. Dies wird durch die Klasse des umschließenden `ul`-Elements definiert.
 
-Hier ist die Höhe vorgegeben durch das höchste Bild, der Rahmen springt dadurch nicht.
+* `<ul class="img-gallery">` ist eine Galerie mit unterschiedlicher Bilderhöhe.
+* `<ul class="img-gallery fixed-size">` ist eine Galerie mit der Höhe des größten Bildes.
+* `<ul class="img-gallery fixed-size" style="max-height: 400px">` ist eine Galerie mit der Höhe von 400px.
 
-<div class="slider preview-nav">
-    <ul class="img-gallery fixed-size">
-        <li><img src="assets/img/img_sichtbaresLicht.png" alt="Sichtbares Licht" /></li>
-        <li><img src="assets/img/img_farbe_farbwirkungen.png" alt="Farbwirkungen" /></li>
-        <li><img src="assets/img/img_additives_farbmodell_01.png" alt="Sichtbares Licht" /></li>
-	<li><img src="assets/img/img_farbeansichkontrast.png" alt="Farbe-an-sich-Kontrast" /></li>
-	<li><img src="assets/img/img_hell_dunkel_kontrast.png" alt="Hell-Dunkel-Kontrast" /></li>
-	<li><img src="assets/img/img_kaltwarmkontrast.png" alt="Kalt-Warm-Kontrast" /></li>
-    </ul>
- </div>
-
-Hier ist die maximale Höhe fest vorgegeben. 
-          
-<div class="slider">
-    <ul class="img-gallery fixed-size" style="max-height: 200px">
-        <li><img src="assets/img/img_sichtbaresLicht.png" alt="Sichtbares Licht" /></li>
-        <li><img src="assets/img/img_farbe_farbwirkungen.png" alt="Farbwirkungen" /></li>
-        <li><img src="assets/img/img_additives_farbmodell_01.png" alt="Sichtbares Licht" /></li>
-    </ul>
-</div>
-
-
-///Medien\\\
+\\\Medien///
 
 ### Medieneinbindung
 
@@ -117,15 +85,15 @@ Da Audio-Dateien als mp3s in der Regel nicht so groß sind, dass ein Streaming-S
            folge einfach diesem <a href="img/beispiel-audio.mp3">Link</a>.
 </audio>
 
-///Mathematische Formeln\\\
+\\\Mathematische Formeln///
 
 ### Mathematische Formeln
 
 Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.   
- 
+
 #### Formeldarstellung via MathJax
 
-Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. 
+Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.
 
 $
 M = \begin{bmatrix}
@@ -141,69 +109,54 @@ $P\left(A=2\middle|\frac{A^2}{B}>4\right)$
 
 At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
 
-///Quiz\\\
+\\\Quiz///
 
 ### Quizfragen
 
 Auf dieser Seite sind einige Quiz-Fragen Beispielhaft dargestellt.
+
 <div class="question">
 <h4>Auf welcher Technologie basieren die digitaen Skripte? </h4> <!-- Fragentext -->
-<!--
-    Feld für Lösung
-    Kann in diesem Fall so kopiert werden, da Freitext.
-    -->
-    <div class="answers">
-        <label>Lösung: <input type="text" name="q"/></label>
-    </div>
-
-<!-- Feedback für eine richtige Antwort -->
+<div class="answers">
+<label>Lösung: <input type="text" name="q"/></label>
+</div>
 <div class="feedback correct">
-     Deine Antwort ist richtig. 
+Deine Antwort ist richtig.
 </div>
-
-<!-- Feedback für eine falsche Antwort -->
 <div class="feedback incorrect">
-        Leider nein, scheue DIr doch nochmal die Dokumentation an.
-    </div>
-
-<!-- richtige Antwortmöglichkeiten in md5 verschlüsselter Form -->
-<!-- eine der unverschlüsselten Antworten muss eingegeben werden -->
-    <a class="ans">4c4ad5fca2e7a3f74dbb1ced00381aa4</a> <!-- "antwort" -->
-    <a class="ans">2182a74bab7188d959e795d9301e87ff</a> <!-- "Antwort" -->
-    <a class="ans">590fc197fe73db0aa2ec03687a372eea</a> <!-- "Antwort" -->
-    <a class="ans">686155af75a60a0f6e9d80c1f7edd3e9</a> <!-- "Antwort" -->
-    <a class="ans">c7a628cba22e28eb17b5f5c6ae2a266a</a> <!-- "Antwort" -->
+Leider nein, scheue DIr doch nochmal die Dokumentation an.
+</div>
+<a class="ans">4c4ad5fca2e7a3f74dbb1ced00381aa4</a>
+<a class="ans">2182a74bab7188d959e795d9301e87ff</a>
+<a class="ans">590fc197fe73db0aa2ec03687a372eea</a>
+<a class="ans">686155af75a60a0f6e9d80c1f7edd3e9</a>
+<a class="ans">c7a628cba22e28eb17b5f5c6ae2a266a</a>
 </div>
 
-
-<!-- FRAGE 2 -->
 <div class="question">
-    <h4>Welche Unterordner werden in der Dateistruktur von digitalen skripten erwartet?</h4>
-    <div class="answers">
-     <!-- Checkboxen zur Auswahl -->
-<!-- checkbox = Mehrfachauswahl, radio = Einfachauswahl -->
-        <label><input type="checkbox" name="q" value="Frage2-1"/>assets</label>
-        <label><input type="checkbox" name="q" value="Frage2-2"/>movies</label>
-        <label><input type="checkbox" name="q" value="Frage2-3"/>img</label>
-        <label><input type="checkbox" name="q" value="Frage2-4"/>css</label>
-         <label><input type="checkbox" name="q" value="Frage2-5"/>lang</label>
+<h4>Welche Unterordner werden in der Dateistruktur von digitalen skripten erwartet?</h4>
+<div class="answers">
+<label><input type="checkbox" name="q" value="Frage2-1"/>assets</label>
+<label><input type="checkbox" name="q" value="Frage2-2"/>movies</label>
+<label><input type="checkbox" name="q" value="Frage2-3"/>img</label>
+<label><input type="checkbox" name="q" value="Frage2-4"/>css</label>
+<label><input type="checkbox" name="q" value="Frage2-5"/>lang</label>
 </div>
 <div class="feedback correct">
-        Genau, das sind zwar nicht alle Ordner, die wir brauchen, aber ein paaar wichtige.
+Genau, diese Ordner werden auf jeden Fall benötigt. Sogar noch ein paar mehr.
 </div>
 <div class="feedback incorrect">
-        In deiner Antwort ist mindest ein Ordner, der nicht unbedingt benötigt wird.
+In deiner Antwort ist mindest ein Ordner, der nicht unbedingt benötigt wird.
 </div>
-<!-- Der value Wert der richtigen Antwort in md5 verschlüsselt -->
-    <a class="ans">b5ceb729a1b347aa357790e1588c88b3</a> <!-- "Antwort 1" -->
-    <a class="ans">1fd302a9c89fc92eead418857a7e5a07</a> <!-- "Antwort 1" -->
-    <a class="ans">4fc364339b2127eb81c13ab986a27085</a> <!-- "Antwort 1" -->
-    <a class="ans">a66ed4f718095c6e9d9d13a5d5ad60a3</a> <!-- "Antwort 1" -->
+<a class="ans">b5ceb729a1b347aa357790e1588c88b3</a>
+<a class="ans">1fd302a9c89fc92eead418857a7e5a07</a>
+<a class="ans">4fc364339b2127eb81c13ab986a27085</a>
+<a class="ans">a66ed4f718095c6e9d9d13a5d5ad60a3</a>
 </div>
 
 Es existieren auch noch andere Fragetypen, diese sind in der Dokumentation vom qiuz.js beschrieben.
 
-///Literatur\\\
+\\\Literatur///
 
 ### Literatur
 
@@ -216,5 +169,3 @@ The Ultimate List of HTML5 eLearning Authoring Tools. (o. J.). Abgerufen von ht
 Wenz, C. (2014). JavaScript: das umfassende Handbuch  (11. Aufl). Bonn: Galileo Press.
 
 Zillgens, C. (2013). Responsive Webdesign: reaktionsfähige Websites gestalten und umsetzen. München: Hanser.
-
-

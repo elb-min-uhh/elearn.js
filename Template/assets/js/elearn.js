@@ -4,7 +4,8 @@
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 */
 
-var VERSION_NR = "0.5"
+var VERSION_NR = "0.5";
+var VERSION_DATE = "12/2015";
 
 var visSection = 0;
 var allShown = false;
@@ -338,9 +339,13 @@ function isSideMenuVisible() {
 */
 function initiateInfo() {
     $('#info').find('.lightbox').append('<div class="elearn-info">'
-        + 'Benutzt das eLearn.js Script Version ' + VERSION_NR + '. '
+        + 'Benutzt das eLearn.js Script Version ' + VERSION_NR + ' | ' + VERSION_DATE + '. '
         + '<br>'
-        + 'Erstellt vom eLearning Büro der MIN-Fakultät der Universität Hamburg. '
+        + '<span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">elearn.js Template</span>'
+        + 'von <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">Universität Hamburg</span>'
+        + 'ist lizenziert unter einer <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">'
+        + 'Creative Commons Namensnennung</a> - Weitergabe unter gleichen Bedingungen 4.0 International Lizenz'
+        + '<br>'
         + '<a href="https://www.min.uni-hamburg.de/de/imprint.html">Impressum</a>'
         + '</div>');
     $('#info').find('.lightbox').append("<div class='support'><small>Dieses "
