@@ -347,15 +347,15 @@ a:active {
 /* --------------------------- Exakte Tooltips -------------------------------------- */
 
 #tooltipArrowRight {
-	position: absolute;
-	top: 14em;
+	position: fixed;
+	top: 13em;
 	right: calc((100% - 1100px) / 2 + 66px);
 	margin: 0;
 }
 
 #tooltipArrowLeft {
-	position: absolute;
-	top: 14em;
+	position: fixed;
+	top: 13em;
 	left: calc((100% - 1100px) / 2 + 66px);
 	margin: 0;
 }
