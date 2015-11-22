@@ -348,14 +348,14 @@ a:active {
 
 #tooltipArrowRight {
 	position: absolute;
-	top: 12em;
+	top: 14em;
 	right: calc((100% - 1100px) / 2 + 66px);
 	margin: 0;
 }
 
 #tooltipArrowLeft {
 	position: absolute;
-	top: 12em;
+	top: 14em;
 	left: calc((100% - 1100px) / 2 + 66px);
 	margin: 0;
 }

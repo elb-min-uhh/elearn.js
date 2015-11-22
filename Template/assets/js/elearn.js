@@ -849,6 +849,7 @@ function showTooltip(nr) {
     		if($($('.tooltip')[nr]).is(".right")) {
     			setTooltipPosition(nr, true, 
     							$(positions[nr]).offset().top 
+    							- $(document).scrollTop()
     							+ parseInt($(positions[nr]).css("margin-top").replace(/\D/g, "")) + 38,
     							$('#wrap').width() 
     							- ($(positions[nr]).offset().left 
@@ -857,7 +858,8 @@ function showTooltip(nr) {
     		}
     		else {
     			setTooltipPosition(nr, false, 
-    							$(positions[nr]).offset().top
+    							$(positions[nr]).offset().top 
+    							- $(document).scrollTop()
     							+ parseInt($(positions[nr]).css("margin-top").replace(/\D/g, "")) + 40,
     							$(positions[nr]).offset().left
     							+ parseInt($(positions[nr]).css("margin-left").replace(/\D/g, ""))
