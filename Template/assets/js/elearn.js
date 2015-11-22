@@ -946,6 +946,20 @@ $(document).keyup(function(e){
 // Touch Scroll part
 // --------------------------------------------------------------------------------------
 
+/**
+* Check if touch is supported
+*/
+function isTouchSupported() {
+    var msTouchEnabled = window.navigator.msMaxTouchPoints;
+    var generalTouchEnabled = "ontouchstart" in document.createElement("div");
+ 
+    if (msTouchEnabled || generalTouchEnabled) {
+        return true;
+    }
+    return false;
+}
+
+
 var maxDiff = 0;
 var clickedAlready = false;
 
@@ -972,7 +986,9 @@ function addTouchToSections() {
 	        while(!p.is("body") && !p.is("label")) {
 	            p = p.parent();
 	        }
-	        if(!p.is("label")) event.preventDefault();
+	        if(!p.is("label") && isTouchSupported()) {
+	            event.preventDefault();
+	        }
 	    }
 		clickedAlready = true;
 	});
