@@ -969,30 +969,17 @@ var clickedAlready = false;
 * Fügt allen Sections eine Touchabfrage hinzu.
 */
 function addTouchToSections() {
-	$("body").bind('touchstart', function() {
+	$(document).bind('touchstart', function() {
 		touchStart(event, this);
 	});
-	$("body").bind('touchend', function() {
+	$(document).bind('touchend', function() {
 		touchEnd(event);
 	});
-	$("body").bind('touchmove', function() {
+	$(document).bind('touchmove', function() {
 		touchMove(event);
 	});
-	$("body").bind('touchcancel', function() {
+	$(document).bind('touchcancel', function() {
 		touchCancel(event);
-	});
-	
-	$("body").click(function(event) {
-//	    if(!$(event.target).is('label')) {
-//	        var p = $(event.target);
-//	        while(!p.is("body") && !p.is("label")) {
-//	            p = p.parent();
-//	        }
-//	        if(!p.is("label") && isTouchSupported()) {
-//	            event.preventDefault();
-//	        }
-//	    }
-//		clickedAlready = true;
 	});
 	
 	
@@ -1026,6 +1013,7 @@ var swipeTarget = null;
 var lastSpeed = 0;
 var lastTime = 0;
 var lastDif = 0;
+var startScrollLeft = 0;
 
 /**
 * Überprüft, um welche Touchfunktion es sich handelt.
@@ -1045,10 +1033,7 @@ function setSwipeType() {
         swipeTarget = ul;
         ul.css("transition-duration", "0s");
     }
-	else if(!allShown && (swipeTarget.is('section') || swipeTarget.is('section *'))) {
-		swipeType = "section";
-	}
-	else if($(document).width() - event.touches[0].pageX < 20 && !isSideMenuVisible()) {
+	else if($(window).width() - (event.touches[0].pageX - $(document).scrollLeft()) < 20 && !isSideMenuVisible()) {
 		swipeType = "menu";
 		$('.menu-wrap').css('top', $('#navigation').height() + "px");
 	}
@@ -1056,18 +1041,19 @@ function setSwipeType() {
 		swipeType = "menu-back";
 		$('.menu-wrap').css('top', $('#navigation').height() + "px");
 	}
+	else if(!allShown && (swipeTarget.is('section') || swipeTarget.is('section *'))) {
+		swipeType = "section";
+	}
 	else {
 		swipeType = "normal";
 	}
 }
 
 function touchStart(event,passedName) {
-	if(swipeDirectionSet && isHorizontalSwipe) {
-		event.preventDefault();
-	}
-	
 	swipeTarget = $(event.target);
 	setSwipeType();
+    
+    startScrollLeft = $(document).scrollLeft();
 	
 	fingerCount = event.touches.length;
 	if ( fingerCount == 1 ) {
@@ -1087,15 +1073,13 @@ function touchMove(event) {
 		if(!swipeDirectionSet) {
 			setSwipeDirection();
 		}
-		if(isHorizontalSwipe) {
+        
+		if((isHorizontalSwipe && swipeType != "section" && swipeType != "normal") 
+            || (isHorizontalSwipe && swipeType == "section" && Math.abs(lastDif) > 12)) {
 			event.preventDefault();
-		}
-		else {
-			swipeType = "normal";
 		}
 		
 		var dif = startX - curX;
-		
 		calcSpeed(dif);
 		
 		if(isHorizontalSwipe) {
@@ -1161,6 +1145,7 @@ function touchCancel(event, dir) {
 		lastSpeed = 0;
 		lastTime = 0;
 		lastDif = 0;
+        startScrollLeft = 0;
 		$('#leftTouch').animate({'margin-left':'0'}, { duration: 200, queue: false });
 		$('#rightTouch').animate({'margin-right':'0'}, { duration: 200, queue: false });
 		$('#leftTouch').animate({'opacity':'0'}, { duration: 200, queue: false });
