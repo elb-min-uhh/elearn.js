@@ -1041,7 +1041,7 @@ function setSwipeType() {
 		swipeType = "menu-back";
 		$('.menu-wrap').css('top', $('#navigation').height() + "px");
 	}
-	else if(!allShown && (swipeTarget.is('section') || swipeTarget.is('section *'))) {
+	else if(!allShown) {
 		swipeType = "section";
 	}
 	else {
