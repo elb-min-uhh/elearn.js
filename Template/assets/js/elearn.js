@@ -983,16 +983,16 @@ function addTouchToSections() {
 	});
 	
 	$("body").click(function(event) {
-	    if(!$(event.target).is('label')) {
-	        var p = $(event.target);
-	        while(!p.is("body") && !p.is("label")) {
-	            p = p.parent();
-	        }
-	        if(!p.is("label") && isTouchSupported()) {
-	            event.preventDefault();
-	        }
-	    }
-		clickedAlready = true;
+//	    if(!$(event.target).is('label')) {
+//	        var p = $(event.target);
+//	        while(!p.is("body") && !p.is("label")) {
+//	            p = p.parent();
+//	        }
+//	        if(!p.is("label") && isTouchSupported()) {
+//	            event.preventDefault();
+//	        }
+//	    }
+//		clickedAlready = true;
 	});
 	
 	
@@ -1145,7 +1145,6 @@ function touchCancel(event, dir) {
     if(swipeType == "slider") {
             $(swipeTarget).css("transition-duration", "0.6s");
     }
-	event.preventDefault();
 	if(triggerElementID != null) {
 		checkClicked();
 		fingerCount = 0;
@@ -1229,6 +1228,7 @@ var x = 0;
 * Aktiviert das Klicken auf alle Elemente in Sections.
 */
 function checkClicked() {
+    return;
 	if(startX >= 0 && startY >= 0 && curX == -1 && curY == -1) {
 		x++;
 		var clicked = $(document.elementFromPoint((startX - $(document).scrollLeft()), (startY - $(document).scrollTop())));

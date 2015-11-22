@@ -387,11 +387,11 @@ a:active {
 }
 
 .section-overview-element, .side-menu-element {
-    width: calc(100% - 135px);
+    width: calc(100% - 130px);
     color: rgb(140,140,140);
     background-color: rgb(240,240,240);
     text-align: left;
-    padding: 5px 0 5px 135px;
+    padding: 5px 0 5px 130px;
 }
 
 .section-overview-element:hover,  .side-menu-element:hover {
@@ -1033,6 +1033,10 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
 		max-width: calc(100% - 40px);
 		max-height: calc(100% - 60px);
     }
+    .section-overview-element {
+        padding: 5px 0 5px 125px;
+        width: calc(100% - 125px);
+    }
 }
 
 @media screen and (max-width:440px) {
@@ -1084,6 +1088,10 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     	margin: 20px 10px;
     	max-width: calc(100% - 20px);
 		max-height: calc(100% - 30px);
+    }
+    .section-overview-element {
+        padding: 5px 0 5px 82px;
+        width: calc(100% - 82px);
     }
     #btnAllText, #btnHelpText {
     	display:none;
