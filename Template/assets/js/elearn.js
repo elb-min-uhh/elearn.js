@@ -1,10 +1,10 @@
 /*
-* v0.5 JavaScript eLearn.js - by Arne Westphal
+* v0.6 JavaScript eLearn.js - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 */
 
-var VERSION_NR = "0.5";
+var VERSION_NR = "0.6";
 var VERSION_DATE = "12/2015";
 
 var visSection = 0;
