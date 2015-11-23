@@ -682,14 +682,20 @@ function resizeSliders() {
 						if(ul.css("max-height") != "none") {
 							heights = Math.min(heights, ul.css("max-height").replace("px", ""));
 						}
+						if(slider.css("max-height") != "none") {
+							heights = Math.min(heights, slider.css("max-height").replace("px", ""));
+						}
 						ul.children('li').css('height', heights + "px");
                         slider.css("height", heights + "px");
 					}
                 }
                 else {
                     var maxHeight = height + "px";
-                    if(height > ul.css("max-height").replace("px", "") && ul.css("max-height") != "none" ) {
-                         maxHeight = ul.css("max-height");
+                    if(height > parseInt(ul.css("max-height").replace("px", "")) && ul.css("max-height") != "none" ) {
+                        maxHeight = ul.css("max-height");
+                    }
+                    if(height > parseInt(slider.css("max-height").replace("px", "")) && slider.css("max-height") != "none" ) {
+                        maxHeight = slider.css("max-height");
                     }
                     li.css("height", maxHeight);
                     if(i == slide) {
