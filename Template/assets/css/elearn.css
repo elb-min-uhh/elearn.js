@@ -383,7 +383,6 @@ a:active {
 
 .section-overview div {
     max-height: calc(80% - 45px);
-    overflow-y: auto;
 }
 
 .section-overview-element, .side-menu-element {
