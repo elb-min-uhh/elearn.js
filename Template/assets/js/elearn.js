@@ -84,6 +84,7 @@ function initiateSections() {
 * Erstellt das SideMenu
 */
 function initiateSideMenu() {
+    var downloadUrl = "./download.zip";
     $('.menu-wrap').html('<div class="side-menu" id="sideMenu">'
     					+ '<div><table>'
 							+ '<tr class="side-menu-element" onclick="javascript: window.print();">'
@@ -98,8 +99,17 @@ function initiateSideMenu() {
 								+ '<td class="side-menu-icon"><div class="icon-info"></div></td> '
 								+ '<td class="side-menu-content">Info</td>'
 							+ '</tr>'
+							+ '<tr class="side-menu-element" id="menu-item-download" onclick="javascript: startDownload(\''+downloadUrl+'\');">'
+								+ '<td class="side-menu-icon"></td> '
+								+ '<td class="side-menu-content">Seite herunterladen</td>'
+							+ '</tr>'
     					+ '</table></div>'
     					+ '</div>');
+    doesURLExist(downloadUrl, function(exists) {
+        if(!exists) {
+            $('#menu-item-download').hide();
+        }
+    });
     $('#sideMenu').css('right', "-"+($('#sideMenu').width()+10)+"px");
 }
 
@@ -370,6 +380,14 @@ function openInfo() {
         }, 200, 
         function() {
     });
+}
+
+
+/**
+* Herunterladen der zip Datei download.zip
+*/
+function startDownload(url) {
+    window.open(url,'_blank');
 }
 
 
@@ -949,6 +967,29 @@ $(document).keyup(function(e){
 		}
 	}
 });
+
+
+
+/**
+* Überprüft ob eine URL existiert.
+* @param url : URL als String (inkl. http:// )
+* @param callback : function(exists) {...}
+*   wird aufgerufen, nachdem die Funktion abgeschlossen ist.
+*/
+function doesURLExist(url, callback) {
+    $.ajax({
+        url: url,
+        type:'HEAD',
+        error: function()
+        {
+            callback(false);
+        },
+        success: function()
+        {
+            callback(true);
+        }
+    });
+}
 
 // --------------------------------------------------------------------------------------
 // Touch Scroll part
