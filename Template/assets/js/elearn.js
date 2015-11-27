@@ -101,7 +101,7 @@ function initiateSideMenu() {
 							+ '</tr>'
 							+ '<tr class="side-menu-element" id="menu-item-download" onclick="javascript: startDownload(\''+downloadUrl+'\');">'
 								+ '<td class="side-menu-icon"></td> '
-								+ '<td class="side-menu-content">Seite herunterladen</td>'
+								+ '<td class="side-menu-content">Quelldateien herunterladen</td>'
 							+ '</tr>'
     					+ '</table></div>'
     					+ '</div>');
