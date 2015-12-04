@@ -65,6 +65,32 @@ function initiateELearnJS() {
 				+ "<div class='menu-wrap'></div>"
 			+ "</div>"
             + "<div id='qr_overlay'><div id='qrcode'></div></div>");
+    
+    // Anhand der Scrollposition merken welche Section aktiv war.
+    $(document).scroll(function() {
+        if(allShown) {
+            var scrollTop = $(document).scrollTop();
+            var i = visSection;
+            var sHeight = $($('section')[i]).position().top - $('#navigation').height() - 15;
+            while(sHeight < scrollTop) {
+                i++;
+                if(i == $('section').length) {
+                    i -= 1;
+                    break;
+                }
+                sHeight = $($('section')[i]).position().top - $('#navigation').height() - 15;
+            }
+            while(sHeight > scrollTop) {
+                i--;
+                if(i < 0) {
+                    i = 0;
+                    break;
+                }
+                sHeight = $($('section')[i]).position().top - $('#navigation').height() - 15;
+            }
+            visSection = i;
+        }
+    });
 }
 
 /**
@@ -75,6 +101,7 @@ function initiateSections() {
 	$('#progressbar').css('width', 100/$('section').length + "%");
 	navigationTitle = $('#nav-title').text();
 	addTouchToSections();
+	createContentOverview();
 	createSectionOverview();
 	$('.section-overview').css('top', $('#navigation').height() + "px");
 	//$('#sideMenu').css('max-width', Math.min($('#sideMenu').width(), $(document).width()) + "px");
@@ -147,19 +174,19 @@ function showSection(i) {
 		}
 		
 		$('#nav-title').text($($('section')[i]).attr('name'));
-		
-		visSection = i;
 		allShown = false;
 		calcProgress(i);
 		
 		resizeAllSliders();
 	}
 	else if(allShown) {
-		var topPos = $($('section')[i]).position().top - $('#navigation').height() - 10;
+		var topPos = $($('section')[i]).position().top - $('#navigation').height();
 		$(document).scrollTop(topPos);
 		
 		resizeAllSliders();
 	}
+		
+	visSection = i;
 
     if(!allShown) {
 		setDirectionButtonsEnabledIdx(visSection);
@@ -188,6 +215,7 @@ function showAllSections() {
 	}
 	else {	
 		$('section').show();
+		$(document).scrollTop($($('section')[visSection]).position().top - $('#navigation').height() - 10);
 		allShown = true;
         resizeAllSliders();
 	}
@@ -242,10 +270,30 @@ function setProgressbarEnabled(b) {
 // -------------------------------------------------------------------------------------
 // Overview
 // -------------------------------------------------------------------------------------
+/**
+* Erstellt ein Inhaltsverzeichnis. Wird #content-overview hinzugefügt.
+*/
+function createContentOverview() {
+    if($('#content-overview').length > 0) {
+	    var text = "<ul>";
+	
+	    for(var i=0; i<$('section').length; i++) {
+		    text += "<li><a href='#' onclick='showSection("+i+")'>"
+					    + $($('section')[i]).attr('name') 
+				    +"</a></li>";
+	    }
+        text+="</ul>";
+	
+	    $('#content-overview').html(text);
+	    $('#content-overview').find("a").click(function(e) {
+	        e.preventDefault();
+	    });
+    }
+}
 
 var justOpenedOverview = false;
 /**
-* Erstellt ein Inhaltsverzeichnis.
+* Erstellt ein Inhaltsverzeichnis. (Für die Nav-Leiste)
 */
 function createSectionOverview() {
 	var text = "<div>";
