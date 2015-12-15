@@ -4,7 +4,7 @@
 Institution des Autors     
 cc by-sa | 2015
 
-![Titelbild](assets/img/md_illu_prod.png)
+![Titelbild](assets/img/illu-concept.png)
 
 \\\Textebenen///
 
