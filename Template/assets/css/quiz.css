@@ -1,62 +1,66 @@
-/*Styles fürs Quiz*/
+/*
+* Styles zum quiz.js v0.2.1 by Arne Westphal
+* Ergänzend zum elearn.js v0.6
+* eLearning Buero MIN-Fakultaet - Universitaet Hamburg
+*/
 
 .question, .q-ergebnis {
-	border: 2px solid rgb(240,240,240);
-	margin:30px 0 0;
-	padding:0em 1em 1em 1.2em;
-	overflow-y: auto;
-	overflow-x: hidden;
+    border: 2px solid rgb(240,240,240);
+    margin:30px 0 0;
+    padding:0em 1em 1em 1.2em;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .question h4 {
-	font-family: TheSansUHH,sans-serif;
-	font-size:120%;
-	font-style: normal;
-	font-weight: normal;
-	background: rgb(240,240,240);
-	margin: 0 -1em 0;
-	padding: 0.3em 1em 0.3em;
+    font-family: TheSansUHH,sans-serif;
+    font-size:120%;
+    font-style: normal;
+    font-weight: normal;
+    background: rgb(240,240,240);
+    margin: 0 -1em 0;
+    padding: 0.3em 1em 0.3em;
 }
 
 .question img {
-	float:left;
-	max-width:100%;
-	margin:1em 0em 1em 0em;
+    float:left;
+    max-width:100%;
+    margin:1em 0em 1em 0em;
 }
 
 .question img.small {
-	max-width: 50%;
+    max-width: 50%;
 }
 
 .question .answers {
-	padding:1em 0em 1em 0em;
-	width: auto;
+    padding:1em 0em 1em 0em;
+    width: auto;
 }
 
 .question label {
-	display:block;
-	margin:0.5em 0 0.5em 2.2em;
-	padding: 0.5em 3.8em 0.5em 1.6em;
+    display:block;
+    margin:0.5em 0 0.5em 2.2em;
+    padding: 0.5em 3.8em 0.5em 1.6em;
 }
 
 .question label:hover {
-	background-color: rgb(240,240,240);
+    background-color: rgb(240,240,240);
 }
 
 .question label.right {
-	background-color:rgb(240,255,240);
+    background-color:rgb(240,255,240);
 }
 
 .question label.right:hover {
-	background-color: rgb(230,245,230);
+    background-color: rgb(230,245,230);
 }
 
 .question label.wrong {
-	background-color: rgb(255,240,240);
+    background-color: rgb(255,240,240);
 }
 
 .question label.wrong:hover {
-	background-color: rgb(245,230,230);
+    background-color: rgb(245,230,230);
 }
 
 /* -------------------------------- Image Selection -------------------------------- */
@@ -121,20 +125,20 @@
 
 .question .feedback, .q-ergebnis .feedback {
     word-break: break-word;
-	margin:1.5em 1.9em 2em 2.2em;
-	padding:0em 1.6em 0em 1.6em;
-	border-left: 1.2em solid rgb(200,200,200); 
-	width: calc(100% - 8.5em);
-	float:left;
+    margin:1.5em 1.9em 2em 2.2em;
+    padding:0em 1.6em 0em 1.6em;
+    border-left: 1.2em solid rgb(200,200,200);
+    width: calc(100% - 8.5em);
+    float:left;
 }
 
 .question .ans {
-	display:none;
+    display:none;
 }
 
 .q-ergebnis h2{
-	text-align: center;
-	width: 100%;
+    text-align: center;
+    width: 100%;
 }
 
 
@@ -144,7 +148,7 @@
 
 
 @media screen and (max-width:800px) {
-	.question label{
+    .question label{
         margin:0.5em 1em 0.5em 1.2em;
     }
     .question .feedback, .q-ergebnis .feedback {
@@ -175,15 +179,15 @@
 
 @media print {
   body {
-  	font-size:78%;
+      font-size:78%;
   }
   .page {
-  	padding: 45px 8.5% 68px 8.5%; 
+      padding: 45px 8.5% 68px 8.5%;
   }
-  
+
   #navigation {
-	font-size: 1em;
-  	display:none;
+    font-size: 1em;
+      display:none;
   }
   h2 {page-break-before:always;}
 }
