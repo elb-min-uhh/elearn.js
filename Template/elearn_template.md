@@ -34,10 +34,11 @@ Bilder können als einzelne Abbildungen oder als Galerien eingebunden werden.Fü
 
 <div class="slider preview-nav loop" style="max-height: 500px">
 <ul class="img-gallery" id="x">
-<li><img src="assets/img/paint01.jpg" alt="Altbau" /><p>„Altbau“, Michael Vogt 2015, digitale Ölfarben</p></li>
-<li><img src="assets/img/paint02.jpg" alt="Propaganda" /><p>„Propaganda an der Straßenecke“, micog, Tempura Digitalis</p>"</li>
-<li><img src="assets/img/paint03.jpg" alt="Onsen" /><p>„Onsen“, Hei Ne Ke, Electronic Ink</p></li>
-<li><img src="assets/img/paint04.jpg" alt="Touching Twins" /><p>„Touching Twins“, Mika Neke, Mixed Technique</p></li>
+<li><img src="assets/img/md-illu_1.png" alt="md-produktion" /><p>Markdown ist kinderleicht zu erlernen.</p></li>
+<li><img src="assets/img/md-illu_2.png" alt="Components" /><p>Zusammenspiel der Komponenten bei der Produktion von digitalen Skripten mit Markdown.</p>"</li>
+<li><img src="assets/img/md-illu_3.png" alt="Future" /><p>Die Zukunft von Markdown als Autorensprache.</p></li>
+<li><img src="assets/img/md-illu_4.png" alt="Media" /><p>Markdown kann viele verschiedene Medientypen in Html einfügen.</p></li>
+<li><img src="assets/img/md-illu_5.png" alt="Hello" /><p>Versuche auch mal, ein Markdown-Dokument zu erstellen. Ist gar nicht schwer!</p></li>
 </ul>
 </div>
 
@@ -65,6 +66,7 @@ Hier wird ein Video eingebuundn, welches sich direkt im Asset-Ordner des Skrips 
 
 <video preload="auto" controls="controls">
     <source src="assets/img/beispiel-video.mp4" type="video/mpeg">
+    <source src="assets/img/beispiel-video.webm" type="video/webm">
            Dein Browser unterstützt kein HTML5-Video. Um dir das Video dennoch ansehen zu können,
            folge einfach diesem <a href="assets/img/beispiel-video.mp4">Link</a>.
 </video>
