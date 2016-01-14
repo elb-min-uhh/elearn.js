@@ -395,6 +395,12 @@ a:active {
     padding: 5px 0 5px 130px;
 }
 
+.section-overview-element.active {
+    border-left: 3px solid #e2001a;
+    background:rgb(220,220,220);
+    padding: 5px 0 5px 127px;
+}
+
 .section-overview-element:hover,  .side-menu-element:hover {
     background:rgb(220,220,220);
 }
@@ -1038,6 +1044,10 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
         padding: 5px 0 5px 125px;
         width: calc(100% - 125px);
     }
+    .section-overview-element.active {
+        padding: 5px 0 5px 122px;
+        width: calc(100% - 122px);
+    }
 }
 
 @media screen and (max-width:440px) {
@@ -1093,6 +1103,10 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     .section-overview-element {
         padding: 5px 0 5px 82px;
         width: calc(100% - 82px);
+    }
+    .section-overview-element.active {
+        padding: 5px 0 5px 79px;
+        width: calc(100% - 79px);
     }
     #btnAllText, #btnHelpText {
         display:none;

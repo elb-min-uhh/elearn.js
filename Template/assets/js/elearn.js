@@ -103,7 +103,7 @@ function initiateSections() {
     addTouchToSections();
     createContentOverview();
     createSectionOverview();
-    $('.section-overview').css('top', $('#navigation').height() + "px");
+    $('.section-overview').css('top', $('nav-bar').outerHeight() + "px");
     //$('#sideMenu').css('max-width', Math.min($('#sideMenu').width(), $(document).width()) + "px");
 };
 
@@ -256,12 +256,12 @@ function setProgressbarEnabled(b) {
     if(b) {
         $('#progressback').show();
         $('.menu-wrap').css('top', $('#navigation').height() + "px");
-        $('.section-overview').css('top', $('#navigation').height() + "px");
+        $('.section-overview').css('top', $('#nav-bar').outerHeight() + "px");
     }
     else {
         $('#progressback').hide();
         $('.menu-wrap').css('top', $('#navigation').height() + "px");
-        $('.section-overview').css('top', $('#navigation').height() + "px");
+        $('.section-overview').css('top', $('#nav-bar').outerHeight() + "px");
     }
 };
 
@@ -328,6 +328,8 @@ function showSectionOverview() {
     else {
         justOpenedOverview = true;
         $('.section-overview').show();
+        $('.section-overview').find(".section-overview-element").removeClass("active");
+        $($('.section-overview').find(".section-overview-element")[visSection]).addClass("active");
         $('#btnExpSym').addClass("mirrorY");
         setDirectionButtonsEnabled(false);
     }
