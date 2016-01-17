@@ -113,6 +113,8 @@ function initiateSections() {
 */
 function initiateSideMenu() {
     var downloadUrl = "./download.zip";
+    var downloadPDF = "./page.pdf";
+    var downloadEPUB = "./page.epub";
     $('.menu-wrap').html('<div class="side-menu" id="sideMenu">'
                         + '<div><table>'
                             + '<tr class="side-menu-element" onclick="javascript: window.print();">'
@@ -131,11 +133,29 @@ function initiateSideMenu() {
                                 + '<td class="side-menu-icon"></td> '
                                 + '<td class="side-menu-content">Quelldateien herunterladen</td>'
                             + '</tr>'
+                            + '<tr class="side-menu-element" id="menu-item-download-pdf" onclick="javascript: startDownload(\''+downloadPDF+'\');">'
+                                + '<td class="side-menu-icon"></td> '
+                                + '<td class="side-menu-content">PDF herunterladen</td>'
+                            + '</tr>'
+                            + '<tr class="side-menu-element" id="menu-item-download-epub" onclick="javascript: startDownload(\''+downloadEPUB+'\');">'
+                                + '<td class="side-menu-icon"></td> '
+                                + '<td class="side-menu-content">EPUB herunterladen</td>'
+                            + '</tr>'
                         + '</table></div>'
                         + '</div>');
     doesURLExist(downloadUrl, function(exists) {
         if(!exists) {
             $('#menu-item-download').hide();
+        }
+    });
+    doesURLExist(downloadPDF, function(exists) {
+        if(!exists) {
+            $('#menu-item-download-pdf').hide();
+        }
+    });
+    doesURLExist(downloadEPUB, function(exists) {
+        if(!exists) {
+            $('#menu-item-download-epub').hide();
         }
     });
     $('#sideMenu').css('right', "-"+($('#sideMenu').width()+10)+"px");
