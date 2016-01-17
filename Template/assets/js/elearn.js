@@ -894,11 +894,18 @@ var tooltips = ['<div id="tooltipShowAll" class="tooltip fixed">'
                 + '</div>',
                 '<div id="tooltipArrowLeft" class="tooltip fixed left">'
                 + 'Klicken, um auf die vorherige Seite zu wechseln.'
+                + '</div>',
+                '<div id="tooltipArrowRight" class="tooltip fixed right">'
+                + 'Wischen, um auf die nächste Seite zu wechseln.'
+                + '</div>',
+                '<div id="tooltipArrowLeft" class="tooltip fixed left">'
+                + 'Wischen, um auf die vorherige Seite zu wechseln.'
                 + '</div>'];
 
-var ttMaxWidth = [-1, -1, -1, 440, 440];
-var anchor = ["#btnAll", "#btnExp", "#btnMenu", "#btnNext", "#btnPrev"];
-var positions = ["#btnAll", "#btnExp", "#btnMenu", [0,0], [0,0]];
+var ttMaxWidth = [-1, -1, -1, 440, 440, -1, -1];
+var ttMinWidth = [-1, -1, -1, -1, -1, 440, 440];
+var anchor = ["#btnAll", "#btnExp", "#btnMenu", "#btnNext", "#btnPrev", "#btnNext", "#btnPrev"];
+var positions = ["#btnAll", "#btnExp", "#btnMenu", [0,0], [0,0], [0,0], [0,0]];
 
 /**
 * Fügt die Buttons und die Funktionen der Buttons hinzu, die zum Durchklicken der
@@ -937,7 +944,9 @@ function showTooltip(nr) {
         return;
     }
     activeTooltip = nr;
-    if($(window).width() > ttMaxWidth[nr] && $(anchor[nr]).is(":visible")) {
+    if((ttMaxWidth[nr] < 0 || $(window).width() > ttMaxWidth[nr])
+        && (ttMinWidth[nr] < 0 || $(window).width() <= ttMinWidth[nr])
+        && $(anchor[nr]).is(":visible")) {
         if(typeof positions[nr] == 'string' && !$(positions[nr]).is(':visible')) {
             nextTooltip();
             return;
