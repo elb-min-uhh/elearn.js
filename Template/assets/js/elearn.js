@@ -903,7 +903,8 @@ var tooltips = ['<div id="tooltipShowAll" class="tooltip fixed">'
                 + '</div>'];
 
 var ttMaxWidth = [-1, -1, -1, 440, 440, -1, -1];
-var ttMinWidth = [-1, -1, -1, -1, -1, 440, 440];
+var ttMinWidth = [-1, -1, -1, -1, -1, -1, -1];
+var bedingung = [true, true, true, true, true, isTouchSupported(), isTouchSupported()];
 var anchor = ["#btnAll", "#btnExp", "#btnMenu", "#btnNext", "#btnPrev", "#btnNext", "#btnPrev"];
 var positions = ["#btnAll", "#btnExp", "#btnMenu", [0,0], [0,0], [0,0], [0,0]];
 
@@ -946,6 +947,7 @@ function showTooltip(nr) {
     activeTooltip = nr;
     if((ttMaxWidth[nr] < 0 || $(window).width() > ttMaxWidth[nr])
         && (ttMinWidth[nr] < 0 || $(window).width() <= ttMinWidth[nr])
+        && bedingung[nr]
         && $(anchor[nr]).is(":visible")) {
         if(typeof positions[nr] == 'string' && !$(positions[nr]).is(':visible')) {
             nextTooltip();
@@ -1087,6 +1089,12 @@ function isTouchSupported() {
     if (msTouchEnabled || generalTouchEnabled) {
         return true;
     }
+    
+    try {  
+        document.createEvent("TouchEvent");  
+        return true;  
+    } catch (e) {
+    } 
     return false;
 }
 
