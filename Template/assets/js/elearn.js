@@ -1141,7 +1141,9 @@ function setSwipeType() {
         swipeType = "menu-back";
         $('.menu-wrap').css('top', $('#navigation').height() + "px");
     }
-    else if(!allShown) {
+    else if(!allShown 
+        && swipeTarget.prop("scrollWidth") == swipeTarget.width()) // Element nicht horizontal scrollbar
+    {
         swipeType = "section";
     }
     else {
