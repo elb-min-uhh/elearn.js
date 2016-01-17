@@ -1133,10 +1133,10 @@ function setSwipeType() {
         swipeTarget = ul;
         ul.css("transition-duration", "0s");
     }
-    else if($(window).width() - (event.touches[0].pageX - $(document).scrollLeft()) < 20 && !isSideMenuVisible()) {
-        swipeType = "menu";
-        $('.menu-wrap').css('top', $('#navigation').height() + "px");
-    }
+    // else if($(window).width() - (event.touches[0].pageX - $(document).scrollLeft()) < 20 && !isSideMenuVisible()) {
+        // swipeType = "menu";
+        // $('.menu-wrap').css('top', $('#navigation').height() + "px");
+    // }
     else if(isSideMenuVisible()) {
         swipeType = "menu-back";
         $('.menu-wrap').css('top', $('#navigation').height() + "px");
