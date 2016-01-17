@@ -1047,7 +1047,6 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     }
     .section-overview-element.active {
         padding: 5px 0 5px 122px;
-        width: calc(100% - 122px);
     }
 }
 
@@ -1107,7 +1106,6 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     }
     .section-overview-element.active {
         padding: 5px 0 5px 79px;
-        width: calc(100% - 79px);
     }
     #btnAllText, #btnHelpText {
         display:none;
