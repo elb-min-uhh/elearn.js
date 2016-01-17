@@ -104,6 +104,7 @@ function initiateSections() {
     createContentOverview();
     createSectionOverview();
     $('.section-overview').css('top', $('nav-bar').outerHeight() + "px");
+    $('.section-overview').css('height', "calc(100% - " + $('.section-overview').css("top") + ")");
     //$('#sideMenu').css('max-width', Math.min($('#sideMenu').width(), $(document).width()) + "px");
 };
 
@@ -257,11 +258,13 @@ function setProgressbarEnabled(b) {
         $('#progressback').show();
         $('.menu-wrap').css('top', $('#navigation').height() + "px");
         $('.section-overview').css('top', $('#nav-bar').outerHeight() + "px");
+        $('.section-overview').css('height', "calc(100% - " + $('.section-overview').css("top") + ")");
     }
     else {
         $('#progressback').hide();
         $('.menu-wrap').css('top', $('#navigation').height() + "px");
         $('.section-overview').css('top', $('#nav-bar').outerHeight() + "px");
+        $('.section-overview').css('height', "calc(100% - " + $('.section-overview').css("top") + ")");
     }
 };
 

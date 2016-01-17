@@ -374,6 +374,7 @@ a:active {
 }
 
 .section-overview {
+    overflow-y: auto;
     display:none;
     position: fixed;
     width:1100px;
