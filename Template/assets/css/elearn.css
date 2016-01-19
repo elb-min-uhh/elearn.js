@@ -537,14 +537,14 @@ button:hover, button:active {
 }
 
 #btnNext:before {
-    color:rgb(102,102,102);
+    color:rgb(200,200,200);
     position:absolute;
     top:5em;
     right:6%;
 }
 
 #btnPrev:before {
-    color:rgb(102,102,102);
+    color:rgb(200,200,200);
     position:absolute;
     top:5em;
     left:6%;
@@ -1017,9 +1017,23 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     #btnNext:before, #tooltipArrowRight {
         right:1%;
     }
+    #btnNext:before{
+        top:6em;
+    }
 
     #btnPrev:before, #tooltipArrowLeft {
         left:1%;
+    }
+    #btnPrev:before{
+        top:6em;
+    }
+
+    #btnNext {
+        font-size: 70%;
+    }
+    
+    #btnPrev {
+        font-size: 70%;
     }
 
     .side-menu {
