@@ -1,6 +1,6 @@
 # elearn.js
 
-Repository für das elearn.js Projekt mit html-Template. Das elearn.js kann zur Produktion von digitalen Skripten für die Hochschullehre eingesetzt werden. 
+Dies ist das Repository des elearn.js Projekts mit html-Template. elearn.js kann zur Produktion von digitalen Skripten für die Hochschullehre und Open Educational Ressources eingesetzt werden. 
 
 ## Dokumentation
 
@@ -12,7 +12,7 @@ Eine Umfassende Dokumentation des Projekts befindet sich unter http://www.sumo.u
 
 elearn.js ist eine Entwicklung des [eLearning-Büro MIN](https://www.min.uni-hamburg.de/studium/elearning.html) der Universität Hamburg.
 
-Die Software unter der [MIT-Lizenz](http://opensource.org/licenses/mit-license.php).
+Die Software steht unter der [MIT-Lizenz](http://opensource.org/licenses/mit-license.php).
 
 Copyright (c) 2016 Michael Heinecke, eLearning-Büro MIN, Universität Hamburg
 
