@@ -1136,4 +1136,7 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     h2 {
         page-break-before:always;
     }
+    code {
+        white-space:pre-wrap;
+    }
 }
