@@ -1179,6 +1179,7 @@ function setSwipeType() {
         $('.menu-wrap').css('top', $('#navigation').height() + "px");
     }
     else if(!allShown 
+        && !swipeTarget.is("code") // Kein Code Element
         && swipeTarget.prop("scrollWidth") == swipeTarget.width()) // Element nicht horizontal scrollbar
     {
         swipeType = "section";
