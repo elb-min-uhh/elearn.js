@@ -23,6 +23,7 @@ $(document).ready(function() {
     initiateELearnJS();
     initiateInfo();
     initiateSections();
+    initiateGalleries();
     showAllSections();
     initiateSideMenu();
     initiateTooltips();
@@ -34,7 +35,6 @@ $(document).ready(function() {
     });
     $('#qr_overlay').click(function() {$('#qr_overlay').hide();});
 
-    initiateGalleries();
 });
 
 /**
@@ -517,7 +517,6 @@ function initiateGalleries() {
         $(this).parent().after("<div class='slider-description'></div>");
         showSlideDescription(ul, 0);
     });
-    resizeAllSliders();
 }
 
 /**
@@ -752,7 +751,8 @@ function resizeAllSliders() {
 * Passt alle Bildergallerien (normalen Slider) an neue Fenstergröße an.
 */
 function resizeSliders() {
-    $('.slider').each(function() {
+    $('.slider:visible').each(function() {
+        console.log(new Date());
         var slider = $(this);
         var ul = slider.children('ul.img-gallery');
         ul.find('img').css('max-height', 'auto');
@@ -811,7 +811,7 @@ function resizeSliders() {
 * Passt alle Slider Navigationen an neue Fenstergröße an.
 */
 function resizeNavigationSliders() {
-    $('.slider-nav').each(function() {
+    $('.slider-nav:visible').each(function() {
         var slider = $(this);
         var ul = slider.children('ul.img-gallery');
         var slide = visibleImage[$('.img-gallery').index(ul)];
@@ -863,7 +863,7 @@ function resizeNavigationSliders() {
 * Passt Zoom Container an neue Fenstergröße an.
 */
 function resizeZoomContainer() {
-    if($('.image-zoom-container').is(':visible')) {
+    if($('.image-zoom-container:visible').is(':visible')) {
         var img = $('.img-lightbox').find('img');
         img.css('margin-left', "");
         img.css('margin-left', (parseInt(img.css('margin-left').replace("px","")) - $('.img-lightbox').find('.close').width() -1) + "px");
