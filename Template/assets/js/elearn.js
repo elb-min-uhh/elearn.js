@@ -206,8 +206,10 @@ function showSection(i) {
 
         resizeAllSliders();
     }
-
-    visSection = i;
+    
+    if(i >= 0 && i < $('section').length) {
+        visSection = i;
+    }
 
     if(!allShown) {
         setDirectionButtonsEnabledIdx(visSection);
@@ -752,7 +754,6 @@ function resizeAllSliders() {
 */
 function resizeSliders() {
     $('.slider:visible').each(function() {
-        console.log(new Date());
         var slider = $(this);
         var ul = slider.children('ul.img-gallery');
         ul.find('img').css('max-height', 'auto');
