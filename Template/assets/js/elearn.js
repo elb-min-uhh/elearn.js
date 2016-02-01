@@ -1085,22 +1085,6 @@ function doesURLExist(url, callback) {
 // --------------------------------------------------------------------------------------
 
 
-var initiateTouchCheck = function() {
-    $(document).bind('touchstart', function() {
-        isTouchSupported = true;
-    });
-    $(document).bind('touchend', function() {
-        isTouchSupported = true;
-    });
-    $(document).bind('touchmove', function() {
-        isTouchSupported = true;
-    });
-    $(document).bind('touchcancel', function() {
-        isTouchSupported = true;
-    });
-};
-
-
 var maxDiff = 0;
 var clickedAlready = false;
 
@@ -1109,6 +1093,7 @@ var clickedAlready = false;
 */
 function addTouchToSections() {
     $(document).bind('touchstart', function() {
+        isTouchSupported = true;
         touchStart(event, this);
     });
     $(document).bind('touchend', function() {
