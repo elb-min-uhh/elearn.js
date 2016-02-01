@@ -7,6 +7,9 @@
 var VERSION_NR = "0.6";
 var VERSION_DATE = "12/2015";
 
+// Will be set on first Touch event. See Help Functions at bottom
+var isTouchSupported = false;
+
 var visSection = 0;
 var allShown = false;
 var overviewShown = false;
@@ -20,6 +23,7 @@ var eLearnJS = this;
 // --------------------------------------------------------------------------------------
 
 $(document).ready(function() {
+    initiateTouchCheck();
     initiateELearnJS();
     initiateInfo();
     initiateSections();
@@ -905,7 +909,7 @@ var tooltips = ['<div id="tooltipShowAll" class="tooltip fixed">'
 
 var ttMaxWidth = [-1, -1, -1, 440, 440, -1, -1];
 var ttMinWidth = [-1, -1, -1, -1, -1, -1, -1];
-var bedingung = [true, true, true, true, true, isTouchSupported(), isTouchSupported()];
+var bedingung = [true, true, true, true, true, isTouchSupported, isTouchSupported];
 var anchor = ["#btnAll", "#btnExp", "#btnMenu", "#btnNext", "#btnPrev", "#btnNext", "#btnPrev"];
 var positions = ["#btnAll", "#btnExp", "#btnMenu", [0,0], [0,0], [0,0], [0,0]];
 
@@ -1080,24 +1084,21 @@ function doesURLExist(url, callback) {
 // Touch Scroll part
 // --------------------------------------------------------------------------------------
 
-/**
-* Check if touch is supported
-*/
-function isTouchSupported() {
-    var msTouchEnabled = window.navigator.msMaxTouchPoints;
-    var generalTouchEnabled = "ontouchstart" in document.createElement("div");
 
-    if (msTouchEnabled || generalTouchEnabled) {
-        return true;
-    }
-    
-    try {  
-        document.createEvent("TouchEvent");  
-        return true;  
-    } catch (e) {
-    } 
-    return false;
-}
+var initiateTouchCheck = function() {
+    $(document).bind('touchstart', function() {
+        isTouchSupported = true;
+    });
+    $(document).bind('touchend', function() {
+        isTouchSupported = true;
+    });
+    $(document).bind('touchmove', function() {
+        isTouchSupported = true;
+    });
+    $(document).bind('touchcancel', function() {
+        isTouchSupported = true;
+    });
+};
 
 
 var maxDiff = 0;
