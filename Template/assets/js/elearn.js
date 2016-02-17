@@ -23,7 +23,6 @@ var eLearnJS = this;
 // --------------------------------------------------------------------------------------
 
 $(document).ready(function() {
-    initiateTouchCheck();
     initiateELearnJS();
     initiateInfo();
     initiateSections();
