@@ -187,6 +187,8 @@ function showNext() {
 function showSection(i) {
     overviewShown = true;
     showSectionOverview();
+
+    // show only this section
     if(!allShown && i >= 0 && i < $('section').length) {
         $('section').hide();
 
@@ -203,15 +205,18 @@ function showSection(i) {
 
         resizeAllSliders();
     }
+    // scroll to that section
     else if(allShown) {
         var topPos = $($('section')[i]).position().top - $('#navigation').height();
         $(document).scrollTop(topPos);
 
         resizeAllSliders();
     }
-    
+
+    // section was updated
     if(i >= 0 && i < $('section').length) {
         visSection = i;
+        stopVideos();
     }
 
     if(!allShown) {
@@ -1023,6 +1028,44 @@ function closeTooltips() {
 
 
 // --------------------------------------------------------------------------------------
+// Stop Videos
+// --------------------------------------------------------------------------------------
+
+/**
+* Stops all videos on the page. Usually called when another section is displayed.
+*/
+function stopVideos() {
+    // stop all HTML5 videos
+    $('video').each(function() {this.pause()});
+
+    // reload sources for every lecture2go video
+    // set source from hsrc (hidden source, set below)
+    $('.strobemediaplayback-video-player:visible').each(function() {
+        if($(this).attr("hsrc") != undefined
+            && $(this).attr("hsrc") != null
+            && $(this).attr("hsrc").length > 0)
+        {
+            this.src = $(this).attr("hsrc");
+            $(this).attr("hsrc", "");
+        }
+    });
+
+    // set hsrc from src and set src to "" so the video stops
+    // cannot be reset directly because it only loads if visible.
+    $('.strobemediaplayback-video-player').not(':visible').each(function() {
+
+        // if not set already
+        if($(this).attr("hsrc") == undefined
+            || $(this).attr("hsrc") == null
+            || $(this).attr("hsrc").length == 0)
+        {
+            $(this).attr("hsrc", this.src);
+            this.src = "";
+        }
+    });
+}
+
+// --------------------------------------------------------------------------------------
 // Window RESIZING
 // --------------------------------------------------------------------------------------
 var resizeTimer;
@@ -1164,7 +1207,7 @@ function setSwipeType() {
         swipeType = "menu-back";
         $('.menu-wrap').css('top', $('#navigation').height() + "px");
     }
-    else if(!allShown 
+    else if(!allShown
         && !swipeTarget.is("code") // Kein Code Element
         && swipeTarget.prop("scrollWidth") == swipeTarget.width()) // Element nicht horizontal scrollbar
     {

@@ -46,6 +46,10 @@ body {
     margin:auto;
 }
 
+iframe {
+    max-width: 100%;
+}
+
 #wrap {
     min-height:100%;
     vertical-align:center;
@@ -1031,7 +1035,7 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     #btnNext {
         font-size: 70%;
     }
-    
+
     #btnPrev {
         font-size: 70%;
     }
