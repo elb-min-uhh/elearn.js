@@ -4,9 +4,9 @@ Dies ist das Repository des elearn.js Projekts mit html-Template. elearn.js kann
 
 ## Dokumentation
 
-Eine Umfassende Dokumentation des Projekts befindet sich unter http://www.sumo.uni-hamburg.de/DigitaleSkripte/.
+Eine umfassende Dokumentation des Projekts befindet sich unter http://www.sumo.uni-hamburg.de/DigitaleSkripte/.
 
-> There ist no english or international version so far.
+> There is no English or international version so far.
 
 ## Lizensierung
 

@@ -62,7 +62,7 @@ Hier sollen vor allem Video und Audio-Einbindung demonstriert werden. At vero eo
 
 #### Videos als Asset
 
-Hier wird ein Video eingebuundn, welches sich direkt im Asset-Ordner des Skrips befindet. Diese Lösung ist nur für relativ kurze Videos empfehlenswert (max. fünf Minuten).
+Hier wird ein Video eingebunden, welches sich direkt im Asset-Ordner des Skrips befindet. Diese Lösung ist nur für relativ kurze Videos empfehlenswert (max. fünf Minuten).
 
 <video preload="auto" controls="controls">
     <source src="assets/img/beispiel-video.mp4" type="video/mpeg">
@@ -73,13 +73,13 @@ Hier wird ein Video eingebuundn, welches sich direkt im Asset-Ordner des Skrips 
 
 #### Videos von einem Streaming Server
 
-Hier ist ein Video von eineme Streamin-Server als iFrame eingebunden.
+Hier ist ein Video von einem Streaming-Server als iFrame eingebunden.
 
 <iframe src='https://lecture2go.uni-hamburg.de/liferay-jedi-theme/javascript/strobe/embed.html?src=https://fms.rrz.uni-hamburg.de/vod/_definst_/mp4:8l2gbal1768/64.280_werz_2013-06-26_16-15.mp4/manifest.f4m&poster=https://lecture2go.uni-hamburg.de/images/64.280_werz_2013-06-26_16-15.jpg' class='strobemediaplayback-video-player' type='text/html' width='500' height='250'> </iframe>
 
 #### Audio-Files
 
-Da Audio-Dateien als mp3s in der Regel nicht so groß sind, dass ein Streaming-Server benötigt wird, können diese aus dem Assets-Ordner progressiv als Download eingebunden wrden. Hier ein Beispiel:
+Da Audio-Dateien als mp3s in der Regel nicht so groß sind, dass ein Streaming-Server benötigt wird, können diese aus dem Assets-Ordner progressiv als Download eingebunden worden. Hier ein Beispiel:
 
 <audio preload="auto" controls="controls">
     <source src="assets/img/beispiel-audio.mp3" type="audio/mpeg">
@@ -118,7 +118,7 @@ At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergr
 Auf dieser Seite sind einige Quiz-Fragen Beispielhaft dargestellt.
 
 <div class="question">
-<h4>Auf welcher Technologie basieren die digitaen Skripte? </h4> <!-- Fragentext -->
+<h4>Auf welcher Technologie basieren die digitalen Skripte? </h4> <!-- Fragentext -->
 <div class="answers">
 <label>Lösung: <input type="text" name="q"/></label>
 </div>
@@ -126,7 +126,7 @@ Auf dieser Seite sind einige Quiz-Fragen Beispielhaft dargestellt.
 Deine Antwort ist richtig.
 </div>
 <div class="feedback incorrect">
-Leider nein, scheue DIr doch nochmal die Dokumentation an.
+Leider nein, schaue dir doch nochmal die Dokumentation an.
 </div>
 <a class="ans">4c4ad5fca2e7a3f74dbb1ced00381aa4</a>
 <a class="ans">2182a74bab7188d959e795d9301e87ff</a>
@@ -136,7 +136,7 @@ Leider nein, scheue DIr doch nochmal die Dokumentation an.
 </div>
 
 <div class="question">
-<h4>Welche Unterordner werden in der Dateistruktur von digitalen skripten erwartet?</h4>
+<h4>Welche Unterordner werden in der Dateistruktur von digitalen Skripten erwartet?</h4>
 <div class="answers">
 <label><input type="checkbox" name="q" value="Frage2-1"/>assets</label>
 <label><input type="checkbox" name="q" value="Frage2-2"/>movies</label>
@@ -148,7 +148,7 @@ Leider nein, scheue DIr doch nochmal die Dokumentation an.
 Genau, diese Ordner werden auf jeden Fall benötigt. Sogar noch ein paar mehr.
 </div>
 <div class="feedback incorrect">
-In deiner Antwort ist mindest ein Ordner, der nicht unbedingt benötigt wird.
+In deiner Antwort ist mindestens ein Ordner, der nicht unbedingt benötigt wird.
 </div>
 <a class="ans">b5ceb729a1b347aa357790e1588c88b3</a>
 <a class="ans">1fd302a9c89fc92eead418857a7e5a07</a>
