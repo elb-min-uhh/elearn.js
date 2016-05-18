@@ -348,8 +348,12 @@ a:active {
     margin: 5px 5px;
     font-weight: bold;
     text-align: center;
-    max-width: 25%;
     cursor: pointer;
+    word-wrap: break-word;
+}
+
+.kachel ul li > * {
+    max-width: 150px;
 }
 
 .kachel span.title {
