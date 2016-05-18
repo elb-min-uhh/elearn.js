@@ -315,6 +315,19 @@ a:active {
 
 /* --------------------------------------- CONTENT OVERVIEW ------------------------------------- */
 
+#content-overview p {
+    display: none;
+}
+
+#content-overview span {
+    color: #e2001a;
+    cursor: pointer;
+}
+
+#content-overview span:hover {
+    text-decoration: underline;
+}
+
 .kachel ul {
   padding: 0;
   margin: 0;
@@ -331,24 +344,37 @@ a:active {
 }
 
 .kachel ul li {
-    background: #e2001a;
+    background: #888;
     margin: 5px 5px;
     font-weight: bold;
     text-align: center;
+    max-width: 25%;
+    cursor: pointer;
 }
 
-.kachel a {
-    color: white;
+.kachel span.title {
+    color: white !important;
     padding: 10px 20px;
     display: inline-block;
 }
 
-.kachel a:hover {
-    text-decoration: none;
+.kachel span.title:hover {
+    text-decoration: none !important;
+}
+
+.kachel p {
+    display: block !important;
+    background: rgba(255,255,255, 0.7);
+    font-weight: normal;
+    text-align: left;
+    line-height: 120%;
+    font-size: 90%;
+    margin: 0;
+    padding: 10px 20px;
 }
 
 .kachel ul li:hover {
-    background: #888;
+    background: #e2001a;
 }
 
 

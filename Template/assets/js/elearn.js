@@ -375,9 +375,13 @@ function createContentOverview() {
         var text = "<ul>";
 
         for(var i=0; i<$('section').length; i++) {
-            text += "<li><a href='#' onclick='showSection("+i+")'>"
-                        + $($('section')[i]).attr('name')
-                    +"</a></li>";
+            text += "<li onclick='showSection("+i+")'>";
+            text += "<span class='title'>" + $($('section')[i]).attr('name') + "</span>";
+            if($($('section')[i]).attr('desc') != undefined
+                && $($('section')[i]).attr('desc').length > 0) {
+                text += "<p>" + $($('section')[i]).attr('desc') + "</p>";
+            }
+            text += "</li>";
         }
         text+="</ul>";
 
