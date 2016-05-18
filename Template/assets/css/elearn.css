@@ -632,6 +632,24 @@ button:hover, button:active {
     content: "a";
 }
 
+.icon-zip:before{
+    font-family: eLearn-icons;
+    font-size:1em;
+    content: "x";
+}
+
+.icon-pdf:before{
+    font-family: eLearn-icons;
+    font-size:1em;
+    content: "f";
+}
+
+.icon-epub:before{
+    font-family: eLearn-icons;
+    font-size:1em;
+    content: "e";
+}
+
 .before-padding:before{
     padding: 10px;
 }
