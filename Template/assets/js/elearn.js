@@ -15,6 +15,13 @@ var allShown = false;
 var overviewShown = false;
 var navigationTitle = "";
 
+var overviewSection = 0;
+
+// Zum generellen Aktivieren oder Deaktivieren der Knöpfe
+var dirButtonsEnabled = true;
+var keyNavigationEnabled = true;
+var progressbarEnabled = true;
+
 // Nur damit Scriptaufrufe übersichtlicher sind.
 var eLearnJS = this;
 
@@ -27,7 +34,7 @@ $(document).ready(function() {
     initiateInfo();
     initiateSections();
     initiateGalleries();
-    showAllSections();
+    toggleAllSections();
     initiateSideMenu();
     initiateTooltips();
 
@@ -53,7 +60,8 @@ function initiateELearnJS() {
             + "<div id='navigation'>"
                 // <!-- Grey Top Menu-bar - Reihenfolge wichtig -->
                 + "<div id='nav-bar'>"
-                    + "<div onclick='javascript: showAllSections();' id='btnAllCon' class ='btn' title='Zeige/verstecke Bereiche'><div class='icon-font' id='btnAll'>s</div><div id='btnAllText'>Ansicht</div></div>"
+                    + "<div onclick='javascript: backButtonPressed();' id='btnBackCon' class ='btn' title='Zurück zur Übersicht'><div class='icon-font' id='btnBack'>b</div><div id='btnBackText'>Übersicht</div></div>"
+                    + "<div onclick='javascript: toggleAllSections();' id='btnAllCon' class ='btn' title='Zeige/verstecke Bereiche'><div class='icon-font' id='btnAll'>s</div><div id='btnAllText'>Ansicht</div></div>"
                     + "<div onclick='javascript: showSectionOverview();' id='btnExp' class ='btn' title='Inhaltsverzeichnis'><div class='icon-font' id='btnExpSym'>c</div><div id='nav-title'>Name des Moduls</div></div>"
                     + "<div onclick='javascript: toggleSideMenu(isSideMenuVisible());' id='btnMenu' class ='icon-font btn' title='Menü'>m</div>"
                     + "<div onclick='javascript: startHelp();' id='btnHelp' class ='btn' title='Zeige/verstecke Bereiche'><div class='icon-font' id='btnHelpSym'>q</div><div id='btnHelpText'>Hilfe</div></div>"
@@ -164,6 +172,33 @@ function initiateSideMenu() {
     $('#sideMenu').css('right', "-"+($('#sideMenu').width()+10)+"px");
 }
 
+
+/**
+* Zeigt den "Back-Button" an oder blendet ihn aus. (Standardmäßig aus)
+*/
+function setBackButtonEnabled(b) {
+    if(b) {
+        $('#navigation').addClass("back-enabled");
+    }
+    else {
+        $('#navigation').removeClass("back-enabled");
+    }
+}
+
+
+/**
+* Zeigt overviewSection an.
+*/
+function backButtonPressed() {
+    showSection(overviewSection);
+}
+
+function setBackPage(name) {
+    var idx = $('section').index($('section[name="' + name + '"]').get(0));
+    overviewSection = idx;
+}
+
+
 /**
 * Zeigt die vorherige Section
 * Funktioniert nur, wenn nicht alle Sections angezeigt werden.
@@ -235,7 +270,7 @@ function calcProgress(i) {
 /**
 * Schaltet zwischen alle Sections anzeigen und nur eine um.
 */
-function showAllSections() {
+function toggleAllSections() {
     setDirectionButtonsEnabled(allShown);
     setProgressbarEnabled(allShown);
     $('#nav-title').text(navigationTitle);
@@ -253,16 +288,32 @@ function showAllSections() {
 };
 
 /**
+* Aktiviert oder deaktiviert generell Richtungsknöpfe.
+* Zum manuellen aktivieren oder deaktivieren durch den Ersteller der Seite
+*/
+function generalDirectionButtonsEnabled(b) {
+    if(b) {
+        setDirectionButtonsEnabledIdx(visSection);
+    }
+    else {
+        setDirectionButtonsEnabled(false);
+    }
+    dirButtonsEnabled = b;
+}
+
+/**
 * Aktiviert die Frage vor und zurück Buttons wenn b == true. deaktiviert sie sonst.
 */
 function setDirectionButtonsEnabled(b) {
-    if(b) {
-        $('#btnPrev').show();
-        $('#btnNext').show();
-    }
-    else {
-        $('#btnPrev').hide();
-        $('#btnNext').hide();
+    if(dirButtonsEnabled) {
+        if(b) {
+            $('#btnPrev').show();
+            $('#btnNext').show();
+        }
+        else {
+            $('#btnPrev').hide();
+            $('#btnNext').hide();
+        }
     }
 };
 
@@ -270,31 +321,44 @@ function setDirectionButtonsEnabled(b) {
 * Aktiviert die Frage vor und zurück Buttons je nach Index.
 */
 function setDirectionButtonsEnabledIdx(i) {
-    $('#btnPrev').show();
-    $('#btnNext').show();
-    if(i == 0 || overviewShown) {
-        $('#btnPrev').hide();
+    if(dirButtonsEnabled) {
+        $('#btnPrev').show();
+        $('#btnNext').show();
+        if(i == 0 || overviewShown) {
+            $('#btnPrev').hide();
+        }
+        if(i == ($('section').length - 1) || overviewShown) {
+            $('#btnNext').hide();
+        }
     }
-    if(i == ($('section').length - 1) || overviewShown) {
-        $('#btnNext').hide();
-    }
+}
+
+
+/**
+* Generelles aktivieren/deaktivieren der Fortschrittsleiste
+*/
+function generalProgressbarEnabled(b) {
+    setProgressbarEnabled(b);
+    progressbarEnabled = b;
 }
 
 /**
 * Aktiviert die Progressbar wenn b == true. deaktiviert sie sonst.
 */
 function setProgressbarEnabled(b) {
-    if(b) {
-        $('#progressback').show();
-        $('.menu-wrap').css('top', $('#navigation').height() + "px");
-        $('.section-overview').css('top', $('#nav-bar').outerHeight() + "px");
-        $('.section-overview').css('height', "calc(100% - " + $('.section-overview').css("top") + ")");
-    }
-    else {
-        $('#progressback').hide();
-        $('.menu-wrap').css('top', $('#navigation').height() + "px");
-        $('.section-overview').css('top', $('#nav-bar').outerHeight() + "px");
-        $('.section-overview').css('height', "calc(100% - " + $('.section-overview').css("top") + ")");
+    if(progressbarEnabled) {
+        if(b) {
+            $('#progressback').show();
+            $('.menu-wrap').css('top', $('#navigation').height() + "px");
+            $('.section-overview').css('top', $('#nav-bar').outerHeight() + "px");
+            $('.section-overview').css('height', "calc(100% - " + $('.section-overview').css("top") + ")");
+        }
+        else {
+            $('#progressback').hide();
+            $('.menu-wrap').css('top', $('#navigation').height() + "px");
+            $('.section-overview').css('top', $('#nav-bar').outerHeight() + "px");
+            $('.section-overview').css('height', "calc(100% - " + $('.section-overview').css("top") + ")");
+        }
     }
 };
 
@@ -1089,7 +1153,7 @@ $(window).resize(function() {
 * Fügt Pfeiltastennavigation durch Sections hinzu.
 */
 $(document).keyup(function(e){
-    if(!allShown) {
+    if(!allShown && keyNavigationEnabled) {
         if(e.keyCode == 37) {
             showPrev();
         }
@@ -1098,6 +1162,15 @@ $(document).keyup(function(e){
         }
     }
 });
+
+
+/**
+* Aktiviert oder Deaktiviert Tastaturnavigation
+*/
+
+function setKeyNavigationEnabled(b) {
+    keyNavigationEnabled = b;
+}
 
 
 

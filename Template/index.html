@@ -16,8 +16,13 @@
 
 		<script>
 		    window.onload = function() {
-                eLearnJS.showAllSections();
-                eLearnJS.showSection(0);
+                eLearnJS.toggleAllSections(); // Zeigt Sections einzeln an
+                eLearnJS.showSection(0); // Zeigt die erste Section
+				eLearnJS.generalDirectionButtonsEnabled(false); // keine Nav. Buttons
+				eLearnJS.setKeyNavigationEnabled(false); // keine Tastaturnavigation
+				eLearnJS.setBackButtonEnabled(true); // Zurück button im Header
+				eLearnJS.setBackPage("Inhaltsverzeichnis"); // Ziel des Zurück-Buttons
+				eLearnJS.generalProgressbarEnabled(false); // keine Fortschrittsleiste
             }
         </script>
 
@@ -54,7 +59,8 @@
 
 			    <section name="Inhaltsverzeichnis">
 			        <h2>Inhaltsverzeichnis</h2>
-			        <div id="content-overview">
+					<!-- Zusatz class="kachel" ändert die Darstellung -->
+			        <div id="content-overview" class="kachel">
 			            <!--
 			                Hier wird automatisch ein Inhaltsverzeichnis
 			                eingefügt, wenn das div#content-overview vorhanden

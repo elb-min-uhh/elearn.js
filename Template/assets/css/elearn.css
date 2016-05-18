@@ -82,10 +82,32 @@ iframe {
     margin-top: -5px;
 }
 
-#btnAll,#btnExpSym,#btnMenu, #btnHelpSym {
+#btnBack,#btnAll,#btnExpSym,#btnMenu, #btnHelpSym {
     color: rgb(204,204,204);
     font-size: 180%;
     display: inline-block;
+}
+
+#btnBackCon {
+    display: none;
+}
+
+.back-enabled #btnBackCon {
+    float: left;
+    display: inline-block;
+    overflow-y: auto;
+    margin-left: 20px;
+}
+
+.back-enabled #btnBack {
+    float: left;
+    width: 22px;
+    display:inline-block;
+}
+
+.back-enabled #btnBackText {
+    margin-left: 5px;
+    float: left;
 }
 
 #btnAllCon {
@@ -93,6 +115,10 @@ iframe {
     display: inline-block;
     overflow-y: auto;
     margin-left: 20px;
+}
+
+.back-enabled #btnAllCon {
+    margin-left: 0;
 }
 
 #btnAll {
@@ -111,6 +137,10 @@ iframe {
     width: calc(100% - 100px - 142px - 5px);
     overflow:hidden;
     white-space:nowrap;
+}
+
+.back-enabled #btnExp {
+    width: calc(100% - 200px - 142px - 5px);
 }
 
 #btnExp:before {
@@ -165,7 +195,8 @@ iframe {
     float: right;
 }
 
-#btnAllCon:hover *, #btnExp:hover *, #btnMenu:hover, #btnHelp:hover * {
+#btnBackCon:hover *, #btnAllCon:hover *, #btnExp:hover *, #btnMenu:hover,
+#btnHelp:hover * {
     text-decoration: none;
     color: #fff;
 }
@@ -280,6 +311,46 @@ a:hover {
 a:active {
     text-decoration: underline;
 }
+
+
+/* --------------------------------------- CONTENT OVERVIEW ------------------------------------- */
+
+.kachel ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+
+  -webkit-flex-flow: row wrap;
+  justify-content: flex-start;
+}
+
+.kachel ul li {
+    background: #e2001a;
+    margin: 5px 5px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.kachel a {
+    color: white;
+    padding: 10px 20px;
+    display: inline-block;
+}
+
+.kachel a:hover {
+    text-decoration: none;
+}
+
+.kachel ul li:hover {
+    background: #888;
+}
+
 
 
 /* ------------------------------------------ TOOLTIPS ------------------------------------------ */
@@ -1143,11 +1214,14 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     .section-overview-element.active {
         padding: 5px 0 5px 79px;
     }
-    #btnAllText, #btnHelpText {
+    #btnBackText, #btnAllText, #btnHelpText {
         display:none;
     }
     #btnExp {
         width: calc(100% - 142px - 5px);
+    }
+    .back-enabled #btnExp {
+        width: calc(100% - 180px - 5px);
     }
     #btnHelp {
         margin-right: 0;
