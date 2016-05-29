@@ -339,6 +339,7 @@ a:active {
   display: -webkit-flex;
   display: flex;
 
+  flex-flow: row wrap;
   -webkit-flex-flow: row wrap;
   justify-content: flex-start;
 }
