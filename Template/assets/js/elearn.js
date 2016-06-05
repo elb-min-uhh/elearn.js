@@ -15,7 +15,8 @@ var allShown = false;
 var overviewShown = false;
 var navigationTitle = "";
 
-var overviewSection = 0;
+var backpage = 0;
+var backpagetype = "index";
 
 // Zum generellen Aktivieren oder Deaktivieren der Knöpfe
 var dirButtonsEnabled = true;
@@ -60,7 +61,7 @@ function initiateELearnJS() {
             + "<div id='navigation'>"
                 // <!-- Grey Top Menu-bar - Reihenfolge wichtig -->
                 + "<div id='nav-bar'>"
-                    + "<div onclick='javascript: backButtonPressed();' id='btnBackCon' class ='btn' title='Zurück zur Übersicht'><div class='icon-font' id='btnBack'>b</div><div id='btnBackText'>Übersicht</div></div>"
+                    + "<div onclick='javascript: backButtonPressed();' id='btnBackCon' class ='btn' title='Zurück zur Übersicht'><div class='icon-font' id='btnBack'>b</div><div id='btnBackText'>Zurück</div></div>"
                     + "<div onclick='javascript: toggleAllSections();' id='btnAllCon' class ='btn' title='Zeige/verstecke Bereiche'><div class='icon-font' id='btnAll'>s</div><div id='btnAllText'>Ansicht</div></div>"
                     + "<div onclick='javascript: showSectionOverview();' id='btnExp' class ='btn' title='Inhaltsverzeichnis'><div class='icon-font' id='btnExpSym'>c</div><div id='nav-title'>Name des Moduls</div></div>"
                     + "<div onclick='javascript: toggleSideMenu(isSideMenuVisible());' id='btnMenu' class ='icon-font btn' title='Menü'>m</div>"
@@ -173,8 +174,14 @@ function initiateSideMenu() {
 }
 
 
+
+// ----------------------------------------------------------------------------
+// ------------------------- BACK BUTTON --------------------------------------
+// ----------------------------------------------------------------------------
+
 /**
-* Zeigt den "Back-Button" an oder blendet ihn aus. (Standardmäßig aus)
+* Zeigt den "Back-Button" an oder blendet ihn aus.
+* Standardmäßig aus
 */
 function setBackButtonEnabled(b) {
     if(b) {
@@ -187,15 +194,52 @@ function setBackButtonEnabled(b) {
 
 
 /**
-* Zeigt overviewSection an.
+* Ändert die Beschriftung des Back-Buttons.
+* Standardmäßig "Zurück"
 */
-function backButtonPressed() {
-    showSection(overviewSection);
+function setBackButtonText(text) {
+    $('#btnBackText').text(text);
 }
 
-function setBackPage(name) {
-    var idx = $('section').index($('section[name="' + name + '"]').get(0));
-    overviewSection = idx;
+
+/**
+* Zeigt die interpretierte backpage und öffnet sie je nachdem welcher
+* backpagetype eingestellt wurde
+* Standardmäßig wird die erste <section> angezeigt
+*/
+function backButtonPressed() {
+    if(backpagetype === "name") {
+        var idx = $('section').index($('section[name="' + backpage + '"]').get(0));
+        showSection(idx);
+    }
+    else if(backpagetype === "index") {
+        showSection(backpage);
+    }
+    else if(backpagetype === "link") {
+        window.open(backpage, "_self")
+    }
+}
+
+/**
+* Stellt ein worauf der Back-Button verlinkt. Dabei kann auf verschiedene
+* Typen verlinkt werden
+* @param val : hier wird der Wert eingetragen, der zusammen mit dem type als
+*               Ziel ausgewertet wird.
+* @param type : gibt an wie "val" interpretiert wird
+            "name" entspricht dem name attribut einer <section>. Dieser name
+*               sollte dann bei val als String übergeben werden
+*           "index" entspricht dem index einer <section>. Die erste section
+*               ist dabei 0 und sie werden aufsteigend nummeriert.
+*           "link" entspricht einem HREF Link. Dieses kann relativ auf der
+*               Seite verlinken wie zB. "../andereSeite" oder auf eine
+*               auf eine ganz andere Seite verlinken wie "http://google.com"
+*
+* Beispiel: setBackPage("http://google.com", "link"); verlinkt auf Google.
+* Standardmäßig wird die erste <section> angezeigt
+*/
+function setBackPage(val, type) {
+    backpagetype = type;
+    backpage = val;
 }
 
 

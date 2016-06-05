@@ -18,12 +18,20 @@
 		    window.onload = function() {
                 eLearnJS.toggleAllSections(); // Zeigt Sections einzeln an
                 eLearnJS.showSection(0); // Zeigt die erste Section
-                
+
 				/* Mögliche Erweiterungen
+
+				eLearnJS.setBackButtonEnabled(true); // Zurück button im Header
+                eLearnJS.setBackButtonText("Übersicht"); // "Übersicht" als Text, statt "Zurück"
+
+                // Beispiele für BackPages (Was geöffnet wird beim Back button):
+                eLearnJS.setBackPage(2, "index"); // Die 3. section
+                eLearnJS.setBackPage("Inhaltsverzeichnis", "name"); // Die section mit name="Inhaltsverzeichnis"
+				eLearnJS.setBackPage("../", "link"); // Im Pfad einen Schritt zurück
+                eLearnJS.setBackPage("http://google.de", "link"); // Google wird geöffnet
+
 				eLearnJS.generalDirectionButtonsEnabled(false); // keine Nav. Buttons
 				eLearnJS.setKeyNavigationEnabled(false); // keine Tastaturnavigation
-				eLearnJS.setBackButtonEnabled(true); // Zurück button im Header
-				eLearnJS.setBackPage("Inhaltsverzeichnis"); // Ziel des Zurück-Buttons
 				eLearnJS.generalProgressbarEnabled(false); // keine Fortschrittsleiste
                 */
             }
