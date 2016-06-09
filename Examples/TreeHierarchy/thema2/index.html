@@ -17,13 +17,12 @@
 		<script>
 		    window.onload = function() {
 				eLearnJS.toggleAllSections(); // Zeigt Sections einzeln an
-                eLearnJS.showSection(0); // Zeigt die erste Section
 
                 /* Mögliche Erweiterungen
 				*/
 				eLearnJS.setBackButtonEnabled(true); // Zurück button im Header
                 eLearnJS.setBackButtonText("Übersicht"); // "Übersicht" als Text, statt "Zurück"
-				eLearnJS.setBackPage("../index.html", "link"); // Im Pfad einen Schritt zurück
+				eLearnJS.setBackPage("../index.html?s=Themenbereich 2", "link"); // Im Pfad einen Schritt zurück
 
 				/*
 				eLearnJS.generalDirectionButtonsEnabled(false); // keine Nav. Buttons
