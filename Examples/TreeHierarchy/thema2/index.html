@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<meta name="keywords" content="Key, Words">
+		<meta name="description" content="Hier Beschreibung einfügen">
+		<meta name="author" content="Name Autor">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" type="text/css" href="../assets/css/elearn.css">
+		<link rel="stylesheet" type="text/css" href="../assets/css/quiz.css">
+
+		<script type="text/javascript" src="../assets/js/min.js"></script> <!-- von UHH verwendetes JQuery -->
+		<script type="text/javascript" src="../assets/js/elearn.js"></script> <!-- eLearn.js -->
+		<script type="text/javascript" src="../assets/js/quiz.js"></script> <!-- Quiz Script -->
+
+		<script>
+		    window.onload = function() {
+				eLearnJS.toggleAllSections(); // Zeigt Sections einzeln an
+                eLearnJS.showSection(0); // Zeigt die erste Section
+
+                /* Mögliche Erweiterungen
+				*/
+				eLearnJS.setBackButtonEnabled(true); // Zurück button im Header
+                eLearnJS.setBackButtonText("Übersicht"); // "Übersicht" als Text, statt "Zurück"
+				eLearnJS.setBackPage("../index.html", "link"); // Im Pfad einen Schritt zurück
+
+				/*
+				eLearnJS.generalDirectionButtonsEnabled(false); // keine Nav. Buttons
+				eLearnJS.setKeyNavigationEnabled(false); // keine Tastaturnavigation
+				eLearnJS.generalProgressbarEnabled(false); // keine Fortschrittsleiste
+                */
+            }
+        </script>
+
+		<title>elearn.js Tree - Thema 1</title>
+	</head>
+	<body>
+	    <!-- #wrap muss bleiben, sonst funktioniert eLearn.js nicht -->
+		<div id="wrap">
+            <!-- Page Info -->
+            <div class="lb-wrap" id="info">
+                <div class="lightbox">
+                    <div class="info-wrapper">
+				        <!--Der inhalt der Info-Box kann frei mit html-Inhalt gefüllt werden. -->
+			         	<h4>Produktion digitaler Skripte</h4>
+				        <p>
+				            Michael Heinecke<br>
+				            Universität Hamburg
+				        <p>
+				    </div>
+			    </div>
+            </div>
+
+			<div class="page">
+
+
+
+                <section name="Titelseite">
+
+<!--Hier den Markdown-Export einfügen-->
+
+                    <h1>Titel Thema 2</h1>
+
+                    <p>Das hier ist die Unterseite die in sich wieder ein eigenes
+					Dokument ist.
+					<br>
+					Diese Seite ist im Gegensatz zu Thema 1 auch in einem Unterordner.
+					Dadurch haben sich natürlich alle relativen Links verändert.
+					</p>
+                </section>
+
+                <section name="Inhaltsverzeichnis">
+			        <h2>Inhaltsverzeichnis</h2>
+					<!-- Zusatz class="kachel" ändert die Darstellung -->
+			        <div id="content-overview" class="kachel">
+			            <!--
+			                Hier wird automatisch ein Inhaltsverzeichnis
+			                eingefügt, wenn das div#content-overview vorhanden
+			                ist.
+			            -->
+			        </div>
+			    </section>
+
+			    <section name="Unterthema">
+			        <h2>Unterthema</h2>
+			        <p>
+			            Hier wird das Thema jetzt im einzelnen beschrieben und
+						die Sections können wieder als einzelne Bereiche verwendet
+						werden.
+			    </section>
+
+
+
+            	<!--MathJax-Einbindung für die Formeldarstellung-->
+	            <script type="text/x-mathjax-config">
+	            	if (typeof MathJaxListener !== 'undefined') {
+	                      MathJax.Hub.Register.StartupHook('End', function () {
+	                        MathJaxListener.invokeCallbackForKey_('End');
+	                      });
+	                    }
+	                    </script>
+	            <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+            </div>
+		</div>
+	</body>
+</html>
