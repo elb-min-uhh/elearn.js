@@ -119,6 +119,8 @@ function initiateSections() {
     $('.section-overview').css('top', $('nav-bar').outerHeight() + "px");
     $('.section-overview').css('height', "calc(100% - " + $('.section-overview').css("top") + ")");
     //$('#sideMenu').css('max-width', Math.min($('#sideMenu').width(), $(document).width()) + "px");
+    setDirectionButtonsEnabled(true);
+    setProgressbarEnabled(true);
     showSection(0);
 };
 
