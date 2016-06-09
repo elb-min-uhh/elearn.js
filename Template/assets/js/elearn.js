@@ -36,7 +36,6 @@ $(document).ready(function() {
     initiateInfo();
     initiateSections();
     initiateGalleries();
-    toggleAllSections();
     initiateSideMenu();
     initiateTooltips();
 
@@ -120,6 +119,7 @@ function initiateSections() {
     $('.section-overview').css('top', $('nav-bar').outerHeight() + "px");
     $('.section-overview').css('height', "calc(100% - " + $('.section-overview').css("top") + ")");
     //$('#sideMenu').css('max-width', Math.min($('#sideMenu').width(), $(document).width()) + "px");
+    showSection(0);
 };
 
 /**
@@ -176,10 +176,22 @@ function initiateSideMenu() {
 }
 
 
+/**
+* In der URL können Parameter angegeben werden, um das direkte Anzeigen einer
+* Section zu ermöglichen.
+*
+* mit ?p=2 könnte man z.B. die 3. (0, 1, 2, ...) section öffnen
+* mit ?s=Inhaltsverzeichnis würde man die <section name="Inhaltsverzeichnis">
+* öffnen.
+*/
 function checkParameters() {
     if(QueryString.s != undefined) {
         var sectionName = decodeURI(QueryString.s);
         var idx = $('section').index($('section[name="' + sectionName + '"]').get(0));
+        showSection(idx);
+    }
+    else if(QueryString.p != undefined) {
+        var idx = parseInt(QueryString.p);
         showSection(idx);
     }
 }
