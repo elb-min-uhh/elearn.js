@@ -8,13 +8,14 @@ var VERSION_NR = "0.8";
 var VERSION_DATE = "05/2016";
 
 // Will be set on first Touch event. See Help Functions at bottom
-var isTouchSupported = false;
+var touchSupported = false;
 
 var visSection = 0;
 var allShown = false;
 var overviewShown = false;
 var navigationTitle = "";
 
+var backbuttonEnabled = false;
 var backpage = 0;
 var backpagetype = "index";
 
@@ -184,12 +185,20 @@ function initiateSideMenu() {
 * Standardmäßig aus
 */
 function setBackButtonEnabled(b) {
+    backbuttonEnabled = b;
     if(b) {
         $('#navigation').addClass("back-enabled");
     }
     else {
         $('#navigation').removeClass("back-enabled");
     }
+}
+
+/**
+* Gibt aus ob der backbutton aktiviert ist.
+*/
+function isBackButtonEnabled() {
+    return backbuttonEnabled;
 }
 
 
@@ -1001,7 +1010,10 @@ function resizeZoomContainer() {
 // --------------------------------------------------------------------------------------
 
 var activeTooltip = 0;
-var tooltips = ['<div id="tooltipShowAll" class="tooltip fixed">'
+var tooltips = ['<div id="tooltipBack" class="tooltip fixed">'
+                + 'Verlinkt normalerweise auf eine <br>vorangegane Seite oder den Anfang <br>des Dokuments.'
+                + '</div>',
+                '<div id="tooltipShowAll" class="tooltip fixed">'
                 + 'Alle Inhalte auf einer Seite anzeigen <br>oder vertikal navigierbar machen.'
                 + '</div>',
                 '<div id="tooltipChapter" class="tooltip fixed">'
@@ -1023,11 +1035,12 @@ var tooltips = ['<div id="tooltipShowAll" class="tooltip fixed">'
                 + 'Wischen, um auf die vorherige Seite zu wechseln.'
                 + '</div>'];
 
-var ttMaxWidth = [-1, -1, -1, 440, 440, -1, -1];
-var ttMinWidth = [-1, -1, -1, -1, -1, -1, -1];
-var bedingung = [true, true, true, true, true, isTouchSupported, isTouchSupported];
-var anchor = ["#btnAll", "#btnExp", "#btnMenu", "#btnNext", "#btnPrev", "#btnNext", "#btnPrev"];
-var positions = ["#btnAll", "#btnExp", "#btnMenu", [0,0], [0,0], [0,0], [0,0]];
+var ttMaxWidth = [-1, -1, -1, -1, 440, 440, -1, -1];
+var ttMinWidth = [-1, -1, -1, -1, -1, -1, -1, -1];
+// in bedingung muss entweder eine Funktion die ein bool returned stehen oder direkt ein bool
+var bedingung = [isBackButtonEnabled, true, true, true, true, true, isTouchSupported, isTouchSupported];
+var anchor = ["#btnBack", "#btnAll", "#btnExp", "#btnMenu", "#btnNext", "#btnPrev", "#btnNext", "#btnPrev"];
+var positions = ["#btnBack", "#btnAll", "#btnExp", "#btnMenu", [0,0], [0,0], [0,0], [0,0]];
 
 /**
 * Fügt die Buttons und die Funktionen der Buttons hinzu, die zum Durchklicken der
@@ -1065,16 +1078,24 @@ function showTooltip(nr) {
         activeTooltip = 0;
         return;
     }
+
+    console.log("TT: " + nr);
+    console.log("Bed: " + bedingung[nr] + " - " + backbuttonEnabled);
+    console.log("Anch: " + $(anchor[nr]).is(":visible"));
+
+
     activeTooltip = nr;
     if((ttMaxWidth[nr] < 0 || $(window).width() > ttMaxWidth[nr])
         && (ttMinWidth[nr] < 0 || $(window).width() <= ttMinWidth[nr])
-        && bedingung[nr]
+        && (isFunction(bedingung[nr])?bedingung[nr]():bedingung[nr])
         && $(anchor[nr]).is(":visible")) {
+        console.log("Dimens. passen " + nr);
         if(typeof positions[nr] == 'string' && !$(positions[nr]).is(':visible')) {
             nextTooltip();
             return;
         }
         if(typeof positions[nr] == 'string') {
+            console.log("Pos - string: " + nr);
             if($($('.tooltip')[nr]).is(".right")) {
                 setTooltipPosition(nr, true,
                                 $(positions[nr]).offset().top
@@ -1243,6 +1264,14 @@ function doesURLExist(url, callback) {
     });
 }
 
+/**
+* Checks if an object is a function
+*/
+function isFunction(functionToCheck) {
+ var getType = {};
+ return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+}
+
 // --------------------------------------------------------------------------------------
 // Touch Scroll part
 // --------------------------------------------------------------------------------------
@@ -1251,12 +1280,16 @@ function doesURLExist(url, callback) {
 var maxDiff = 0;
 var clickedAlready = false;
 
+function isTouchSupported() {
+    return touchSupported;
+}
+
 /**
 * Fügt allen Sections eine Touchabfrage hinzu.
 */
 function addTouchToSections() {
     $(document).bind('touchstart', function() {
-        isTouchSupported = true;
+        touchSupported = true;
         touchStart(event, this);
     });
     $(document).bind('touchend', function() {
