@@ -40,13 +40,14 @@ $(document).ready(function() {
     initiateSideMenu();
     initiateTooltips();
 
+    checkParameters();
+
     $('#qrcode').qrcode({
         "width": 256,
         "height": 256,
         "text": window.location.href
     });
     $('#qr_overlay').click(function() {$('#qr_overlay').hide();});
-
 });
 
 /**
@@ -175,6 +176,13 @@ function initiateSideMenu() {
 }
 
 
+function checkParameters() {
+    if(QueryString.s != undefined) {
+        var sectionName = decodeURI(QueryString.s);
+        var idx = $('section').index($('section[name="' + sectionName + '"]').get(0));
+        showSection(idx);
+    }
+}
 
 // ----------------------------------------------------------------------------
 // ------------------------- BACK BUTTON --------------------------------------
@@ -1078,24 +1086,16 @@ function showTooltip(nr) {
         activeTooltip = 0;
         return;
     }
-
-    console.log("TT: " + nr);
-    console.log("Bed: " + bedingung[nr] + " - " + backbuttonEnabled);
-    console.log("Anch: " + $(anchor[nr]).is(":visible"));
-
-
     activeTooltip = nr;
     if((ttMaxWidth[nr] < 0 || $(window).width() > ttMaxWidth[nr])
         && (ttMinWidth[nr] < 0 || $(window).width() <= ttMinWidth[nr])
-        && (isFunction(bedingung[nr])?bedingung[nr]():bedingung[nr])
+        && (isFunction(bedingung[nr]) ? bedingung[nr]() : bedingung[nr])
         && $(anchor[nr]).is(":visible")) {
-        console.log("Dimens. passen " + nr);
         if(typeof positions[nr] == 'string' && !$(positions[nr]).is(':visible')) {
             nextTooltip();
             return;
         }
         if(typeof positions[nr] == 'string') {
-            console.log("Pos - string: " + nr);
             if($($('.tooltip')[nr]).is(".right")) {
                 setTooltipPosition(nr, true,
                                 $(positions[nr]).offset().top
@@ -1701,6 +1701,33 @@ function calcSpeed(dif) {
 function getSpeed(lastDif, lastTime, dif, time) {
     return (dif-lastDif) / (time - lastTime);
 }
+
+
+
+
+//
+var QueryString = function () {
+  // This function is anonymous, is executed immediately and
+  // the return value is assigned to QueryString!
+  var query_string = {};
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i=0;i<vars.length;i++) {
+    var pair = vars[i].split("=");
+    	// If first entry with this name
+    if (typeof query_string[pair[0]] === "undefined") {
+      query_string[pair[0]] = pair[1];
+    	// If second entry with this name
+    } else if (typeof query_string[pair[0]] === "string") {
+      var arr = [ query_string[pair[0]], pair[1] ];
+      query_string[pair[0]] = arr;
+    	// If third or later entry with this name
+    } else {
+      query_string[pair[0]].push(pair[1]);
+    }
+  }
+    return query_string;
+} ();
 
 
 // --------------------------------------------------------------------------------------
