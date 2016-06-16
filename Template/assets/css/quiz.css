@@ -1,6 +1,6 @@
 /*
-* Styles zum quiz.js v0.2.1 by Arne Westphal
-* Ergänzend zum elearn.js v0.6
+* Styles zum quiz.js v0.2.3 by Arne Westphal
+* Ergänzend zum elearn.js v0.9
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 */
 
@@ -140,6 +140,42 @@
     text-align: center;
     width: 100%;
 }
+
+
+/* -------------------------------- FREE TEXT -------------------------------- */
+
+.question .answers textarea {
+    display: block;
+    width: 100%;
+}
+
+.question.answered .answers textarea {
+    opacity: 0.6;
+    background: #eeeeee;
+}
+
+
+/* -------------------------------- FILL BLANK -------------------------------- */
+
+.question[qtype="fill_blank"] label,
+.question[qtype="fill_blank_choice"] label {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+
+button.error_button {
+    width: auto;
+    padding: 3px;
+    font-size: 100%;
+}
+
+button.error_button.act {
+    text-decoration: line-through;
+    text-decoration-color: #f00;
+}
+
 
 
 

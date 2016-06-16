@@ -5,8 +5,6 @@
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 */
 
-var correctQs = [];
-
 /**
 * Aktiviert alle <button> mit der Klasse "quizButton" für das Quiz.
 * Wenn fragen <input> fokussiert ist, kann mit Enter die Antwort abgeschickt werden.
@@ -14,6 +12,19 @@ var correctQs = [];
 $(document).ready(function() {
     init();
 });
+
+
+// Quiztypen. Benennung entspricht dem, was im HTML Attribut qtype angegeben ist.
+var quizTypes = {
+    SHORT_TEXT : "short_text",
+    CHOICE : "choice",
+    FREE_TEXT : "free_text" ,
+    FILL_BLANK : "fill_blank",
+    FILL_BLANK_CHOICE : "fill_blank_choice",
+    ERROR_TEXT : "error_text",
+    HOTSPOT : "hotspot",
+    ORDER : "order"
+};
 
 
 /**
@@ -53,6 +64,10 @@ function init() {
         }
     });
 
+
+    // Fehlertext Buttons toggle
+    $(".error_button").click(function() { toggleErrorButton(this); });
+
     $("#neustart").click(function() {
         resetQuiz();
     });
@@ -73,16 +88,7 @@ function submitAns(button) {
 
     // Falls die Frage bereits beantwortet wurde, wird sie zurückgesetzt. (2. Button)
     if(div.is('.answered')) {
-        div.removeClass("answered");
-        div.find(".feedback").hide();
-        deleteLabelColoring(div.find("label"));
-        div.find("input:text").val("");
-        div.find("input:radio").prop("checked", false);
-        div.find("input:checkbox").prop("checked", false);
-
-        div.next("button.quizButton").show();
-        div.nextUntil("div").filter("button.quizButton.weiter").hide();
-        correctQs[correctQs.length] = null;
+        resetQuestion(div);
         return;
     }
 
@@ -91,15 +97,45 @@ function submitAns(button) {
     var labels = div.children('.answers').children('label');
     deleteLabelColoring(labels);
 
-    var type = labels.children('input').attr("type");
+    var type = div.attr("qtype");
+
 
     var correct = true;
 
-    if(type === "text") {
-        correct = getCorrectForText(labels, c);
+    // Für alte Versionen oder nichtdefinierte Fragetypen
+    if(type === undefined) {
+        type = labels.children('input').attr("type");
+
+        if(type === "text") {
+            correct = getCorrectForText(labels, c);
+        }
+        else if (type === "radio" || type === "checkbox") {
+            correct = getCorrectForRadio(labels, c, true);
+        }
     }
-    else if (type === "radio" || type === "checkbox") {
-        correct = getCorrectForRadio(labels, c, true);
+    // Für explizit definierten qtype
+    else {
+        if(type === quizTypes.SHORT_TEXT) {
+            correct = getCorrectForText(labels, c);
+        }
+        else if (type === quizTypes.CHOICE) {
+            correct = getCorrectForRadio(labels, c, true);
+        }
+        else if (type === quizTypes.FREE_TEXT) {
+            processFreeText(div);
+        }
+        else if (type === quizTypes.FILL_BLANK) {
+            var answers = div.find("a.ans");
+            correct = getCorrectFillBlank(labels, answers);
+        }
+        else if (type === quizTypes.FILL_BLANK_CHOICE) {
+            var answers = div.find("a.ans");
+            correct = getCorrectFillBlankChoice(labels, answers);
+        }
+        else if (type === quizTypes.ERROR_TEXT) {
+            var buttons = div.find(".error_button");
+            correct = getCorrectErrorText(buttons, c);
+        }
     }
 
     if(correct === -1) {
@@ -123,7 +159,20 @@ function submitAns(button) {
     div.addClass("answered");
     div.next("button.quizButton").hide();
     div.nextUntil("div").filter("button.quizButton.weiter").show();
-    correctQs[correctQs.length] = correct;
+};
+
+
+
+/**
+* Liest für ein <div> alle als korrekt angegebenen Antworten aus.
+* Diese sollten MD5 Verschlüsselt sein.
+*/
+function getCorrectAnswers(div) {
+    var c = [];
+    div.find('a.ans').each(function(i) {
+        c[c.length] = $(this).html();
+    });
+    return c;
 };
 
 
@@ -191,17 +240,181 @@ function getCorrectForText(labels, c) {
     return correct;
 };
 
-/**
-* Liest für ein <div> alle als korrekt angegebenen Antworten aus.
-* Diese sollten MD5 Verschlüsselt sein.
-*/
-function getCorrectAnswers(div) {
-    var c = [];
-    div.find('a.ans').each(function(i) {
-        c[c.length] = $(this).html();
+
+function getCorrectFillBlank(labels, answers) {
+    var correct = true;
+
+    labels.each(function(i, e) {
+        var input = $(this).find("input");
+        var id = input.attr("id");
+        var cor = answers.filter("#"+id).text();
+        var ans = encryptMD5(input.val());
+
+        // antwort richtig
+        if(cor == ans) {
+            //$(this).addClass("right");
+        }
+        // antwort falsch
+        else if(cor != ans) {
+            correct = false;
+            //$(this).addClass("wrong");
+        }
+
+        input.attr("disabled", true);
     });
-    return c;
-};
+
+    return correct;
+}
+
+function getCorrectFillBlankChoice(labels, answers) {
+    var correct = true;
+
+    labels.each(function(i, e) {
+        var select = $(this).find("select");
+        var id = select.attr("id");
+        var cor = answers.filter("#"+id).text();
+        var ans = encryptMD5(select.val());
+
+        // antwort richtig
+        if(cor == ans) {
+            //$(this).addClass("right");
+        }
+        // antwort falsch
+        else if(cor != ans) {
+            correct = false;
+            //$(this).addClass("wrong");
+        }
+
+        select.attr("disabled", true);
+    });
+
+    return correct;
+}
+
+function getCorrectErrorText(buttons, c) {
+    var correct = true;
+    
+    buttons.each(function(i, e) {
+        var ans = encryptMD5($(this).text());
+
+        var act = $(this).is(".act");
+
+        // Wort markiert und in Antworten enthalten
+        if((contains(c, ans) && act) 
+            || (!contains(c, ans) && !act)) {
+            // richtig
+        }
+        // Nicht markiert oder nicht in Antworten
+        else if(!contains(c, ans) ^ !act) {
+            // falsch
+            correct = false;
+        }
+    });
+
+    return correct;
+}
+
+
+// --------------------------------------------------------------------------------------
+// PROCESS ANSWER
+// --------------------------------------------------------------------------------------
+
+
+function processFreeText(div) {
+    div.find(".answers").find("textarea").attr('readonly','readonly');
+}
+
+
+// --------------------------------------------------------------------------------------
+
+
+// --------------------------------------------------------------------------------------
+// COPY QUESTION TO SHOW AGAIN
+// --------------------------------------------------------------------------------------
+
+/**
+* Kopiert die Frage ohne Bestätigungsbuttons (reiner Fragekörper)
+*/
+function showQuestionHere(button) {
+    var id = $(button).attr("id").replace("_ref", "");
+
+    var orig = $('#'+id);
+
+    var div = orig.clone();
+    div.addClass("cloned");
+
+    // zählt immer als beantwortet
+    div.addClass("answered");
+
+    var type = orig.attr("qtype");
+    // Verarbeiten der vorherigen Eingaben
+    if(type === quizTypes.FREE_TEXT) {
+        copyFreeText(div, orig);
+    }
+    else if(type === quizTypes.FILL_BLANK) {
+        copyFillBlank(div, orig);
+    }
+    else if(type === quizTypes.FILL_BLANK_CHOICE) {
+        copyFillBlankChoice(div, orig);
+    }
+
+
+    var hideButton = '<button class="free_text_ref" id="'+id+'_ref" onclick="removeQuestionHere(this)">Ausblenden</button>';
+    $(button).before(div);
+    $(button).before(hideButton)
+    $(button).hide();
+}
+
+function removeQuestionHere(button) {
+    $(button).prev().remove();
+    $(button).next().show();
+    $(button).remove();
+}
+
+
+function copyFreeText(div, orig) {
+    div.find("textarea").val(orig.find("textarea").val());
+    div.find("textarea").attr("readonly", "readonly");
+}
+
+function copyFillBlank(div, orig) {
+    div.find("input").each(function(i, e) {
+        // Kopiert ausgewählten Wert
+        $(this).val($($(orig).find("input").get(i)).val());
+
+        // Disabled jedes input
+        $(this).attr("disabled", true);
+    });
+}
+
+function copyFillBlankChoice(div, orig) {
+    div.find("select").each(function(i, e) {
+        // Kopiert ausgewählten Wert
+        $(this).val($($(orig).find("select").get(i)).val());
+
+        // Disabled jedes Select
+        $(this).attr("disabled", true);
+    });
+}
+
+
+// --------------------------------------------------------------------------------------
+
+/**
+* Streicht das Wort durch oder entfernt den Strich beim Draufklicken.
+*/
+function toggleErrorButton(button) {
+    if(!$(button).parent().parent().is(".answered")) {
+        if($(button).is(".act")) {
+            $(button).removeClass("act");
+        }
+        else {
+            $(button).addClass("act");
+        }
+    }
+    
+}
+
 
 /**
 * Entfernt für alle übergebenen Labels die färbenden Klassen "right" und "wrong"
@@ -321,17 +534,36 @@ function windowResizing() {
     });
 }
 
+
+
+function resetQuestion(div) {
+    div.removeClass("answered");
+    div.find(".feedback").hide();
+    deleteLabelColoring(div.find("label"));
+    div.find("input:text").val("");
+    div.find("input:radio").prop("checked", false);
+    div.find("input:checkbox").prop("checked", false);
+
+    div.find('textarea').attr('readonly', false);
+    div.find("select").attr("disabled", false);
+    div.find("input").attr("disabled", false);
+
+    div.nextAll("button.quizButton").first().show();
+    div.nextAll("button.quizButton.weiter").first().hide();
+}
+
 /**
 * Setzt alle Fragen des Quiz' auf den Anfangszustand zurück.
 */
 function resetQuiz() {
-    correctQs = [];
     $(".question").removeClass("answered");
     $(".feedback").hide();
     deleteLabelColoring($("label"));
     $("input:text").val("");
     $("input:radio").prop("checked", false);
     $("input:checkbox").prop("checked", false);
+
+    $('.question').find('textarea').attr('readonly', false);
 }
 
 
