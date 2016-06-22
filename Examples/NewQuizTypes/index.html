@@ -69,6 +69,55 @@
 					<h3>Quizfragen</h3>
 					<p>Auf dieser Seite sind einige Quiz-Fragen Beispielhaft dargestellt.</p>
 
+                    <div class="question" qtype="classification" id="c_1">
+						<h4>Zuordnung von Bildern</h4>
+						<div class="answers">
+                            Die folgenden Objekte müssen in den leeren Rechtecken
+                            platziert werden:<br>
+                            <div class="object">
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt --->
+                                <img src="assets/img/md-illu_1.png" style="height: 125px;" id="papier" draggable="false"/>
+                            </div>
+                            <div class="object">
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt --->
+                                <img src="assets/img/logo-bmbf.gif" id="foerderung" draggable="false"/>
+                            </div>
+
+
+                            <br>Bild der Förderung:<br>
+                            <!-- ID zeigt welches .ans Objekt hierzu gehört --->
+                            <div class="object destination" id="0"></div>
+
+                            <br>Bild von einem Stück Papier mit Schraubenschlüssel:<br>
+                            <!-- ID zeigt welches .ans Objekt hierzu gehört --->
+                            <div class="object destination" id="1"></div>
+						</div>
+
+						<div class="feedback correct">
+							Richtig
+							<b>Richtige Antwort:</b><br>
+							Text mit Antworten
+						</div>
+						<div class="feedback incorrect">
+							Falsch
+							<b>Richtige Antwort:</b><br>
+							Text mit Antworten
+						</div>
+
+                        <!-- ID zeigt welches .destination Objekt hierzu gehört --->
+						<a class="ans" id="0">97fdbbc71cbce085f0e41ebdbf4a9c99</a>
+                        <!-- ID zeigt welches .destination Objekt hierzu gehört --->
+						<a class="ans" id="1">30c2c31a4a67ee9afdb2283b9a688a19</a>
+					</div>
+
+					<br><br>
+					<!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+					<button id="c_1_ref" onclick="showQuestionHere(this)">
+						Vorherige Antwort anzeigen
+					</button>
+					<br><br><br>
+
+
 
 					<div class="question" qtype="error_text" id="et_1">
 						<h4>Text mit Falschen Wörtern</h4>
@@ -92,8 +141,8 @@
 							Text mit Antworten
 						</div>
 
-						<a class="ans" id="0">54b851fdfcb598592d15214f24c6fdc7</a>
-						<a class="ans" id="1">14c5492ce2fe855f408481fdbd13f7a6</a>
+						<a class="ans">54b851fdfcb598592d15214f24c6fdc7</a>
+						<a class="ans">14c5492ce2fe855f408481fdbd13f7a6</a>
 					</div>
 
 					<br><br>

@@ -24,6 +24,7 @@
 
 .question img {
     float:left;
+    width: auto;
     max-width:100%;
     margin:1em 0em 1em 0em;
 }
@@ -165,6 +166,8 @@
 }
 
 
+/* ------------------------------- ERROR TEXT -------------------------------- */
+
 button.error_button {
     width: auto;
     padding: 3px;
@@ -177,6 +180,39 @@ button.error_button.act {
 }
 
 
+/* ----------------------------- CLASSIFICATION ------------------------------ */
+
+.question .answers .object {
+    display: inline-block;
+    border: 2px solid #dcdcdc;
+    overflow-y: auto;
+    cursor: move;
+
+    min-width: 100px;
+    min-height: 50px;
+}
+
+.question .answers .object:hover {
+    border-color: #888;
+}
+
+.question .answers .object.emph {
+    background: #ddddff;
+    border: 2px dashed #b4b4b4;
+}
+
+.question .answers .object.draggedover {
+    border: 2px dashed #888;
+}
+
+/* Kein Drop auf Objekte innerhalb der Blöcke */
+.question .answers .object * {
+    pointer-events: none;
+}
+
+.question .answers .object.used * {
+    opacity: 0.4;
+}
 
 
 /*Media-Querys für Responsivität*/

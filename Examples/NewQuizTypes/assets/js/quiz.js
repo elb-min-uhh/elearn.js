@@ -23,6 +23,7 @@ var quizTypes = {
     FILL_BLANK_CHOICE : "fill_blank_choice",
     ERROR_TEXT : "error_text",
     HOTSPOT : "hotspot",
+    CLASSIFICATION : "classification",
     ORDER : "order"
 };
 
@@ -72,6 +73,8 @@ function init() {
         resetQuiz();
     });
 
+    addDragAndDropToClassification();
+
     resetQuiz();
 }
 
@@ -118,23 +121,29 @@ function submitAns(button) {
         if(type === quizTypes.SHORT_TEXT) {
             correct = getCorrectForText(labels, c);
         }
-        else if (type === quizTypes.CHOICE) {
+        else if(type === quizTypes.CHOICE) {
             correct = getCorrectForRadio(labels, c, true);
         }
-        else if (type === quizTypes.FREE_TEXT) {
+        else if(type === quizTypes.FREE_TEXT) {
             processFreeText(div);
         }
-        else if (type === quizTypes.FILL_BLANK) {
+        else if(type === quizTypes.FILL_BLANK) {
             var answers = div.find("a.ans");
             correct = getCorrectFillBlank(labels, answers);
         }
-        else if (type === quizTypes.FILL_BLANK_CHOICE) {
+        else if(type === quizTypes.FILL_BLANK_CHOICE) {
             var answers = div.find("a.ans");
             correct = getCorrectFillBlankChoice(labels, answers);
         }
-        else if (type === quizTypes.ERROR_TEXT) {
+        else if(type === quizTypes.ERROR_TEXT) {
             var buttons = div.find(".error_button");
             correct = getCorrectErrorText(buttons, c);
+        }
+        else if(type === quizTypes.CLASSIFICATION) {
+            var dests = div.find(".destination");
+            var answers = div.find("a.ans");
+            correct = getCorrectClassification(dests, answers);
+            div.find('.object').addClass("blocked");
         }
     }
 
@@ -293,14 +302,14 @@ function getCorrectFillBlankChoice(labels, answers) {
 
 function getCorrectErrorText(buttons, c) {
     var correct = true;
-    
+
     buttons.each(function(i, e) {
         var ans = encryptMD5($(this).text());
 
         var act = $(this).is(".act");
 
         // Wort markiert und in Antworten enthalten
-        if((contains(c, ans) && act) 
+        if((contains(c, ans) && act)
             || (!contains(c, ans) && !act)) {
             // richtig
         }
@@ -308,6 +317,30 @@ function getCorrectErrorText(buttons, c) {
         else if(!contains(c, ans) ^ !act) {
             // falsch
             correct = false;
+        }
+    });
+
+    return correct;
+}
+
+
+function getCorrectClassification(dests, answers) {
+    var correct = true;
+
+    dests.each(function(i, e) {
+        var dest = $(this);
+        var id = dest.attr("id");
+        var cor = answers.filter("#"+id).text();
+        var ans = encryptMD5(dest.children().attr("id"));
+
+        // antwort richtig
+        if(cor == ans) {
+            //$(this).addClass("right");
+        }
+        // antwort falsch
+        else if(cor != ans) {
+            correct = false;
+            //$(this).addClass("wrong");
         }
     });
 
@@ -398,6 +431,129 @@ function copyFillBlankChoice(div, orig) {
 }
 
 
+
+// --------------------------------------------------------------------------------------
+// DRAG AND DROP FUNCTIONS
+// --------------------------------------------------------------------------------------
+
+var draggedObjects = null;
+var startedObject = null;
+
+function addDragAndDropToClassification() {
+    $('.object').attr("draggable", "true");
+    $('.object').on("dragstart", function(event) {
+        dragObject(event.originalEvent);
+    });
+    $('.object').on("dragover", function(event) {
+        allowObjectDrop(event.originalEvent);
+    });
+    $('.object').on("drop", function(event) {
+        dropObject(event.originalEvent);
+    });
+
+    $('.object').on("dragend", function(event) {
+        dragReset(event.originalEvent);
+    });
+
+    $('.object').on("dragenter", function(event) {
+        draggedOver(event.originalEvent);
+    });
+    $('.object').on("dragleave", function(event) {
+        draggedOut(event.originalEvent);
+    });
+}
+
+
+/**
+* Fügt dem Datentransfer alle zu verschiebenen Objekte hinzu
+*/
+function dragObject(e) {
+    // Falls noch nicht benutzt
+    if(!$(e.target).is(".used") && !$(e.target).is(".blocked")) {
+        draggedObjects = $(e.target).children();
+        startedObject = $(e.target);
+        $(e.target).css("opacity", "0.4");
+        $(e.target).parent().find(".destination").not(".full").addClass("emph");
+    }
+    else {
+        e.preventDefault();
+    }
+}
+
+
+/**
+* Verhindert Standardfunktionen
+*/
+function allowObjectDrop(e) {
+    e.preventDefault();
+}
+
+/**
+* Verschiebt alle Objekte in das Ziel
+*/
+function dropObject(e) {
+
+    var dragBackToStart = draggedObjects.get(0).isEqualNode($(e.target).children().get(0));
+
+    // Ablegen an freiem Platz aus StartObjekt (!= Zielobjekt)
+    if(!startedObject.is(".destination")
+            && $(e.target).is(".object.destination")
+            && $(e.target).is(".object")
+            && !$(e.target).is(".full")
+            && !$(e.target).is(".blocked")) {
+        e.preventDefault();
+        startedObject.addClass("used");
+        $(e.target).append(draggedObjects.clone());
+        $(e.target).addClass("full");
+        dragReset();
+    }
+    // Ablegen an freiem Platz aus Zielobjekt (verschieben)
+    else if(startedObject.is(".destination")
+            && $(e.target).is(".object.destination")
+            && !$(e.target).is(".full")
+            && !dragBackToStart
+            && !$(e.target).is(".blocked")) {
+        startedObject.removeClass("full");
+        $(e.target).append(draggedObjects);
+        $(e.target).addClass("full");
+        dragReset();
+    }
+    // Zurücklegen an ursprünglichen Ort
+    else if($(e.target).is(".object") && $(e.target).is(".used")
+        && dragBackToStart
+        && !$(e.target).is(".blocked")) {
+        startedObject.removeClass("full");
+        draggedObjects.remove();
+        $(e.target).removeClass("used");
+        dragReset();
+    }
+}
+
+/**
+* Setzt Sachen zurück die während des Dragvorgangs verwendet werden.
+*/
+function dragReset(e) {
+    // remove emphasis
+    $(e.target).parent().find(".emph").removeClass("emph");
+
+    $('.draggedover').removeClass("draggedover");
+    $(".object").css("opacity", "1");
+    draggedObjects = null;
+}
+
+function draggedOver(e) {
+    // Leer oder zurücklegen zur Ursprungsort
+    if(!$(e.target).is(".full")
+        || draggedObjects == $(e.target).children()) $(e.target).addClass("draggedover");
+}
+
+function draggedOut(e) {
+    // Leer oder zurücklegen zur Ursprungsort
+    if(!$(e.target).is(".full")
+        || draggedObjects == $(e.target).children()) $(e.target).removeClass("draggedover");
+}
+
+
 // --------------------------------------------------------------------------------------
 
 /**
@@ -412,7 +568,7 @@ function toggleErrorButton(button) {
             $(button).addClass("act");
         }
     }
-    
+
 }
 
 
@@ -547,6 +703,12 @@ function resetQuestion(div) {
     div.find('textarea').attr('readonly', false);
     div.find("select").attr("disabled", false);
     div.find("input").attr("disabled", false);
+
+    // Zuordnung (Classfication)
+    div.find('.used').removeClass("used");
+    div.find('.full').children().remove();
+    div.find('.full').removeClass("full");
+    div.find('.blocked').removeClass("blocked");
 
     div.nextAll("button.quizButton").first().show();
     div.nextAll("button.quizButton.weiter").first().hide();
