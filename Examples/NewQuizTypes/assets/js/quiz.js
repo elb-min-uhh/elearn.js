@@ -608,6 +608,9 @@ function dropObject(e) {
     // get type
     var type = $(e.target).closest(".question").attr("qtype");
 
+    // für firefox notwendig, sonst startet drag nicht
+    e.dataTransfer.setData("transer", "data");
+
     if(type === quizTypes.CLASSIFICATION) {
         var dragBackToStart = draggedObjects.get(0).isEqualNode($(e.target).children().get(0));
 
