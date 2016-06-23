@@ -219,6 +219,7 @@ button.error_button.act {
 
 .question .answers .object.blocked {
     opacity: 0.8;
+    background: #dcdcdc;
 }
 
 

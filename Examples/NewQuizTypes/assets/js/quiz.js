@@ -663,8 +663,8 @@ function dragReset(e) {
     if(e != undefined) $(e.target).closest(".answers").find(".emph").removeClass("emph");
 
     $('.draggedover').removeClass("draggedover");
-    $(".object").css("opacity", "1");
-    $(".object").css("background", "none");
+    $(".object").css("opacity", false);
+    $(".object").css("background", false);
     $('.question[qtype="'+quizTypes.ORDER+'"]').find(".destination").removeClass("vis");
     draggedObjects = null;
 }
