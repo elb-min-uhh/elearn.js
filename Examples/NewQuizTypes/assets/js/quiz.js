@@ -74,6 +74,7 @@ function init() {
     });
 
     addDragAndDropToClassification();
+    addDragAndDropToOrderObjects();
 
     resetQuiz();
 }
@@ -143,6 +144,12 @@ function submitAns(button) {
             var dests = div.find(".destination");
             var answers = div.find("a.ans");
             correct = getCorrectClassification(dests, answers);
+            div.find('.object').addClass("blocked");
+        }
+        else if(type === quizTypes.ORDER) {
+            var objects = div.find(".object").not(".destination");
+            var answers = div.find("a.ans");
+            correct = getCorrectOrder(objects, answers);
             div.find('.object').addClass("blocked");
         }
     }
@@ -348,6 +355,36 @@ function getCorrectClassification(dests, answers) {
 }
 
 
+function getCorrectOrder(objects, answers) {
+    var correct = true;
+    var index = 0;
+
+    objects.each(function(i, e) {
+        var obj = $(this);
+        var id = obj.children().attr("id");
+        var cor = answers.filter("#"+id).text();
+
+        // check if found object is in correct position
+        // correct position is same or next active index
+
+        // same position
+        if(encryptMD5(""+index) == cor) {
+        }
+        // antwort richtig
+        else if(encryptMD5(""+(index+1)) == cor) {
+            index++;
+        }
+        // antwort falsch
+        else {
+            correct = false;
+            //$(this).addClass("wrong");
+        }
+    });
+
+    return correct;
+}
+
+
 // --------------------------------------------------------------------------------------
 // PROCESS ANSWER
 // --------------------------------------------------------------------------------------
@@ -436,48 +473,124 @@ function copyFillBlankChoice(div, orig) {
 // DRAG AND DROP FUNCTIONS
 // --------------------------------------------------------------------------------------
 
+
+
+
 var draggedObjects = null;
 var startedObject = null;
 
+// CLASSIFICATION
+
+/**
+* Jedes Object kann gedragt und gedropt werden in jedem Object.
+*/
 function addDragAndDropToClassification() {
-    $('.object').attr("draggable", "true");
-    $('.object').on("dragstart", function(event) {
+    var root = $('[qtype="'+quizTypes.CLASSIFICATION+'"]');
+    root.find('.object').attr("draggable", "true");
+    root.find('.object').on("dragstart", function(event) {
         dragObject(event.originalEvent);
     });
-    $('.object').on("dragover", function(event) {
+    root.find('.object').on("dragover", function(event) {
         allowObjectDrop(event.originalEvent);
     });
-    $('.object').on("drop", function(event) {
+    root.find('.object').on("drop", function(event) {
         dropObject(event.originalEvent);
     });
 
-    $('.object').on("dragend", function(event) {
+    root.find('.object').on("dragend", function(event) {
         dragReset(event.originalEvent);
     });
 
-    $('.object').on("dragenter", function(event) {
+    root.find('.object').on("dragenter", function(event) {
         draggedOver(event.originalEvent);
     });
-    $('.object').on("dragleave", function(event) {
+    root.find('.object').on("dragleave", function(event) {
         draggedOut(event.originalEvent);
     });
 }
+
+
+// ORDER
+
+function addDragAndDropToOrderObjects() {
+    var root = $('[qtype="'+quizTypes.ORDER+'"]');
+    root.find('.object').attr("draggable", "true");
+    root.find('.object').on("dragstart", function(event) {
+        dragObject(event.originalEvent);
+    });
+
+    root.find('.object').on("dragend", function(event) {
+        dragReset(event.originalEvent);
+    });
+
+    addDragAndDropToOrderDestinations(root);
+}
+
+function addDragAndDropToOrderDestinations(root) {
+    root.find('.object').after(
+        "<div class='object destination'></div>");
+
+    root.find('.object').first().before(
+        "<div class='object destination'></div>");
+    root.find('.destination').on("dragover", function(event) {
+        allowObjectDrop(event.originalEvent);
+    });
+    root.find('.destination').on("drop", function(event) {
+        dropObject(event.originalEvent);
+    });
+
+    root.find('.destination').on("dragend", function(event) {
+        dragReset(event.originalEvent);
+    });
+
+    root.find('.destination').on("dragenter", function(event) {
+        draggedOver(event.originalEvent);
+    });
+    root.find('.destination').on("dragleave", function(event) {
+        draggedOut(event.originalEvent);
+    });
+}
+
+
+// DRAG & DROP --------------------------
 
 
 /**
 * Fügt dem Datentransfer alle zu verschiebenen Objekte hinzu
 */
 function dragObject(e) {
-    // Falls noch nicht benutzt
-    if(!$(e.target).is(".used") && !$(e.target).is(".blocked")) {
-        draggedObjects = $(e.target).children();
-        startedObject = $(e.target);
-        $(e.target).css("opacity", "0.4");
-        $(e.target).parent().find(".destination").not(".full").addClass("emph");
+    // get type
+    var type = $(e.target).closest(".question").attr("qtype");
+
+    if(type === quizTypes.CLASSIFICATION) {
+        // Falls noch nicht benutzt
+        if(!$(e.target).is(".used") && !$(e.target).is(".blocked")) {
+            draggedObjects = $(e.target).children();
+            startedObject = $(e.target);
+            $(e.target).css("opacity", "0.4");
+            $(e.target).css("background", "#888");
+            $(e.target).closest(".answers").find(".destination").not(".full").addClass("emph");
+        }
+        else {
+            e.preventDefault();
+        }
     }
-    else {
-        e.preventDefault();
+    else if(type === quizTypes.ORDER) {
+        if(!$(e.target).is(".blocked")) {
+            startedObject = $(e.target);
+            $(e.target).css("opacity", "0.4");
+            $(e.target).css("background", "#888");
+            setTimeout(function() {
+                $(e.target).closest(".answers").find(".destination").addClass("vis");
+                $(e.target).prev().removeClass("vis");
+                $(e.target).next().removeClass("vis");
+            }, 0);
+        }
+        else {
+            e.preventDefault();
+        }
     }
+
 }
 
 
@@ -492,39 +605,52 @@ function allowObjectDrop(e) {
 * Verschiebt alle Objekte in das Ziel
 */
 function dropObject(e) {
+    // get type
+    var type = $(e.target).closest(".question").attr("qtype");
 
-    var dragBackToStart = draggedObjects.get(0).isEqualNode($(e.target).children().get(0));
+    if(type === quizTypes.CLASSIFICATION) {
+        var dragBackToStart = draggedObjects.get(0).isEqualNode($(e.target).children().get(0));
 
-    // Ablegen an freiem Platz aus StartObjekt (!= Zielobjekt)
-    if(!startedObject.is(".destination")
-            && $(e.target).is(".object.destination")
-            && $(e.target).is(".object")
-            && !$(e.target).is(".full")
+        // Ablegen an freiem Platz aus StartObjekt (!= Zielobjekt)
+        if(!startedObject.is(".destination")
+                && $(e.target).is(".object.destination")
+                && $(e.target).is(".object")
+                && !$(e.target).is(".full")
+                && !$(e.target).is(".blocked")) {
+            e.preventDefault();
+            startedObject.addClass("used");
+            $(e.target).append(draggedObjects.clone());
+            $(e.target).addClass("full");
+            dragReset();
+        }
+        // Ablegen an freiem Platz aus Zielobjekt (verschieben)
+        else if(startedObject.is(".destination")
+                && $(e.target).is(".object.destination")
+                && !$(e.target).is(".full")
+                && !dragBackToStart
+                && !$(e.target).is(".blocked")) {
+            startedObject.removeClass("full");
+            $(e.target).append(draggedObjects);
+            $(e.target).addClass("full");
+            dragReset();
+        }
+        // Zurücklegen an ursprünglichen Ort
+        else if($(e.target).is(".object") && $(e.target).is(".used")
+            && dragBackToStart
             && !$(e.target).is(".blocked")) {
-        e.preventDefault();
-        startedObject.addClass("used");
-        $(e.target).append(draggedObjects.clone());
-        $(e.target).addClass("full");
-        dragReset();
+            startedObject.removeClass("full");
+            draggedObjects.remove();
+            $(e.target).removeClass("used");
+            dragReset();
+        }
     }
-    // Ablegen an freiem Platz aus Zielobjekt (verschieben)
-    else if(startedObject.is(".destination")
-            && $(e.target).is(".object.destination")
-            && !$(e.target).is(".full")
-            && !dragBackToStart
-            && !$(e.target).is(".blocked")) {
-        startedObject.removeClass("full");
-        $(e.target).append(draggedObjects);
-        $(e.target).addClass("full");
-        dragReset();
-    }
-    // Zurücklegen an ursprünglichen Ort
-    else if($(e.target).is(".object") && $(e.target).is(".used")
-        && dragBackToStart
-        && !$(e.target).is(".blocked")) {
-        startedObject.removeClass("full");
-        draggedObjects.remove();
-        $(e.target).removeClass("used");
+    else if(type === quizTypes.ORDER) {
+        $(e.target).after(startedObject);
+
+        var root = $(e.target).closest(".question");
+        root.find(".destination").remove();
+
+        addDragAndDropToOrderDestinations(root);
         dragReset();
     }
 }
@@ -534,10 +660,12 @@ function dropObject(e) {
 */
 function dragReset(e) {
     // remove emphasis
-    $(e.target).parent().find(".emph").removeClass("emph");
+    if(e != undefined) $(e.target).closest(".answers").find(".emph").removeClass("emph");
 
     $('.draggedover').removeClass("draggedover");
     $(".object").css("opacity", "1");
+    $(".object").css("background", "none");
+    $('.question[qtype="'+quizTypes.ORDER+'"]').find(".destination").removeClass("vis");
     draggedObjects = null;
 }
 

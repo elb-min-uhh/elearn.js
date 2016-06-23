@@ -69,6 +69,78 @@
 					<h3>Quizfragen</h3>
 					<p>Auf dieser Seite sind einige Quiz-Fragen Beispielhaft dargestellt.</p>
 
+                    <div class="question" qtype="order" id="c_1">
+    					<h4>Ordnen</h4>
+                        
+                        <!-- .fill sorgt dafür das .object die volle Breite einnehmen -->
+    					<div class="answers fill">
+                            Die folgenden Objekte müssen in die korrekte Reihenfolge gebracht werden
+                            (zwischen einzelnen Objekten könnte die Reihenfolge egal sein):<br>
+                            <br>
+                            <div class="object">
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt --->
+                                <span id="0">Aufwachen</span>
+                            </div>
+                            <div class="object">
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt --->
+                                <span id="1">Aufstehen</span>
+                            </div>
+                            <div class="object">
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt --->
+                                <span id="2">Augen öffnen</span>
+                            </div>
+                            <div class="object">
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt --->
+                                <span id="3">Wecker ausmachen</span>
+                            </div>
+    					</div>
+
+    					<div class="feedback correct">
+    						Richtig
+    						<b>Richtige Antwort:</b><br>
+    						Text mit Antworten
+    					</div>
+    					<div class="feedback incorrect">
+    						Falsch
+    						<b>Richtige Antwort:</b><br>
+    						Text mit Antworten
+    					</div>
+
+                        <!--
+                            Verschlüsselt ist der Index in der Richtigen Reihenfolge.
+                            Also z.B. das Objekt mit der ID 0 gehört an Stelle 0,
+                            dann ist der Wert md5("0").
+                            Das Objekt mit der ID 1 gehört an Stelle 2 (3. Position),
+                            dann ist der Wert md5("2").
+                            Es wird hochgezählt von 0.
+
+                            Sollten zwei Objekte nebeneinander keine direkte Reihenfolge
+                            haben (zB Aufwachen, Wecker ausmachen, Augen öffnen könnte
+                            genauso Aufwachen, Augen öffnen, Wecker ausmachen sein)
+                            dann kriegen beide DENSELBEN index.
+                            In diesem Beispiel also Aufwachen(0), Wecker ausmachen(1),
+                            Augen öffnen(1), Aufstehen(2).
+                        -->
+                        <!-- ID zeigt welches Objekt in answers hierzu gehört --->
+                        <!-- verschlüsselt ist "0" -->
+    					<a class="ans" id="0">cfcd208495d565ef66e7dff9f98764da</a>
+                        <!-- verschlüsselt ist "2" -->
+    					<a class="ans" id="1">c81e728d9d4c2f636f067f89cc14862c</a>
+                        <!-- verschlüsselt ist "1" -->
+    					<a class="ans" id="2">c4ca4238a0b923820dcc509a6f75849b</a>
+                        <!-- verschlüsselt ist "1" -->
+    					<a class="ans" id="3">c4ca4238a0b923820dcc509a6f75849b</a>
+    				</div>
+
+    				<br><br>
+    				<!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+    				<button id="c_1_ref" onclick="showQuestionHere(this)">
+    					Vorherige Antwort anzeigen
+    				</button>
+    				<br><br><br>
+
+
+
                     <div class="question" qtype="classification" id="c_1">
 						<h4>Zuordnung von Bildern</h4>
 						<div class="answers">

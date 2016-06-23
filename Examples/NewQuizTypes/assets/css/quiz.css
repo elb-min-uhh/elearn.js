@@ -187,6 +187,9 @@ button.error_button.act {
     border: 2px solid #dcdcdc;
     overflow-y: auto;
     cursor: move;
+    padding: 5px;
+
+    text-align: center;
 
     min-width: 100px;
     min-height: 50px;
@@ -213,6 +216,41 @@ button.error_button.act {
 .question .answers .object.used * {
     opacity: 0.4;
 }
+
+.question .answers .object.blocked {
+    opacity: 0.8;
+}
+
+
+/* ORDER */
+
+.question[qtype="order"] .answers .object,
+.question[qtype="order"] .answers .destination {
+    float: left;
+    margin: 3px;
+}
+
+.question[qtype="order"] .answers.fill .object {
+    width: 95%;
+}
+
+.question[qtype="order"] .answers .destination {
+    display: none;
+}
+
+.question[qtype="order"] .answers .destination.vis {
+    display: inline-block;
+    border: 2px dashed #b4b4b4;
+    min-height: 50px;
+    min-width: 20px;
+    background: #ddddff;
+}
+
+.question[qtype="order"] .answers .destination.vis.draggedover {
+    border: 2px dashed #888;
+}
+
+
 
 
 /*Media-Querys für Responsivität*/
