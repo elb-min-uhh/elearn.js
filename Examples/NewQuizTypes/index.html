@@ -69,42 +69,271 @@
 					<h3>Quizfragen</h3>
 					<p>Auf dieser Seite sind einige Quiz-Fragen Beispielhaft dargestellt.</p>
 
-                    <div class="question" qtype="order" id="c_1">
-    					<h4>Ordnen</h4>
-                        
+
+                    <!-- TODO Kreis für markierbare Punkte. Mit Hover hervorheben -->
+
+                    <div class="question" qtype="hotspot" id="h_1">
+                        <h4>Hotspot</h4>
+
                         <!-- .fill sorgt dafür das .object die volle Breite einnehmen -->
-    					<div class="answers fill">
+                        <div class="answers">
+
+                            Markiere die genannte Stelle auf dem Bild:<br>
+                            <div class="hotspot_image">
+                                <img src="assets/img/md-illu_1.png"/>
+                                <div
+                                    style="top: 38.5047%; left: 47.4378%; height:50px; width: 50px; margin: -25px 0 0 -25px; opacity: 0.1" class="dot"></div>
+                            </div>
+
+                        </div>
+
+                        <button>Bestätigen</button>
+
+                        <div class="feedback correct">
+                            Richtig<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
+                        <div class="feedback incorrect">
+                            Falsch<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
+
+                        <!--
+                            Verschlüsselt ist die id der Antwort aus dem Head der Tabelle
+                        -->
+
+                        <!--
+                        Verschluesselt ist hier "gueltig" als richtige Antwort für die Zeile mit der ID=1
+                        -->
+                        <a id="0" class="ans">47.5,38.5</a>
+                    </div>
+
+                    <br><br>
+                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <button id="h_1_ref" onclick="showQuestionHere(this)">
+                        Vorherige Antwort anzeigen
+                    </button>
+                    <br><br><br>
+
+
+
+
+                    <div class="question" qtype="matrix_choice" id="m_1">
+                        <h4>Matrix (Multiple Choice)</h4>
+
+                        <!-- .fill sorgt dafür das .object die volle Breite einnehmen -->
+                        <div class="answers">
+
+                            Die richtigen Antworten müssen markiert werden<br>
+
+                            <!-- Diese Tabelle ist Grundlage der Matrixanordnung -->
+                            <table class="matrix">
+
+                                <!--
+                                    Die erste Zeile ist die Kopfzeile, die die Antwortmöglichkeiten definiert.
+
+                                    In jedem <tr> sollten als direkte "Kinder" nur <th> oder <td> folgen.
+                                    Alle anderen Elemente führen zu Verfälschung der Auswertung.
+                                -->
+                                <tr>
+                                    <td>Aufgabe</td>
+
+                                    <!--
+                                    Das class="antwort" muss an jeder Antwortmöglichkeit stehen (wie hier)
+                                    Die hier verwendete ID ist per MD5 verschlüsselt als Inhalt in den
+                                    a.ans anzugeben.
+                                    Ist also in der Zeile mit der ID=1 (<tr id="1">) die Antwort "gueltig"
+                                    sollte unten ein Block
+                                    <a class="ans" id="1">5f5316a69e79419a121ee2e0488189c0</a>
+                                    exisiteren. Der verschluesselte Wert entspricht dabei "gueltig",
+                                    die ID muss übereinstimmen mit der ID der Zeile.
+                                    -->
+                                    <th id="ungueltig" class="antwort">Ungültig</th>
+                                    <th id="gueltig" class="antwort">Gültig</th>
+                                    <th id="nicht0" class="antwort">Ergebnis ist nicht 0 (nur bei gültig)</th>
+                                </tr>
+                                <tr id="0">
+                                    <td>3 +: 5</td>
+
+                                    <!--
+                                    Jede Checkbox ist ein Kästchen indem man ein Häckchen setzen kann.
+                                    Diese sollten alle unabhängig voneinander markierbar sein, deshalb wird hier
+                                    name="" nicht verwendet.
+                                    -->
+                                    <td><input type="checkbox"/></td>
+                                    <td><input type="checkbox"/></td>
+                                    <td><input type="checkbox"/></td>
+                                </tr>
+                                <tr id="1">
+                                    <td>3 + 5</td>
+                                    <td><input type="checkbox"/></td>
+                                    <td><input type="checkbox"/></td>
+                                    <td><input type="checkbox"/></td>
+                                </tr>
+
+                            </table>
+                        </div>
+
+                        <div class="feedback correct">
+                            Richtig<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
+                        <div class="feedback incorrect">
+                            Falsch<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
+
+                        <!--
+                            Verschlüsselt ist die id der Antwort aus dem Head der Tabelle
+                        -->
+
+                        <!--
+                        Verschluesselt ist hier "gueltig" als richtige Antwort für die Zeile mit der ID=1
+                        -->
+                        <a class="ans" id="0">a4905edcff5197d6c0e23f3d12276d21</a>
+                        <!--
+                        Verschluesselt ist hier "gueltig" als richtige Antwort für die Zeile mit der ID=1
+                        -->
+                        <a class="ans" id="1">5f5316a69e79419a121ee2e0488189c0</a>
+                        <!-- "nicht0" -->
+                        <a class="ans" id="1">d8feba83234675589530d165dbe2f95e</a>
+                    </div>
+
+                    <br><br>
+                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <button id="m_1_ref" onclick="showQuestionHere(this)">
+                        Vorherige Antwort anzeigen
+                    </button>
+                    <br><br><br>
+
+
+                    <div class="question" qtype="matrix_choice" id="m_2">
+                        <h4>Matrix (Single Choice)</h4>
+
+                        <!-- .fill sorgt dafür das .object die volle Breite einnehmen -->
+                        <div class="answers">
+
+                            Die richtigen Antworten müssen markiert werden<br>
+
+                            <!-- Diese Tabelle ist Grundlage der Matrixanordnung -->
+                            <table class="matrix">
+
+                                <!--
+                                    Die erste Zeile ist die Kopfzeile, die die Antwortmöglichkeiten definiert.
+
+                                    In jedem <tr> sollten als direkte "Kinder" nur <th> oder <td> folgen.
+                                    Alle anderen Elemente führen zu Verfälschung der Auswertung.
+                                -->
+                                <tr>
+                                    <td>Aufgabe</td>
+
+                                    <!--
+                                    Das class="antwort" muss an jeder Antwortmöglichkeit stehen (wie hier)
+                                    Die hier verwendete ID ist per MD5 verschlüsselt als Inhalt in den
+                                    a.ans anzugeben.
+                                    Ist also in der Zeile mit der ID=1 (<tr id="1">) die Antwort "gueltig"
+                                    sollte unten ein Block
+                                    <a class="ans" id="1">5f5316a69e79419a121ee2e0488189c0</a>
+                                    exisiteren. Der verschluesselte Wert entspricht dabei "gueltig",
+                                    die ID muss übereinstimmen mit der ID der Zeile.
+                                    -->
+                                    <th id="ungueltig" class="antwort">Ungültig</th>
+                                    <th id="gueltig" class="antwort">Gültig</th>
+                                </tr>
+                                <tr id="0">
+                                    <td>3 +: 5</td>
+
+                                    <!--
+                                    Jedes radio-input ist ein Kreis, der markiert werden kann.
+                                    Diese sollten alle abhängig voneinander markierbar sein, deshalb wird hier
+                                    name="X" verwendet, für welche die voneinander abhängig sind.
+                                    -->
+                                    <td><input name="r1" type="radio"/></td>
+                                    <td><input name="r1" type="radio"/></td>
+                                </tr>
+                                <tr id="1">
+                                    <td>3 + 5</td>
+                                    <td><input name="r2" type="radio"/></td>
+                                    <td><input name="r2" type="radio"/></td>
+                                </tr>
+
+                            </table>
+                        </div>
+
+                        <div class="feedback correct">
+                            Richtig<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
+                        <div class="feedback incorrect">
+                            Falsch<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
+
+                        <!--
+                            Verschlüsselt ist die id der Antwort aus dem Head der Tabelle
+                        -->
+
+                        <!--
+                        Verschluesselt ist hier "gueltig" als richtige Antwort für die Zeile mit der ID=1
+                        -->
+                        <a class="ans" id="0">a4905edcff5197d6c0e23f3d12276d21</a>
+                        <!--
+                        Verschluesselt ist hier "gueltig" als richtige Antwort für die Zeile mit der ID=1
+                        -->
+                        <a class="ans" id="1">5f5316a69e79419a121ee2e0488189c0</a>
+                    </div>
+
+                    <br><br>
+                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <button id="m_2_ref" onclick="showQuestionHere(this)">
+                        Vorherige Antwort anzeigen
+                    </button>
+                    <br><br><br>
+
+
+
+                    <div class="question" qtype="order" id="o_1">
+                        <h4>Sortieren</h4>
+
+                        <!-- .fill sorgt dafür das .object die volle Breite einnehmen -->
+                        <div class="answers">
                             Die folgenden Objekte müssen in die korrekte Reihenfolge gebracht werden
                             (zwischen einzelnen Objekten könnte die Reihenfolge egal sein):<br>
                             <br>
                             <div class="object">
-                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt --->
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt -->
                                 <span id="0">Aufwachen</span>
                             </div>
                             <div class="object">
-                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt --->
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt -->
                                 <span id="1">Aufstehen</span>
                             </div>
                             <div class="object">
-                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt --->
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt -->
                                 <span id="2">Augen öffnen</span>
                             </div>
                             <div class="object">
-                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt --->
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt -->
                                 <span id="3">Wecker ausmachen</span>
                             </div>
-    					</div>
+                        </div>
 
-    					<div class="feedback correct">
-    						Richtig
-    						<b>Richtige Antwort:</b><br>
-    						Text mit Antworten
-    					</div>
-    					<div class="feedback incorrect">
-    						Falsch
-    						<b>Richtige Antwort:</b><br>
-    						Text mit Antworten
-    					</div>
+                        <div class="feedback correct">
+                            Richtig<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
+                        <div class="feedback incorrect">
+                            Falsch<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
 
                         <!--
                             Verschlüsselt ist der Index in der Richtigen Reihenfolge.
@@ -121,78 +350,273 @@
                             In diesem Beispiel also Aufwachen(0), Wecker ausmachen(1),
                             Augen öffnen(1), Aufstehen(2).
                         -->
-                        <!-- ID zeigt welches Objekt in answers hierzu gehört --->
+                        <!-- ID zeigt welches Objekt in answers hierzu gehört -->
                         <!-- verschlüsselt ist "0" -->
-    					<a class="ans" id="0">cfcd208495d565ef66e7dff9f98764da</a>
+                        <a class="ans" id="0">cfcd208495d565ef66e7dff9f98764da</a>
                         <!-- verschlüsselt ist "2" -->
-    					<a class="ans" id="1">c81e728d9d4c2f636f067f89cc14862c</a>
+                        <a class="ans" id="1">c81e728d9d4c2f636f067f89cc14862c</a>
                         <!-- verschlüsselt ist "1" -->
-    					<a class="ans" id="2">c4ca4238a0b923820dcc509a6f75849b</a>
+                        <a class="ans" id="2">c4ca4238a0b923820dcc509a6f75849b</a>
                         <!-- verschlüsselt ist "1" -->
-    					<a class="ans" id="3">c4ca4238a0b923820dcc509a6f75849b</a>
-    				</div>
+                        <a class="ans" id="3">c4ca4238a0b923820dcc509a6f75849b</a>
+                    </div>
 
-    				<br><br>
-    				<!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
-    				<button id="c_1_ref" onclick="showQuestionHere(this)">
-    					Vorherige Antwort anzeigen
-    				</button>
-    				<br><br><br>
+                    <br><br>
+                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <button id="o_1_ref" onclick="showQuestionHere(this)">
+                        Vorherige Antwort anzeigen
+                    </button>
+                    <br><br><br>
+
 
 
 
                     <div class="question" qtype="classification" id="c_1">
-						<h4>Zuordnung von Bildern</h4>
-						<div class="answers">
+                        <h4>Zuordnung von Bildern</h4>
+                        <div class="answers">
                             Die folgenden Objekte müssen in den leeren Rechtecken
                             platziert werden:<br>
+
+                            <!--
+                            Die nachfolgenden Objekte können verschoben werden.
+                            Jedes Objekt kann nur einmal verwendet werden im Rahmen der Aufgabe.
+                            In jedem div.object sollte nur ein Element sein. Dieses Element enthält die ID,
+                            die wiederum zur Angabe der korrekten zuordnung benutzt wird.
+                            -->
                             <div class="object">
-                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt --->
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt -->
                                 <img src="assets/img/md-illu_1.png" style="height: 125px;" id="papier" draggable="false"/>
                             </div>
                             <div class="object">
-                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt --->
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt -->
                                 <img src="assets/img/logo-bmbf.gif" id="foerderung" draggable="false"/>
                             </div>
 
 
                             <br>Bild der Förderung:<br>
-                            <!-- ID zeigt welches .ans Objekt hierzu gehört --->
+                            <!-- ID zeigt welches .ans Objekt hierzu gehört -->
+                            <!--
+                            Dieses div ist eine "Zielposition". Hier kann etwas hinein-
+                            gezogen werden. Die Objekte die hier landen können, wurden oben
+                            als div.object eingeführt.
+                            -->
                             <div class="object destination" id="0"></div>
 
                             <br>Bild von einem Stück Papier mit Schraubenschlüssel:<br>
-                            <!-- ID zeigt welches .ans Objekt hierzu gehört --->
+                            <!-- ID zeigt welches .ans Objekt hierzu gehört -->
+                            <!--
+                            Dieses div ist eine "Zielposition". Hier kann etwas hinein-
+                            gezogen werden. Die Objekte die hier landen können, wurden oben
+                            als div.object eingeführt.
+                            -->
                             <div class="object destination" id="1"></div>
-						</div>
+                        </div>
 
-						<div class="feedback correct">
-							Richtig
-							<b>Richtige Antwort:</b><br>
-							Text mit Antworten
-						</div>
-						<div class="feedback incorrect">
-							Falsch
-							<b>Richtige Antwort:</b><br>
-							Text mit Antworten
-						</div>
+                        <div class="feedback correct">
+                            Richtig<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
+                        <div class="feedback incorrect">
+                            Falsch<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
 
-                        <!-- ID zeigt welches .destination Objekt hierzu gehört --->
-						<a class="ans" id="0">97fdbbc71cbce085f0e41ebdbf4a9c99</a>
-                        <!-- ID zeigt welches .destination Objekt hierzu gehört --->
-						<a class="ans" id="1">30c2c31a4a67ee9afdb2283b9a688a19</a>
-					</div>
+                        <!-- ID zeigt welches .destination Objekt hierzu gehört -->
+                        <a class="ans" id="0">97fdbbc71cbce085f0e41ebdbf4a9c99</a>
+                        <!-- ID zeigt welches .destination Objekt hierzu gehört -->
+                        <a class="ans" id="1">30c2c31a4a67ee9afdb2283b9a688a19</a>
+                    </div>
 
-					<br><br>
-					<!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
-					<button id="c_1_ref" onclick="showQuestionHere(this)">
-						Vorherige Antwort anzeigen
-					</button>
-					<br><br><br>
+                    <br><br>
+                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <button id="c_1_ref" onclick="showQuestionHere(this)">
+                        Vorherige Antwort anzeigen
+                    </button>
+                    <br><br><br>
 
+
+
+                    <div class="question" qtype="classification" id="c_2">
+                        <h4>Zuordnung in Matrix/Tabelle</h4>
+                        <div class="answers">
+                            Die folgenden Objekte müssen in den leeren Rechtecken
+                            platziert werden (Objekte können wieder zurückgelegt werden):<br>
+
+                            <!--
+                            Die nachfolgenden Objekte können verschoben werden.
+                            Jedes Objekt kann nur einmal verwendet werden im Rahmen der Aufgabe.
+                            In jedem div.object sollte nur ein Element sein. Dieses Element enthält die ID,
+                            die wiederum zur Angabe der korrekten zuordnung benutzt wird.
+                            -->
+                            <div class="object">
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt -->
+                                <span id="a1">a1</span>
+                            </div>
+                            <div class="object">
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt -->
+                                <span id="a2">a2</span>
+                            </div>
+                            <div class="object">
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt -->
+                                <span id="b1">b1</span>
+                            </div>
+                            <div class="object">
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt -->
+                                <span id="b2">b2</span>
+                            </div>
+
+                            <br>
+                            Die Zeilen werden durchnummeriert die Spalten sind von links nach rechts
+                            alphabetisch sortiert:
+
+                            <!--
+                            Style nur für diesen speziellen Fall
+                            Der Style Bereich verändert die Darstellung der Tabelle, damit diese so aussieht,
+                            wie es gewünscht ist. Um diesen Stil zu verändern kann man den CSS Code verändern
+                            bzw. eigenen schreiben.
+                            -->
+                            <style>
+                                table.zuordnungstabelle {
+                                }
+                                table.zuordnungstabelle td {
+                                    padding: 0;
+                                    border: 0;
+                                }
+                                table.zuordnungstabelle td div.object.destination {
+                                    margin: 0;
+                                    display: block;
+                                    width: 100px;
+                                    height: 50px;
+                                    text-align: center;
+                                }
+                            </style>
+
+
+                            <!--
+                            Diese Tabelle ist nur dazu gedacht die Antwortfelder richtig anzuordnen.
+                            Die eigentlichen Antwortfelder sind als "Zielposition" enthalten.
+                            -->
+                            <table class="zuordnungstabelle">
+                                <!--
+                                Die erste Zeile ist nur zur Beschriftung gedacht
+                                Zeilen können beliebig hinzugefügt werden.
+                                -->
+                                <tr>
+
+                                    <!--
+                                    Die erste Spalte ist nur zur Beschriftung gedacht
+                                    Zeilen können beliebig hinzugefügt werden, also sollten in jeder Zeile
+                                    zusammengerechnet gleichviele <th> + <td> sein.
+                                    -->
+                                    <th></th>
+                                    <th>A</th>
+                                    <th>B</th>
+                                </tr>
+                                <tr>
+                                    <th>1</th>
+
+                                    <td>
+                                        <!--
+                                        Dieses div ist eine "Zielposition". Hier kann etwas hinein-
+                                        gezogen werden. Die Objekte die hier landen können, wurden oben
+                                        als div.object eingeführt.
+                                        -->
+                                        <div class="object destination" id="0"></div>
+                                    </td>
+                                    <td>
+                                        <div class="object destination" id="1"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>2</th>
+                                    <td>
+                                        <div class="object destination" id="2"></div>
+                                    </td>
+                                    <td>
+                                        <div class="object destination" id="3"></div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+
+                        <div class="feedback correct">
+                            Richtig<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
+                        <div class="feedback incorrect">
+                            Falsch<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
+
+
+                        <!-- ID zeigt welches .destination Objekt hierzu gehört -->
+                        <!--
+                        Der Wert entspricht dem MD5 Wert der ID der richtigen Antwort (oben angegeben)
+                        Hier z.B. "a1"
+                        -->
+                        <a class="ans" id="0">8a8bb7cd343aa2ad99b7d762030857a2</a>
+                        <!-- ID zeigt welches .destination Objekt hierzu gehört -->
+                        <a class="ans" id="1">edbab45572c72a5d9440b40bcc0500c0</a>
+                        <!-- ID zeigt welches .destination Objekt hierzu gehört -->
+                        <a class="ans" id="2">693a9fdd4c2fd0700968fba0d07ff3c0</a>
+                        <!-- ID zeigt welches .destination Objekt hierzu gehört -->
+                        <a class="ans" id="3">fbfba2e45c2045dc5cab22a5afe83d9d</a>
+                    </div>
+
+                    <br><br>
+                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <button id="c_2_ref" onclick="showQuestionHere(this)">
+                        Vorherige Antwort anzeigen
+                    </button>
+                    <br><br><br>
+
+
+
+
+
+                    <div class="question" qtype="error_text" id="et_1">
+                        <h4>Unterstreiche richtige Wörter</h4>
+
+                        <!-- .underline ist der einzige Unterschied zu dem sonstigen Fehlertext -->
+                        <div class="answers underline">
+                            In Deutschland gibt es die Flüsse <button class="error_button">Elbe</button>,<button class="error_button">Wolga</button>, <button class="error_button">Mississippi</button> und <button class="error_button">Weser</button>.
+                            <br>
+                            Die Antwortmöglichkeit darf nicht wiederholt werden.
+                            <!--
+                            Die gleiche Antwort wie z.B. Elbe darf innerhalb einer Frage nicht einmal falsch und einmal richtig sein. Möglichst gleiche Antworten vermeiden.
+                            -->
+                        </div>
+
+                        <div class="feedback correct">
+                            Richtig<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
+                        <div class="feedback incorrect">
+                            Falsch<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
+
+                        <a class="ans">d17fd933f9295721a2e5c1ebd2b08d6a</a>
+                        <a class="ans">e1545275ca27c7ce710f37a3fe483db1</a>
+                    </div>
+
+                    <br><br>
+                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <button id="et_1_ref" onclick="showQuestionHere(this)">
+                        Vorherige Antwort anzeigen
+                    </button>
+                    <br><br><br>
 
 
 					<div class="question" qtype="error_text" id="et_1">
-						<h4>Text mit Falschen Wörtern</h4>
+						<h4>Streiche falsche Wörter</h4>
 						<div class="answers">
 							In Deutschland gibt es die Flüsse <button class="error_button">Elbe</button>,<button class="error_button">Wolga</button>, <button class="error_button">Mississippi</button> und <button class="error_button">Weser</button>.
 							<br>
@@ -203,12 +627,12 @@
 						</div>
 
 						<div class="feedback correct">
-							Richtig
+							Richtig<br>
 							<b>Richtige Antwort:</b><br>
 							Text mit Antworten
 						</div>
 						<div class="feedback incorrect">
-							Falsch
+							Falsch<br>
 							<b>Richtige Antwort:</b><br>
 							Text mit Antworten
 						</div>
@@ -236,12 +660,12 @@
 						</div>
 
 						<div class="feedback correct">
-							Richtig
+							Richtig<br>
 							<b>Richtige Antwort:</b><br>
 							Text mit Antworten
 						</div>
 						<div class="feedback incorrect">
-							Falsch
+							Falsch<br>
 							<b>Richtige Antwort:</b><br>
 							Text mit Antworten
 						</div>
@@ -274,10 +698,12 @@
 						</div>
 
 						<div class="feedback correct">
+							Richtig<br>
 							<b>Richtige Antwort:</b><br>
 							Text mit Antworten
 						</div>
 						<div class="feedback incorrect">
+							Falsch<br>
 							<b>Richtige Antwort:</b><br>
 							Text mit Antworten
 						</div>

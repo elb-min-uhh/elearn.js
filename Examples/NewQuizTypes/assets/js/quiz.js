@@ -24,7 +24,8 @@ var quizTypes = {
     ERROR_TEXT : "error_text",
     HOTSPOT : "hotspot",
     CLASSIFICATION : "classification",
-    ORDER : "order"
+    ORDER : "order",
+    MATRIX_CHOICE : "matrix_choice"
 };
 
 
@@ -75,6 +76,7 @@ function init() {
 
     addDragAndDropToClassification();
     addDragAndDropToOrderObjects();
+    addClickToHotspotImage();
 
     resetQuiz();
 }
@@ -96,7 +98,7 @@ function submitAns(button) {
         return;
     }
 
-    var c = getCorrectAnswers(div);
+    var c = getCorrectAnswers(div.find("a.ans"));
 
     var labels = div.children('.answers').children('label');
     deleteLabelColoring(labels);
@@ -152,6 +154,11 @@ function submitAns(button) {
             correct = getCorrectOrder(objects, answers);
             div.find('.object').addClass("blocked");
         }
+        else if(type === quizTypes.MATRIX_CHOICE) {
+            var rows = div.find("tr");
+            var answers = div.find("a.ans");
+            correct = getCorrectMatrixChoice(rows, answers);
+        }
     }
 
     if(correct === -1) {
@@ -183,9 +190,9 @@ function submitAns(button) {
 * Liest für ein <div> alle als korrekt angegebenen Antworten aus.
 * Diese sollten MD5 Verschlüsselt sein.
 */
-function getCorrectAnswers(div) {
+function getCorrectAnswers(ans) {
     var c = [];
-    div.find('a.ans').each(function(i) {
+    ans.each(function(i) {
         c[c.length] = $(this).html();
     });
     return c;
@@ -385,6 +392,38 @@ function getCorrectOrder(objects, answers) {
 }
 
 
+function getCorrectMatrixChoice(rows, answers) {
+    var correct = true;
+
+    rows.each(function(i, e) {
+        var row = $(this);
+        var id = row.attr("id");
+        var cor = getCorrectAnswers(answers.filter("#"+id)); // Mehrere Antworten können vorhanden sein
+
+        var inputs = row.find("input"); // alle Inputs der Zeile
+
+        inputs.each(function(ii, ee) {
+            var ans = $(rows.find(".antwort").get(ii)).attr("id");
+            ans = encryptMD5(ans);
+            
+            // ausgewählt und richtig oder nicht ausgewählt und nicht richtig (insg richtig)
+            if(($(ee).is(":checked") && contains(cor, ans)) 
+                || (!$(ee).is(":checked") && !contains(cor, ans))) {
+
+            }
+            // falsch
+            else {
+                correct = false;
+            }
+
+            $(ee).attr("disabled", true);
+        });
+    });
+
+    return correct;
+}
+
+
 // --------------------------------------------------------------------------------------
 // PROCESS ANSWER
 // --------------------------------------------------------------------------------------
@@ -402,6 +441,8 @@ function processFreeText(div) {
 // COPY QUESTION TO SHOW AGAIN
 // --------------------------------------------------------------------------------------
 
+// TODO um Matrix und Drag and Drop erweitern
+
 /**
 * Kopiert die Frage ohne Bestätigungsbuttons (reiner Fragekörper)
 */
@@ -415,6 +456,10 @@ function showQuestionHere(button) {
 
     // zählt immer als beantwortet
     div.addClass("answered");
+
+    // hinweis, dass nicht veränderbar
+    div.find("h4").after(
+        '<span class="answered_hint">Nicht änderbar, da die Frage bereits beantwortet wurde</span>');
 
     var type = orig.attr("qtype");
     // Verarbeiten der vorherigen Eingaben
@@ -488,23 +533,29 @@ function addDragAndDropToClassification() {
     var root = $('[qtype="'+quizTypes.CLASSIFICATION+'"]');
     root.find('.object').attr("draggable", "true");
     root.find('.object').on("dragstart", function(event) {
+        console.log("drag");
         dragObject(event.originalEvent);
     });
     root.find('.object').on("dragover", function(event) {
+        console.log("allow");
         allowObjectDrop(event.originalEvent);
     });
     root.find('.object').on("drop", function(event) {
+        console.log("drop");
         dropObject(event.originalEvent);
     });
 
     root.find('.object').on("dragend", function(event) {
+        console.log("reset");
         dragReset(event.originalEvent);
     });
 
     root.find('.object').on("dragenter", function(event) {
+        console.log("over");
         draggedOver(event.originalEvent);
     });
     root.find('.object').on("dragleave", function(event) {
+        console.log("out");
         draggedOut(event.originalEvent);
     });
 }
@@ -683,6 +734,39 @@ function draggedOut(e) {
     if(!$(e.target).is(".full")
         || draggedObjects == $(e.target).children()) $(e.target).removeClass("draggedover");
 }
+
+
+
+
+// --------------------------------------------------------------------------------------
+// HOTSPOT
+// --------------------------------------------------------------------------------------
+
+var activeElement = 0;
+
+function addClickToHotspotImage() {
+    var root = $('[qtype="'+quizTypes.HOTSPOT+'"]');
+
+    root.find(".hotspot_image").click(function(event) {
+        hotspotClick(event.originalEvent);
+    });
+}
+
+function hotspotClick(e) {
+    var posX = e.layerX;
+    var posY = e.layerY;
+    var target = $(e.target);
+
+    var percX = (100 * posX) / target.width();
+    var percY = (100 * posY) / target.height();
+
+    if(target.find(".clickpos").length == 0) target.append("<div class='dot clickpos'></div>");
+    target.find(".clickpos").css({
+        "top" : percY + "%",
+        "left" : percX + "%"
+    });
+}
+
 
 
 // --------------------------------------------------------------------------------------

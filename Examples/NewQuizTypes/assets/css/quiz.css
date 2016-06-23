@@ -143,6 +143,17 @@
 }
 
 
+
+/* BEREITS BEANTWORTETE FRAGE */
+.question .answered_hint {
+    float: right;
+    opacity: 0.5;
+    font-size: 80%;
+    padding-bottom: 0.5em;
+    padding-left: 0.5em;
+}
+
+
 /* -------------------------------- FREE TEXT -------------------------------- */
 
 .question .answers textarea {
@@ -179,6 +190,10 @@ button.error_button.act {
     text-decoration-color: #f00;
 }
 
+.underline button.error_button.act {
+    text-decoration: underline;
+    text-decoration-color: #000;
+}
 
 /* ----------------------------- CLASSIFICATION ------------------------------ */
 
@@ -205,6 +220,7 @@ button.error_button.act {
 }
 
 .question .answers .object.draggedover {
+    background: #ccccee;
     border: 2px dashed #888;
 }
 
@@ -248,9 +264,45 @@ button.error_button.act {
 }
 
 .question[qtype="order"] .answers .destination.vis.draggedover {
+    background: #ccccee;
     border: 2px dashed #888;
 }
 
+
+/* ----------------------------- MATRIX CHOICE ------------------------------ */
+
+.question[qtype="matrix_choice"] .answers .matrix {
+
+}
+
+.question[qtype="matrix_choice"] .answers .matrix td,
+.question[qtype="matrix_choice"] .answers .matrix th {
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #888;
+}
+
+
+/* ----------------------------- HOTSPOT ------------------------------ */
+
+.question[qtype="hotspot"] .answers .hotspot_image {
+    position: relative;
+    overflow-y: auto;
+}
+
+/* Kein Drop auf Objekte innerhalb der Blöcke */
+.question[qtype="hotspot"] .answers .hotspot_image * {
+    pointer-events: none;
+}
+
+.question[qtype="hotspot"] .answers .dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    margin: -4px 0 0 -4px;
+    border-radius: 50%;
+    background: #f00;
+}
 
 
 
