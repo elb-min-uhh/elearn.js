@@ -29,6 +29,23 @@ var quizTypes = {
 };
 
 
+// ------------------------------------------------------------
+// INTERFACE
+// ------------------------------------------------------------
+
+/**
+* Gibt zurück, ob alle sichtbaren Fragen beantwortet wurden. (bool)
+*/
+function getVisibleQuestionsAnswered() {
+    return $('.question:visible').filter('.answered').length
+            == $('.question:visible').length;
+}
+
+
+// ------------------------------------------------------------
+
+
+
 /**
 * Diese Funktion initialisiert das Quiz.
 */
@@ -405,9 +422,9 @@ function getCorrectMatrixChoice(rows, answers) {
         inputs.each(function(ii, ee) {
             var ans = $(rows.find(".antwort").get(ii)).attr("id");
             ans = encryptMD5(ans);
-            
+
             // ausgewählt und richtig oder nicht ausgewählt und nicht richtig (insg richtig)
-            if(($(ee).is(":checked") && contains(cor, ans)) 
+            if(($(ee).is(":checked") && contains(cor, ans))
                 || (!$(ee).is(":checked") && !contains(cor, ans))) {
 
             }

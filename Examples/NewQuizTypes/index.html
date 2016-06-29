@@ -16,6 +16,7 @@
 
 		<script>
 		    window.onload = function() {
+
 				/* Mögliche Erweiterungen
 
 				eLearnJS.setBackButtonEnabled(true); // Zurück button im Header
@@ -30,6 +31,23 @@
 				eLearnJS.generalDirectionButtonsEnabled(false); // keine Nav. Buttons
 				eLearnJS.setKeyNavigationEnabled(false); // keine Tastaturnavigation
 				eLearnJS.generalProgressbarEnabled(false); // keine Fortschrittsleiste
+
+
+				// ---- Zu quiz.js ----
+
+				// Aktiviert eine Blockierung der "showNext" Funktion, wenn nicht
+				// alle sichtbaren (!) Fragen beantwortet wurden
+				eLearnJS.setBlockProgressIfQuestionsNotAnswered(true);
+
+				// aktiviert eine Alert Nachricht mit dem angegebenen Text
+				eLearnJS.setBlockProgressAlert(true, "Zuerst die Frage(n) beantworten!");
+
+				// zeigt die angegebenen Elemente an, wenn der Fortschritt geblockt wird
+				// beim nächsten nicht geblockten showNext werden diese Elemente
+				// wieder ausgeblendet
+				eLearnJS.setBlockProgressShowElement(true, ".feedback.noselection");
+
+
                 */
             }
         </script>
@@ -117,7 +135,8 @@
                     </button>
                     <br><br><br>
 
-
+				</section>
+				<section name="Quiz 2">
 
 
                     <div class="question" qtype="matrix_choice" id="m_1">

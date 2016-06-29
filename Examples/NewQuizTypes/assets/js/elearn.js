@@ -19,6 +19,13 @@ var backbuttonEnabled = false;
 var backpage = 0;
 var backpagetype = "index";
 
+
+var blockProgressQuizJS = false;
+var blockProgressAlertActivated = false;
+var blockProgressAlertText = "";
+var blockProgressShowElementActivated = false;
+var blockProgressShowElementText = "";
+
 // Zum generellen Aktivieren oder Deaktivieren der Knöpfe
 var dirButtonsEnabled = true;
 var keyNavigationEnabled = true;
@@ -287,7 +294,12 @@ function showPrev() {
 * Funktioniert nur, wenn nicht alle Sections angezeigt werden.
 */
 function showNext() {
-    showSection(visSection+1);
+
+    // nur wenn entweder nicht blockiert bei unbeantworteter Frage
+    // oder alle (sichtbaren) Fragen beantwortet
+    if(!checkBlockProgress()) {
+        showSection(visSection+1);
+    }
 };
 
 /**
@@ -436,6 +448,57 @@ function setProgressbarEnabled(b) {
         }
     }
 };
+
+
+/**
+* Aktiviert oder deaktiviert das Blocken des Weitergehens (in showNext())
+*/
+function setBlockProgressIfQuestionsNotAnswered(b) {
+    blockProgressQuizJS = b;
+}
+
+/**
+* Gibt zurück ob der Fortschritt geblockt werden soll.
+* Zeigt außerdem Blocknachrichten an.
+*/
+function checkBlockProgress() {
+    var block = blockProgressQuizJS && !getVisibleQuestionsAnswered();
+
+    if(block) {
+        // Zeigt alert
+        if(blockProgressAlertActivated) {
+            alert(blockProgressAlertText);
+        }
+
+        // zeigt gesetztes Element an
+        if(blockProgressShowElementActivated) {
+            $(blockProgressShowElementText).show();
+        }
+    }
+    else {
+        // blendet gesetztes Element wieder aus
+        if(blockProgressShowElementActivated) {
+            $(blockProgressShowElementText).hide();
+        }
+    }
+
+    return block;
+}
+
+/**
+* Aktiviert oder deaktiviert einen Alert im Blockfall und setzt ggf. die
+* Nachricht die angezeigt wird.
+*/
+function setBlockProgressAlert(enabled, text) {
+    blockProgressAlertActivated = enabled;
+    blockProgressAlertText = text;
+}
+
+
+function setBlockProgressShowElement(enabled, text) {
+    blockProgressShowElementActivated = enabled;
+    blockProgressShowElementText = text;
+}
 
 
 
