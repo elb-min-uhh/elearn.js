@@ -473,7 +473,7 @@ function getCorrectMatrixChoice(rows, answers) {
         var inputs = row.find("input"); // alle Inputs der Zeile
 
         // keines ausgewählt in einer Zeile
-        if(inputs.filter(':checked').length == 0) {
+        if(inputs.length > 0 && inputs.filter(':checked').length == 0) {
             rows.find('input').attr("disabled", false);
             correct = -1;
             return false;
@@ -666,29 +666,23 @@ function addDragAndDropToClassification() {
     var root = $('[qtype="'+quizTypes.CLASSIFICATION+'"]');
     root.find('.object').attr("draggable", "true");
     root.find('.object').on("dragstart", function(event) {
-        console.log("drag");
         dragObject(event.originalEvent);
     });
     root.find('.object').on("dragover", function(event) {
-        console.log("allow");
         allowObjectDrop(event.originalEvent);
     });
     root.find('.object').on("drop", function(event) {
-        console.log("drop");
         dropObject(event.originalEvent);
     });
 
     root.find('.object').on("dragend", function(event) {
-        console.log("reset");
         dragReset(event.originalEvent);
     });
 
     root.find('.object').on("dragenter", function(event) {
-        console.log("over");
         draggedOver(event.originalEvent);
     });
     root.find('.object').on("dragleave", function(event) {
-        console.log("out");
         draggedOut(event.originalEvent);
     });
 }
