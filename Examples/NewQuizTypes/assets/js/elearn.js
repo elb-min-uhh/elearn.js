@@ -31,6 +31,10 @@ var dirButtonsEnabled = true;
 var keyNavigationEnabled = true;
 var progressbarEnabled = true;
 
+// Funktionen die aufgerufen werden, wenn eine neue section angezeigt wird
+// diese sind registrierbar mit registerAfterShow(KEY, FNC)
+var afterShow = {};
+
 // Nur damit Scriptaufrufe übersichtlicher sind.
 var eLearnJS = this;
 
@@ -344,7 +348,20 @@ function showSection(i) {
     if(!allShown) {
         setDirectionButtonsEnabledIdx(visSection);
     }
+
+    // Ausführen registrierten funktionen
+    $.each(afterShow, function(key, fnc) {
+        fnc();
+    })
 };
+
+/**
+* Registriert eine Funktion, die ausgeführt wird, nachdem eine neue Section
+* angezeigt wurde.
+*/
+function registerAfterShow(key, fnc) {
+    afterShow[key] = fnc;
+}
 
 /**
 * Aktualisiert den Fortschritt der progressbar

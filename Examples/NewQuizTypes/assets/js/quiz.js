@@ -11,6 +11,10 @@
 */
 $(document).ready(function() {
     init();
+
+    // resize Funktion wird aufgerufen, wenn im eLearnJS eine neue section
+    // angezeigt wird
+    eLearnJS.registerAfterShow("quiz-resizing", windowResizing);
 });
 
 
