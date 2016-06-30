@@ -272,7 +272,7 @@ function getCorrectForRadio(labels, c, colorLabels) {
 */
 function getCorrectForText(labels, c) {
     var correct = true;
-    var ans = labels.children('input').val();
+    var ans = labels.children('input').val().trim();
     ans = encryptMD5(ans);
     if(!contains(c, ans)) {
         correct = false;
@@ -302,7 +302,7 @@ function getCorrectFillBlank(labels, answers) {
         var input = $(this).find("input");
         var id = input.attr("id");
         var cor = answers.filter("#"+id).text();
-        var ans = encryptMD5(input.val());
+        var ans = encryptMD5(input.val().trim());
 
         // nicht ausgefüllt
         if(input.val().length == 0) {
