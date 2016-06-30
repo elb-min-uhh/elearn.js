@@ -96,36 +96,54 @@
                         <!-- .fill sorgt dafür das .object die volle Breite einnehmen -->
                         <div class="answers">
 
-                            Markiere die genannte Stelle auf dem Bild:<br>
-                            <div class="hotspot_image">
+                            Markiere den/die/das
+                            <!--
+                            das span element mit der Klasse gesucht wird genutzt
+                            um die Bezeichnung des gesuchten Elements anzuzeigen.
+                            Dieser Block kann frei verschoben werden, jenachdem
+                            wo er für die Frage gut hinpasst.
+                            Mit CSS Kenntnis kann auch frei der Stil geändert
+                            werden.
+                            Die Schachtelung in ein <b> sorgt für das fettdrucken.
+                            -->
+                            <b><span class="gesucht"></span></b>
+                            auf dem Bild:<br>
+
+                            <!--
+                            Das zusätzliche shuffle sorgt dafür, dass die
+                            Antworten in einer zufälligen Reihenfolge abgefragt
+                            werden.
+                            -->
+                            <div class="hotspot_image shuffle">
                                 <img src="assets/img/md-illu_1.png"/>
-                                <div
-                                    style="top: 38.5047%; left: 47.4378%; height:50px; width: 50px; margin: -25px 0 0 -25px; opacity: 0.1" class="dot"></div>
+
+                                <!--
+                                Angaben der auswählbaren Objekte
+                                Die Position wird als Abstand zum oberen und
+                                linken Bildrand angegeben.
+                                Die Klasse "hotspot" muss bleiben.
+                                Die ID ist das was als korrekte Antwort verschlüsselt wird.
+                                -->
+                                <div style="top: 38.5047%; left: 47.4378%;" class="hotspot" id="obj1"></div>
+                                <div style="top: 50%; left: 83.5%;" class="hotspot" id="obj2"></div>
                             </div>
 
                         </div>
 
-                        <button>Bestätigen</button>
-
+                        <!-- Bei Hotspot gibt es nur eine generelle Rückmeldung -->
+                        <!-- Hier sollte also kein "Richtige Antwort" stehen -->
                         <div class="feedback correct">
-                            Richtig<br>
-                            <b>Richtige Antwort:</b><br>
-                            Text mit Antworten
+                            <b>Richtig</b>
                         </div>
                         <div class="feedback incorrect">
-                            Falsch<br>
-                            <b>Richtige Antwort:</b><br>
-                            Text mit Antworten
+                            <b>Falsch</b>
                         </div>
 
                         <!--
-                            Verschlüsselt ist die id der Antwort aus dem Head der Tabelle
+                            Verschlüsselt ist die id der Antwort
                         -->
-
-                        <!--
-                        Verschluesselt ist hier "gueltig" als richtige Antwort für die Zeile mit der ID=1
-                        -->
-                        <a id="0" class="ans">47.5,38.5</a>
+                        <a id="Mund" class="ans">24f682f769992022dba3cf73550b7da0</a>
+                        <a id="Schraubenschlüssel" class="ans">fedce951c5a3cfa14347eff6301859b0</a>
                     </div>
 
                     <br><br>

@@ -93,7 +93,7 @@ function init() {
 
     addDragAndDropToClassification();
     addDragAndDropToOrderObjects();
-    addClickToHotspotImage();
+    initiateHotspotImage();
 
     resetQuiz();
 }
@@ -175,6 +175,14 @@ function submitAns(button) {
             var rows = div.find("tr");
             var answers = div.find("a.ans");
             correct = getCorrectMatrixChoice(rows, answers);
+        }
+        else if(type === quizTypes.HOTSPOT) {
+            var hss = div.find('.hotspot');
+            var gesucht = div.find('.gesucht').html()
+            var answer = div.find('a.ans').filter('#'+gesucht);
+            correct = getCorrectHotspot(div, hss, answer);
+            hss.filter('.act').removeClass('act');
+            if(correct !== -1 && correct !== true) return;
         }
     }
 
@@ -441,6 +449,45 @@ function getCorrectMatrixChoice(rows, answers) {
 }
 
 
+function getCorrectHotspot(div, hss, answer) {
+    var finished = false;
+
+    // nichts ausgewählt
+    if(hss.filter('.act').length == 0) {
+        return -1;
+    }
+    else {
+        var ans = hss.filter('.act').attr('id');
+        ans = encryptMD5(ans);
+
+        var correct = ans == answer.html();
+        var cl = "cor";
+        if(!correct) cl = "inc";
+
+        hss.filter('.act').find('.descr').append("<div class='"+cl+"'>"
+                                                    + div.find('.gesucht').html()
+                                                    + "</div>");
+
+        if(correct) {
+            div.children("div.feedback").filter(".noselection").hide();
+            div.children("div.feedback").filter(".incorrect").hide();
+            div.children("div.feedback").filter(".correct").show();
+        }
+        else {
+            div.children("div.feedback").filter(".noselection").hide();
+            div.children("div.feedback").filter(".correct").hide();
+            div.children("div.feedback").filter(".incorrect").show();
+        }
+
+        finished = !hotspotNextObject(div);
+
+        if(finished) {
+            blockHotspot(div);
+        }
+    }
+    return finished;
+}
+
 // --------------------------------------------------------------------------------------
 // PROCESS ANSWER
 // --------------------------------------------------------------------------------------
@@ -489,6 +536,9 @@ function showQuestionHere(button) {
     else if(type === quizTypes.FILL_BLANK_CHOICE) {
         copyFillBlankChoice(div, orig);
     }
+    else if(type === quizTypes.HOTSPOT) {
+        copyHotspot(div);
+    }
 
 
     var hideButton = '<button class="free_text_ref" id="'+id+'_ref" onclick="removeQuestionHere(this)">Ausblenden</button>';
@@ -526,6 +576,20 @@ function copyFillBlankChoice(div, orig) {
 
         // Disabled jedes Select
         $(this).attr("disabled", true);
+    });
+}
+
+
+function copyHotspot(div) {
+    div.find('.hotspot').addClass("blocked");
+
+    // hover funktionen
+    div.find('.hotspot').mouseover(function(event) {
+        if($(this).find('.descr').children().length > 0) $(this).find('.descr').show();
+        calculateHotspotDescriptions($(this).closest('[qtype="'+quizTypes.HOTSPOT+'"]'));
+    });
+    div.find('.hotspot').mouseout(function(event) {
+        $(this).find('.descr').hide();
     });
 }
 
@@ -761,27 +825,135 @@ function draggedOut(e) {
 
 var activeElement = 0;
 
-function addClickToHotspotImage() {
+function initiateHotspotImage() {
     var root = $('[qtype="'+quizTypes.HOTSPOT+'"]');
 
-    root.find(".hotspot_image").click(function(event) {
-        hotspotClick(event.originalEvent);
+    // Descr (richtige und falsche antworten) hinzufügen
+    root.find('.hotspot').append('<div class="descr"></div>')
+
+    // hover funktionen
+    root.find('.hotspot').mouseover(function(event) {
+        if($(this).find('.descr').children().length > 0) $(this).find('.descr').show();
+        calculateHotspotDescriptions($(this).closest('[qtype="'+quizTypes.HOTSPOT+'"]'));
+    });
+    root.find('.hotspot').mouseout(function(event) {
+        $(this).find('.descr').hide();
+    });
+
+
+    // Klicken auf Hotspot
+    root.find('.hotspot').click(function() {
+        hotspotClick($(this));
+    });
+
+
+    // zeigt erstes gesuchtes objekt in .gesucht an
+    root.each(function(i,e) {
+        hotspotNextObject($(e));
+    });
+
+    // berechnet Größe der Hotspots
+    calculateHotspotDimensions();
+}
+
+
+function hotspotClick(hs) {
+    if(!hs.is('.blocked')) {
+        hs.closest('[qtype="'+quizTypes.HOTSPOT+'"]').find('.hotspot').removeClass("act");
+        hs.addClass("act");
+    }
+}
+
+/**
+* Setzt in .gesucht das nächste Gesuchte Objekt ein
+* gibt zurück ob ein nicht beantwortetes Objekt gefunden wurde (bool)
+*/
+function hotspotNextObject(root) {
+    var doShuffle = root.find('.hotspot_image').is('.shuffle');
+
+    var ans = root.find('a.ans').not('.used');
+    if(doShuffle) {
+        shuffle(ans);
+    }
+
+    root.find('.gesucht').html(ans.first().attr('id'));
+    ans.first().addClass("used");
+
+    return ans.length > 0;
+}
+
+function calculateHotspotDimensions() {
+    var root = $('[qtype="'+quizTypes.HOTSPOT+'"]');
+
+    root.each(function(i, e) {
+        var imgWidth = root.find('.hotspot_image').width();
+        var width = imgWidth * 0.05;
+
+        $(e).find('.hotspot_image').find('.hotspot').css({
+            "width" : width + "px",
+            "height" : width + "px",
+            "margin-top": "-" + (width/2) + "px",
+            "margin-left": "-" + (width/2) + "px"
+        });
     });
 }
 
-function hotspotClick(e) {
-    var posX = e.layerX;
-    var posY = e.layerY;
-    var target = $(e.target);
+function calculateHotspotDescriptions(root) {
+    const descr_margin = {
+        top : 5,
+        left : 0
+    };
 
-    var percX = (100 * posX) / target.width();
-    var percY = (100 * posY) / target.height();
+    root.each(function(i, e) {
+        var imgWidth = root.find('.hotspot_image').width();
+        var width = imgWidth * 0.05;
 
-    if(target.find(".clickpos").length == 0) target.append("<div class='dot clickpos'></div>");
-    target.find(".clickpos").css({
-        "top" : percY + "%",
-        "left" : percX + "%"
+
+        var hs_img = $(e).find('.hotspot_image').find('img');
+
+        var hss = $(e).find('.hotspot_image').find('.hotspot');
+
+        hss.each(function(i,e) {
+            hs = $(e);
+            if(hs.find('.descr').length > 0) {
+                var hs_width = hs.width();
+                var des_width = hs.find('.descr').outerWidth();
+                var des_height = hs.find('.descr').outerHeight();
+
+                var top = (hs_width + descr_margin.top) + "px";
+                var left = 0;
+
+                // zu hoch um darunter angezeigt zu werden
+                if((hs.offset().top
+                    - hs_img.offset().top
+                    + hs_width
+                    + des_height
+                    + descr_margin.top)
+                    > hs_img.height()) {
+                    top = "-" + (des_height + descr_margin.top) + "px";
+                }
+
+                // zu breit um nach rechts angezeigt zu werden
+                if((hs.offset().left
+                    - hs_img.offset().left
+                    + hs_width
+                    + des_width
+                    + descr_margin.left)
+                    > hs_img.width()) {
+                    left = "-" + (des_width - hs_width - descr_margin.left) + "px";
+                }
+
+                hs.find('.descr').css({
+                    "top" : top,
+                    "left" : left
+                });
+            }
+        });
     });
+}
+
+function blockHotspot(div) {
+    div.find('.hotspot').addClass('blocked');
 }
 
 
@@ -920,6 +1092,8 @@ function windowResizing() {
             $(this).children('div.answers').css("padding-left", maxWidth + "px");
         }
     });
+
+    calculateHotspotDimensions();
 }
 
 
@@ -941,6 +1115,7 @@ function resetQuestion(div) {
     div.find('.full').children().remove();
     div.find('.full').removeClass("full");
     div.find('.blocked').removeClass("blocked");
+    div.find('.hotspot').find('.descr').children().remove();
 
     div.nextAll("button.quizButton").first().show();
     div.nextAll("button.quizButton.weiter").first().hide();

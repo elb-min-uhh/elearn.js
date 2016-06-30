@@ -290,19 +290,79 @@ button.error_button.act {
     overflow-y: auto;
 }
 
-/* Kein Drop auf Objekte innerhalb der Blöcke */
+.question[qtype="hotspot"] .answers .hotspot_image img {
+    margin: 0;
+}
+
+/*
 .question[qtype="hotspot"] .answers .hotspot_image * {
     pointer-events: none;
 }
+*/
 
-.question[qtype="hotspot"] .answers .dot {
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot {
+    display:none;
     position: absolute;
-    width: 8px;
-    height: 8px;
-    margin: -4px 0 0 -4px;
+
+    /*
+    width is calculated in quiz.js
+    */
+
+    border: 1px solid white;
     border-radius: 50%;
-    background: #f00;
+
+    background: rgb(0,0,255);
+    background: rgba(0,0,255,0.3);
 }
+
+.question[qtype="hotspot"] .answers .hotspot_image:hover .hotspot {
+    display: block;
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot:hover {
+    background: rgb(0,0,200);
+    background: rgba(0,0,255,0.6);
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot.act {
+    display: block !important;
+    background: rgb(255,0,0);
+    background: rgba(255,0,0,0.3);
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot.act:hover {
+    background: rgb(200,0,0);
+    background: rgba(255,0,0,0.6);
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot.blocked {
+    display: block !important;
+    background: rgb(150,150,150);
+    background: rgba(100,100,100,0.3);
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot.blocked:hover {
+    background: rgb(100,100,100);
+    background: rgba(100,100,100,0.6);
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot .descr {
+    display: none;
+    /* visibility in quiz.js */
+    position: absolute;
+    background: #fff;
+    border: 1px solid #dcdcdc;
+    padding: 3px;
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot .descr .cor {
+    color: #0a0;
+}
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot .descr .inc {
+    color: #a00;
+    text-decoration: line-through;
+}
+
 
 
 
