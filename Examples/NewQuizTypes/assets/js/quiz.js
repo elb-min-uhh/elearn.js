@@ -163,7 +163,9 @@ function submitAns(button) {
             var dests = div.find(".destination");
             var answers = div.find("a.ans");
             correct = getCorrectClassification(dests, answers);
-            div.find('.object').addClass("blocked");
+            if(correct !== -1) {
+                div.find('.object').addClass("blocked");
+            }
         }
         else if(type === quizTypes.ORDER) {
             var objects = div.find(".object").not(".destination");
@@ -288,7 +290,11 @@ function getCorrectForText(labels, c) {
     return correct;
 };
 
-
+/**
+* Lücken Text mit Textfeldern
+*
+* -1 falls nicht alle ausgefüllt
+*/
 function getCorrectFillBlank(labels, answers) {
     var correct = true;
 
@@ -297,6 +303,12 @@ function getCorrectFillBlank(labels, answers) {
         var id = input.attr("id");
         var cor = answers.filter("#"+id).text();
         var ans = encryptMD5(input.val());
+
+        // nicht ausgefüllt
+        if(input.val().length == 0) {
+            correct = -1;
+            return false;
+        }
 
         // antwort richtig
         if(cor == ans) {
@@ -314,6 +326,12 @@ function getCorrectFillBlank(labels, answers) {
     return correct;
 }
 
+
+/**
+* Lücken Text mit Select
+*
+* kann nicht unbeantwortet sein
+*/
 function getCorrectFillBlankChoice(labels, answers) {
     var correct = true;
 
@@ -339,6 +357,12 @@ function getCorrectFillBlankChoice(labels, answers) {
     return correct;
 }
 
+
+/**
+* Fehlertext. markierbare Wörter
+*
+* Kann nicht unausgefüllt sein
+*/
 function getCorrectErrorText(buttons, c) {
     var correct = true;
 
@@ -363,6 +387,11 @@ function getCorrectErrorText(buttons, c) {
 }
 
 
+/**
+* Zuordnung
+*
+* -1 falls eines der Ziele nicht gefüllt
+*/
 function getCorrectClassification(dests, answers) {
     var correct = true;
 
@@ -370,6 +399,13 @@ function getCorrectClassification(dests, answers) {
         var dest = $(this);
         var id = dest.attr("id");
         var cor = answers.filter("#"+id).text();
+
+        // leer
+        if(dest.children().length == 0) {
+            correct = -1;
+            return false;
+        }
+
         var ans = encryptMD5(dest.children().attr("id"));
 
         // antwort richtig
@@ -387,6 +423,11 @@ function getCorrectClassification(dests, answers) {
 }
 
 
+/**
+* Reihenfolge
+*
+* Kann nicht unausgefüllt sein
+*/
 function getCorrectOrder(objects, answers) {
     var correct = true;
     var index = 0;
@@ -416,7 +457,11 @@ function getCorrectOrder(objects, answers) {
     return correct;
 }
 
-
+/**
+* Matrix (single/multiple) choice
+*
+* -1 wenn nicht in jeder Zeile mindest eines ausgewählt
+*/
 function getCorrectMatrixChoice(rows, answers) {
     var correct = true;
 
@@ -426,6 +471,13 @@ function getCorrectMatrixChoice(rows, answers) {
         var cor = getCorrectAnswers(answers.filter("#"+id)); // Mehrere Antworten können vorhanden sein
 
         var inputs = row.find("input"); // alle Inputs der Zeile
+
+        // keines ausgewählt in einer Zeile
+        if(inputs.filter(':checked').length == 0) {
+            rows.find('input').attr("disabled", false);
+            correct = -1;
+            return false;
+        }
 
         inputs.each(function(ii, ee) {
             var ans = $(rows.find(".antwort").get(ii)).attr("id");
