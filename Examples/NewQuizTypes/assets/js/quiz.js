@@ -1176,6 +1176,7 @@ function resetQuestion(div) {
     div.find("input:checkbox").prop("checked", false);
 
     div.find('textarea').attr('readonly', false);
+    div.find('textarea').val("");
     div.find("select").attr("disabled", false);
     div.find("input").attr("disabled", false);
 
