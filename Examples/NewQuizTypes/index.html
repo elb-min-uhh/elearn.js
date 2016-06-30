@@ -1,81 +1,81 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8">
-		<meta name="keywords" content="Key, Words">
-		<meta name="description" content="Hier Beschreibung einfügen">
-		<meta name="author" content="Name Autor">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <meta name="keywords" content="Key, Words">
+        <meta name="description" content="Hier Beschreibung einfügen">
+        <meta name="author" content="Name Autor">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-		<link rel="stylesheet" type="text/css" href="assets/css/elearn.css">
-		<link rel="stylesheet" type="text/css" href="assets/css/quiz.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/elearn.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/quiz.css">
 
-		<script type="text/javascript" src="assets/js/min.js"></script> <!-- von UHH verwendetes JQuery -->
-		<script type="text/javascript" src="assets/js/elearn.js"></script> <!-- eLearn.js -->
-		<script type="text/javascript" src="assets/js/quiz.js"></script> <!-- Quiz Script -->
+        <script type="text/javascript" src="assets/js/min.js"></script> <!-- von UHH verwendetes JQuery -->
+        <script type="text/javascript" src="assets/js/elearn.js"></script> <!-- eLearn.js -->
+        <script type="text/javascript" src="assets/js/quiz.js"></script> <!-- Quiz Script -->
 
-		<script>
-		    window.onload = function() {
+        <script>
+            window.onload = function() {
 
-				/* Mögliche Erweiterungen
+                /* Mögliche Erweiterungen
 
-				eLearnJS.setBackButtonEnabled(true); // Zurück button im Header
+                eLearnJS.setBackButtonEnabled(true); // Zurück button im Header
                 eLearnJS.setBackButtonText("Übersicht"); // "Übersicht" als Text, statt "Zurück"
 
                 // Beispiele für BackPages (Was geöffnet wird beim Back button):
                 eLearnJS.setBackPage(2, "index"); // Die 3. section
                 eLearnJS.setBackPage("Inhaltsverzeichnis", "name"); // Die section mit name="Inhaltsverzeichnis"
-				eLearnJS.setBackPage("../", "link"); // Im Pfad einen Schritt zurück
+                eLearnJS.setBackPage("../", "link"); // Im Pfad einen Schritt zurück
                 eLearnJS.setBackPage("http://google.de", "link"); // Google wird geöffnet
 
-				eLearnJS.generalDirectionButtonsEnabled(false); // keine Nav. Buttons
-				eLearnJS.setKeyNavigationEnabled(false); // keine Tastaturnavigation
-				eLearnJS.generalProgressbarEnabled(false); // keine Fortschrittsleiste
+                eLearnJS.generalDirectionButtonsEnabled(false); // keine Nav. Buttons
+                eLearnJS.setKeyNavigationEnabled(false); // keine Tastaturnavigation
+                eLearnJS.generalProgressbarEnabled(false); // keine Fortschrittsleiste
 
 
-				// ---- Zu quiz.js ----
+                // ---- Zu quiz.js ----
 
-				// Aktiviert eine Blockierung der "showNext" Funktion, wenn nicht
-				// alle sichtbaren (!) Fragen beantwortet wurden
-				eLearnJS.setBlockProgressIfQuestionsNotAnswered(true);
+                // Aktiviert eine Blockierung der "showNext" Funktion, wenn nicht
+                // alle sichtbaren (!) Fragen beantwortet wurden
+                eLearnJS.setBlockProgressIfQuestionsNotAnswered(true);
 
-				// aktiviert eine Alert Nachricht mit dem angegebenen Text
-				eLearnJS.setBlockProgressAlert(true, "Zuerst die Frage(n) beantworten!");
+                // aktiviert eine Alert Nachricht mit dem angegebenen Text
+                eLearnJS.setBlockProgressAlert(true, "Zuerst die Frage(n) beantworten!");
 
-				// zeigt die angegebenen Elemente an, wenn der Fortschritt geblockt wird
-				// beim nächsten nicht geblockten showNext werden diese Elemente
-				// wieder ausgeblendet
-				eLearnJS.setBlockProgressShowElement(true, ".feedback.noselection");
+                // zeigt die angegebenen Elemente an, wenn der Fortschritt geblockt wird
+                // beim nächsten nicht geblockten showNext werden diese Elemente
+                // wieder ausgeblendet
+                eLearnJS.setBlockProgressShowElement(true, ".feedback.noselection");
 
 
                 */
             }
         </script>
 
-		<title>elearn.js Template</title>
-	</head>
-	<body>
-	    <!-- #wrap muss bleiben, sonst funktioniert eLearn.js nicht -->
-		<div id="wrap">
+        <title>elearn.js Template</title>
+    </head>
+    <body>
+        <!-- #wrap muss bleiben, sonst funktioniert eLearn.js nicht -->
+        <div id="wrap">
             <!-- Page Info -->
             <div class="lb-wrap" id="info">
                 <div class="lightbox">
                     <div class="info-wrapper">
-				        <!--Der inhalt der Info-Box kann frei mit html-Inhalt gefüllt werden. -->
-			         	<h4>elearn.js Template</h4>
-				        <p>
-				            Prof. Dr. Name des Autors<br>
-				            Universität Hamburg
-				        <p>
-				    </div>
-			    </div>
+                        <!--Der inhalt der Info-Box kann frei mit html-Inhalt gefüllt werden. -->
+                         <h4>elearn.js Template</h4>
+                        <p>
+                            Prof. Dr. Name des Autors<br>
+                            Universität Hamburg
+                        <p>
+                    </div>
+                </div>
             </div>
 
-			<div class="page">
+            <div class="page">
 
                 <section name="Quiz">
-					<h3>Quizfragen</h3>
-					<p>Auf dieser Seite sind einige Quiz-Fragen Beispielhaft dargestellt.</p>
+                    <h3>Quizfragen</h3>
+                    <p>Auf dieser Seite sind einige Quiz-Fragen Beispielhaft dargestellt.</p>
 
                     <div class="question" qtype="hotspot" id="h_1">
                         <h4>Hotspot</h4>
@@ -83,7 +83,7 @@
                         <!-- .fill sorgt dafür das .object die volle Breite einnehmen -->
                         <div class="answers">
 
-                            Markiere den/die/das
+                            Markiere die Stelle an die der folgende Begriff gehört:
                             <!--
                             das span element mit der Klasse gesucht wird genutzt
                             um die Bezeichnung des gesuchten Elements anzuzeigen.
@@ -94,7 +94,7 @@
                             Die Schachtelung in ein <b> sorgt für das fettdrucken.
                             -->
                             <b><span class="gesucht"></span></b>
-                            auf dem Bild:<br>
+                            <br>
 
                             <!--
                             Das zusätzliche shuffle sorgt dafür, dass die
@@ -102,7 +102,7 @@
                             werden.
                             -->
                             <div class="hotspot_image shuffle">
-                                <img src="assets/img/md-illu_1.png"/>
+                                <img src="assets/img/UeberblickWi_empty.png"/>
 
                                 <!--
                                 Angaben der auswählbaren Objekte
@@ -111,8 +111,11 @@
                                 Die Klasse "hotspot" muss bleiben.
                                 Die ID ist das was als korrekte Antwort verschlüsselt wird.
                                 -->
-                                <div style="top: 38.5047%; left: 47.4378%;" class="hotspot" id="obj1"></div>
-                                <div style="top: 50%; left: 83.5%;" class="hotspot" id="obj2"></div>
+                                <div style="top: 25%; left: 50%;" class="hotspot" id="obj1"></div>
+                                <div style="top: 40%; left: 28.5%;" class="hotspot" id="obj2"></div>
+                                <div style="top: 40%; left: 71.5%;" class="hotspot" id="obj3"></div>
+                                <div style="top: 52%; left: 50%;" class="hotspot" id="obj4"></div>
+                                <div style="top: 70%; left: 50%;" class="hotspot" id="obj5"></div>
                             </div>
 
                         </div>
@@ -129,8 +132,11 @@
                         <!--
                             Verschlüsselt ist die id der Antwort
                         -->
-                        <a id="Mund" class="ans">24f682f769992022dba3cf73550b7da0</a>
-                        <a id="Schraubenschlüssel" class="ans">fedce951c5a3cfa14347eff6301859b0</a>
+                        <a id="Betriebliche Anwendungssysteme" class="ans">24f682f769992022dba3cf73550b7da0</a>
+                        <a id="Softwareentwicklung" class="ans">fedce951c5a3cfa14347eff6301859b0</a>
+                        <a id="Informationsmanagement" class="ans">28ed2ea313ce00277f4b48056439e08d</a>
+                        <a id="Projektmanagement" class="ans">f8bf8558a8a955083984dcdd887608c4</a>
+                        <a id="Datenbanken / Modellierung" class="ans">6c7169e4667d2d39b782b290c502152a</a>
                     </div>
 
                     <br><br>
@@ -140,8 +146,8 @@
                     </button>
                     <br><br><br>
 
-				</section>
-				<section name="Quiz 2">
+                </section>
+                <section name="Quiz 2">
 
 
                     <div class="question" qtype="matrix_choice" id="m_1">
@@ -639,195 +645,195 @@
                     <br><br><br>
 
 
-					<div class="question" qtype="error_text" id="et_1">
-						<h4>Streiche falsche Wörter</h4>
-						<div class="answers">
-							In Deutschland gibt es die Flüsse <button class="error_button">Elbe</button>,<button class="error_button">Wolga</button>, <button class="error_button">Mississippi</button> und <button class="error_button">Weser</button>.
-							<br>
-							Die Antwortmöglichkeit darf nicht wiederholt werden.
-							<!--
-							Die gleiche Antwort wie z.B. Elbe darf innerhalb einer Frage nicht einmal falsch und einmal richtig sein. Möglichst gleiche Antworten vermeiden.
-							-->
-						</div>
+                    <div class="question" qtype="error_text" id="et_1">
+                        <h4>Streiche falsche Wörter</h4>
+                        <div class="answers">
+                            In Deutschland gibt es die Flüsse <button class="error_button">Elbe</button>,<button class="error_button">Wolga</button>, <button class="error_button">Mississippi</button> und <button class="error_button">Weser</button>.
+                            <br>
+                            Die Antwortmöglichkeit darf nicht wiederholt werden.
+                            <!--
+                            Die gleiche Antwort wie z.B. Elbe darf innerhalb einer Frage nicht einmal falsch und einmal richtig sein. Möglichst gleiche Antworten vermeiden.
+                            -->
+                        </div>
 
-						<div class="feedback correct">
-							Richtig<br>
-							<b>Richtige Antwort:</b><br>
-							Text mit Antworten
-						</div>
-						<div class="feedback incorrect">
-							Falsch<br>
-							<b>Richtige Antwort:</b><br>
-							Text mit Antworten
-						</div>
+                        <div class="feedback correct">
+                            Richtig<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
+                        <div class="feedback incorrect">
+                            Falsch<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
 
-						<a class="ans">54b851fdfcb598592d15214f24c6fdc7</a>
-						<a class="ans">14c5492ce2fe855f408481fdbd13f7a6</a>
-					</div>
+                        <a class="ans">54b851fdfcb598592d15214f24c6fdc7</a>
+                        <a class="ans">14c5492ce2fe855f408481fdbd13f7a6</a>
+                    </div>
 
-					<br><br>
-					<!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
-					<button id="et_1_ref" onclick="showQuestionHere(this)">
-						Vorherige Antwort anzeigen
-					</button>
-					<br><br><br>
-
-
-					<div class="question" qtype="fill_blank" id="fb_1">
-						<h4>Lückentext mit Texteingabe</h4>
-						<div class="answers">
-							Antworten: Lücken, Test.<br>
-							Hier wäre ein langer Text mit
-							<label><input id="0" type="text"></label>
-							und diese müssen gefüllt werden. Hier gehört Test hin
-							<label><input id="1" type="text"></label>.
-						</div>
-
-						<div class="feedback correct">
-							Richtig<br>
-							<b>Richtige Antwort:</b><br>
-							Text mit Antworten
-						</div>
-						<div class="feedback incorrect">
-							Falsch<br>
-							<b>Richtige Antwort:</b><br>
-							Text mit Antworten
-						</div>
-
-						<a class="ans" id="0">6497dcbced26ee0f510bf82de5234653</a>
-						<a class="ans" id="1">0cbc6611f5540bd0809a388dc95a615b</a>
-					</div>
-
-					<br><br>
-					<!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
-					<button id="fb_1_ref" onclick="showQuestionHere(this)">
-						Vorherige Antwort anzeigen
-					</button>
-					<br><br><br>
+                    <br><br>
+                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <button id="et_1_ref" onclick="showQuestionHere(this)">
+                        Vorherige Antwort anzeigen
+                    </button>
+                    <br><br><br>
 
 
-					<div class="question" qtype="fill_blank_choice" id="fb_2">
-						<h4>Lückentext mit Auswahl</h4>
-						<div class="answers">
-							Hier wäre ein langer Text mit
-							<label><select id="0">
-								<option>Elefant</option>
-								<option>Lücken</option>
-							</select></label>
-							und diese müssen gefüllt werden. Hier gehört Test hin
-							<label><select id="1">
-								<option>Test</option>
-								<option>Falsch</option>
-							</select></label>.
-						</div>
+                    <div class="question" qtype="fill_blank" id="fb_1">
+                        <h4>Lückentext mit Texteingabe</h4>
+                        <div class="answers">
+                            Antworten: Lücken, Test.<br>
+                            Hier wäre ein langer Text mit
+                            <label><input id="0" type="text"></label>
+                            und diese müssen gefüllt werden. Hier gehört Test hin
+                            <label><input id="1" type="text"></label>.
+                        </div>
 
-						<div class="feedback correct">
-							Richtig<br>
-							<b>Richtige Antwort:</b><br>
-							Text mit Antworten
-						</div>
-						<div class="feedback incorrect">
-							Falsch<br>
-							<b>Richtige Antwort:</b><br>
-							Text mit Antworten
-						</div>
+                        <div class="feedback correct">
+                            Richtig<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
+                        <div class="feedback incorrect">
+                            Falsch<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
 
-						<a class="ans" id="0">6497dcbced26ee0f510bf82de5234653</a>
-						<a class="ans" id="1">0cbc6611f5540bd0809a388dc95a615b</a>
-					</div>
+                        <a class="ans" id="0">6497dcbced26ee0f510bf82de5234653</a>
+                        <a class="ans" id="1">0cbc6611f5540bd0809a388dc95a615b</a>
+                    </div>
 
-
-					<br><br>
-					<!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
-					<button id="fb_2_ref" onclick="showQuestionHere(this)">
-						Vorherige Antwort anzeigen
-					</button>
-					<br><br><br>
+                    <br><br>
+                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <button id="fb_1_ref" onclick="showQuestionHere(this)">
+                        Vorherige Antwort anzeigen
+                    </button>
+                    <br><br><br>
 
 
+                    <div class="question" qtype="fill_blank_choice" id="fb_2">
+                        <h4>Lückentext mit Auswahl</h4>
+                        <div class="answers">
+                            Hier wäre ein langer Text mit
+                            <label><select id="0">
+                                <option>Elefant</option>
+                                <option>Lücken</option>
+                            </select></label>
+                            und diese müssen gefüllt werden. Hier gehört Test hin
+                            <label><select id="1">
+                                <option>Test</option>
+                                <option>Falsch</option>
+                            </select></label>.
+                        </div>
 
-					<div class="question" qtype="free_text" id="ft_1">
-						<h4>Welche Unterordner werden in der Dateistruktur von digitalen Skripten erwartet?</h4>
-						<div class="answers">
-							Hier wäre ein langer Text.
-							<label>
-								Antwort:
-								<textarea></textarea>
-							</label>
-						</div>
-						<div class="feedback correct">
-							<b>Richtige Antwort:</b><br>
-							Text
-						</div>
-					</div>
+                        <div class="feedback correct">
+                            Richtig<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
+                        <div class="feedback incorrect">
+                            Falsch<br>
+                            <b>Richtige Antwort:</b><br>
+                            Text mit Antworten
+                        </div>
 
-					<br><br>
-					<!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
-					<button id="ft_1_ref" onclick="showQuestionHere(this)">
-						Vorherige Antwort anzeigen
-					</button>
-					<br><br><br>
-
-					Ältere Fragentypen:<br>
-
-					<div class="question" qtype="short_text">
-						<h4>Auf welcher Technologie basieren die digitalen Skripte? </h4> <!-- Fragentext -->
-						<div class="answers">
-							<label>Lösung: <input type="text" name="q"></label>
-						</div>
-						<div class="feedback correct">
-							Deine Antwort ist richtig.
-						</div>
-						<div class="feedback incorrect">
-							Leider nein, schaue Dir doch nochmal die Dokumentation an.
-						</div>
-							<a class="ans">4c4ad5fca2e7a3f74dbb1ced00381aa4</a>
-							<a class="ans">2182a74bab7188d959e795d9301e87ff</a>
-							<a class="ans">590fc197fe73db0aa2ec03687a372eea</a>
-							<a class="ans">686155af75a60a0f6e9d80c1f7edd3e9</a>
-							<a class="ans">fc35fdc70d5fc69d269883a822c7a53e</a>
-							<a class="ans">65e232ed43477b2f5cb4413023548fce</a>
-							<a class="ans">644e5bfeb12517406338d351c4375248</a>
-					</div>
+                        <a class="ans" id="0">6497dcbced26ee0f510bf82de5234653</a>
+                        <a class="ans" id="1">0cbc6611f5540bd0809a388dc95a615b</a>
+                    </div>
 
 
-					<div class="question" qtype="choice">
-						<h4>Welche Unterordner werden in der Dateistruktur von digitalen Skripten erwartet?</h4>
-						<div class="answers">
-							<label><input type="checkbox" name="q" value="Frage2-1">assets</label>
-							<label><input type="checkbox" name="q" value="Frage2-2">movies</label>
-							<label><input type="checkbox" name="q" value="Frage2-3">img</label>
-							<label><input type="checkbox" name="q" value="Frage2-4">css</label>
-							<label><input type="checkbox" name="q" value="Frage2-5">lang</label>
-						</div>
-						<div class="feedback correct">
-							Genau, diese Ordner werden auf jeden Fall benötigt. Sogar noch ein paar mehr.
-						</div>
-						<div class="feedback incorrect">
-							Deine Antwort ist leider nicht ganz richtig. Entweder fehlt ein Ordner, oder du hast einen ausgewählt, der nicht benötigt wird.
-						</div>
-							<a class="ans">b5ceb729a1b347aa357790e1588c88b3</a>
-							<a class="ans">1fd302a9c89fc92eead418857a7e5a07</a>
-							<a class="ans">4fc364339b2127eb81c13ab986a27085</a>
-					</div>
+                    <br><br>
+                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <button id="fb_2_ref" onclick="showQuestionHere(this)">
+                        Vorherige Antwort anzeigen
+                    </button>
+                    <br><br><br>
 
-					<p>Es existieren auch noch andere Fragetypen, diese sind in der Dokumentation vom qiuz.js beschrieben.</p>
 
-				</section>
 
-            	<!--Ende des Einfüge-Bereichs-->
+                    <div class="question" qtype="free_text" id="ft_1">
+                        <h4>Welche Unterordner werden in der Dateistruktur von digitalen Skripten erwartet?</h4>
+                        <div class="answers">
+                            Hier wäre ein langer Text.
+                            <label>
+                                Antwort:
+                                <textarea></textarea>
+                            </label>
+                        </div>
+                        <div class="feedback correct">
+                            <b>Richtige Antwort:</b><br>
+                            Text
+                        </div>
+                    </div>
 
-            	<!--MathJax-Einbindung für die Formeldarstellung-->
-	            <script type="text/x-mathjax-config">
-	            	if (typeof MathJaxListener !== 'undefined') {
-	                      MathJax.Hub.Register.StartupHook('End', function () {
-	                        MathJaxListener.invokeCallbackForKey_('End');
-	                      });
-	                    }
-	                    </script>
-	            <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                    <br><br>
+                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <button id="ft_1_ref" onclick="showQuestionHere(this)">
+                        Vorherige Antwort anzeigen
+                    </button>
+                    <br><br><br>
+
+                    Ältere Fragentypen:<br>
+
+                    <div class="question" qtype="short_text">
+                        <h4>Auf welcher Technologie basieren die digitalen Skripte? </h4> <!-- Fragentext -->
+                        <div class="answers">
+                            <label>Lösung: <input type="text" name="q"></label>
+                        </div>
+                        <div class="feedback correct">
+                            Deine Antwort ist richtig.
+                        </div>
+                        <div class="feedback incorrect">
+                            Leider nein, schaue Dir doch nochmal die Dokumentation an.
+                        </div>
+                            <a class="ans">4c4ad5fca2e7a3f74dbb1ced00381aa4</a>
+                            <a class="ans">2182a74bab7188d959e795d9301e87ff</a>
+                            <a class="ans">590fc197fe73db0aa2ec03687a372eea</a>
+                            <a class="ans">686155af75a60a0f6e9d80c1f7edd3e9</a>
+                            <a class="ans">fc35fdc70d5fc69d269883a822c7a53e</a>
+                            <a class="ans">65e232ed43477b2f5cb4413023548fce</a>
+                            <a class="ans">644e5bfeb12517406338d351c4375248</a>
+                    </div>
+
+
+                    <div class="question" qtype="choice">
+                        <h4>Welche Unterordner werden in der Dateistruktur von digitalen Skripten erwartet?</h4>
+                        <div class="answers">
+                            <label><input type="checkbox" name="q" value="Frage2-1">assets</label>
+                            <label><input type="checkbox" name="q" value="Frage2-2">movies</label>
+                            <label><input type="checkbox" name="q" value="Frage2-3">img</label>
+                            <label><input type="checkbox" name="q" value="Frage2-4">css</label>
+                            <label><input type="checkbox" name="q" value="Frage2-5">lang</label>
+                        </div>
+                        <div class="feedback correct">
+                            Genau, diese Ordner werden auf jeden Fall benötigt. Sogar noch ein paar mehr.
+                        </div>
+                        <div class="feedback incorrect">
+                            Deine Antwort ist leider nicht ganz richtig. Entweder fehlt ein Ordner, oder du hast einen ausgewählt, der nicht benötigt wird.
+                        </div>
+                            <a class="ans">b5ceb729a1b347aa357790e1588c88b3</a>
+                            <a class="ans">1fd302a9c89fc92eead418857a7e5a07</a>
+                            <a class="ans">4fc364339b2127eb81c13ab986a27085</a>
+                    </div>
+
+                    <p>Es existieren auch noch andere Fragetypen, diese sind in der Dokumentation vom qiuz.js beschrieben.</p>
+
+                </section>
+
+                <!--Ende des Einfüge-Bereichs-->
+
+                <!--MathJax-Einbindung für die Formeldarstellung-->
+                <script type="text/x-mathjax-config">
+                    if (typeof MathJaxListener !== 'undefined') {
+                          MathJax.Hub.Register.StartupHook('End', function () {
+                            MathJaxListener.invokeCallbackForKey_('End');
+                          });
+                        }
+                        </script>
+                <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
             </div>
-		</div>
-	</body>
+        </div>
+    </body>
 </html>

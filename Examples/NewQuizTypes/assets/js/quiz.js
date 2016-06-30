@@ -181,7 +181,7 @@ function submitAns(button) {
         else if(type === quizTypes.HOTSPOT) {
             var hss = div.find('.hotspot');
             var gesucht = div.find('.gesucht').html()
-            var answer = div.find('a.ans').filter('#'+gesucht);
+            var answer = div.find('a.ans').filter('[id="'+gesucht+'"]');
             correct = getCorrectHotspot(div, hss, answer);
             hss.filter('.act').removeClass('act');
             if(correct !== -1 && correct !== true) return;
@@ -535,6 +535,7 @@ function getCorrectHotspot(div, hss, answer) {
 
         if(finished) {
             blockHotspot(div);
+            findCorrectsHotspot(div);
         }
     }
     return finished;
@@ -1000,6 +1001,28 @@ function calculateHotspotDescriptions(root) {
 
 function blockHotspot(div) {
     div.find('.hotspot').addClass('blocked');
+}
+
+
+function findCorrectsHotspot(div) {
+    var hss = div.find('.hotspot');
+    var ans = div.find('a.ans');
+
+    hss.each(function(i,e) {
+        var hs = $(e);
+        // bisher nicht korrekt
+        if(hs.find('.cor').length == 0) {
+            var id = hs.attr("id");
+            var enc = encryptMD5(id);
+
+            ans.each(function(ii, ee) {
+                // korrekte antwort
+                if($(ee).html() == enc) {
+                    hs.find('.descr').prepend("<div class='cor'>"+$(ee).attr("id")+"</div>");
+                }
+            });
+        }
+    });
 }
 
 

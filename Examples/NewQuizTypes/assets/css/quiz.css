@@ -353,6 +353,7 @@ button.error_button.act {
     background: #fff;
     border: 1px solid #dcdcdc;
     padding: 3px;
+    z-index: 10;
 }
 
 .question[qtype="hotspot"] .answers .hotspot_image .hotspot .descr .cor {
