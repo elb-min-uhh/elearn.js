@@ -48,7 +48,16 @@
                 eLearnJS.setBlockProgressShowElement(true, ".feedback.noselection");
 
 
+                // Erweiterung der Timer. Hinweis
+                quizJS.setTimerAlert(true, "Deine Zeit für die Aufgabe ist abgelaufen. \r\n"
+                                            + "Bitte speichere diese Seite (via Drucken als pdf)\r\n"
+                                            + "und reiche deine Ergebnisse am Ende als E-Mail ein.");
+
                 */
+
+                quizJS.setTimerAlert(true, "Deine Zeit für die Aufgabe ist abgelaufen. \r\n"
+                                            + "Bitte speichere diese Seite (via Drucken als pdf)\r\n"
+                                            + "und reiche deine Ergebnisse am Ende als E-Mail ein.");
             }
         </script>
 
@@ -81,14 +90,23 @@
                 -->
 
                 <section name="Lückentext mit Texteingabe">
-                    <div class="question" qtype="petri" id="pe_1">
+                    <!--
+                    max-time definiert die maximale Bearbeitungszeit, bis
+                    die Aufgabe gesperrt wird.
+                    Alle Zeiten starten gleichzeitig beim Anzeigen auf der Seite,
+                    also wenn man die jeweilige Section erreicht.
+
+                    reset_blocked sorgt dafür das man eine Frage nicht (so einfach)
+                    zurücksetzen kann, um sie erneut zu beantworten
+                    -->
+                    <div class="question reset_blocked" qtype="petri" id="pe_1" max-time="99">
                         <h4>Petrinetz</h4>
 
                         <!-- .fill sorgt dafür das .object die volle Breite einnehmen -->
                         <div class="answers">
 
                             Markiere die Plätze an denen mindestens eine Marke
-                            vorhanden ist, wenn Transition <span class="gesucht"></span> geschaltet wird.
+                            vorhanden ist, wenn Transition <b><span class="gesucht"></span></b> geschaltet wird.
 
 
                             <!--
@@ -103,10 +121,11 @@
                                 Unterscheiden sollten sich maximal Markierte Transition
                                 oder die Position der Marken.
                                 -->
-                                <img id="produce" src="assets/img/producerConsumer.jpg"/>
+                                <img id="0" task="produce" src="assets/img/producerConsumer.jpg"/>
+                                <img id="1" task="deliver" src="assets/img/producerConsumer_1.jpg"/>
 
-                                <!-- Das letzte Bild, wenn fertig hat KEINE ID! -->
-                                <img src="assets/img/producerConsumer_1.jpg"/>
+                                <!-- Das letzte Bild, wenn alles fertig ist, hat KEINE ID! -->
+                                <img task="deliver" src="assets/img/producerConsumer_2.jpg"/>
 
 
                                 <!--
@@ -152,6 +171,11 @@
                             oben definiert ist. Eine durchnummerierung ist hier sinnvoll.
                         -->
                         <a id="0" class="ans">ec6ef230f1828039ee794566b9c58adc</a>
+                        <a id="0" class="ans">ed92eff813a02a31a2677be0563a0739</a>
+                        <a id="0" class="ans">c6c27fc98633c82571d75dcb5739bbdf</a>
+
+                        <a id="1" class="ans">1d665b9b1467944c128a5575119d1cfd</a>
+                        <a id="1" class="ans">c6c27fc98633c82571d75dcb5739bbdf</a>
                     </div>
 
                     <br><br>
@@ -237,20 +261,20 @@
                     auszuwählen.
                     -->
                     <style>
-                        #c_2 .classification_image {
+                        #c_3 .classification_image {
                             /* Wird immer benötigt, wenn Dinge auf einem Bild positioniert
                             werden sollen. Beide Dinge nicht entfernen. */
                             position: relative;
                             overflow-y: auto;
                         }
-                        #c_2 .object.destination {
+                        #c_3 .object.destination {
                             position: absolute; /* Erlaubt genaue positionierung. */
                             border: 0; /* Entfernt die zusätliche Umrandung */
                             min-height: 20px; /* Verändert die mindesthöhe (kleiner) */
                             min-width: 180px; /* Verändert die mindestbreite (breiter) */
                         }
                     </style>
-                    <div class="question" qtype="classification" id="c_2">
+                    <div class="question" qtype="classification" id="c_3">
                         <h4>Zuordnung von Begriffen</h4>
 
                         <!-- .fill sorgt dafür das .object die volle Breite einnehmen -->
@@ -314,9 +338,13 @@
                         <!-- Hier sollte also kein "Richtige Antwort" stehen -->
                         <div class="feedback correct">
                             <b>Richtig</b>
+                            <br>
+                            <img src="assets/img/UeberblickWi.png"/>
                         </div>
                         <div class="feedback incorrect">
                             <b>Falsch</b>
+                            <br>
+                            <img src="assets/img/UeberblickWi.png"/>
                         </div>
 
                         <!--
@@ -331,14 +359,14 @@
 
                     <br><br>
                     <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
-                    <button id="c_2_ref" onclick="showQuestionHere(this)">
+                    <button id="c_3_ref" onclick="showQuestionHere(this)">
                         Vorherige Antwort anzeigen
                     </button>
                     <br><br><br>
 
 
 
-                    <div class="question" qtype="hotspot" id="h_1">
+                    <div class="question" qtype="hotspot" id="h_1" max-time="10">
                         <h4>Hotspot</h4>
 
                         <!-- .fill sorgt dafür das .object die volle Breite einnehmen -->
@@ -385,9 +413,13 @@
                         <!-- Hier sollte also kein "Richtige Antwort" stehen -->
                         <div class="feedback correct">
                             <b>Richtig</b>
+                            <br>
+                            <img src="assets/img/UeberblickWi.png"/>
                         </div>
                         <div class="feedback incorrect">
                             <b>Falsch</b>
+                            <br>
+                            <img src="assets/img/UeberblickWi.png"/>
                         </div>
 
                         <div class="feedback information">

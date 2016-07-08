@@ -5,6 +5,8 @@
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 */
 
+var start_time = null;
+
 /**
 * Aktiviert alle <button> mit der Klasse "quizButton" für das Quiz.
 * Wenn fragen <input> fokussiert ist, kann mit Enter die Antwort abgeschickt werden.
@@ -15,6 +17,7 @@ $(document).ready(function() {
     // resize Funktion wird aufgerufen, wenn im eLearnJS eine neue section
     // angezeigt wird
     eLearnJS.registerAfterShow("quiz-resizing", windowResizing);
+    eLearnJS.registerAfterShow("quiz-timer-init", initTimers);
 });
 
 
@@ -32,6 +35,8 @@ var quizTypes = {
     MATRIX_CHOICE : "matrix_choice",
     PETRI : "petri"
 };
+
+var quizJS = this;
 
 
 // ------------------------------------------------------------
@@ -102,6 +107,8 @@ function init() {
     initiatePetriImage();
 
     resetQuiz();
+
+    initTimers();
 }
 
 /**
@@ -109,7 +116,7 @@ function init() {
 * @param button - ist der geklickte Button von dem aus die beantwortete Frage
 *                 bestimmt wird.
 */
-function submitAns(button) {
+function submitAns(button, force) {
     if($(button).filter(".weiter").length > 0) {
         button = $(button).prev(":button");
     }
@@ -145,30 +152,30 @@ function submitAns(button) {
     // Für explizit definierten qtype
     else {
         if(type === quizTypes.SHORT_TEXT) {
-            correct = getCorrectForText(labels, c);
+            correct = getCorrectForText(labels, c, force);
         }
         else if(type === quizTypes.CHOICE) {
-            correct = getCorrectForRadio(labels, c, true);
+            correct = getCorrectForRadio(labels, c, true, force);
         }
         else if(type === quizTypes.FREE_TEXT) {
             processFreeText(div);
         }
         else if(type === quizTypes.FILL_BLANK) {
             var answers = div.find("a.ans");
-            correct = getCorrectFillBlank(labels, answers);
+            correct = getCorrectFillBlank(labels, answers, force);
         }
         else if(type === quizTypes.FILL_BLANK_CHOICE) {
             var answers = div.find("a.ans");
-            correct = getCorrectFillBlankChoice(labels, answers);
+            correct = getCorrectFillBlankChoice(labels, answers, force);
         }
         else if(type === quizTypes.ERROR_TEXT) {
             var buttons = div.find(".error_button");
-            correct = getCorrectErrorText(buttons, c);
+            correct = getCorrectErrorText(buttons, c, force);
         }
         else if(type === quizTypes.CLASSIFICATION) {
             var dests = div.find(".destination");
             var answers = div.find("a.ans");
-            correct = getCorrectClassification(dests, answers);
+            correct = getCorrectClassification(dests, answers, force);
             if(correct !== -1) {
                 div.find('.object').addClass("blocked");
             }
@@ -176,29 +183,48 @@ function submitAns(button) {
         else if(type === quizTypes.ORDER) {
             var objects = div.find(".object").not(".destination");
             var answers = div.find("a.ans");
-            correct = getCorrectOrder(objects, answers);
+            correct = getCorrectOrder(objects, answers, force);
             div.find('.object').addClass("blocked");
         }
         else if(type === quizTypes.MATRIX_CHOICE) {
             var rows = div.find("tr");
             var answers = div.find("a.ans");
-            correct = getCorrectMatrixChoice(rows, answers);
+            correct = getCorrectMatrixChoice(rows, answers, force);
         }
         else if(type === quizTypes.HOTSPOT) {
             var hss = div.find('.hotspot');
             var gesucht = div.find('.gesucht').html();
             var answer = div.find('a.ans').filter('[id="'+gesucht+'"]');
-            correct = getCorrectHotspot(div, hss, answer);
+            correct = getCorrectHotspot(div, hss, answer, force);
             hss.filter('.act').removeClass('act');
             if(correct !== -1 && correct !== true && correct !== 2) return;
         }
         else if(type === quizTypes.PETRI) {
             var places = div.find('.place');
-            var answers = div.find('a.ans').filter('[id="'+$('.petri_image').find('img:visible').attr("id")+'"]');
-            correct = getCorrectPetri(div, places, answers);
-            places.filter('.act').removeClass('act');
-            if(correct !== -1 && correct !== true && correct !== 2) return;
+            if(div.is('.show_feedback')) {
+                div.removeClass("show_feedback");
+                if(petriFinished(div)) {
+                    blockPetri(div);
+                    // for information show
+                    correct = 2;
+                }
+                else {
+                    petriNextPart(div);
+                    places.filter('.act').removeClass('act');
+                    return;
+                }
+            }
+            else {
+                var answers = div.find('a.ans').filter('[id="'+$('.petri_image').find('img:visible').attr("id")+'"]');
+                correct = getCorrectPetri(div, places, answers, force);
+                petriNextImage(div);
+                return;
+            }
         }
+    }
+
+    if(correct == -1 && force === true) {
+        correct = false;
     }
 
     if(correct === -1) {
@@ -228,7 +254,8 @@ function submitAns(button) {
 
     div.addClass("answered");
     div.next("button.quizButton").hide();
-    div.nextUntil("div").filter("button.quizButton.weiter").show();
+
+    if(!div.is('.reset_blocked')) div.nextUntil("div").filter("button.quizButton.weiter").show();
 };
 
 
@@ -255,7 +282,7 @@ function getCorrectAnswers(ans) {
 *                            Es werden alle Antworten die richtigen Antworten auf die Frage grün gefärbt.
 *                            Fälschlicherweise angekreute Antworten werden rot markiert. Falsche und nicht angekreuzte Antworten bleiben weiß.
 */
-function getCorrectForRadio(labels, c, colorLabels) {
+function getCorrectForRadio(labels, c, colorLabels, force) {
     var correct = true;
     var numberofchecked = 0;
     labels.each(function(i) {
@@ -279,7 +306,7 @@ function getCorrectForRadio(labels, c, colorLabels) {
             }
         }
     });
-    if(numberofchecked === 0) {
+    if(numberofchecked === 0 && !force) {
         correct = -1;
     }
     return correct;
@@ -290,14 +317,14 @@ function getCorrectForRadio(labels, c, colorLabels) {
 * Gibt zurück, ob die eingegebene Antwort zu den korrekten gehört.
 * -1 falls Textfeld leer.
 */
-function getCorrectForText(labels, c) {
+function getCorrectForText(labels, c, force) {
     var correct = true;
     var ans = labels.children('input').val().trim();
     ans = encryptMD5(ans);
     if(!contains(c, ans)) {
         correct = false;
     }
-    if(labels.children('input').val().length == 0) {
+    if(labels.children('input').val().length == 0 && !force) {
         correct = -1;
     }
 
@@ -315,7 +342,7 @@ function getCorrectForText(labels, c) {
 *
 * -1 falls nicht alle ausgefüllt
 */
-function getCorrectFillBlank(labels, answers) {
+function getCorrectFillBlank(labels, answers, force) {
     var correct = true;
 
     labels.each(function(i, e) {
@@ -325,7 +352,7 @@ function getCorrectFillBlank(labels, answers) {
         var ans = encryptMD5(input.val().trim());
 
         // nicht ausgefüllt
-        if(input.val().length == 0) {
+        if(input.val().length == 0 && !force) {
             correct = -1;
             return false;
         }
@@ -352,7 +379,7 @@ function getCorrectFillBlank(labels, answers) {
 *
 * kann nicht unbeantwortet sein
 */
-function getCorrectFillBlankChoice(labels, answers) {
+function getCorrectFillBlankChoice(labels, answers, force) {
     var correct = true;
 
     labels.each(function(i, e) {
@@ -383,7 +410,7 @@ function getCorrectFillBlankChoice(labels, answers) {
 *
 * Kann nicht unausgefüllt sein
 */
-function getCorrectErrorText(buttons, c) {
+function getCorrectErrorText(buttons, c, force) {
     var correct = true;
 
     buttons.each(function(i, e) {
@@ -412,7 +439,7 @@ function getCorrectErrorText(buttons, c) {
 *
 * -1 falls eines der Ziele nicht gefüllt
 */
-function getCorrectClassification(dests, answers) {
+function getCorrectClassification(dests, answers, force) {
     var correct = true;
 
     dests.each(function(i, e) {
@@ -421,7 +448,7 @@ function getCorrectClassification(dests, answers) {
         var cor = answers.filter("#"+id).text();
 
         // leer
-        if(dest.children().length == 0) {
+        if(dest.children().length == 0 && !force) {
             correct = -1;
             return false;
         }
@@ -448,7 +475,7 @@ function getCorrectClassification(dests, answers) {
 *
 * Kann nicht unausgefüllt sein
 */
-function getCorrectOrder(objects, answers) {
+function getCorrectOrder(objects, answers, force) {
     var correct = true;
     var index = 0;
 
@@ -482,7 +509,7 @@ function getCorrectOrder(objects, answers) {
 *
 * -1 wenn nicht in jeder Zeile mindest eines ausgewählt
 */
-function getCorrectMatrixChoice(rows, answers) {
+function getCorrectMatrixChoice(rows, answers, force) {
     var correct = true;
 
     rows.each(function(i, e) {
@@ -493,7 +520,8 @@ function getCorrectMatrixChoice(rows, answers) {
         var inputs = row.find("input"); // alle Inputs der Zeile
 
         // keines ausgewählt in einer Zeile
-        if(inputs.length > 0 && inputs.filter(':checked').length == 0) {
+        if(inputs.length > 0 && inputs.filter(':checked').length == 0
+            && !force) {
             rows.find('input').attr("disabled", false);
             correct = -1;
             return false;
@@ -521,11 +549,11 @@ function getCorrectMatrixChoice(rows, answers) {
 }
 
 
-function getCorrectHotspot(div, hss, answer) {
+function getCorrectHotspot(div, hss, answer, force) {
     var finished = false;
 
     // nichts ausgewählt
-    if(hss.filter('.act').length == 0) {
+    if(hss.filter('.act').length == 0 && !force) {
         return -1;
     }
     else {
@@ -564,11 +592,10 @@ function getCorrectHotspot(div, hss, answer) {
 }
 
 
-function getCorrectPetri(div, places, answers) {
-    var finished = false;
+function getCorrectPetri(div, places, answers, force) {
 
     // nichts ausgewählt
-    if(places.filter('.act').length == 0) {
+    if(places.filter('.act').length == 0 && !force) {
         return -1;
     }
     else {
@@ -600,15 +627,9 @@ function getCorrectPetri(div, places, answers) {
             div.children("div.feedback").filter(".incorrect").show();
         }
 
-        finished = !petriNextImage(div);
-
-        if(finished) {
-            blockPetri(div);
-            // for information show
-            finished = 2;
-        }
+        div.addClass("show_feedback");
     }
-    return finished;
+    return false;
 }
 
 // --------------------------------------------------------------------------------------
@@ -714,6 +735,45 @@ function copyHotspot(div) {
     div.find('.hotspot').mouseout(function(event) {
         $(this).find('.descr').hide();
     });
+}
+
+
+function finishQuestion(div) {
+    var try_count = 50;
+    while(!div.is(".answered") && try_count > 0) {
+        submitAns(div.next('button'), true);
+        try_count -= 1;
+    }
+}
+
+function blockQuestion(div) {
+    div.addClass("answered");
+
+    var type = div.attr("qtype");
+
+    if(type === quizTypes.FREE_TEXT) {
+        div.find("textarea").attr("readonly", "readonly");
+    }
+    else if(type === quizTypes.SHORT_TEXT
+            || type === quizTypes.CHOICE
+            || type === quizTypes.FILL_BLANK
+            || type === quizTypes.MATRIX_CHOICE) {
+        // Disabled jedes input
+        div.find("input").attr("disabled", true);
+    }
+    else if(type === quizTypes.FILL_BLANK_CHOICE) {
+        div.find("select").attr("disabled", true);
+    }
+    else if(type === quizTypes.CLASSIFICATION
+            || type === quizTypes.ORDER) {
+        div.find('.object').addClass("blocked");
+    }
+    else if(type === quizTypes.HOTSPOT) {
+        div.find('.hotspot').addClass("blocked");
+    }
+    else if(type === quizTypes.PETRI) {
+        div.find('.place').addClass("blocked");
+    }
 }
 
 
@@ -1105,7 +1165,7 @@ function initiatePetriImage() {
     root.find('.petri_image').find('img').hide();
     root.find('.petri_image').find('img').first().show();
 
-    root.find('.gesucht').html(root.find('.petri_image').find('img').first().attr("id"));
+    root.find('.gesucht').html(root.find('.petri_image').find('img').first().attr("task"));
 
     // Klicken auf Hotspot
     root.find('.place').click(function() {
@@ -1129,22 +1189,36 @@ function petriClick(element) {
 }
 
 function petriNextImage(div) {
+    var imgs = div.find('.petri_image').find('img');
+
+    var act_img = div.find('.petri_image').find('img:visible');
+
+    var idx = imgs.index(act_img);
+
+    if(imgs.length > idx + 1) {
+        next_img = $(div.find('.petri_image').find('img').get(idx+1));
+
+        next_img.show();
+        act_img.hide();
+    }
+}
+
+function petriNextPart(div) {
+    div.find('.gesucht').html(div.find('.petri_image').find('img:visible').attr("task"));
+}
+
+function petriFinished(div) {
     var finished = false;
 
     var act_img = div.find('.petri_image').find('img:visible');
 
-    var next_img = act_img.nextAll('img').first();
-    next_img.show();
-    act_img.hide();
+    var idx = div.find('.petri_image').find('img').index(act_img);
 
-    if(next_img.attr("id") == undefined || next_img.attr("id").length == 0) {
+    if(idx >= div.find('.petri_image').find('img').length - 1) {
         finished = true;
     }
-    else {
-        div.find('.gesucht').html(next_img.attr("id"));
-    }
 
-    return !finished;
+    return finished;
 }
 
 function blockPetri(div) {
@@ -1210,6 +1284,74 @@ function contains(array, val) {
     }
     return found;
 };
+
+
+var timerAlertActivated = false;
+var timerAlertText ="";
+
+/**
+* initialisiert Timer für alle Aufgaben die welche haben
+*/
+function initTimers() {
+    start_time = new Date();
+
+    // anzeigen der startzeit
+    $('.question:visible').not('.answered').each(function(i,e) {
+        var max_time = $(this).attr("max-time");
+        if(max_time != undefined && max_time.length != 0) {
+            max_time = parseInt(max_time);
+            $(this).find('.answered_hint.timer').remove();
+            $(this).find("h4").after("<div class='answered_hint timer'>"
+                            + max_time + ":00</div>");
+        }
+    });
+
+    updateTimers();
+}
+
+/**
+* Aktualisieren aller Timer
+*/
+function updateTimers() {
+    var now = new Date();
+    var diff = (now.getTime() - start_time.getTime())/1000;
+
+    $('.answered_hint.timer').each(function(i,e) {
+        var timer = $(this);
+        // time in seconds
+        var time = parseInt(timer.closest('.question').attr("max-time")) * 60;
+        var time_left = time - diff;
+
+        if(timer.closest('.question').is('.answered')) return true;
+
+        if(time_left > 0) {
+            var min = Math.floor(time_left/60);
+            var sec = Math.floor(time_left - min*60);
+            if(sec < 10) {
+                sec = "0" + sec;
+            }
+            $(this).html(min + ":" + sec);
+        }
+        else if(!$(this).closest(".question").is('.answered')) {
+            finishQuestion($(this).closest(".question"));
+            blockQuestion($(this).closest(".question"));
+            $(this).closest(".question").find('.feedback.noselection').hide();
+
+            $(this).closest(".question").append("<div class='feedback timeup'>Die Zeit ist abgelaufen. Die Frage wurde automatisch beantwortet und gesperrt.</div>");
+
+            if(timerAlertActivated) {
+                alert(timerAlertText);
+            }
+        }
+    });
+
+    setTimeout(function() { updateTimers(); }, 1000);
+}
+
+function setTimerAlert(bool, text) {
+    timerAlertActivated = bool;
+    timerAlertText = text;
+}
 
 
 /**
@@ -1328,10 +1470,11 @@ function resetQuestion(div) {
     div.find('.full').children().remove();
     div.find('.full').removeClass("full");
     div.find('.blocked').removeClass("blocked");
+    div.find('.act').removeClass("act");
     div.find('.hotspot').find('.descr').children().remove();
     div.find('.petri_image').find('img').hide();
     div.find('.petri_image').find('img').first().show();
-    div.find('.gesucht').html(div.find('.petri_image').find('img').first().attr("id"));
+    div.filter('[qtype="'+quizTypes.PETRI+'"]').find('.gesucht').html(div.find('.petri_image').find('img').first().attr("task"));
 
     div.nextAll("button.quizButton").first().show();
     div.nextAll("button.quizButton.weiter").first().hide();
