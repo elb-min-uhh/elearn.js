@@ -190,14 +190,14 @@ function submitAns(button) {
             var answer = div.find('a.ans').filter('[id="'+gesucht+'"]');
             correct = getCorrectHotspot(div, hss, answer);
             hss.filter('.act').removeClass('act');
-            if(correct !== -1 && correct !== true) return;
+            if(correct !== -1 && correct !== true && correct !== 2) return;
         }
         else if(type === quizTypes.PETRI) {
             var places = div.find('.place');
             var answers = div.find('a.ans').filter('[id="'+$('.petri_image').find('img:visible').attr("id")+'"]');
             correct = getCorrectPetri(div, places, answers);
             places.filter('.act').removeClass('act');
-            if(correct !== -1 && correct !== true) return;
+            if(correct !== -1 && correct !== true && correct !== 2) return;
         }
     }
 
@@ -208,15 +208,22 @@ function submitAns(button) {
         div.children("div.feedback").filter(".noselection").show();
         return;
     }
-    else if(correct) {
+    else if(correct === true) {
         div.children("div.feedback").filter(".noselection").hide();
         div.children("div.feedback").filter(".incorrect").hide();
         div.children("div.feedback").filter(".correct").show();
     }
-    else {
+    else if(correct === false) {
         div.children("div.feedback").filter(".noselection").hide();
         div.children("div.feedback").filter(".correct").hide();
         div.children("div.feedback").filter(".incorrect").show();
+    }
+    // hide all (hotspot, petri when finished)
+    else {
+        div.children("div.feedback").filter(".noselection").hide();
+        div.children("div.feedback").filter(".correct").hide();
+        div.children("div.feedback").filter(".incorrect").hide();
+        div.children("div.feedback").filter(".information").show();
     }
 
     div.addClass("answered");
@@ -549,6 +556,8 @@ function getCorrectHotspot(div, hss, answer) {
         if(finished) {
             blockHotspot(div);
             findCorrectsHotspot(div);
+            // for information show
+            finished = 2;
         }
     }
     return finished;
@@ -595,6 +604,8 @@ function getCorrectPetri(div, places, answers) {
 
         if(finished) {
             blockPetri(div);
+            // for information show
+            finished = 2;
         }
     }
     return finished;
