@@ -365,6 +365,41 @@ button.error_button.act {
 }
 
 
+/* ----------------------------- PETRI-NETZ ------------------------------ */
+
+.question[qtype="petri"] .petri_image {
+    position: relative;
+    overflow-y: auto;
+}
+
+.question[qtype="petri"] .petri_image img {
+    margin: 0;
+}
+
+.question[qtype="petri"] .petri_image .place {
+    position: absolute;
+    background: #dcdcdc;
+    background: rgba(220,220,220, 0.6);
+    width: 25px;
+    height: 25px;
+    margin-left: -10px;
+    margin-top: -10px;
+    border-radius: 50%;
+}
+
+.question[qtype="petri"] .petri_image .place:hover {
+    background: #b4b4b4;
+    background: rgba(150,150,150, 0.6);
+}
+
+.question[qtype="petri"] .petri_image .place.act {
+    background: #b4b4b4;
+    background: rgba(255,150,150, 0.6);
+}
+
+.question[qtype="petri"] .petri_image .place.blocked {
+    display: none;
+}
 
 
 /*Media-Querys für Responsivität*/

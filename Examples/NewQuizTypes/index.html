@@ -81,6 +81,84 @@
                 -->
 
                 <section name="Lückentext mit Texteingabe">
+                    <div class="question" qtype="petri" id="pe_1">
+                        <h4>Petrinetz</h4>
+
+                        <!-- .fill sorgt dafür das .object die volle Breite einnehmen -->
+                        <div class="answers">
+
+                            Markiere die Plätze an denen mindestens eine Marke
+                            vorhanden ist, wenn Transition <span class="gesucht"></span> geschaltet wird.
+
+
+                            <!--
+                            Das zusätzliche shuffle sorgt dafür, dass die
+                            Antworten in einer zufälligen Reihenfolge abgefragt
+                            werden.
+                            -->
+                            <div class="petri_image">
+
+                                <!--
+                                Alle Bilder sollten grundsätzlich gleich sein
+                                Unterscheiden sollten sich maximal Markierte Transition
+                                oder die Position der Marken.
+                                -->
+                                <img id="produce" src="assets/img/producerConsumer.jpg"/>
+
+                                <!-- Das letzte Bild, wenn fertig hat KEINE ID! -->
+                                <img src="assets/img/producerConsumer_1.jpg"/>
+
+
+                                <!--
+                                Angaben der auswählbaren Objekte
+                                Die Position wird als Abstand zum oberen und
+                                linken Bildrand angegeben.
+                                Die Klasse "hotspot" muss bleiben.
+                                Die ID ist das was als korrekte Antwort verschlüsselt wird.
+                                -->
+                                <div style="top: 28%; left: 22.5%;" class="place" id="p1"></div>
+                                <div style="top: 39%; left: 48.2%;" class="place" id="p2"></div>
+                                <div style="top: 27%; left: 73.7%;" class="place" id="p3"></div>
+                                <div style="top: 68%; left: 22.5%;" class="place" id="p4"></div>
+                                <div style="top: 61%; left: 47.7%;" class="place" id="p5"></div>
+                                <div style="top: 68%; left: 74%;" class="place" id="p6"></div>
+                            </div>
+
+                        </div>
+
+                        <!-- Bei Hotspot gibt es nur eine generelle Rückmeldung -->
+                        <!-- Hier sollte also kein "Richtige Antwort" stehen -->
+                        <div class="feedback correct">
+                            <b>Richtig</b>
+                        </div>
+                        <div class="feedback incorrect">
+                            <b>Falsch</b>
+                        </div>
+
+                        <!--
+                            Verschlüsselt ist die id der Antwort
+                            Die ID dieses Feldes gibt an, in welcher Runde die Markierung stattfinden soll.
+                            Also ist zB. in Runde eins (index 0) der Platz mit ID="p1" richtig,
+                            gibt es ein <a id="0" class="ans">ec6ef230f1828039ee794566b9c58adc</a>
+                            Dabei entspricht der verschlüsselte Text "p1"
+
+                            Es können mehrere Richtig sein für jede Runde.
+
+                            Die ID des <a> entspricht dabei der ID des jeweiligen <img> welches weiter
+                            oben definiert ist. Eine durchnummerierung ist hier sinnvoll.
+                        -->
+                        <a id="0" class="ans">ec6ef230f1828039ee794566b9c58adc</a>
+                    </div>
+
+                    <br><br>
+                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <button id="pe_1_ref" onclick="showQuestionHere(this)">
+                        Vorherige Antwort anzeigen
+                    </button>
+                    <br><br><br>
+
+
+
 					<div class="question" qtype="fill_blank" id="fb_7">
 
 					Aufgabe 1) I&K- und Anwendungssysteme als Lückentext
@@ -142,6 +220,119 @@
                 <section name="Quiz">
                     <h3>Quizfragen</h3>
                     <p>Auf dieser Seite sind einige Quiz-Fragen Beispielhaft dargestellt.</p>
+
+                    <!--
+                    Style nur für diesen speziellen Fall
+                    Der Style Bereich verändert die Darstellung der Kästchen in die die Schrift gezogen wird.
+
+                    #c_2 gibt die ID des übergeordneten Containers an
+                    Ein Leerzeichen beginnt eine neue Ebene. Das was danach kommt
+                    befindet sich also irgendwo in #c_2
+                    .object beschreibt die Klasse object. Man kann mehrere Klassen eines
+                    Elements direkt hintereinander hängen um nur genau das gewünscht
+                    auszuwählen.
+                    -->
+                    <style>
+                        #c_2 .classification_image {
+                            /* Wird immer benötigt, wenn Dinge auf einem Bild positioniert
+                            werden sollen. Beide Dinge nicht entfernen. */
+                            position: relative;
+                            overflow-y: auto;
+                        }
+                        #c_2 .object.destination {
+                            position: absolute; /* Erlaubt genaue positionierung. */
+                            border: 0; /* Entfernt die zusätliche Umrandung */
+                            min-height: 20px; /* Verändert die mindesthöhe (kleiner) */
+                            min-width: 180px; /* Verändert die mindestbreite (breiter) */
+                        }
+                    </style>
+                    <div class="question" qtype="classification" id="c_2">
+                        <h4>Zuordnung von Begriffen</h4>
+
+                        <!-- .fill sorgt dafür das .object die volle Breite einnehmen -->
+                        <div class="answers">
+
+                            Sortiere die folgenden Begriffe an die richtigen Stellen im Bild:
+                            <!--
+                            Nachfolgend kommen die Blöcke mit Begriffen die einsortiert
+                            werden müssen. Ändern sollte man hier nur den innersten Text.
+                            Außerdem muss die ID md5-verschlüsselt in den Antworten block.
+                            Siehe classification Aufgabe weiter unten.
+                            -->
+                            <div class="object">
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt -->
+                                <span id="obj1">Betriebliche Anwendungssysteme</span>
+                            </div>
+                            <div class="object">
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt -->
+                                <span id="obj2">Softwareentwicklung</span>
+                            </div>
+                            <div class="object">
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt -->
+                                <span id="obj3">Informationsmanagement</span>
+                            </div>
+                            <div class="object">
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt -->
+                                <span id="obj4">Projektmanagement</span>
+                            </div>
+                            <div class="object">
+                                <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt -->
+                                <span id="obj5">Datenbanken/Modellierung</span>
+                            </div>
+
+
+
+                            <!--
+                            Das zusätzliche shuffle sorgt dafür, dass die
+                            Antworten in einer zufälligen Reihenfolge abgefragt
+                            werden.
+                            -->
+                            <div class="classification_image">
+                                <img src="assets/img/UeberblickWi_empty.png"/>
+
+                                <!--
+                                Angaben der auswählbaren Objekte
+                                Die Position wird als Abstand zum oberen und
+                                linken Bildrand angegeben.
+                                Die Klasse "hotspot" muss bleiben.
+                                Die ID ist das was als korrekte Antwort verschlüsselt wird.
+                                -->
+                                <div style="top: 22%; left: 36%;" class="object destination" id="1"></div>
+                                <div style="top: 37%; left: 15%;" class="object destination" id="2"></div>
+                                <div style="top: 37%; left: 57.5%;" class="object destination" id="3"></div>
+                                <div style="top: 49%; left: 36%;" class="object destination" id="4"></div>
+                                <div style="top: 67%; left: 36%;" class="object destination" id="5"></div>
+                            </div>
+
+                        </div>
+
+                        <!-- Bei Hotspot gibt es nur eine generelle Rückmeldung -->
+                        <!-- Hier sollte also kein "Richtige Antwort" stehen -->
+                        <div class="feedback correct">
+                            <b>Richtig</b>
+                        </div>
+                        <div class="feedback incorrect">
+                            <b>Falsch</b>
+                        </div>
+
+                        <!--
+                            Verschlüsselt ist die id der Antwort
+                        -->
+                        <a id="1" class="ans">24f682f769992022dba3cf73550b7da0</a>
+                        <a id="2" class="ans">fedce951c5a3cfa14347eff6301859b0</a>
+                        <a id="3" class="ans">28ed2ea313ce00277f4b48056439e08d</a>
+                        <a id="4" class="ans">f8bf8558a8a955083984dcdd887608c4</a>
+                        <a id="5" class="ans">6c7169e4667d2d39b782b290c502152a</a>
+                    </div>
+
+                    <br><br>
+                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <button id="c_2_ref" onclick="showQuestionHere(this)">
+                        Vorherige Antwort anzeigen
+                    </button>
+                    <br><br><br>
+
+
 
                     <div class="question" qtype="hotspot" id="h_1">
                         <h4>Hotspot</h4>

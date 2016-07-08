@@ -29,7 +29,8 @@ var quizTypes = {
     HOTSPOT : "hotspot",
     CLASSIFICATION : "classification",
     ORDER : "order",
-    MATRIX_CHOICE : "matrix_choice"
+    MATRIX_CHOICE : "matrix_choice",
+    PETRI : "petri"
 };
 
 
@@ -98,6 +99,7 @@ function init() {
     addDragAndDropToClassification();
     addDragAndDropToOrderObjects();
     initiateHotspotImage();
+    initiatePetriImage();
 
     resetQuiz();
 }
@@ -184,10 +186,17 @@ function submitAns(button) {
         }
         else if(type === quizTypes.HOTSPOT) {
             var hss = div.find('.hotspot');
-            var gesucht = div.find('.gesucht').html()
+            var gesucht = div.find('.gesucht').html();
             var answer = div.find('a.ans').filter('[id="'+gesucht+'"]');
             correct = getCorrectHotspot(div, hss, answer);
             hss.filter('.act').removeClass('act');
+            if(correct !== -1 && correct !== true) return;
+        }
+        else if(type === quizTypes.PETRI) {
+            var places = div.find('.place');
+            var answers = div.find('a.ans').filter('[id="'+$('.petri_image').find('img:visible').attr("id")+'"]');
+            correct = getCorrectPetri(div, places, answers);
+            places.filter('.act').removeClass('act');
             if(correct !== -1 && correct !== true) return;
         }
     }
@@ -540,6 +549,52 @@ function getCorrectHotspot(div, hss, answer) {
         if(finished) {
             blockHotspot(div);
             findCorrectsHotspot(div);
+        }
+    }
+    return finished;
+}
+
+
+function getCorrectPetri(div, places, answers) {
+    var finished = false;
+
+    // nichts ausgewählt
+    if(places.filter('.act').length == 0) {
+        return -1;
+    }
+    else {
+        correct = true;
+        places.each(function(i,e) {
+            var ans = $(this).attr('id');
+            ans = encryptMD5(ans);
+
+            c = getCorrectAnswers(answers);
+
+            // markiert und richtig
+            if(($(this).is(".act") && contains(c, ans))
+                || (!$(this).is(".act") && !contains(c, ans))) {
+            }
+            else {
+                correct = false;
+                return false; // break;
+            }
+        });
+
+        if(correct) {
+            div.children("div.feedback").filter(".noselection").hide();
+            div.children("div.feedback").filter(".incorrect").hide();
+            div.children("div.feedback").filter(".correct").show();
+        }
+        else {
+            div.children("div.feedback").filter(".noselection").hide();
+            div.children("div.feedback").filter(".correct").hide();
+            div.children("div.feedback").filter(".incorrect").show();
+        }
+
+        finished = !petriNextImage(div);
+
+        if(finished) {
+            blockPetri(div);
         }
     }
     return finished;
@@ -1031,6 +1086,78 @@ function findCorrectsHotspot(div) {
 
 
 
+// ---------------------------------- PETRI IMAGE --------------------------------------
+
+function initiatePetriImage() {
+    var root = $('[qtype="'+quizTypes.PETRI+'"]');
+
+    root.find('.petri_image').find('img').hide();
+    root.find('.petri_image').find('img').first().show();
+
+    root.find('.gesucht').html(root.find('.petri_image').find('img').first().attr("id"));
+
+    // Klicken auf Hotspot
+    root.find('.place').click(function() {
+        petriClick($(this));
+    });
+
+    // berechnet Größe der Plätze
+    calculatePetriDimensions();
+}
+
+
+function petriClick(element) {
+    if(!element.is(".blocked")) {
+        if(element.is(".act")) {
+            element.removeClass("act");
+        }
+        else {
+            element.addClass("act");
+        }
+    }
+}
+
+function petriNextImage(div) {
+    var finished = false;
+
+    var act_img = div.find('.petri_image').find('img:visible');
+
+    var next_img = act_img.nextAll('img').first();
+    next_img.show();
+    act_img.hide();
+
+    if(next_img.attr("id") == undefined || next_img.attr("id").length == 0) {
+        finished = true;
+    }
+    else {
+        div.find('.gesucht').html(next_img.attr("id"));
+    }
+
+    return !finished;
+}
+
+function blockPetri(div) {
+    div.find('.place').addClass("blocked");
+}
+
+
+function calculatePetriDimensions() {
+    var root = $('[qtype="'+quizTypes.PETRI+'"]');
+
+    root.each(function(i, e) {
+        var imgWidth = root.find('.petri_image').width();
+        var width = imgWidth * 0.05;
+
+        $(e).find('.petri_image').find('.place').css({
+            "width" : width + "px",
+            "height" : width + "px",
+            "margin-top": "-" + (width/2) + "px",
+            "margin-left": "-" + (width/2) + "px"
+        });
+    });
+}
+
+
 // --------------------------------------------------------------------------------------
 
 /**
@@ -1167,6 +1294,7 @@ function windowResizing() {
     });
 
     calculateHotspotDimensions();
+    calculatePetriDimensions();
 }
 
 
@@ -1190,6 +1318,9 @@ function resetQuestion(div) {
     div.find('.full').removeClass("full");
     div.find('.blocked').removeClass("blocked");
     div.find('.hotspot').find('.descr').children().remove();
+    div.find('.petri_image').find('img').hide();
+    div.find('.petri_image').find('img').first().show();
+    div.find('.gesucht').html(div.find('.petri_image').find('img').first().attr("id"));
 
     div.nextAll("button.quizButton").first().show();
     div.nextAll("button.quizButton.weiter").first().hide();
