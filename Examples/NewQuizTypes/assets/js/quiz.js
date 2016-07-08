@@ -649,8 +649,6 @@ function processFreeText(div) {
 // COPY QUESTION TO SHOW AGAIN
 // --------------------------------------------------------------------------------------
 
-// TODO um Matrix und Drag and Drop erweitern
-
 /**
 * Kopiert die Frage ohne Bestätigungsbuttons (reiner Fragekörper)
 */
@@ -816,6 +814,18 @@ function addDragAndDropToClassification() {
     root.find('.object').on("dragleave", function(event) {
         draggedOut(event.originalEvent);
     });
+
+    // mobile unterstützung / Klick-Fallback. Auch am Desktop möglich
+    root.find('.object').on("click", function(event) {
+        if(startedObject == null) {
+            dragObject(event.originalEvent);
+        }
+        else {
+            dropObject(event.originalEvent);
+            dragReset(event.originalEvent);
+        }
+    });
+
 }
 
 
@@ -830,6 +840,17 @@ function addDragAndDropToOrderObjects() {
 
     root.find('.object').on("dragend", function(event) {
         dragReset(event.originalEvent);
+    });
+
+
+    // mobile unterstützung / Klick-Fallback. Auch am Desktop möglich
+    root.find('.object').on("click", function(event) {
+        if(startedObject == null) {
+            dragObject(event.originalEvent);
+        }
+        else {
+            dragReset(event.originalEvent);
+        }
     });
 
     addDragAndDropToOrderDestinations(root);
@@ -858,6 +879,16 @@ function addDragAndDropToOrderDestinations(root) {
     root.find('.destination').on("dragleave", function(event) {
         draggedOut(event.originalEvent);
     });
+
+    // mobile unterstützung / Klick-Fallback. Auch am Desktop möglich
+    root.find('.destination').on("click", function(event) {
+        if(startedObject == null) {
+        }
+        else {
+            dropObject(event.originalEvent);
+            dragReset(event.originalEvent);
+        }
+    });
 }
 
 
@@ -872,7 +903,7 @@ function dragObject(e) {
     var type = $(e.target).closest(".question").attr("qtype");
 
     // für firefox notwendig, sonst startet drag nicht
-    e.dataTransfer.setData("transer", "data");
+    if(event.type === "dragstart") e.dataTransfer.setData("transer", "data");
 
     if(type === quizTypes.CLASSIFICATION) {
         // Falls noch nicht benutzt
@@ -882,6 +913,12 @@ function dragObject(e) {
             $(e.target).css("opacity", "0.4");
             $(e.target).css("background", "#888");
             $(e.target).closest(".answers").find(".destination").not(".full").addClass("emph");
+
+            $(e.target).closest(".question").find(".object.used").each(function(i,e) {
+                if($(this).children().attr("id") == draggedObjects.attr("id")) {
+                    $(this).addClass("emph");
+                }
+            });
         }
         else {
             e.preventDefault();
@@ -979,6 +1016,7 @@ function dragReset(e) {
     $(".object").css("background", false);
     $('.question[qtype="'+quizTypes.ORDER+'"]').find(".destination").removeClass("vis");
     draggedObjects = null;
+    startedObject = null;
 }
 
 function draggedOver(e) {
