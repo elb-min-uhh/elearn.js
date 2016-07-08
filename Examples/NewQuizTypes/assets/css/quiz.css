@@ -289,6 +289,7 @@ button.error_button.act {
     display: inline-block;
     position: relative;
     overflow-y: auto;
+    max-width: 100%;
 }
 
 .question[qtype="hotspot"] .answers .hotspot_image img {
@@ -372,6 +373,7 @@ button.error_button.act {
     position: relative;
     overflow-y: auto;
     display: inline-block;
+    max-width: 100%;
 }
 
 .question[qtype="petri"] .petri_image img {
