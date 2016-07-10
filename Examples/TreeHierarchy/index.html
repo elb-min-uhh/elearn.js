@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<meta name="keywords" content="Key, Words">
+		<meta name="description" content="Hier Beschreibung einfügen">
+		<meta name="author" content="Name Autor">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" type="text/css" href="assets/css/elearn.css">
+		<link rel="stylesheet" type="text/css" href="assets/css/quiz.css">
+
+		<script type="text/javascript" src="assets/js/min.js"></script> <!-- von UHH verwendetes JQuery -->
+		<script type="text/javascript" src="assets/js/elearn.js"></script> <!-- eLearn.js -->
+		<script type="text/javascript" src="assets/js/quiz.js"></script> <!-- Quiz Script -->
+
+		<script>
+		    window.onload = function() {
+                /* Mögliche Erweiterungen
+
+                eLearnJS.toggleAllSections(); // Zeigt alle Sections an
+
+				eLearnJS.setBackButtonEnabled(true); // Zurück button im Header
+                eLearnJS.setBackButtonText("Übersicht"); // "Übersicht" als Text, statt "Zurück"
+
+                // Beispiele für BackPages (Was geöffnet wird beim Back button):
+                eLearnJS.setBackPage(2, "index"); // Die 3. section
+                eLearnJS.setBackPage("Inhaltsverzeichnis", "name"); // Die section mit name="Inhaltsverzeichnis"
+				eLearnJS.setBackPage("../", "link"); // Im Pfad einen Schritt zurück
+                eLearnJS.setBackPage("http://google.de", "link"); // Google wird geöffnet
+
+				eLearnJS.generalDirectionButtonsEnabled(false); // keine Nav. Buttons
+				eLearnJS.setKeyNavigationEnabled(false); // keine Tastaturnavigation
+				eLearnJS.generalProgressbarEnabled(false); // keine Fortschrittsleiste
+                */
+            }
+        </script>
+
+		<title>elearn.js Tree Example</title>
+	</head>
+	<body>
+	    <!-- #wrap muss bleiben, sonst funktioniert eLearn.js nicht -->
+		<div id="wrap">
+            <!-- Page Info -->
+            <div class="lb-wrap" id="info">
+                <div class="lightbox">
+                    <div class="info-wrapper">
+				        <!--Der inhalt der Info-Box kann frei mit html-Inhalt gefüllt werden. -->
+			         	<h4>Produktion digitaler Skripte</h4>
+				        <p>
+				            Michael Heinecke<br>
+				            Universität Hamburg
+				        <p>
+				    </div>
+			    </div>
+            </div>
+
+			<div class="page">
+
+
+
+                <section name="Titelseite">
+
+<!--Hier den Markdown-Export einfügen-->
+
+                    <h1>Titel</h1>
+
+                    <p>Text für Titelseite</p>
+                </section>
+
+                <section name="Inhaltsverzeichnis">
+			        <h2>Inhaltsverzeichnis</h2>
+					<!-- Zusatz class="kachel" ändert die Darstellung -->
+			        <div id="content-overview" class="kachel">
+			            <!--
+			                Hier wird automatisch ein Inhaltsverzeichnis
+			                eingefügt, wenn das div#content-overview vorhanden
+			                ist.
+			            -->
+			        </div>
+			    </section>
+
+			    <section name="Themenbereich 1">
+			        <h2>Themenbereich 1</h2>
+			        <p>
+			            Hier könnte jetzt z.B. ein kurzer (einseitiger) Einleitungstext
+			            stehen, der einem das Thema grob erklärt.
+			            <br>
+			            Für genauere Information hier <a href="thema1.html">weiterlesen</a>
+			    </section>
+                <section name="Themenbereich 2">
+			        <h2>Themenbereich 2</h2>
+			        <p>
+			            Thema 2 ist vielleicht garnicht so lang und braucht keinen
+			            weiterleitenden Link. Hier ist man komplett frei.
+			            Die Unterseiten werden wieder einzeln erstellt.
+			            Ich baue hier trotzdem mal einen Link ein.
+			            <br>
+						<br>
+						Im Unterschied zu Thema1 befindet sich Thema2 in einem
+						Unterordner. Auch sowas ist möglich, mit den bekannten
+						relativen Links. (Im Header müssen dazu Verlinkungen
+						angepasst werden).
+						<br>
+						<br>
+			            Für genauere Information hier <a href="thema2/index.html">weiterlesen</a>
+			    </section>
+
+
+
+            	<!--MathJax-Einbindung für die Formeldarstellung-->
+	            <script type="text/x-mathjax-config">
+	            	if (typeof MathJaxListener !== 'undefined') {
+	                      MathJax.Hub.Register.StartupHook('End', function () {
+	                        MathJaxListener.invokeCallbackForKey_('End');
+	                      });
+	                    }
+	                    </script>
+	            <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+            </div>
+		</div>
+	</body>
+</html>
