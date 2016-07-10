@@ -1,20 +1,21 @@
 /*
-* v0.8 16/05/18 JavaScript eLearn.js - by Arne Westphal
+* v0.9 16/06/09 JavaScript eLearn.js - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 */
 
-var VERSION_NR = "0.8";
-var VERSION_DATE = "05/2016";
+var VERSION_NR = "0.9";
+var VERSION_DATE = "06/2016";
 
 // Will be set on first Touch event. See Help Functions at bottom
-var isTouchSupported = false;
+var touchSupported = false;
 
 var visSection = 0;
 var allShown = false;
 var overviewShown = false;
 var navigationTitle = "";
 
+var backbuttonEnabled = false;
 var backpage = 0;
 var backpagetype = "index";
 
@@ -35,9 +36,10 @@ $(document).ready(function() {
     initiateInfo();
     initiateSections();
     initiateGalleries();
-    toggleAllSections();
     initiateSideMenu();
     initiateTooltips();
+
+    checkParameters();
 
     $('#qrcode').qrcode({
         "width": 256,
@@ -45,7 +47,6 @@ $(document).ready(function() {
         "text": window.location.href
     });
     $('#qr_overlay').click(function() {$('#qr_overlay').hide();});
-
 });
 
 /**
@@ -118,6 +119,9 @@ function initiateSections() {
     $('.section-overview').css('top', $('nav-bar').outerHeight() + "px");
     $('.section-overview').css('height', "calc(100% - " + $('.section-overview').css("top") + ")");
     //$('#sideMenu').css('max-width', Math.min($('#sideMenu').width(), $(document).width()) + "px");
+    setDirectionButtonsEnabled(true);
+    setProgressbarEnabled(true);
+    showSection(0);
 };
 
 /**
@@ -174,6 +178,25 @@ function initiateSideMenu() {
 }
 
 
+/**
+* In der URL können Parameter angegeben werden, um das direkte Anzeigen einer
+* Section zu ermöglichen.
+*
+* mit ?p=2 könnte man z.B. die 3. (0, 1, 2, ...) section öffnen
+* mit ?s=Inhaltsverzeichnis würde man die <section name="Inhaltsverzeichnis">
+* öffnen.
+*/
+function checkParameters() {
+    if(QueryString.s != undefined) {
+        var sectionName = decodeURI(QueryString.s);
+        var idx = $('section').index($('section[name="' + sectionName + '"]').get(0));
+        showSection(idx);
+    }
+    else if(QueryString.p != undefined) {
+        var idx = parseInt(QueryString.p);
+        showSection(idx);
+    }
+}
 
 // ----------------------------------------------------------------------------
 // ------------------------- BACK BUTTON --------------------------------------
@@ -184,12 +207,20 @@ function initiateSideMenu() {
 * Standardmäßig aus
 */
 function setBackButtonEnabled(b) {
+    backbuttonEnabled = b;
     if(b) {
         $('#navigation').addClass("back-enabled");
     }
     else {
         $('#navigation').removeClass("back-enabled");
     }
+}
+
+/**
+* Gibt aus ob der backbutton aktiviert ist.
+*/
+function isBackButtonEnabled() {
+    return backbuttonEnabled;
 }
 
 
@@ -1001,7 +1032,10 @@ function resizeZoomContainer() {
 // --------------------------------------------------------------------------------------
 
 var activeTooltip = 0;
-var tooltips = ['<div id="tooltipShowAll" class="tooltip fixed">'
+var tooltips = ['<div id="tooltipBack" class="tooltip fixed">'
+                + 'Verlinkt normalerweise auf eine <br>vorangegane Seite oder den Anfang <br>des Dokuments.'
+                + '</div>',
+                '<div id="tooltipShowAll" class="tooltip fixed">'
                 + 'Alle Inhalte auf einer Seite anzeigen <br>oder vertikal navigierbar machen.'
                 + '</div>',
                 '<div id="tooltipChapter" class="tooltip fixed">'
@@ -1023,11 +1057,12 @@ var tooltips = ['<div id="tooltipShowAll" class="tooltip fixed">'
                 + 'Wischen, um auf die vorherige Seite zu wechseln.'
                 + '</div>'];
 
-var ttMaxWidth = [-1, -1, -1, 440, 440, -1, -1];
-var ttMinWidth = [-1, -1, -1, -1, -1, -1, -1];
-var bedingung = [true, true, true, true, true, isTouchSupported, isTouchSupported];
-var anchor = ["#btnAll", "#btnExp", "#btnMenu", "#btnNext", "#btnPrev", "#btnNext", "#btnPrev"];
-var positions = ["#btnAll", "#btnExp", "#btnMenu", [0,0], [0,0], [0,0], [0,0]];
+var ttMaxWidth = [-1, -1, -1, -1, 440, 440, -1, -1];
+var ttMinWidth = [-1, -1, -1, -1, -1, -1, -1, -1];
+// in bedingung muss entweder eine Funktion die ein bool returned stehen oder direkt ein bool
+var bedingung = [isBackButtonEnabled, true, true, true, true, true, isTouchSupported, isTouchSupported];
+var anchor = ["#btnBack", "#btnAll", "#btnExp", "#btnMenu", "#btnNext", "#btnPrev", "#btnNext", "#btnPrev"];
+var positions = ["#btnBack", "#btnAll", "#btnExp", "#btnMenu", [0,0], [0,0], [0,0], [0,0]];
 
 /**
 * Fügt die Buttons und die Funktionen der Buttons hinzu, die zum Durchklicken der
@@ -1068,7 +1103,7 @@ function showTooltip(nr) {
     activeTooltip = nr;
     if((ttMaxWidth[nr] < 0 || $(window).width() > ttMaxWidth[nr])
         && (ttMinWidth[nr] < 0 || $(window).width() <= ttMinWidth[nr])
-        && bedingung[nr]
+        && (isFunction(bedingung[nr]) ? bedingung[nr]() : bedingung[nr])
         && $(anchor[nr]).is(":visible")) {
         if(typeof positions[nr] == 'string' && !$(positions[nr]).is(':visible')) {
             nextTooltip();
@@ -1243,6 +1278,14 @@ function doesURLExist(url, callback) {
     });
 }
 
+/**
+* Checks if an object is a function
+*/
+function isFunction(functionToCheck) {
+ var getType = {};
+ return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+}
+
 // --------------------------------------------------------------------------------------
 // Touch Scroll part
 // --------------------------------------------------------------------------------------
@@ -1251,12 +1294,16 @@ function doesURLExist(url, callback) {
 var maxDiff = 0;
 var clickedAlready = false;
 
+function isTouchSupported() {
+    return touchSupported;
+}
+
 /**
 * Fügt allen Sections eine Touchabfrage hinzu.
 */
 function addTouchToSections() {
     $(document).bind('touchstart', function() {
-        isTouchSupported = true;
+        touchSupported = true;
         touchStart(event, this);
     });
     $(document).bind('touchend', function() {
@@ -1668,6 +1715,33 @@ function calcSpeed(dif) {
 function getSpeed(lastDif, lastTime, dif, time) {
     return (dif-lastDif) / (time - lastTime);
 }
+
+
+
+
+//
+var QueryString = function () {
+  // This function is anonymous, is executed immediately and
+  // the return value is assigned to QueryString!
+  var query_string = {};
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i=0;i<vars.length;i++) {
+    var pair = vars[i].split("=");
+    	// If first entry with this name
+    if (typeof query_string[pair[0]] === "undefined") {
+      query_string[pair[0]] = pair[1];
+    	// If second entry with this name
+    } else if (typeof query_string[pair[0]] === "string") {
+      var arr = [ query_string[pair[0]], pair[1] ];
+      query_string[pair[0]] = arr;
+    	// If third or later entry with this name
+    } else {
+      query_string[pair[0]].push(pair[1]);
+    }
+  }
+    return query_string;
+} ();
 
 
 // --------------------------------------------------------------------------------------
