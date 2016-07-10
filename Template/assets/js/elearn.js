@@ -102,6 +102,7 @@ function initiateELearnJS() {
                 sHeight = $($('section')[i]).position().top - $('#navigation').height() - 15;
             }
             visSection = i;
+            updateContentOverview();
         }
     });
 }
@@ -326,6 +327,7 @@ function showSection(i) {
     // section was updated
     if(i >= 0 && i < $('section').length) {
         visSection = i;
+        updateContentOverview();
         stopVideos();
     }
 
@@ -442,6 +444,9 @@ function setProgressbarEnabled(b) {
 // -------------------------------------------------------------------------------------
 // Overview
 // -------------------------------------------------------------------------------------
+
+var sectionsVisited = [];
+
 /**
 * Erstellt ein Inhaltsverzeichnis. Wird #content-overview hinzugefügt.
 */
@@ -451,12 +456,14 @@ function createContentOverview() {
 
         for(var i=0; i<$('section').length; i++) {
             text += "<li onclick='showSection("+i+")'>";
+            text += "<div class='sectionRead'><div class='img'></div></div>";
             text += "<span class='title'>" + $($('section')[i]).attr('name') + "</span>";
             if($($('section')[i]).attr('desc') != undefined
                 && $($('section')[i]).attr('desc').length > 0) {
                 text += "<p>" + $($('section')[i]).attr('desc') + "</p>";
             }
             text += "</li>";
+            sectionsVisited.push(false);
         }
         text+="</ul>";
 
@@ -466,6 +473,20 @@ function createContentOverview() {
         });
     }
 }
+
+
+function updateContentOverview() {
+    sectionsVisited[visSection] = true;
+    for(var i=0; i<$('section').length; i++) {
+        if(sectionsVisited[i]) {
+            $($('#content-overview').find('li').get(i)).find('.sectionRead').addClass('read');
+        }
+        else {
+            $($('#content-overview').find('li').get(i)).find('.sectionRead').removeClass('read');
+        }
+    }
+}
+
 
 var justOpenedOverview = false;
 /**
