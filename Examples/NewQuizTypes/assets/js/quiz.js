@@ -90,7 +90,10 @@ function init() {
     // Submit with enter for every question possible
     $(".answers label").keyup(function(event) {
         if(event.which == 13) {
-            $(this).closest("div.question").next(':button').click();
+            var div = $(this).closest("div.question");
+            if(!div.is('[qtype="'+quizTypes.FREE_TEXT+'"]')) {
+                div.next(':button').click();
+            }
         }
     });
 
