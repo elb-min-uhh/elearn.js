@@ -204,7 +204,6 @@ function submitAns(button, force) {
         else if(type === quizTypes.PETRI) {
             correct = processPetri(div, force);
             if(!correct) {
-                alert(correct);
                 return;
             }
         }
@@ -1673,19 +1672,19 @@ function createDrawingCanvas(element) {
     // Find the canvas element.
     canvaso = element[0];
     if (!canvaso) {
-      alert('Error: I cannot find the canvas element!');
+      //alert('Error: I cannot find the canvas element!');
       return;
     }
 
     if (!canvaso.getContext) {
-      alert('Error: no canvas.getContext!');
+      //alert('Error: no canvas.getContext!');
       return;
     }
 
     // Get the 2D canvas context.
     contexto = canvaso.getContext('2d');
     if (!contexto) {
-      alert('Error: failed to getContext!');
+      //alert('Error: failed to getContext!');
       return;
     }
 
@@ -1693,7 +1692,7 @@ function createDrawingCanvas(element) {
     var container = canvaso.parentNode;
     canvas = document.createElement('canvas');
     if (!canvas) {
-      alert('Error: I cannot create a new canvas element!');
+      //alert('Error: I cannot create a new canvas element!');
       return;
     }
 
