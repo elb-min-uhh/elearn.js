@@ -33,7 +33,8 @@ var quizTypes = {
     CLASSIFICATION : "classification",
     ORDER : "order",
     MATRIX_CHOICE : "matrix_choice",
-    PETRI : "petri"
+    PETRI : "petri",
+    DRAW : "drawing"
 };
 
 var quizJS = this;
@@ -105,6 +106,7 @@ function init() {
     addDragAndDropToOrderObjects();
     initiateHotspotImage();
     initiatePetriImage();
+    initiateDrawingCanvas();
 
     resetQuiz();
 
@@ -200,31 +202,14 @@ function submitAns(button, force) {
             if(correct !== -1 && correct !== true && correct !== 2) return;
         }
         else if(type === quizTypes.PETRI) {
-            var places = div.find('.place');
-
-            // after answer
-            if(div.is('.show_feedback')) {
-                div.removeClass("show_feedback");
-                if(petriFinished(div)) {
-                    blockPetri(div);
-                    // for information show
-                    correct = 2;
-                }
-                else {
-                    petriNextPart(div);
-                    places.filter('.act').removeClass('act');
-                    return;
-                }
+            correct = processPetri(div, force);
+            if(!correct) {
+                alert(correct);
+                return;
             }
-            // before answer - when answering
-            else {
-                var answers = div.find('a.ans').filter('[id="'+$('.petri_image').find('img:visible').attr("id")+'"]');
-                correct = getCorrectPetri(div, places, answers, force);
-                if(correct != -1) {
-                    petriNextImage(div);
-                    return;
-                }
-            }
+        }
+        else if(type === quizTypes.DRAW) {
+            processDrawing(div);
         }
     }
 
@@ -250,7 +235,7 @@ function submitAns(button, force) {
         div.children("div.feedback").filter(".incorrect").show();
     }
     // hide all (hotspot, petri when finished)
-    else {
+    else if(correct === 2) {
         div.children("div.feedback").filter(".noselection").hide();
         div.children("div.feedback").filter(".correct").hide();
         div.children("div.feedback").filter(".incorrect").hide();
@@ -646,6 +631,44 @@ function processFreeText(div) {
     div.find(".answers").find("textarea").attr('readonly','readonly');
 }
 
+/**
+* Verarbeiten des "Lösen" Knopfes in einer Petri-Netz Aufgabe
+*/
+function processPetri(div, force) {
+    var places = div.find('.place');
+
+    var correct = 0;
+
+    // after answer
+    if(div.is('.show_feedback')) {
+        div.removeClass("show_feedback");
+        if(petriFinished(div)) {
+            blockPetri(div);
+            // for information show
+            correct = 2;
+        }
+        else {
+            petriNextPart(div);
+            places.filter('.act').removeClass('act');
+            correct = false;
+        }
+    }
+    // before answer - when answering
+    else {
+        var answers = div.find('a.ans').filter('[id="'+$('.petri_image').find('img:visible').attr("id")+'"]');
+        correct = getCorrectPetri(div, places, answers, force);
+        if(correct != -1) {
+            petriNextImage(div);
+            correct = false;
+        }
+    }
+
+    return correct;
+}
+
+function processDrawing(div) {
+    div.find('.drawing_canvas').addClass("blocked");
+}
 
 // --------------------------------------------------------------------------------------
 
@@ -685,6 +708,9 @@ function showQuestionHere(button) {
     }
     else if(type === quizTypes.HOTSPOT) {
         copyHotspot(div);
+    }
+    else if(type === quizTypes.DRAW) {
+        copyDrawing(div, orig);
     }
 
 
@@ -738,6 +764,18 @@ function copyHotspot(div) {
     div.find('.hotspot').mouseout(function(event) {
         $(this).find('.descr').hide();
     });
+}
+
+function copyDrawing(div, orig) {
+    div.find('.drawing_canvas').addClass("blocked");
+
+    var canvas_orig = orig.find('.drawing_canvas').find('canvas.original')[0];
+    var canvas = div.find('.drawing_canvas').find('canvas.original')[0];
+
+    div.find('.clear').remove();
+    div.find('.feedback.correct').show();
+
+    canvas.getContext('2d').drawImage(canvas_orig, 0, 0);
 }
 
 
@@ -1491,6 +1529,7 @@ function windowResizing() {
 
     calculateHotspotDimensions();
     calculatePetriDimensions();
+    calculateCanvasDimensions();
 }
 
 
@@ -1519,6 +1558,8 @@ function resetQuestion(div) {
     div.find('.petri_image').find('img').first().show();
     div.filter('[qtype="'+quizTypes.PETRI+'"]').find('.gesucht').html(div.find('.petri_image').find('img').first().attr("task"));
 
+    resetCanvas(div);
+
     div.nextAll("button.quizButton").first().show();
     div.nextAll("button.quizButton.weiter").first().hide();
 }
@@ -1537,6 +1578,322 @@ function resetQuiz() {
     $('.question').find('textarea').attr('readonly', false);
 }
 
+
+
+/** **************************************************************************
+*                                                                            *
+*                                                                            *
+*                             DRAWING CANVAS                                 *
+*                                                                            *
+*                                                                            *
+******************************************************************************/
+
+function initiateDrawingCanvas() {
+    var root = $('[qtype="'+quizTypes.DRAW+'"]');
+
+    root.each(function(i,e) {
+        var div = $(this);
+        div.find('.drawing_canvas').append('<canvas class="original"></canvas>');
+        div.find('.drawing_canvas').after('<button class="clear">Löschen</button>');
+        div.find('.clear').click(function() {
+            resetCanvas(div);
+        });
+        createDrawingCanvas(div.find('.drawing_canvas').find('canvas'));
+        calculateCanvasDimensions();
+    });
+}
+
+function calculateCanvasDimensions() {
+    var root = $('[qtype="'+quizTypes.DRAW+'"]');
+
+    root.each(function(i,e) {
+        var div = $(this);
+        div.find('canvas').each(function(ii,ee) {
+
+            // canvas to scale
+            var canvas = $(this);
+
+            // clear prev. timeouts if existent
+            if(this.redrawTimeout != undefined && this.redrawTimeout != null) {
+                clearTimeout(this.redrawTimeout);
+            }
+
+            // create new timeout
+            var timeout = setTimeout(function() {
+                // clone before resize
+                var oldCanvas = canvas[0];
+                var newCanvas = document.createElement('canvas');
+                var context = newCanvas.getContext('2d');
+                newCanvas.width = oldCanvas.width;
+                newCanvas.height = oldCanvas.height;
+                context.drawImage(oldCanvas, 0, 0);
+
+                // change dimensions
+                canvas.attr("width", canvas.width());
+                canvas.attr("height", canvas.height());
+
+                // redraw frome cloned canvas
+                oldCanvas.getContext('2d').drawImage(newCanvas, 0, 0, canvas.width(), canvas.height());
+                $(newCanvas).remove();
+            }, 100);
+
+            // add this timeout to the element
+            this.redrawTimeout = timeout;
+        });
+    });
+}
+
+function resetCanvas(div) {
+    div.find('canvas').remove();
+    div.find('.drawing_canvas').append('<canvas class="original"></canvas>');
+    createDrawingCanvas(div.find('.drawing_canvas').find('canvas'));
+
+    div.find('.drawing_canvas').removeClass(".blocked");
+    calculateCanvasDimensions();
+}
+
+
+/* © 2009 ROBO Design
+ * http://www.robodesign.ro
+ */
+
+// Keep everything in anonymous function, called on window load.
+function createDrawingCanvas(element) {
+
+  initTouchToMouse(element.closest('.drawing_canvas'));
+
+  var canvas, context, canvaso, contexto;
+  var root = element.closest('.drawing_canvas');
+
+  // The active tool instance.
+  var tool;
+  var tool_default = 'pencil';
+
+  function init () {
+    // Find the canvas element.
+    canvaso = element[0];
+    if (!canvaso) {
+      alert('Error: I cannot find the canvas element!');
+      return;
+    }
+
+    if (!canvaso.getContext) {
+      alert('Error: no canvas.getContext!');
+      return;
+    }
+
+    // Get the 2D canvas context.
+    contexto = canvaso.getContext('2d');
+    if (!contexto) {
+      alert('Error: failed to getContext!');
+      return;
+    }
+
+    // Add the temporary canvas.
+    var container = canvaso.parentNode;
+    canvas = document.createElement('canvas');
+    if (!canvas) {
+      alert('Error: I cannot create a new canvas element!');
+      return;
+    }
+
+    canvas.id     = 'imageTemp';
+    canvas.width  = canvaso.width;
+    canvas.height = canvaso.height;
+    container.appendChild(canvas);
+
+    context = canvas.getContext('2d');
+
+
+    // Activate the default tool.
+    if (tools[tool_default]) {
+      tool = new tools[tool_default]();
+    }
+
+    // Attach the mousedown, mousemove and mouseup event listeners.
+    canvas.addEventListener('mousedown', ev_canvas, false);
+    canvas.addEventListener('mousemove', ev_canvas, false);
+    canvas.addEventListener('mouseup',   ev_canvas, false);
+  }
+
+  // The general-purpose event handler. This function just determines the mouse
+  // position relative to the canvas element.
+  function ev_canvas (ev) {
+    if(!root.is('.blocked')) {
+      if (ev.layerX || ev.layerX == 0) { // Firefox
+        ev._x = ev.layerX;
+        ev._y = ev.layerY;
+      } else if (ev.offsetX || ev.offsetX == 0) { // Opera
+        ev._x = ev.offsetX;
+        ev._y = ev.offsetY;
+      }
+
+      // Call the event handler of the tool.
+      var func = tool[ev.type];
+      if (func) {
+        func(ev);
+      }
+    }
+  }
+
+
+  // This function draws the #imageTemp canvas on top of #imageView, after which
+  // #imageTemp is cleared. This function is called each time when the user
+  // completes a drawing operation.
+  function img_update () {
+		contexto.drawImage(canvas, 0, 0);
+		context.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  // This object holds the implementation of each drawing tool.
+  var tools = {};
+
+  // The drawing pencil.
+  tools.pencil = function () {
+    var tool = this;
+    this.started = false;
+
+    // This is called when you start holding down the mouse button.
+    // This starts the pencil drawing.
+    this.mousedown = function (ev) {
+        context.beginPath();
+        context.moveTo(ev._x, ev._y);
+        tool.started = true;
+    };
+
+    // This function is called every time you move the mouse. Obviously, it only
+    // draws if the tool.started state is set to true (when you are holding down
+    // the mouse button).
+    this.mousemove = function (ev) {
+      if (tool.started) {
+        context.lineTo(ev._x, ev._y);
+        context.stroke();
+      }
+    };
+
+    // This is called when you release the mouse button.
+    this.mouseup = function (ev) {
+      if (tool.started) {
+        tool.mousemove(ev);
+        tool.started = false;
+        img_update();
+      }
+    };
+  };
+
+  // The rectangle tool.
+  tools.rect = function () {
+    var tool = this;
+    this.started = false;
+
+    this.mousedown = function (ev) {
+      tool.started = true;
+      tool.x0 = ev._x;
+      tool.y0 = ev._y;
+    };
+
+    this.mousemove = function (ev) {
+      if (!tool.started) {
+        return;
+      }
+
+      var x = Math.min(ev._x,  tool.x0),
+          y = Math.min(ev._y,  tool.y0),
+          w = Math.abs(ev._x - tool.x0),
+          h = Math.abs(ev._y - tool.y0);
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (!w || !h) {
+        return;
+      }
+
+      context.strokeRect(x, y, w, h);
+    };
+
+    this.mouseup = function (ev) {
+      if (tool.started) {
+        tool.mousemove(ev);
+        tool.started = false;
+        img_update();
+      }
+    };
+  };
+
+  // The line tool.
+  tools.line = function () {
+    var tool = this;
+    this.started = false;
+
+    this.mousedown = function (ev) {
+      tool.started = true;
+      tool.x0 = ev._x;
+      tool.y0 = ev._y;
+    };
+
+    this.mousemove = function (ev) {
+      if (!tool.started) {
+        return;
+      }
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      context.beginPath();
+      context.moveTo(tool.x0, tool.y0);
+      context.lineTo(ev._x,   ev._y);
+      context.stroke();
+      context.closePath();
+    };
+
+    this.mouseup = function (ev) {
+      if (tool.started) {
+        tool.mousemove(ev);
+        tool.started = false;
+        img_update();
+      }
+    };
+  };
+
+  init();
+}
+
+function touchHandler(event)
+{
+    event = event.originalEvent;
+    var touches = event.changedTouches,
+        first = touches[0],
+        type = "";
+    switch(event.type)
+    {
+        case "touchstart": type = "mousedown"; break;
+        case "touchmove":  type = "mousemove"; break;
+        case "touchend":   type = "mouseup";   break;
+        default:           return;
+    }
+
+    // initMouseEvent(type, canBubble, cancelable, view, clickCount,
+    //                screenX, screenY, clientX, clientY, ctrlKey,
+    //                altKey, shiftKey, metaKey, button, relatedTarget);
+
+    var simulatedEvent = document.createEvent("MouseEvent");
+
+    simulatedEvent.initMouseEvent(type, true, true, window, 1,
+                                  first.screenX, first.screenY,
+                                  first.clientX, first.clientY, false,
+                                  false, false, false, 0/*left*/, null);
+
+    first.target.dispatchEvent(simulatedEvent);
+    event.preventDefault();
+    event.stopPropagation();
+}
+
+function initTouchToMouse(element)
+{
+    element.on("touchstart", touchHandler);
+    element.on("touchmove", touchHandler);
+    element.on("touchend", touchHandler);
+    element.on("touchcancel", touchHandler);
+}
 
 
 /** *********************************************************************
