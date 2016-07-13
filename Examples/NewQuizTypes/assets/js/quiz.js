@@ -201,6 +201,8 @@ function submitAns(button, force) {
         }
         else if(type === quizTypes.PETRI) {
             var places = div.find('.place');
+
+            // after answer
             if(div.is('.show_feedback')) {
                 div.removeClass("show_feedback");
                 if(petriFinished(div)) {
@@ -214,11 +216,14 @@ function submitAns(button, force) {
                     return;
                 }
             }
+            // before answer - when answering
             else {
                 var answers = div.find('a.ans').filter('[id="'+$('.petri_image').find('img:visible').attr("id")+'"]');
                 correct = getCorrectPetri(div, places, answers, force);
-                petriNextImage(div);
-                return;
+                if(correct != -1) {
+                    petriNextImage(div);
+                    return;
+                }
             }
         }
     }
