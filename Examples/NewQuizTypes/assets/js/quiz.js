@@ -345,6 +345,7 @@ function getCorrectFillBlank(labels, answers, force) {
         // nicht ausgefüllt
         if(input.val().length == 0 && !force) {
             correct = -1;
+            deleteLabelColoring($(this).closest('.question'));
             return false;
         }
 
@@ -443,6 +444,7 @@ function getCorrectClassification(dests, answers, force) {
         // leer
         if(dest.children().length == 0 && !force) {
             correct = -1;
+            deleteLabelColoring($(this).closest('.question'));
             return false;
         }
 
@@ -519,6 +521,7 @@ function getCorrectMatrixChoice(rows, answers, force) {
             && !force) {
             rows.find('input').attr("disabled", false);
             correct = -1;
+            deleteLabelColoring($(this).closest('.question'));
             return false;
         }
 
@@ -972,19 +975,27 @@ function dragObject(e) {
     // get type
     var type = $(e.target).closest(".question").attr("qtype");
 
+    var target = $(e.target).closest('.object')[0];
+
     // für firefox notwendig, sonst startet drag nicht
-    if(event.type === "dragstart") e.dataTransfer.setData("transer", "data");
+    // try da Microsoft edge sonst abbricht
+    try {
+        if(e.type === "dragstart") e.dataTransfer.setData("transer", "data");
+    }
+    catch(e) {
+        // do nothing
+    }
 
     if(type === quizTypes.CLASSIFICATION) {
         // Falls noch nicht benutzt
-        if(!$(e.target).is(".used") && !$(e.target).is(".blocked")) {
-            draggedObjects = $(e.target).children();
-            startedObject = $(e.target);
-            $(e.target).css("opacity", "0.4");
-            $(e.target).css("background", "#888");
-            $(e.target).closest(".answers").find(".destination").not(".full").addClass("emph");
+        if(!$(target).is(".used") && !$(target).is(".blocked")) {
+            draggedObjects = $(target).children();
+            startedObject = $(target);
+            $(target).css("opacity", "0.4");
+            $(target).css("background", "#888");
+            $(target).closest(".answers").find(".destination").not(".full").addClass("emph");
 
-            $(e.target).closest(".question").find(".object.used").each(function(i,e) {
+            $(target).closest(".question").find(".object.used").each(function(i,e) {
                 if($(this).children().attr("id") == draggedObjects.attr("id")) {
                     $(this).addClass("emph");
                 }
@@ -995,14 +1006,14 @@ function dragObject(e) {
         }
     }
     else if(type === quizTypes.ORDER) {
-        if(!$(e.target).is(".blocked")) {
-            startedObject = $(e.target);
-            $(e.target).css("opacity", "0.4");
-            $(e.target).css("background", "#888");
+        if(!$(target).is(".blocked")) {
+            startedObject = $(target);
+            $(target).css("opacity", "0.4");
+            $(target).css("background", "#888");
             setTimeout(function() {
-                $(e.target).closest(".answers").find(".destination").addClass("vis");
-                $(e.target).prev().removeClass("vis");
-                $(e.target).next().removeClass("vis");
+                $(target).closest(".answers").find(".destination").addClass("vis");
+                $(target).prev().removeClass("vis");
+                $(target).next().removeClass("vis");
             }, 0);
         }
         else {
@@ -1027,46 +1038,48 @@ function dropObject(e) {
     // get type
     var type = $(e.target).closest(".question").attr("qtype");
 
+    var target = $(e.target).closest('.object')[0];
+
     if(type === quizTypes.CLASSIFICATION) {
-        var dragBackToStart = draggedObjects.get(0).isEqualNode($(e.target).children().get(0));
+        var dragBackToStart = draggedObjects.attr('id') == $(target).children().attr('id');
 
         // Ablegen an freiem Platz aus StartObjekt (!= Zielobjekt)
         if(!startedObject.is(".destination")
-                && $(e.target).is(".object.destination")
-                && $(e.target).is(".object")
-                && !$(e.target).is(".full")
-                && !$(e.target).is(".blocked")) {
+                && $(target).is(".object.destination")
+                && $(target).is(".object")
+                && !$(target).is(".full")
+                && !$(target).is(".blocked")) {
             e.preventDefault();
             startedObject.addClass("used");
-            $(e.target).append(draggedObjects.clone());
-            $(e.target).addClass("full");
+            $(target).append(draggedObjects.clone());
+            $(target).addClass("full");
             dragReset();
         }
         // Ablegen an freiem Platz aus Zielobjekt (verschieben)
         else if(startedObject.is(".destination")
-                && $(e.target).is(".object.destination")
-                && !$(e.target).is(".full")
+                && $(target).is(".object.destination")
+                && !$(target).is(".full")
                 && !dragBackToStart
-                && !$(e.target).is(".blocked")) {
+                && !$(target).is(".blocked")) {
             startedObject.removeClass("full");
-            $(e.target).append(draggedObjects);
-            $(e.target).addClass("full");
+            $(target).append(draggedObjects);
+            $(target).addClass("full");
             dragReset();
         }
         // Zurücklegen an ursprünglichen Ort
-        else if($(e.target).is(".object") && $(e.target).is(".used")
+        else if($(target).is(".object") && $(target).is(".used")
             && dragBackToStart
-            && !$(e.target).is(".blocked")) {
+            && !$(target).is(".blocked")) {
             startedObject.removeClass("full");
             draggedObjects.remove();
-            $(e.target).removeClass("used");
+            $(target).removeClass("used");
             dragReset();
         }
     }
     else if(type === quizTypes.ORDER) {
-        $(e.target).after(startedObject);
+        $(target).after(startedObject);
 
-        var root = $(e.target).closest(".question");
+        var root = $(target).closest(".question");
         root.find(".destination").remove();
 
         addDragAndDropToOrderDestinations(root);
@@ -1090,15 +1103,17 @@ function dragReset(e) {
 }
 
 function draggedOver(e) {
+    var target = $(e.target).closest('.object')[0];
     // Leer oder zurücklegen zur Ursprungsort
-    if(!$(e.target).is(".full")
-        || draggedObjects == $(e.target).children()) $(e.target).addClass("draggedover");
+    if(!$(target).is(".full")
+        || draggedObjects == $(target).children()) $(target).addClass("draggedover");
 }
 
 function draggedOut(e) {
+    var target = $(e.target).closest('.object')[0];
     // Leer oder zurücklegen zur Ursprungsort
-    if(!$(e.target).is(".full")
-        || draggedObjects == $(e.target).children()) $(e.target).removeClass("draggedover");
+    if(!$(target).is(".full")
+        || draggedObjects == $(target).children()) $(target).removeClass("draggedover");
 }
 
 
@@ -1372,11 +1387,9 @@ function toggleErrorButton(button) {
 /**
 * Entfernt für alle übergebenen Labels die färbenden Klassen "right" und "wrong"
 */
-function deleteLabelColoring(labels) {
-    labels.each(function() {
-        $(this).removeClass('right');
-        $(this).removeClass('wrong');
-    });
+function deleteLabelColoring(div) {
+    div.find('.right').removeClass('right');
+    div.find('.wrong').removeClass('wrong');
 };
 
 /**
@@ -1564,9 +1577,7 @@ function windowResizing() {
 function resetQuestion(div) {
     div.removeClass("answered");
     div.find(".feedback").hide();
-    deleteLabelColoring(div.find("label"));
-    div.find('.right').removeClass("right");
-    div.find('.wrong').removeClass("wrong");
+    deleteLabelColoring(div);
 
     div.find("input:text").val("");
     div.find("input:radio").prop("checked", false);
