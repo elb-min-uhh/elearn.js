@@ -1643,12 +1643,14 @@ function calculateCanvasDimensions() {
 }
 
 function resetCanvas(div) {
-    div.find('canvas').remove();
-    div.find('.drawing_canvas').append('<canvas class="original"></canvas>');
-    createDrawingCanvas(div.find('.drawing_canvas').find('canvas'));
+    if(div.is('[qtype="'+quizTypes.DRAW+'"]')) {
+        div.find('canvas').remove();
+        div.find('.drawing_canvas').append('<canvas class="original"></canvas>');
+        createDrawingCanvas(div.find('.drawing_canvas').find('canvas'));
 
-    div.find('.drawing_canvas').removeClass(".blocked");
-    calculateCanvasDimensions();
+        div.find('.drawing_canvas').removeClass(".blocked");
+        calculateCanvasDimensions();
+    }
 }
 
 
