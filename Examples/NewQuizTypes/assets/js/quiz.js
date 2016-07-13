@@ -104,6 +104,8 @@ function init() {
 
     addDragAndDropToClassification();
     addDragAndDropToOrderObjects();
+    initiateErrorText();
+    initiateMatrix();
     initiateHotspotImage();
     initiatePetriImage();
     initiateDrawingCanvas();
@@ -348,12 +350,12 @@ function getCorrectFillBlank(labels, answers, force) {
 
         // antwort richtig
         if(cor == ans) {
-            //$(this).addClass("right");
+            $(this).addClass("right");
         }
         // antwort falsch
         else if(cor != ans) {
             correct = false;
-            //$(this).addClass("wrong");
+            $(this).addClass("wrong");
         }
 
         input.attr("disabled", true);
@@ -379,12 +381,12 @@ function getCorrectFillBlankChoice(labels, answers, force) {
 
         // antwort richtig
         if(cor == ans) {
-            //$(this).addClass("right");
+            $(this).addClass("right");
         }
         // antwort falsch
         else if(cor != ans) {
             correct = false;
-            //$(this).addClass("wrong");
+            $(this).addClass("wrong");
         }
 
         select.attr("disabled", true);
@@ -411,11 +413,13 @@ function getCorrectErrorText(buttons, c, force) {
         if((contains(c, ans) && act)
             || (!contains(c, ans) && !act)) {
             // richtig
+            $(this).closest('label').addClass("right");
         }
         // Nicht markiert oder nicht in Antworten
         else if(!contains(c, ans) ^ !act) {
             // falsch
             correct = false;
+            $(this).closest('label').addClass("wrong");
         }
     });
 
@@ -446,12 +450,12 @@ function getCorrectClassification(dests, answers, force) {
 
         // antwort richtig
         if(cor == ans) {
-            //$(this).addClass("right");
+            $(this).addClass("right");
         }
         // antwort falsch
         else if(cor != ans) {
             correct = false;
-            //$(this).addClass("wrong");
+            $(this).addClass("wrong");
         }
     });
 
@@ -478,15 +482,17 @@ function getCorrectOrder(objects, answers, force) {
 
         // same position
         if(encryptMD5(""+index) == cor) {
+            $(this).addClass("right");
         }
         // antwort richtig
         else if(encryptMD5(""+(index+1)) == cor) {
             index++;
+            $(this).addClass("right");
         }
         // antwort falsch
         else {
             correct = false;
-            //$(this).addClass("wrong");
+            $(this).addClass("wrong");
         }
     });
 
@@ -523,11 +529,12 @@ function getCorrectMatrixChoice(rows, answers, force) {
             // ausgewählt und richtig oder nicht ausgewählt und nicht richtig (insg richtig)
             if(($(ee).is(":checked") && contains(cor, ans))
                 || (!$(ee).is(":checked") && !contains(cor, ans))) {
-
+                $(this).closest('label').addClass("right");
             }
             // falsch
             else {
                 correct = false;
+                $(this).closest('label').addClass("wrong");
             }
 
             $(ee).attr("disabled", true);
@@ -598,10 +605,11 @@ function getCorrectPetri(div, places, answers, force) {
             // markiert und richtig
             if(($(this).is(".act") && contains(c, ans))
                 || (!$(this).is(".act") && !contains(c, ans))) {
+                $(this).addClass("right");
             }
             else {
                 correct = false;
-                return false; // break;
+                $(this).addClass("wrong");
             }
         });
 
@@ -817,6 +825,26 @@ function blockQuestion(div) {
 }
 
 
+
+// --------------------------------------------------------------------------------------
+// ERROR TEXT (Buttons)
+// --------------------------------------------------------------------------------------
+
+function initiateErrorText() {
+    var root = $('[qtype="'+quizTypes.ERROR_TEXT+'"]');
+
+    root.find('.error_button').wrap("<label></label>");
+}
+
+// --------------------------------------------------------------------------------------
+// MATRIX
+// --------------------------------------------------------------------------------------
+
+function initiateMatrix() {
+    var root = $('[qtype="'+quizTypes.MATRIX_CHOICE+'"]');
+
+    root.find('input').wrap("<label></label>");
+}
 
 // --------------------------------------------------------------------------------------
 // DRAG AND DROP FUNCTIONS
@@ -1537,6 +1565,9 @@ function resetQuestion(div) {
     div.removeClass("answered");
     div.find(".feedback").hide();
     deleteLabelColoring(div.find("label"));
+    div.find('.right').removeClass("right");
+    div.find('.wrong').removeClass("wrong");
+
     div.find("input:text").val("");
     div.find("input:radio").prop("checked", false);
     div.find("input:checkbox").prop("checked", false);
