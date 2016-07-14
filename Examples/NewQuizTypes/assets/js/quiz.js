@@ -829,6 +829,9 @@ function blockQuestion(div) {
     else if(type === quizTypes.PETRI) {
         div.find('.place').addClass("blocked");
     }
+    else if(type === quizTypes.DRAW) {
+        div.find('.drawing_canvas').addClass("blocked");
+    }
 }
 
 
