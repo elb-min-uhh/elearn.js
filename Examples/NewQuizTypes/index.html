@@ -154,7 +154,7 @@
 
                 </section>
 
-                <section name="Petrinetz und Lückentext mit Texteingabe">
+                <section name="Petrinetze">
                     <!--
                     max-time definiert die maximale Bearbeitungszeit, bis
                     die Aufgabe gesperrt wird.
@@ -164,7 +164,7 @@
                     reset_blocked sorgt dafür das man eine Frage nicht (so einfach)
                     zurücksetzen kann, um sie erneut zu beantworten
                     -->
-                    <div class="question reset_blocked" qtype="petri" id="pe_1" max-time="99">
+                    <div class="question reset_blocked unbewertet" qtype="petri" id="pe_1" max-time="99">
                         <h4>Petrinetz</h4>
 
                         <!-- -->
@@ -286,6 +286,142 @@
                     </button>
                     <br><br><br>
 
+                    <div class="question" qtype="petri" id="pe_2">
+                        <h4>Petrinetz</h4>
+
+                        <!-- -->
+                        Geben Sie an, wie das folgende Petrinetz (Typ Bedingung-Ereignis-
+                        Netz) nach den nächsten drei Schaltzyklen aussieht, wenn bei jedem
+                        Schaltzyklus so viele Transitionen wie möglich schalten!
+                        Markiert werden sollen alle Plätze an denen sich eine Marke befindet.<br>
+                        <!--
+                        Hier werden Aufgabenbilder definiert. Diese müssen nicht
+                        vorhanden sein. Die eigentliche "Aufgabe" wird weiter unten definiert.
+                        Diese Bilder werden lediglich angezeigt, wenn vorhanden, wenn
+                        der zugehörige Aufgabenteil (das Bild mit der selben ID aus .petri_image)
+                        aktiv ist.
+                        Dieses Bild kann also definiert werden als Ausgangssituation und das
+                        Hintergrundbild aus .petri_image dazu ist "leer" (alle Plätze leer).
+                        So ist es in diesem Beispiel.
+                        -->
+                        <div class="petri_aufgabe" style="max-width: 60%;">
+                            <img id="0" src="assets/img/petrinetz_1.png"/>
+                        </div>
+                        <br>
+                        <hr>
+
+                        <div class="answers">
+                            <!--
+                            Die hier vorhandenen Bilder werden in der Reihenfolge, wie sie hier
+                            stehen, angezeigt. Das jeweilige Bild ist der HINTERGRUND,
+                            auf dem die Punkte sichtbar sind die markiert werden können.
+                            Hier können bspw. alle Plätze leer sein. Man kann oben z.B. eine
+                            Ausgangssituation zu der Aufgabe explizit anzeigen lassen.
+                            Dazu muss in .petri_aufgabe ein Bild mit derselben ID vorhanden
+                            sein.
+                            task="..." definiert das was bei .gesucht oben eingesetzt wird.
+                            -->
+                            <div class="petri_image">
+
+                                <!--
+                                Alle Bilder sollten grundsätzlich gleich sein
+                                Unterscheiden sollten sich maximal Markierte Transition
+                                oder die Position der Marken.
+                                -->
+                                <img id="0" task="" src="assets/img/petrinetz_empty.png"/>
+                                <!-- das .correct Objekt wird zum Vergleich der Lösung als Hintergrund eingeblendet -->
+                                <img id="0" task="" class="correct" src="assets/img/petrinetz_fin.png"/>
+
+                                <!-- Das letzte Bild, wenn alles fertig ist, hat KEINE ID! -->
+                                <!--
+                                Dieses Bild bleibt einfach als Letztes einzeln über.
+                                Es sind hier keine Ergebnisse mehr zu sehen.
+                                -->
+                                <img src="assets/img/petrinetz_fin.png"/>
+
+
+                                <!--
+                                Angaben der auswählbaren Objekte
+                                Die Position wird als Abstand zum oberen und
+                                linken Bildrand angegeben.
+                                Die Klasse "hotspot" muss bleiben.
+                                Die ID ist das was als korrekte Antwort verschlüsselt wird.
+                                -->
+                                <div style="top: 11%; left: 17%;" class="place" id="p1"></div>
+                                <div style="top: 11%; left: 43.5%;" class="place" id="p2"></div>
+                                <div style="top: 11%; left: 70%;" class="place" id="p3"></div>
+                                <div style="top: 11%; left: 96.5%;" class="place" id="p4"></div>
+
+                                <div style="top: 37%; left: 3.7%;" class="place" id="p5"></div>
+                                <div style="top: 37%; left: 30.2%;" class="place" id="p6"></div>
+                                <div style="top: 37%; left: 56.7%;" class="place" id="p7"></div>
+                                <div style="top: 37%; left: 83.2%;" class="place" id="p8"></div>
+
+                                <div style="top: 63%; left: 17%;" class="place" id="p9"></div>
+                                <div style="top: 63%; left: 43.5%;" class="place" id="p10"></div>
+                                <div style="top: 63%; left: 70%;" class="place" id="p11"></div>
+                                <div style="top: 63%; left: 96.5%;" class="place" id="p12"></div>
+
+                                <div style="top: 89%; left: 3.7%;" class="place" id="p13"></div>
+                                <div style="top: 89%; left: 30.2%;" class="place" id="p14"></div>
+                                <div style="top: 89%; left: 56.7%;" class="place" id="p15"></div>
+                                <div style="top: 89%; left: 83.2%;" class="place" id="p16"></div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Bei Petrinetzen gibt es nur eine generelle Rückmeldung -->
+                        <!-- Hier sollte also kein "Richtige Antwort" stehen -->
+                        <!-- Diese Blöcke werden nach jeder Teilantwort angezeigt -->
+                        <div class="feedback correct">
+                            <b>Richtig</b>
+                        </div>
+                        <div class="feedback incorrect">
+                            <b>Falsch</b>
+                        </div>
+
+                        <!-- Dieser Block wird erst angezeigt, wenn alles beantwortet wurde. -->
+                        <div class="feedback information">
+                            Informationstext, wenn alle Teile beantwortet.
+                        </div>
+
+                        <!--
+                            Verschlüsselt ist die id der Antwort
+                            Die ID dieses Feldes gibt an, in welcher Runde die Markierung stattfinden soll.
+                            Also ist zB. in Runde eins (index 0) der Platz mit ID="p1" richtig,
+                            gibt es ein <a id="0" class="ans">ec6ef230f1828039ee794566b9c58adc</a>
+                            Dabei entspricht der verschlüsselte Text "p1"
+
+                            Es können mehrere Richtig sein für jede Runde.
+
+                            Die ID des <a> entspricht dabei der ID des jeweiligen <img> welches weiter
+                            oben definiert ist. Eine durchnummerierung ist hier sinnvoll.
+                        -->
+                        <a id="0" class="ans">ec6ef230f1828039ee794566b9c58adc</a>
+                        <a id="0" class="ans">c6c27fc98633c82571d75dcb5739bbdf</a>
+                        <a id="0" class="ans">46d46a759bf6cbed05d7bcdcb911a4f8</a>
+                        <a id="0" class="ans">2e3f209d4f2bb34667dde08e3c9585f1</a>
+                        <a id="0" class="ans">d9a9d61ef9ac1fb462fb3ce61f509700</a>
+                        <a id="0" class="ans">d3d078bf2fc1425e6d4410ccb6ed6df9</a>
+                        <a id="0" class="ans">a60812a268abc3f1f5c56ddc205e5a23</a>
+                        <a id="0" class="ans">5e9ac5d787f7bdd0fa73b873ad4f278e</a>
+                    </div>
+
+                    <br><br>
+                    <!--
+                    Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+                    Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+                    und um "_ref" erweitert wird. (Referenz)
+                    -->
+                    <button id="pe_2_ref" onclick="showQuestionHere(this)">
+                        Vorherige Antwort anzeigen
+                    </button>
+                    <br><br><br>
+
+                </section>
+
+                <section name="Lückentext">
 
 
 					<div class="question" qtype="fill_blank" id="fb_7">

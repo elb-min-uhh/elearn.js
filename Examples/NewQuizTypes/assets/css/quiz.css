@@ -416,9 +416,8 @@
 
 .question[qtype="petri"] .petri_image {
     position: relative;
-    overflow-y: auto;
     display: inline-block;
-    max-width: 100%;
+    max-width: 90%;
 }
 
 .question[qtype="petri"] .petri_image img {
