@@ -5,7 +5,8 @@
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 */
 
-var start_time = null;
+var start_time = [];
+var passed_time = [];
 
 /**
 * Aktiviert alle <button> mit der Klasse "quizButton" für das Quiz.
@@ -1449,7 +1450,19 @@ var timerAlertText ="";
 * initialisiert Timer für alle Aufgaben die welche haben
 */
 function initTimers() {
-    start_time = new Date();
+    // Startet neuen Timer
+    if(start_time[eLearnJS.visSection] == undefined
+        || start_time[eLearnJS.visSection] == null) {
+        start_time[eLearnJS.visSection] = new Date();
+        passed_time[eLearnJS.visSection] = 0;
+    }
+    // Passt alten Timer an (Zeit weiterlaufen lassen)
+    else {
+        start_time[eLearnJS.visSection] = new Date();
+        start_time[eLearnJS.visSection].setTime(
+            start_time[eLearnJS.visSection].getTime()
+            - passed_time[eLearnJS.visSection]*1000);
+    }
 
     // anzeigen der startzeit
     $('.question:visible').not('.answered').each(function(i,e) {
@@ -1470,9 +1483,9 @@ function initTimers() {
 */
 function updateTimers() {
     var now = new Date();
-    var diff = (now.getTime() - start_time.getTime())/1000;
-
-    $('.answered_hint.timer').each(function(i,e) {
+    var diff = (now.getTime() - start_time[eLearnJS.visSection].getTime())/1000;
+    passed_time[eLearnJS.visSection] = diff;
+    $('.answered_hint.timer:visible').each(function(i,e) {
         var timer = $(this);
         // time in seconds
         var time = parseInt(timer.closest('.question').attr("max-time")) * 60;
