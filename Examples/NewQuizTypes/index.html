@@ -89,14 +89,24 @@
                 -->
 
                 <section name="Zeichnen">
+                    <!--
+                    AUFGABENTYP ZEICHNEN
+
+                    Dieser Typ erlaubt das Frei-Hand-Zeichnen mit der Mouse oder
+                    per Touch. Gemalt wird dabei auf einem Hintergrundbild, welches
+                    frei wählbar ist.
+                    Wenn man die Aufgabe löst, wird das Hintergrundbild ersetzt,
+                    durch eine mögliche Lösung und ein Hinweistext wird angezeigt.
+                    Dieser Hinweistext kann auch weitere Bilder oder anderes enthalten.
+                    -->
                     <div class="question" qtype="drawing" id="dr_1">
                         <h4>Zeichnen</h4>
 
-                        <!-- .fill sorgt dafür das .object die volle Breite einnehmen -->
+                        Zeichne eine Parabel:<br>
+                        <br>
                         <div class="answers">
 
-                            Zeichne eine Parabel:<br>
-                            <br>
+
                             <div class="drawing_canvas">
                                 <!--
                                 .background ist vor dem Lösen sichtbar. Hierauf wird gemalt
@@ -117,6 +127,11 @@
 
                         </div>
 
+                        <!--
+                        Dies hier ist der Hinweistext, der eingeblendet wird,
+                        wenn die Aufgabe "gelöst" wurde. Er kann auch weitere Bilder
+                        enthalten.
+                        -->
                         <div class="feedback correct">
                             Eine unverschobene und ungestauchte Parabel ist
                             symmetrisch zur Y-Achse und geht außerdem durch den
@@ -127,7 +142,11 @@
                     </div>
 
                     <br><br>
-                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <!--
+                    Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+                    Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+                    und um "_ref" erweitert wird. (Referenz)
+                    -->
                     <button id="dr_1_ref" onclick="showQuestionHere(this)">
                         Vorherige Antwort anzeigen
                     </button>
@@ -135,7 +154,7 @@
 
                 </section>
 
-                <section name="Lückentext mit Texteingabe">
+                <section name="Petrinetz und Lückentext mit Texteingabe">
                     <!--
                     max-time definiert die maximale Bearbeitungszeit, bis
                     die Aufgabe gesperrt wird.
@@ -148,29 +167,29 @@
                     <div class="question reset_blocked" qtype="petri" id="pe_1" max-time="99">
                         <h4>Petrinetz</h4>
 
-                        <!-- .fill sorgt dafür das .object die volle Breite einnehmen -->
-                        <div class="answers">
+                        <!-- -->
+                        Markiere die Plätze an denen mindestens eine Marke
+                        vorhanden ist, wenn Transition <b><span class="gesucht"></span></b> geschaltet wird.
+                        <br>
+                        Hier ist die Ausgangssituation sichtbar.<br>
+                        <!--
+                        Hier werden Aufgabenbilder definiert. Diese müssen nicht
+                        vorhanden sein. Die eigentliche "Aufgabe" wird weiter unten definiert.
+                        Diese Bilder werden lediglich angezeigt, wenn vorhanden, wenn
+                        der zugehörige Aufgabenteil (das Bild mit der selben ID aus .petri_image)
+                        aktiv ist.
+                        Dieses Bild kann also definiert werden als Ausgangssituation und das
+                        Hintergrundbild aus .petri_image dazu ist "leer" (alle Plätze leer).
+                        So ist es in diesem Beispiel.
+                        -->
+                        <div class="petri_aufgabe" style="max-width: 60%;">
+                            <img id="0" src="assets/img/producerConsumer.jpg"/>
+                            <img id="1" src="assets/img/producerConsumer_1.jpg"/>
+                        </div>
+                        <br>
+                        <hr>
 
-                            Markiere die Plätze an denen mindestens eine Marke
-                            vorhanden ist, wenn Transition <b><span class="gesucht"></span></b> geschaltet wird.
-                            <br>
-                            Hier ist die Ausgangssituation sichtbar.<br>
-                            <!--
-                            Hier werden Aufgabenbilder definiert. Diese müssen nicht
-                            vorhanden sein. Die eigentliche "Aufgabe" wird weiter unten definiert.
-                            Diese Bilder werden lediglich angezeigt, wenn vorhanden, wenn
-                            der zugehörige Aufgabenteil (das Bild mit der selben ID aus .petri_image)
-                            aktiv ist.
-                            Dieses Bild kann also definiert werden als Ausgangssituation und das
-                            Hintergrundbild aus .petri_image dazu ist "leer" (alle Plätze leer).
-                            So ist es in diesem Beispiel.
-                            -->
-                            <div class="petri_aufgabe" style="max-width: 60%;">
-                                <img id="0" src="assets/img/producerConsumer.jpg"/>
-                                <img id="1" src="assets/img/producerConsumer_1.jpg"/>
-                            </div>
-                            <br>
-                            <hr>
+                        <div class="answers">
                             <!--
                             Die hier vorhandenen Bilder werden in der Reihenfolge, wie sie hier
                             stehen, angezeigt. Das jeweilige Bild ist der HINTERGRUND,
@@ -221,8 +240,9 @@
 
                         </div>
 
-                        <!-- Bei Hotspot gibt es nur eine generelle Rückmeldung -->
+                        <!-- Bei Petrinetzen gibt es nur eine generelle Rückmeldung -->
                         <!-- Hier sollte also kein "Richtige Antwort" stehen -->
+                        <!-- Diese Blöcke werden nach jeder Teilantwort angezeigt -->
                         <div class="feedback correct">
                             <b>Richtig</b>
                         </div>
@@ -230,6 +250,7 @@
                             <b>Falsch</b>
                         </div>
 
+                        <!-- Dieser Block wird erst angezeigt, wenn alles beantwortet wurde. -->
                         <div class="feedback information">
                             Informationstext, wenn alle Teile beantwortet.
                         </div>
@@ -255,7 +276,11 @@
                     </div>
 
                     <br><br>
-                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <!--
+                    Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+                    Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+                    und um "_ref" erweitert wird. (Referenz)
+                    -->
                     <button id="pe_1_ref" onclick="showQuestionHere(this)">
                         Vorherige Antwort anzeigen
                     </button>
@@ -314,12 +339,17 @@
 					</div>
 
 					<br><br>
-					<!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+					<!--
+                    Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+                    Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+                    und um "_ref" erweitert wird. (Referenz)
+                    -->
 					<button id="fb_7_ref" onclick="showQuestionHere(this)">
 						Vorherige Antwort anzeigen
 					</button>
 					<br><br><br>
                 </section>
+
 
                 <section name="Quiz">
                     <h3>Quizfragen</h3>
@@ -329,9 +359,9 @@
                     Style nur für diesen speziellen Fall
                     Der Style Bereich verändert die Darstellung der Kästchen in die die Schrift gezogen wird.
 
-                    #c_2 gibt die ID des übergeordneten Containers an
+                    #c_3 gibt die ID des übergeordneten Containers an
                     Ein Leerzeichen beginnt eine neue Ebene. Das was danach kommt
-                    befindet sich also irgendwo in #c_2
+                    befindet sich also irgendwo in #c_3
                     .object beschreibt die Klasse object. Man kann mehrere Klassen eines
                     Elements direkt hintereinander hängen um nur genau das gewünscht
                     auszuwählen.
@@ -350,16 +380,39 @@
                             min-width: 180px; /* Verändert die mindestbreite (breiter) */
                         }
                     </style>
+
+                    <!--
+                    AUFGABENTYP ZUORDNUNG
+
+                    Per Drag&Drop (Ziehen & Fallen lassen) oder auch per Klicken/Touch
+                    werden hier Objekte in bestimmte Zielcontainer sortiert.
+                    Dabei kann jedes Objekt nur einmal verwendet werden.
+
+                    Problematisch ist das Verwenden von Objekten auf einem Bild, so
+                    wie es in diesem Beispiel ist. Je kleiner das Display wird,
+                    desto ungenauer wird die Positionierung. Empfohlen wird hier ein
+                    arbeiten mit prozentualen Werten für Breiten. (Prozentuale Höhe
+                    ist so nicht möglich.) Hier muss man also ggf. viel rumprobieren.
+                    Verwendet werden, kann dafür so etwas wie der <style> Block direkt
+                    über diesem Block.
+
+                    Empfohlen werden auch Bildobjekte entgegen der hier verwendeten
+                    Texte, da diese besser klein skaliert werden können (prozentual).
+                    Die Verwendung von Bildobjekten wird im Detail noch genauer erklärt.
+                    -->
                     <div class="question" qtype="classification" id="c_3">
                         <h4>Zuordnung von Begriffen</h4>
 
-                        <!-- .fill sorgt dafür das .object die volle Breite einnehmen -->
-                        <div class="answers">
+                        Sortiere die folgenden Begriffe an die richtigen Stellen im Bild:
+                        <br>
 
-                            Sortiere die folgenden Begriffe an die richtigen Stellen im Bild:
+                        <div class="answers">
                             <!--
                             Nachfolgend kommen die Blöcke mit Begriffen die einsortiert
-                            werden müssen. Ändern sollte man hier nur den innersten Text.
+                            werden müssen.
+                            Ändern sollte man hier nur den innersten Text.
+                            Das <span> Element kann auch durch ein <img> ersetzt werden.
+                            Die Verwendung der ID ist in dem Fall dieselbe wie hier.
                             Außerdem muss die ID md5-verschlüsselt in den Antworten block.
                             Siehe classification Aufgabe weiter unten.
                             -->
@@ -385,21 +438,38 @@
                             </div>
 
 
-
-                            <!--
-                            Das zusätzliche shuffle sorgt dafür, dass die
-                            Antworten in einer zufälligen Reihenfolge abgefragt
-                            werden.
-                            -->
+                            <!-- Das hier ist der Block in den die Objekte einsortiert werden -->
                             <div class="classification_image">
+
+                                <!--
+                                Dieses Bild ist der Hintergrund.
+                                Es wurde im <style> so definiert, dass das Bild
+                                den Block .classification_image ausfüllt.
+                                Die nachfolgenden <div> liegen dann auf diesem Bild.
+                                -->
                                 <img src="assets/img/UeberblickWi_empty.png"/>
 
                                 <!--
-                                Angaben der auswählbaren Objekte
+                                Angaben der auswählbaren Ziele
+                                Die Positionierung dieser Ziele entsteht durch ausprobieren auf dem Bild.
+                                Hier ist viel Gedult erforderlich.
                                 Die Position wird als Abstand zum oberen und
                                 linken Bildrand angegeben.
-                                Die Klasse "hotspot" muss bleiben.
-                                Die ID ist das was als korrekte Antwort verschlüsselt wird.
+
+                                Wie Hoch und Breit diese Blöcke sind wurde oberhalb in dem
+                                <style> Block extra für diesen einen Fall definiert.
+
+                                Die Klasse "object destination" muss bleiben.
+
+                                Die ID ist dieselbe wie der dazugehörige Antwortblock <a class="ans"...>...</a>
+                                In dem Antwortblock ist wiederum die ID des Objekts verschlüsselt,
+                                welches hier rein gehört.
+                                id="0" wird nachfolgend als #0 geschrieben
+                                Soll das .object#obj1 (class="object" id="obj1") in .object.destination#3
+                                gezogen werden, existiert ein Antwortblock wie folgt:
+                                <a class="ans" id="3">24f682f769992022dba3cf73550b7da0</a>
+                                Dabei steht der lange Teil zwischen > und < für die MD5-Verschlüsselte
+                                Version von "obj1". Es wird also angegeben: In .destination#3 gehört #obj1.
                                 -->
                                 <div style="top: 22%; left: 36%;" class="object destination" id="1"></div>
                                 <div style="top: 37%; left: 15%;" class="object destination" id="2"></div>
@@ -410,8 +480,12 @@
 
                         </div>
 
-                        <!-- Bei Hotspot gibt es nur eine generelle Rückmeldung -->
-                        <!-- Hier sollte also kein "Richtige Antwort" stehen -->
+                        <!--
+                        Diese Blöcke werden angezeigt, jenachdem ob die
+                        Antwort richtig (.correct) oder falsch (.incorrect) war.
+                        In diesem Block kann ein erklärender Text und auch Bilder
+                        verwendet werden.
+                        -->
                         <div class="feedback correct">
                             <b>Richtig</b>
                             <br>
@@ -424,7 +498,9 @@
                         </div>
 
                         <!--
-                            Verschlüsselt ist die id der Antwort
+                            Verschlüsselt ist die id der Antwort.
+                            Genauere Erklärung ist weiter oben bei den
+                            div.destination Elementen.
                         -->
                         <a id="1" class="ans">24f682f769992022dba3cf73550b7da0</a>
                         <a id="2" class="ans">fedce951c5a3cfa14347eff6301859b0</a>
@@ -434,32 +510,56 @@
                     </div>
 
                     <br><br>
-                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <!--
+                    Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+                    Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+                    und um "_ref" erweitert wird. (Referenz)
+                    -->
                     <button id="c_3_ref" onclick="showQuestionHere(this)">
                         Vorherige Antwort anzeigen
                     </button>
                     <br><br><br>
 
 
+                    <!--
+                    AUFGABENTYP HOTSPOT
 
+                    Hier werden Begriffe gesucht die auf einem Bild markiert werden
+                    sollen.
+                    Es werden verschiedene markierbare Punkte vorgegeben die
+                    nach Möglichkeit alle abgefragt werden sollten.
+                    Jeder markierbare Punkt sollte dabei einem eindeutigen Wort/Satz
+                    zugeordnet werden können.
+
+                    Nachdem man Begriffe zugeordnet hat, kann man an jedem Punkt,
+                    per rüberfahren mit der Maus, ablesen, welche Begriffe richtig/falsch
+                    diesem einen Punkt zugeordnet wurden.
+                    Sollten alle Begriffe fertig abgefragt worden sein, wird zu jedem
+                    abgefragten Begriff auch der richtige Punkt auf dem Bild gefunden.
+                    So kann man am Ende, für jeden Punkt nachgucken, welcher der abgefragten
+                    Begriffe zu diesem gehörte und auch welche möglicherweise
+                    Falsch zugeordnet wurden.
+
+                    Theoretisch können mehrere Begriffe einem Punkt zugeordnet werden
+                    aber nicht anders herum.
+                    -->
                     <div class="question" qtype="hotspot" id="h_1" max-time="10">
                         <h4>Hotspot</h4>
 
-                        <!-- .fill sorgt dafür das .object die volle Breite einnehmen -->
-                        <div class="answers">
+                        Markiere die Stelle an die der folgende Begriff gehört:
+                        <!--
+                        das span element mit der Klasse gesucht wird genutzt
+                        um die Bezeichnung des gesuchten Elements anzuzeigen.
+                        Dieser Block kann frei verschoben werden, jenachdem
+                        wo er für die Frage gut hinpasst.
+                        Mit CSS Kenntnis kann auch frei der Stil geändert
+                        werden.
+                        Die Schachtelung in ein <b> sorgt für das fettdrucken.
+                        -->
+                        <b><span class="gesucht"></span></b>
+                        <br>
 
-                            Markiere die Stelle an die der folgende Begriff gehört:
-                            <!--
-                            das span element mit der Klasse gesucht wird genutzt
-                            um die Bezeichnung des gesuchten Elements anzuzeigen.
-                            Dieser Block kann frei verschoben werden, jenachdem
-                            wo er für die Frage gut hinpasst.
-                            Mit CSS Kenntnis kann auch frei der Stil geändert
-                            werden.
-                            Die Schachtelung in ein <b> sorgt für das fettdrucken.
-                            -->
-                            <b><span class="gesucht"></span></b>
-                            <br>
+                        <div class="answers">
 
                             <!--
                             Das zusätzliche shuffle sorgt dafür, dass die
@@ -467,12 +567,27 @@
                             werden.
                             -->
                             <div class="hotspot_image shuffle">
+
+                                <!--
+                                Dieses Bild ist der Hintergrund, auf dem Punkte
+                                markiert werden können. Wo diese Punkte sind wird
+                                direkt danach definiert.
+                                -->
                                 <img src="assets/img/UeberblickWi_empty.png"/>
 
                                 <!--
                                 Angaben der auswählbaren Objekte
                                 Die Position wird als Abstand zum oberen und
                                 linken Bildrand angegeben.
+
+                                Diese Punkte werden sichtbar, wenn man mit der Maus
+                                über das Bild fährt oder es auf Mobilgeräten einmal
+                                antippt.
+
+                                Zu jedem Begriff kann nur ein Punkt markiert werden.
+                                Die Begriffe sollten also eindeutig zugeordnet werden
+                                können.
+
                                 Die Klasse "hotspot" muss bleiben.
                                 Die ID ist das was als korrekte Antwort verschlüsselt wird.
                                 -->
@@ -494,13 +609,17 @@
                             <b>Falsch</b>
                         </div>
 
+                        <!--
+                        Dieser Text wird angezeigt, wenn alle Begriffe abgefragt wurden.
+                        Dabei mussten nicht alle richtig sein.
+                        -->
                         <div class="feedback information">
                             Informationstext, wenn alle Teile beantwortet.
                             <img src="assets/img/UeberblickWi.png"/>
                         </div>
 
                         <!--
-                            Verschlüsselt ist die id der Antwort
+                            Verschlüsselt ist die id des zugehörigen Punkts
                         -->
                         <a id="Betriebliche Anwendungssysteme" class="ans">24f682f769992022dba3cf73550b7da0</a>
                         <a id="Softwareentwicklung" class="ans">fedce951c5a3cfa14347eff6301859b0</a>
@@ -510,7 +629,11 @@
                     </div>
 
                     <br><br>
-                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <!--
+                    Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+                    Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+                    und um "_ref" erweitert wird. (Referenz)
+                    -->
                     <button id="h_1_ref" onclick="showQuestionHere(this)">
                         Vorherige Antwort anzeigen
                     </button>
@@ -520,13 +643,27 @@
                 <section name="Quiz 2">
 
 
+                    <!--
+                    AUFGABENTYP MATRIX
+
+                    Bei matrix_choice handelt es sich um Multiple/Single-Choice
+                    Aufgaben in Tabellen/Matrix Form.
+                    So können z.B. mehreren Aussagen Wahrheitswerte zugeordnet werden
+                    oder ähnliches.
+
+                    Es ist frei wählbar, ob es sich um multiple oder single choice
+                    hält.
+
+                    Dieses Beispiel entspricht einer Multiple-Choice Aufgabe.
+                    -->
                     <div class="question" qtype="matrix_choice" id="m_1">
                         <h4>Matrix (Multiple Choice)</h4>
 
-                        <!-- .fill sorgt dafür das .object die volle Breite einnehmen -->
-                        <div class="answers">
 
-                            Die richtigen Antworten müssen markiert werden<br>
+                        <!-- Einleitender Aufgabentext -->
+                        Die richtigen Antworten müssen markiert werden<br>
+
+                        <div class="answers">
 
                             <!-- Diese Tabelle ist Grundlage der Matrixanordnung -->
                             <table class="matrix">
@@ -538,6 +675,7 @@
                                     Alle anderen Elemente führen zu Verfälschung der Auswertung.
                                 -->
                                 <tr>
+                                    <!-- Erste Spalte in der obersten Zeile -->
                                     <td>Aufgabe</td>
 
                                     <!--
@@ -555,6 +693,8 @@
                                     <th id="nicht0" class="antwort">Ergebnis ist nicht 0 (nur bei gültig)</th>
                                 </tr>
                                 <tr id="0">
+
+                                    <!-- Erste Spalte in der ersten Aufgabenzeile -->
                                     <td>3 +: 5</td>
 
                                     <!--
@@ -576,6 +716,12 @@
                             </table>
                         </div>
 
+                        <!--
+                        Diese Blöcke werden angezeigt, jenachdem ob die
+                        Antwort richtig (.correct) oder falsch (.incorrect) war.
+                        In diesem Block kann ein erklärender Text und auch Bilder
+                        verwendet werden.
+                        -->
                         <div class="feedback correct">
                             Richtig<br>
                             <b>Richtige Antwort:</b><br>
@@ -590,7 +736,6 @@
                         <!--
                             Verschlüsselt ist die id der Antwort aus dem Head der Tabelle
                         -->
-
                         <!--
                         Verschluesselt ist hier "gueltig" als richtige Antwort für die Zeile mit der ID=1
                         -->
@@ -604,20 +749,37 @@
                     </div>
 
                     <br><br>
-                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <!--
+                    Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+                    Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+                    und um "_ref" erweitert wird. (Referenz)
+                    -->
                     <button id="m_1_ref" onclick="showQuestionHere(this)">
                         Vorherige Antwort anzeigen
                     </button>
                     <br><br><br>
 
 
+                    <!--
+                    AUFGABENTYP MATRIX
+
+                    Bei matrix_choice handelt es sich um Multiple/Single-Choice
+                    Aufgaben in Tabellen/Matrix Form.
+                    So können z.B. mehreren Aussagen Wahrheitswerte zugeordnet werden
+                    oder ähnliches.
+
+                    Es ist frei wählbar, ob es sich um multiple oder single choice
+                    hält.
+
+                    Dieses Beispiel entspricht einer Single-Choice Aufgabe.
+                    -->
                     <div class="question" qtype="matrix_choice" id="m_2">
                         <h4>Matrix (Single Choice)</h4>
 
-                        <!-- .fill sorgt dafür das .object die volle Breite einnehmen -->
-                        <div class="answers">
+                        <!-- Einleitender Aufgabentext -->
+                        Die richtigen Antworten müssen markiert werden<br>
 
-                            Die richtigen Antworten müssen markiert werden<br>
+                        <div class="answers">
 
                             <!-- Diese Tabelle ist Grundlage der Matrixanordnung -->
                             <table class="matrix">
@@ -664,6 +826,12 @@
                             </table>
                         </div>
 
+                        <!--
+                        Diese Blöcke werden angezeigt, jenachdem ob die
+                        Antwort richtig (.correct) oder falsch (.incorrect) war.
+                        In diesem Block kann ein erklärender Text und auch Bilder
+                        verwendet werden.
+                        -->
                         <div class="feedback correct">
                             Richtig<br>
                             <b>Richtige Antwort:</b><br>
@@ -678,7 +846,6 @@
                         <!--
                             Verschlüsselt ist die id der Antwort aus dem Head der Tabelle
                         -->
-
                         <!--
                         Verschluesselt ist hier "gueltig" als richtige Antwort für die Zeile mit der ID=1
                         -->
@@ -690,7 +857,11 @@
                     </div>
 
                     <br><br>
-                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <!--
+                    Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+                    Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+                    und um "_ref" erweitert wird. (Referenz)
+                    -->
                     <button id="m_2_ref" onclick="showQuestionHere(this)">
                         Vorherige Antwort anzeigen
                     </button>
@@ -698,14 +869,32 @@
 
 
 
+                    <!--
+                    AUFGABENTYP SORTIEREN/ORDNEN
+
+                    Hier werden mehrere Objekte definiert die in eine Reihenfolge
+                    zu bringen sind. Die Objekte können Texte oder auch Bilder sein.
+
+                    Die Objekte sind dabei im Normalfall so klein wie möglich
+                    (automatische Größe), es wird aber empfohlen, zu versuchen,
+                    Objekte gleich groß hinzubekommen. Dies kann z.B. durch
+                    einen <style> Block, wie weiter oben bei CLASSIFICATION bereits
+                    gezeigt, geschehen.
+                    -->
                     <div class="question" qtype="order" id="o_1">
                         <h4>Sortieren</h4>
 
-                        <!-- .fill sorgt dafür das .object die volle Breite einnehmen -->
-                        <div class="answers">
-                            Die folgenden Objekte müssen in die korrekte Reihenfolge gebracht werden
-                            (zwischen einzelnen Objekten könnte die Reihenfolge egal sein):<br>
-                            <br>
+
+                        <!-- Einleitender Aufgabentext -->
+                        Die folgenden Objekte müssen in die korrekte Reihenfolge gebracht werden
+                        (zwischen einzelnen Objekten könnte die Reihenfolge egal sein):<br>
+                        <br>
+
+                        <!--
+                        .fill sorgt dafür das .object die volle Breite einnehmen
+                        Das fill kann auf Wunsch entfernt werden.
+                        -->
+                        <div class="answers fill">
                             <div class="object">
                                 <!-- ID ist per MD5 verschlüsselt in dem .ans Objekt -->
                                 <span id="0">Aufwachen</span>
@@ -724,6 +913,12 @@
                             </div>
                         </div>
 
+                        <!--
+                        Diese Blöcke werden angezeigt, jenachdem ob die
+                        Antwort richtig (.correct) oder falsch (.incorrect) war.
+                        In diesem Block kann ein erklärender Text und auch Bilder
+                        verwendet werden.
+                        -->
                         <div class="feedback correct">
                             Richtig<br>
                             <b>Richtige Antwort:</b><br>
@@ -762,7 +957,11 @@
                     </div>
 
                     <br><br>
-                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <!--
+                    Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+                    Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+                    und um "_ref" erweitert wird. (Referenz)
+                    -->
                     <button id="o_1_ref" onclick="showQuestionHere(this)">
                         Vorherige Antwort anzeigen
                     </button>
@@ -770,12 +969,32 @@
 
 
 
+                    <!--
+                    AUFGABENTYP ZUORDNUNG
 
+                    Per Drag&Drop (Ziehen & Fallen lassen) oder auch per Klicken/Touch
+                    werden hier Objekte in bestimmte Zielcontainer sortiert.
+                    Dabei kann jedes Objekt nur einmal verwendet werden.
+
+                    Problematisch ist das Verwenden von Objekten auf einem Bild.
+                    Je kleiner das Display wird,
+                    desto ungenauer wird die Positionierung. Empfohlen wird hier ein
+                    arbeiten mit prozentualen Werten für Breiten. (Prozentuale Höhe
+                    ist so nicht möglich.) Hier muss man also ggf. viel rumprobieren.
+                    Verwendet werden, kann dafür so etwas wie der <style> Block direkt
+                    über diesem Block.
+
+                    Empfohlen werden auch Bildobjekte, da diese besser klein skaliert
+                    werden können (prozentual).
+                    -->
                     <div class="question" qtype="classification" id="c_1">
                         <h4>Zuordnung von Bildern</h4>
+
+                        <!-- Einleitender Aufgabentext -->
+                        Die folgenden Objekte müssen in den leeren Rechtecken
+                        platziert werden:<br>
+
                         <div class="answers">
-                            Die folgenden Objekte müssen in den leeren Rechtecken
-                            platziert werden:<br>
 
                             <!--
                             Die nachfolgenden Objekte können verschoben werden.
@@ -812,6 +1031,12 @@
                             <div class="object destination" id="1"></div>
                         </div>
 
+                        <!--
+                        Diese Blöcke werden angezeigt, jenachdem ob die
+                        Antwort richtig (.correct) oder falsch (.incorrect) war.
+                        In diesem Block kann ein erklärender Text und auch Bilder
+                        verwendet werden.
+                        -->
                         <div class="feedback correct">
                             Richtig<br>
                             <b>Richtige Antwort:</b><br>
@@ -830,14 +1055,35 @@
                     </div>
 
                     <br><br>
-                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <!--
+                    Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+                    Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+                    und um "_ref" erweitert wird. (Referenz)
+                    -->
                     <button id="c_1_ref" onclick="showQuestionHere(this)">
                         Vorherige Antwort anzeigen
                     </button>
                     <br><br><br>
 
 
+                    <!--
+                    AUFGABENTYP ZUORDNUNG
 
+                    Per Drag&Drop (Ziehen & Fallen lassen) oder auch per Klicken/Touch
+                    werden hier Objekte in bestimmte Zielcontainer sortiert.
+                    Dabei kann jedes Objekt nur einmal verwendet werden.
+
+                    Problematisch ist das Verwenden von Objekten auf einem Bild.
+                    Je kleiner das Display wird,
+                    desto ungenauer wird die Positionierung. Empfohlen wird hier ein
+                    arbeiten mit prozentualen Werten für Breiten. (Prozentuale Höhe
+                    ist so nicht möglich.) Hier muss man also ggf. viel rumprobieren.
+                    Verwendet werden, kann dafür so etwas wie der <style> Block direkt
+                    über diesem Block.
+
+                    Empfohlen werden auch Bildobjekte, da diese besser klein skaliert
+                    werden können (prozentual).
+                    -->
                     <div class="question" qtype="classification" id="c_2">
                         <h4>Zuordnung in Matrix/Tabelle</h4>
                         <div class="answers">
@@ -942,6 +1188,12 @@
                         </div>
 
 
+                        <!--
+                        Diese Blöcke werden angezeigt, jenachdem ob die
+                        Antwort richtig (.correct) oder falsch (.incorrect) war.
+                        In diesem Block kann ein erklärender Text und auch Bilder
+                        verwendet werden.
+                        -->
                         <div class="feedback correct">
                             Richtig<br>
                             <b>Richtige Antwort:</b><br>
@@ -969,7 +1221,11 @@
                     </div>
 
                     <br><br>
-                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <!--
+                    Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+                    Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+                    und um "_ref" erweitert wird. (Referenz)
+                    -->
                     <button id="c_2_ref" onclick="showQuestionHere(this)">
                         Vorherige Antwort anzeigen
                     </button>
@@ -978,20 +1234,46 @@
 
 
 
+                    <!--
+                    AUFGABENTYP FEHLERTEXT
 
+                    Bestimmte Wörter in einem Text sind markierbar.
+                    Möglich ist durchstreichen/unterstreichen.
+                    Bestimmte Wörter sind entweder Falsch oder sollen als
+                    "richtig" hervorgehoben werden.
+
+                    In diesem Beispiel sollen richtige Wörter unterstrichen werden.
+                    -->
                     <div class="question" qtype="error_text" id="et_1">
                         <h4>Unterstreiche richtige Wörter</h4>
 
                         <!-- .underline ist der einzige Unterschied zu dem sonstigen Fehlertext -->
                         <div class="answers underline">
-                            In Deutschland gibt es die Flüsse <button class="error_button">Elbe</button>,<button class="error_button">Wolga</button>, <button class="error_button">Mississippi</button> und <button class="error_button">Weser</button>.
-                            <br>
-                            Die Antwortmöglichkeit darf nicht wiederholt werden.
+
                             <!--
-                            Die gleiche Antwort wie z.B. Elbe darf innerhalb einer Frage nicht einmal falsch und einmal richtig sein. Möglichst gleiche Antworten vermeiden.
+                            Hier steht der Text. Unterstreichbare Begriffe werden
+                            in ein <button class="error_button">...</button> eingebettet.
+                            Ansonsten stehen sie normal im Text.
+                            Hier können auch Bilder eingebaut werden, um etwas
+                            zu illustrieren. Markierbar sind aber nur Wörter.
+                            -->
+                            In Deutschland gibt es die Flüsse <button class="error_button">Elbe</button>,
+                            <button class="error_button">Wolga</button>,
+                            <button class="error_button">Mississippi</button> und
+                            <button class="error_button">Weser</button>.
+                            <!--
+                            Die gleiche Antwort wie z.B. Elbe darf innerhalb einer Frage
+                            nicht einmal falsch und einmal richtig sein. Möglichst gleiche
+                            Antworten vermeiden.
                             -->
                         </div>
 
+                        <!--
+                        Diese Blöcke werden angezeigt, jenachdem ob die
+                        Antwort richtig (.correct) oder falsch (.incorrect) war.
+                        In diesem Block kann ein erklärender Text und auch Bilder
+                        verwendet werden.
+                        -->
                         <div class="feedback correct">
                             Richtig<br>
                             <b>Richtige Antwort:</b><br>
@@ -1003,29 +1285,64 @@
                             Text mit Antworten
                         </div>
 
+                        <!--
+                        Hier werden die zu markierenden Wörter definiert.
+                        Da hier richtige Wörter unterstrichen werden sollen,
+                        sind dies die Wörter "Elbe" und "Weser".
+                        Diese Wörter werden per MD5 Verschlüsselt und hier eingetragen.
+                        Die hier vorhandenen Blöcke geben bereits Elbe und Weser an.
+                        -->
                         <a class="ans">d17fd933f9295721a2e5c1ebd2b08d6a</a>
                         <a class="ans">e1545275ca27c7ce710f37a3fe483db1</a>
                     </div>
 
                     <br><br>
-                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <!--
+                    Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+                    Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+                    und um "_ref" erweitert wird. (Referenz)
+                    -->
                     <button id="et_1_ref" onclick="showQuestionHere(this)">
                         Vorherige Antwort anzeigen
                     </button>
                     <br><br><br>
 
 
+                    <!--
+                    AUFGABENTYP FEHLERTEXT
+
+                    Bestimmte Wörter in einem Text sind markierbar.
+                    Möglich ist durchstreichen/unterstreichen.
+                    Bestimmte Wörter sind entweder Falsch oder sollen als
+                    "richtig" hervorgehoben werden.
+
+                    In diesem Beispiel sollen falsche Wörter durchgestrichen werden.
+                    -->
                     <div class="question" qtype="error_text" id="et_1">
                         <h4>Streiche falsche Wörter</h4>
                         <div class="answers">
-                            In Deutschland gibt es die Flüsse <button class="error_button">Elbe</button>,<button class="error_button">Wolga</button>, <button class="error_button">Mississippi</button> und <button class="error_button">Weser</button>.
-                            <br>
-                            Die Antwortmöglichkeit darf nicht wiederholt werden.
+                            <!--
+                            Hier steht der Text. Durchstreichbare Begriffe werden
+                            in ein <button class="error_button">...</button> eingebettet.
+                            Ansonsten stehen sie normal im Text.
+                            Hier können auch Bilder eingebaut werden, um etwas
+                            zu illustrieren. Markierbar sind aber nur Wörter.
+                            -->
+                            In Deutschland gibt es die Flüsse <button class="error_button">Elbe</button>,
+                            <button class="error_button">Wolga</button>,
+                            <button class="error_button">Mississippi</button> und
+                            <button class="error_button">Weser</button>.
                             <!--
                             Die gleiche Antwort wie z.B. Elbe darf innerhalb einer Frage nicht einmal falsch und einmal richtig sein. Möglichst gleiche Antworten vermeiden.
                             -->
                         </div>
 
+                        <!--
+                        Diese Blöcke werden angezeigt, jenachdem ob die
+                        Antwort richtig (.correct) oder falsch (.incorrect) war.
+                        In diesem Block kann ein erklärender Text und auch Bilder
+                        verwendet werden.
+                        -->
                         <div class="feedback correct">
                             Richtig<br>
                             <b>Richtige Antwort:</b><br>
@@ -1037,28 +1354,59 @@
                             Text mit Antworten
                         </div>
 
+                        <!--
+                        Hier werden die zu markierenden Wörter definiert.
+                        Da hier falsche Wörter durchgestrichen werden sollen,
+                        sind dies die Wörter "Wolga" und "Mississippi".
+                        Diese Wörter werden per MD5 Verschlüsselt und hier eingetragen.
+                        Die hier vorhandenen Blöcke geben bereits Wolga und Mississippi an.
+                        -->
                         <a class="ans">54b851fdfcb598592d15214f24c6fdc7</a>
                         <a class="ans">14c5492ce2fe855f408481fdbd13f7a6</a>
                     </div>
 
                     <br><br>
-                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <!--
+                    Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+                    Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+                    und um "_ref" erweitert wird. (Referenz)
+                    -->
                     <button id="et_1_ref" onclick="showQuestionHere(this)">
                         Vorherige Antwort anzeigen
                     </button>
                     <br><br><br>
 
 
+                    <!--
+                    AUFGABENTYP LÜCKENTEXT (mit Textfeldern)
+
+                    Hier sollen Begriffe in Textfelder eingetragen werden.
+
+                    Es wird empfohlen die möglichen Begriffe im Text anzugeben,
+                    da Groß- und Kleinschreibung entscheident ist. Es kann
+                    jeweils nur ein Begriff als richtig angegeben werden.
+                    -->
                     <div class="question" qtype="fill_blank" id="fb_1">
                         <h4>Lückentext mit Texteingabe</h4>
+
+                        <!-- Einleitender Aufgabentext -->
+                        Setze die Folgenden Begriffe in den Text ein:
+                        <br>
+                        Lücken, Test
+
                         <div class="answers">
-                            Antworten: Lücken, Test.<br>
                             Hier wäre ein langer Text mit
                             <label><input id="0" type="text"></label>
                             und diese müssen gefüllt werden. Hier gehört Test hin
                             <label><input id="1" type="text"></label>.
                         </div>
 
+                        <!--
+                        Diese Blöcke werden angezeigt, jenachdem ob die
+                        Antwort richtig (.correct) oder falsch (.incorrect) war.
+                        In diesem Block kann ein erklärender Text und auch Bilder
+                        verwendet werden.
+                        -->
                         <div class="feedback correct">
                             Richtig<br>
                             <b>Richtige Antwort:</b><br>
@@ -1070,33 +1418,78 @@
                             Text mit Antworten
                         </div>
 
+                        <!--
+                        Hier wird für jedes Textfeld die richtige Antwort angegeben.
+                        Die ID verweist jeweils auf die ID des Textfeldes <input>
+                        weiter oben.
+
+                        Verschlüsselt wird das genaue Wort, so wie es geschrieben
+                        werden soll. Dieses Wort muss exakt richtig geschrieben werden.
+                        Also sicherstellen, dass keine zusätzlichen Leerzeichen oder
+                        anderes mit verschlüsselt wurde.
+                        (Verschlüsselt wird mit MD5)
+                        -->
                         <a class="ans" id="0">6497dcbced26ee0f510bf82de5234653</a>
                         <a class="ans" id="1">0cbc6611f5540bd0809a388dc95a615b</a>
                     </div>
 
                     <br><br>
-                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <!--
+                    Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+                    Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+                    und um "_ref" erweitert wird. (Referenz)
+                    -->
                     <button id="fb_1_ref" onclick="showQuestionHere(this)">
                         Vorherige Antwort anzeigen
                     </button>
                     <br><br><br>
 
 
+                    <!--
+                    AUFGABENTYP LÜCKENTEXT (mit Auswahl)
+
+                    Hier sollen Begriffe ausgewählt werden.
+                    -->
                     <div class="question" qtype="fill_blank_choice" id="fb_2">
                         <h4>Lückentext mit Auswahl</h4>
+
+                        Wähle jeweils die richtigen Begriffe aus:<br>
+
                         <div class="answers">
                             Hier wäre ein langer Text mit
-                            <label><select id="0">
-                                <option>Elefant</option>
-                                <option>Lücken</option>
-                            </select></label>
+                            <!--
+                            Hier ist eine Auswahlmöglichkeit.
+                            Die ID des Selects muss eindeutig innerhalb dieser Frage sein.
+                            Die angegebenen richtigen Antworten verweise auf diese ID.
+
+                            <option> Blöcke geben jeweils eine Mögliche Auswahloption an.
+                            Der Begriff der in diesem Block steht wird als richtige Antwort
+                            verschlüsselt. Dazu weiter unten.
+                            Davon können beliebig viele hinzugefügt werden,
+                            es ist aber jeweils nur EIN <option> richtig.
+                            -->
+                            <label>
+                                <select id="0">
+                                    <option>Elefant</option>
+                                    <option>Lücken</option>
+                                </select>
+                            </label>
                             und diese müssen gefüllt werden. Hier gehört Test hin
-                            <label><select id="1">
-                                <option>Test</option>
-                                <option>Falsch</option>
-                            </select></label>.
+                            <!-- weiterer Auswahlblock -->
+                            <label>
+                                <select id="1">
+                                    <option>Test</option>
+                                    <option>Falsch</option>
+                                </select>
+                            </label>.
                         </div>
 
+                        <!--
+                        Diese Blöcke werden angezeigt, jenachdem ob die
+                        Antwort richtig (.correct) oder falsch (.incorrect) war.
+                        In diesem Block kann ein erklärender Text und auch Bilder
+                        verwendet werden.
+                        -->
                         <div class="feedback correct">
                             Richtig<br>
                             <b>Richtige Antwort:</b><br>
@@ -1108,13 +1501,28 @@
                             Text mit Antworten
                         </div>
 
+                        <!--
+                        Hier wird für jedes Select die richtige Antwort angegeben.
+                        Die ID verweist jeweils auf die ID des Selects <select>
+                        weiter oben.
+
+                        Verschlüsselt wird das genaue Wort, so wie es geschrieben
+                        werden soll. Dieses Wort muss exakt richtig geschrieben werden.
+                        Also sicherstellen, dass keine zusätzlichen Leerzeichen oder
+                        anderes mit verschlüsselt wurde.
+                        (Verschlüsselt wird mit MD5)
+                        -->
                         <a class="ans" id="0">6497dcbced26ee0f510bf82de5234653</a>
                         <a class="ans" id="1">0cbc6611f5540bd0809a388dc95a615b</a>
                     </div>
 
 
                     <br><br>
-                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <!--
+                    Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+                    Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+                    und um "_ref" erweitert wird. (Referenz)
+                    -->
                     <button id="fb_2_ref" onclick="showQuestionHere(this)">
                         Vorherige Antwort anzeigen
                     </button>
@@ -1122,15 +1530,31 @@
 
 
 
+                    <!--
+                    AUFGABENTYP FREITEXT
+
+                    Hier kann einfach ein beliebiger Text eingegeben werden.
+                    Nach beantworten, wird eine Beispiellösung angezeigt,
+                    diese kann auch Bilder enthalten.
+                    -->
                     <div class="question" qtype="free_text" id="ft_1">
                         <h4>Welche Unterordner werden in der Dateistruktur von digitalen Skripten erwartet?</h4>
+
+                        Hier wäre ein langer Text.
+                        <br>
+
                         <div class="answers">
-                            Hier wäre ein langer Text.
                             <label>
                                 Antwort:
                                 <textarea></textarea>
                             </label>
                         </div>
+
+                        <!--
+                        Dieser Block wird angezeigt, wenn die Frage beantwortet wurde.
+                        In diesem Block kann ein erklärender Text und auch Bilder
+                        verwendet werden.
+                        -->
                         <div class="feedback correct">
                             <b>Richtige Antwort:</b><br>
                             Text
@@ -1138,53 +1562,114 @@
                     </div>
 
                     <br><br>
-                    <!-- Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her -->
+                    <!--
+                    Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+                    Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+                    und um "_ref" erweitert wird. (Referenz)
+                    -->
                     <button id="ft_1_ref" onclick="showQuestionHere(this)">
                         Vorherige Antwort anzeigen
                     </button>
                     <br><br><br>
 
+
+
+
                     Ältere Fragentypen:<br>
 
+                    <!--
+
+                    FRAGENTYP Kurztext
+
+                    Hier wird nach einem kurzen Begriff gefragt.
+                    Es können mehrere Begriffe richtig sein, aber nur einer davon
+                    kann eingegeben werden.
+
+                    -->
                     <div class="question" qtype="short_text">
                         <h4>Auf welcher Technologie basieren die digitalen Skripte? </h4> <!-- Fragentext -->
+
                         <div class="answers">
+                            <!-- In das nachfolgende <input> wird die Antwort eingegeben -->
                             <label>Lösung: <input type="text" name="q"></label>
                         </div>
+
+                        <!--
+                        Diese Blöcke werden angezeigt, jenachdem ob die
+                        Antwort richtig (.correct) oder falsch (.incorrect) war.
+                        In diesem Block kann ein erklärender Text und auch Bilder
+                        verwendet werden.
+                        -->
                         <div class="feedback correct">
                             Deine Antwort ist richtig.
                         </div>
                         <div class="feedback incorrect">
                             Leider nein, schaue Dir doch nochmal die Dokumentation an.
                         </div>
-                            <a class="ans">4c4ad5fca2e7a3f74dbb1ced00381aa4</a>
-                            <a class="ans">2182a74bab7188d959e795d9301e87ff</a>
-                            <a class="ans">590fc197fe73db0aa2ec03687a372eea</a>
-                            <a class="ans">686155af75a60a0f6e9d80c1f7edd3e9</a>
-                            <a class="ans">fc35fdc70d5fc69d269883a822c7a53e</a>
-                            <a class="ans">65e232ed43477b2f5cb4413023548fce</a>
-                            <a class="ans">644e5bfeb12517406338d351c4375248</a>
+
+                        <!--
+                        Hier werden alle richtigen Antwortmöglichkeiten angegeben.
+                        Diese werden einfach per MD5 verschlüsselt hier eingefügt.
+                        Je eine antwort in einem <a class="ans">...</a>
+                        -->
+                        <a class="ans">4c4ad5fca2e7a3f74dbb1ced00381aa4</a>
+                        <a class="ans">2182a74bab7188d959e795d9301e87ff</a>
+                        <a class="ans">590fc197fe73db0aa2ec03687a372eea</a>
+                        <a class="ans">686155af75a60a0f6e9d80c1f7edd3e9</a>
+                        <a class="ans">fc35fdc70d5fc69d269883a822c7a53e</a>
+                        <a class="ans">65e232ed43477b2f5cb4413023548fce</a>
+                        <a class="ans">644e5bfeb12517406338d351c4375248</a>
                     </div>
 
 
+                    <!--
+                    FRAGENTYP AUSWAHLFRAGE (Multiple/Single Choice)
+
+                    Eine Frage mit mehrere Antwortmöglichkeiten.
+                    -->
                     <div class="question" qtype="choice">
                         <h4>Welche Unterordner werden in der Dateistruktur von digitalen Skripten erwartet?</h4>
+
+
                         <div class="answers">
+                            <!--
+                            Definition der Antwortmöglichkeiten.
+                            type="checkbox" gibt an, dass es eine multiple Choice Frage ist.
+                            Bei single Choice wäre dies type="radio".
+                            name="q" sollte jeweils gleich sein bei Single Choice Fragen,
+                            damit immer nur eine Antwort auswählbar ist.
+
+                            Das value="..." wird jeweils als MD5 verschlüsselt als richtige Antwort angegeben.
+                            -->
                             <label><input type="checkbox" name="q" value="Frage2-1">assets</label>
                             <label><input type="checkbox" name="q" value="Frage2-2">movies</label>
                             <label><input type="checkbox" name="q" value="Frage2-3">img</label>
                             <label><input type="checkbox" name="q" value="Frage2-4">css</label>
                             <label><input type="checkbox" name="q" value="Frage2-5">lang</label>
                         </div>
+
+                        <!--
+                        Diese Blöcke werden angezeigt, jenachdem ob die
+                        Antwort richtig (.correct) oder falsch (.incorrect) war.
+                        In diesem Block kann ein erklärender Text und auch Bilder
+                        verwendet werden.
+                        -->
                         <div class="feedback correct">
                             Genau, diese Ordner werden auf jeden Fall benötigt. Sogar noch ein paar mehr.
                         </div>
                         <div class="feedback incorrect">
                             Deine Antwort ist leider nicht ganz richtig. Entweder fehlt ein Ordner, oder du hast einen ausgewählt, der nicht benötigt wird.
                         </div>
-                            <a class="ans">b5ceb729a1b347aa357790e1588c88b3</a>
-                            <a class="ans">1fd302a9c89fc92eead418857a7e5a07</a>
-                            <a class="ans">4fc364339b2127eb81c13ab986a27085</a>
+
+                        <!--
+                        Hier werden alle richtigen Antwortmöglichkeiten angegeben.
+                        (Verschlüsselt wird der value Wert)
+                        Diese werden einfach per MD5 verschlüsselt hier eingefügt.
+                        Je eine antwort in einem <a class="ans">...</a>
+                        -->
+                        <a class="ans">b5ceb729a1b347aa357790e1588c88b3</a>
+                        <a class="ans">1fd302a9c89fc92eead418857a7e5a07</a>
+                        <a class="ans">4fc364339b2127eb81c13ab986a27085</a>
                     </div>
 
                     <p>Es existieren auch noch andere Fragetypen, diese sind in der Dokumentation vom qiuz.js beschrieben.</p>

@@ -706,6 +706,7 @@ function showQuestionHere(button) {
     div.addClass("answered");
 
     // hinweis, dass nicht veränderbar
+    div.find(".answered_hint").remove();
     div.find("h4").after(
         '<span class="answered_hint">Nicht änderbar, da die Frage bereits beantwortet wurde</span>');
 
@@ -1356,6 +1357,7 @@ function petriNextAufgabenImage(div) {
 }
 
 function petriNextPart(div) {
+    div.find('.feedback').hide();
     petriNextImage(div);
     petriNextAufgabenImage(div);
     div.find('.gesucht').html(div.find('.petri_image').find('img:visible').attr("task"));
