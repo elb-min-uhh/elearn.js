@@ -662,6 +662,7 @@ function processPetri(div, force) {
         }
         else {
             petriNextPart(div);
+            deleteLabelColoring(places);
             places.filter('.act').removeClass('act');
             correct = false;
         }
@@ -1391,6 +1392,8 @@ function toggleErrorButton(button) {
 * Entfernt für alle übergebenen Labels die färbenden Klassen "right" und "wrong"
 */
 function deleteLabelColoring(div) {
+    div.removeClass('right');
+    div.removeClass('wrong');
     div.find('.right').removeClass('right');
     div.find('.wrong').removeClass('wrong');
 };
