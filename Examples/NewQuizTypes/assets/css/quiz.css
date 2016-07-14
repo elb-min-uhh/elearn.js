@@ -406,6 +406,13 @@
 
 /* ----------------------------- PETRI-NETZ ------------------------------ */
 
+.question[qtype="petri"] .petri_aufgabe {
+    position: relative;
+    overflow-y: auto;
+    display: inline-block;
+    max-width: 100%;
+}
+
 .question[qtype="petri"] .petri_image {
     position: relative;
     overflow-y: auto;
@@ -435,7 +442,8 @@
 
 .question[qtype="petri"] .petri_image .place.act {
     background: #b4b4b4;
-    background: rgba(255,150,150, 0.6);
+    background: rgb(0,0,255);
+    background: rgba(0,0,255,0.5);
 }
 
 .question[qtype="petri"] .petri_image .place.blocked {

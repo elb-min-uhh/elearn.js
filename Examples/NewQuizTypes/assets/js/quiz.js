@@ -655,13 +655,13 @@ function processPetri(div, force) {
     // after answer
     if(div.is('.show_feedback')) {
         div.removeClass("show_feedback");
+        petriNextPart(div);
         if(petriFinished(div)) {
             blockPetri(div);
             // for information show
             correct = 2;
         }
         else {
-            petriNextPart(div);
             deleteLabelColoring(places);
             places.filter('.act').removeClass('act');
             correct = false;
@@ -672,7 +672,7 @@ function processPetri(div, force) {
         var answers = div.find('a.ans').filter('[id="'+$('.petri_image').find('img:visible').attr("id")+'"]');
         correct = getCorrectPetri(div, places, answers, force);
         if(correct != -1) {
-            petriNextImage(div);
+            petriShowCorrectBG(div);
             correct = false;
         }
     }
@@ -1292,6 +1292,10 @@ function initiatePetriImage() {
     root.find('.petri_image').find('img').hide();
     root.find('.petri_image').find('img').first().show();
 
+    root.find('.petri_aufgabe').find('img').hide();
+    root.find('.petri_aufgabe').find(
+        '#'+root.find('.petri_image').find('img').first().attr("id")).show();
+
     root.find('.gesucht').html(root.find('.petri_image').find('img').first().attr("task"));
 
     // Klicken auf Hotspot
@@ -1315,22 +1319,42 @@ function petriClick(element) {
     }
 }
 
-function petriNextImage(div) {
-    var imgs = div.find('.petri_image').find('img');
+function petriShowCorrectBG(div) {
+    var imgs = div.find('.petri_image').find('img.correct');
 
     var act_img = div.find('.petri_image').find('img:visible');
 
-    var idx = imgs.index(act_img);
+    var cor_img = imgs.filter('#'+act_img.attr('id'));
 
-    if(imgs.length > idx + 1) {
-        next_img = $(div.find('.petri_image').find('img').get(idx+1));
-
-        next_img.show();
+    if(cor_img.length > 0) {
         act_img.hide();
+        cor_img.show();
     }
 }
 
+function petriNextImage(div) {
+    var imgs = div.find('.petri_image').find('img').not('.correct');
+
+    var act_img = div.find('.petri_image').find('img:visible');
+
+    var idx = imgs.index(imgs.filter('#'+act_img.attr("id")));
+
+    if(imgs.length > idx + 1) {
+        next_img = $(imgs.get(idx+1));
+
+        act_img.hide();
+        next_img.show();
+    }
+}
+
+function petriNextAufgabenImage(div) {
+    div.find('.petri_aufgabe').find('img').hide();
+    div.find('.petri_aufgabe').find('#'+div.find('.petri_image').find('img:visible').attr("id")).show();
+}
+
 function petriNextPart(div) {
+    petriNextImage(div);
+    petriNextAufgabenImage(div);
     div.find('.gesucht').html(div.find('.petri_image').find('img:visible').attr("task"));
 }
 

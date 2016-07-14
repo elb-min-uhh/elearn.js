@@ -153,12 +153,33 @@
 
                             Markiere die Plätze an denen mindestens eine Marke
                             vorhanden ist, wenn Transition <b><span class="gesucht"></span></b> geschaltet wird.
-
-
+                            <br>
+                            Hier ist die Ausgangssituation sichtbar.<br>
                             <!--
-                            Das zusätzliche shuffle sorgt dafür, dass die
-                            Antworten in einer zufälligen Reihenfolge abgefragt
-                            werden.
+                            Hier werden Aufgabenbilder definiert. Diese müssen nicht
+                            vorhanden sein. Die eigentliche "Aufgabe" wird weiter unten definiert.
+                            Diese Bilder werden lediglich angezeigt, wenn vorhanden, wenn
+                            der zugehörige Aufgabenteil (das Bild mit der selben ID aus .petri_image)
+                            aktiv ist.
+                            Dieses Bild kann also definiert werden als Ausgangssituation und das
+                            Hintergrundbild aus .petri_image dazu ist "leer" (alle Plätze leer).
+                            So ist es in diesem Beispiel.
+                            -->
+                            <div class="petri_aufgabe" style="max-width: 60%;">
+                                <img id="0" src="assets/img/producerConsumer.jpg"/>
+                                <img id="1" src="assets/img/producerConsumer_1.jpg"/>
+                            </div>
+                            <br>
+                            <hr>
+                            <!--
+                            Die hier vorhandenen Bilder werden in der Reihenfolge, wie sie hier
+                            stehen, angezeigt. Das jeweilige Bild ist der HINTERGRUND,
+                            auf dem die Punkte sichtbar sind die markiert werden können.
+                            Hier können bspw. alle Plätze leer sein. Man kann oben z.B. eine
+                            Ausgangssituation zu der Aufgabe explizit anzeigen lassen.
+                            Dazu muss in .petri_aufgabe ein Bild mit derselben ID vorhanden
+                            sein.
+                            task="..." definiert das was bei .gesucht oben eingesetzt wird.
                             -->
                             <div class="petri_image">
 
@@ -167,11 +188,20 @@
                                 Unterscheiden sollten sich maximal Markierte Transition
                                 oder die Position der Marken.
                                 -->
-                                <img id="0" task="produce" src="assets/img/producerConsumer.jpg"/>
-                                <img id="1" task="deliver" src="assets/img/producerConsumer_1.jpg"/>
+                                <img id="0" task="produce" src="assets/img/producerConsumer_empty.jpg"/>
+                                <!-- das .correct Objekt wird zum Vergleich der Lösung als Hintergrund eingeblendet -->
+                                <img id="0" task="produce" class="correct" src="assets/img/producerConsumer_1.jpg"/>
+
+                                <img id="1" task="deliver" src="assets/img/producerConsumer_empty.jpg"/>
+                                <!-- das .correct Objekt wird zum Vergleich der Lösung als Hintergrund eingeblendet -->
+                                <img id="1" task="deliver" class="correct" src="assets/img/producerConsumer_2.jpg"/>
 
                                 <!-- Das letzte Bild, wenn alles fertig ist, hat KEINE ID! -->
-                                <img task="deliver" src="assets/img/producerConsumer_2.jpg"/>
+                                <!--
+                                Dieses Bild bleibt einfach als Letztes einzeln über.
+                                Es sind hier keine Ergebnisse mehr zu sehen.
+                                -->
+                                <img src="assets/img/producerConsumer_2.jpg"/>
 
 
                                 <!--
