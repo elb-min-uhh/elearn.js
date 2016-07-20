@@ -440,6 +440,13 @@ function setProgressbarEnabled(b) {
 };
 
 
+function setNavigationTitle(text) {
+    navigationTitle = text;
+    if(allShown) {
+        $('#nav-title').text(text);
+    }
+}
+
 
 // -------------------------------------------------------------------------------------
 // Overview
