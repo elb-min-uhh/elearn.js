@@ -119,6 +119,65 @@
                             black (#000000)
 
                             Die Farbe kann auch per style="color: #e2001a;" verändert werden.
+
+                            no_steps sorgt dafür, dass man Schritte nicht Rückgängig machen kann
+                            -->
+                            <div class="drawing_canvas red">
+                                <!--
+                                .background ist vor dem Lösen sichtbar. Hierauf wird gemalt
+                                Hier könnten z.B. Achsen zu sehen sein.
+                                .background und .correct sollten IMMER exakt gleich groß sein.
+                                Notfalls ist das per <img ... style="width: 100px; height: 100px" .../>
+                                zu erreichen.
+                                Wie bei .correct auch, lässt sich die Sichtbarkeit des Bildes anpassen, per
+                                <img ... style="opacity: 0.5;" .../> ist es bspw. nur 50% sichtbar.
+                                -->
+                                <img class="background" style="opacity: 0.5" src="assets/img/parabel_bg.png"/>
+                                <!--
+                                .correct wird nach klicken auf Lösen als Hintergrund der
+                                Zeichnung angezeigt. Ersetzt .background, wenn Nutzer auf "lösen" klickt.
+                                -->
+                                <img class="correct" style="opacity: 0.5" src="assets/img/parabel.png"/>
+                            </div>
+
+                        </div>
+
+                        <!--
+                        Dies hier ist der Hinweistext, der eingeblendet wird,
+                        wenn die Aufgabe "gelöst" wurde. Er kann auch weitere Bilder
+                        enthalten.
+                        -->
+                        <div class="feedback correct">
+                            Eine unverschobene und ungestauchte Parabel ist
+                            symmetrisch zur Y-Achse und geht außerdem durch den
+                            Ursprung des Graphen. Zur Illustration wird hier
+                            X² verwendet.
+                        </div>
+
+                    </div>
+
+                    <div class="question" qtype="drawing" id="dr_1">
+                        <h4>Zeichnen</h4>
+
+                        Zeichne eine Parabel:<br>
+                        <br>
+                        <div class="answers">
+
+                            <!--
+                            Das zusätzliche red verändert die Farbe des Strichs
+                            Verfügbar sind:
+                            red (#FF0000)
+                            blue (#0000FF)
+                            green (#00FF00)
+                            cyan (#00FFFF)
+                            yellow (#FFFF00)
+                            orange (#FF8000)
+                            purple (#FF00FF)
+                            black (#000000)
+
+                            Die Farbe kann auch per style="color: #e2001a;" verändert werden.
+
+                            no_steps sorgt dafür, dass man Schritte nicht Rückgängig machen kann
                             -->
                             <div class="drawing_canvas red">
                                 <!--
@@ -884,9 +943,13 @@
 
                         <!--
                             Verschlüsselt ist die id der Antwort aus dem Head der Tabelle
+
+                            id des a.ans Elements entspricht der ID der Zeile
+                            Wert/Inhalt des Elements ist die ID des Kopfzeilenelements <th>
+                            per md5 verschlüsselt
                         -->
                         <!--
-                        Verschluesselt ist hier "gueltig" als richtige Antwort für die Zeile mit der ID=1
+                        Verschluesselt ist hier "ungueltig" als richtige Antwort für die Zeile mit der ID=0
                         -->
                         <a class="ans" id="0">a4905edcff5197d6c0e23f3d12276d21</a>
                         <!--

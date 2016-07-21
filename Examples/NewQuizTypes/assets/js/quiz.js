@@ -1688,19 +1688,41 @@ function resetQuiz() {
 *                                                                            *
 *                                                                            *
 ******************************************************************************/
+var canvasIndex = [];
 
 function initiateDrawingCanvas() {
     var root = $('[qtype="'+quizTypes.DRAW+'"]');
 
     root.each(function(i,e) {
         var div = $(this);
+
+        setCanvasIndex(div.find('.drawing_canvas'), 0);
+
         div.find('.drawing_canvas').append('<canvas class="original"></canvas>');
-        div.find('.drawing_canvas').after('<button class="clear">Löschen</button>');
+
+        createDrawingCanvas(div.find('.drawing_canvas').find('canvas'),
+                            getCanvasStrokeColor(div));
+
+
+        // Bild komplett löschen
+        div.find('.drawing_canvas').after('<br><button class="clear">Löschen</button>');
         div.find('.clear').click(function() {
             resetCanvas(div);
         });
-        createDrawingCanvas(div.find('.drawing_canvas').find('canvas'),
-                            getCanvasStrokeColor(div));
+
+        // Rückgängig und Wiederholen
+        if(!div.find('.drawing_canvas').is('.no_steps')) {
+            div.find('.drawing_canvas').after('<br><button class="stepback">Rückgängig</button>');
+            div.find('.stepback').click(function() {
+                canvasStepBack(div.find('.drawing_canvas'));
+            });
+
+            div.find('.drawing_canvas').after('<br><button class="stepforw">Wiederholen</button>');
+            div.find('.stepforw').click(function() {
+                canvasStepForward(div.find('.drawing_canvas'));
+            });
+        }
+
         calculateCanvasDimensions();
     });
 }
@@ -1752,9 +1774,46 @@ function resetCanvas(div) {
         createDrawingCanvas(div.find('.drawing_canvas').find('canvas'),
                             getCanvasStrokeColor(div));
 
+        setCanvasIndex(div, 0);
         div.find('.drawing_canvas').removeClass(".blocked");
         calculateCanvasDimensions();
     }
+}
+
+function canvasStepBack(div) {
+    var c_Idx = getCanvasIndex(div);
+
+    var canvasList = div.find('canvas').not('#imageTemp');
+
+    if(c_Idx > 0) {
+        canvasList.hide();
+        $(canvasList.get(c_Idx - 1)).show();
+        setCanvasIndex(div, getCanvasIndex(div)-1);
+    }
+}
+
+function canvasStepForward(div) {
+    var c_Idx = getCanvasIndex(div);
+
+    var canvasList = div.find('canvas').not('#imageTemp');
+
+    if(c_Idx < canvasList.length - 1) {
+        canvasList.hide();
+        $(canvasList.get(c_Idx + 1)).show();
+        setCanvasIndex(div, getCanvasIndex(div)+1);
+    }
+}
+
+function getCanvasIndex(div) {
+    var draw_can = $('[qtype="'+quizTypes.DRAW+'"]').find('.drawing_canvas');
+
+    return canvasIndex[draw_can.index(div)];
+}
+
+function setCanvasIndex(div, idx) {
+    var draw_can = $('[qtype="'+quizTypes.DRAW+'"]').find('.drawing_canvas');
+
+    canvasIndex[draw_can.index(div)] = idx;
 }
 
 /**
@@ -1807,7 +1866,7 @@ function createDrawingCanvas(element, color) {
 
   initTouchToMouse(element.closest('.drawing_canvas'));
 
-  var canvas, context, canvaso, contexto;
+  var canvas, context, canvasoList, contextoList;
   var root = element.closest('.drawing_canvas');
 
   var strokeColor = color;
@@ -1817,27 +1876,31 @@ function createDrawingCanvas(element, color) {
   var tool_default = 'pencil';
 
   function init () {
+
+    canvasoList = [];
+    contextoList = [];
+
     // Find the canvas element.
-    canvaso = element[0];
-    if (!canvaso) {
+    canvasoList[0] = element[0];
+    if (!canvasoList[0]) {
       //alert('Error: I cannot find the canvas element!');
       return;
     }
 
-    if (!canvaso.getContext) {
+    if (!canvasoList[0].getContext) {
       //alert('Error: no canvas.getContext!');
       return;
     }
 
     // Get the 2D canvas context.
-    contexto = canvaso.getContext('2d');
-    if (!contexto) {
+    contextoList[0] = canvasoList[0].getContext('2d');
+    if (!contextoList[0]) {
       //alert('Error: failed to getContext!');
       return;
     }
 
     // Add the temporary canvas.
-    var container = canvaso.parentNode;
+    var container = canvasoList[0].parentNode;
     canvas = document.createElement('canvas');
     if (!canvas) {
       //alert('Error: I cannot create a new canvas element!');
@@ -1845,8 +1908,8 @@ function createDrawingCanvas(element, color) {
     }
 
     canvas.id     = 'imageTemp';
-    canvas.width  = canvaso.width;
-    canvas.height = canvaso.height;
+    canvas.width  = canvasoList[0].width;
+    canvas.height = canvasoList[0].height;
     container.appendChild(canvas);
 
     context = canvas.getContext('2d');
@@ -1888,8 +1951,50 @@ function createDrawingCanvas(element, color) {
   // #imageTemp is cleared. This function is called each time when the user
   // completes a drawing operation.
   function img_update () {
-		contexto.drawImage(canvas, 0, 0);
-		context.clearRect(0, 0, canvas.width, canvas.height);
+    new_canvas();
+    contextoList[getCanvasIndex(root)].drawImage(canvas, 0, 0);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function new_canvas() {
+      // clear all others after this
+      var canvasList = root.find('canvas').not('#imageTemp');
+      for(var i = getCanvasIndex(root)+1; i<canvasList.length; i++) {
+          $(canvasList.get(i)).remove();
+      }
+
+      // create new canvas
+      var canvas_new, context_new;
+      canvas_new = document.createElement('canvas');
+      canvas_new.width  = canvasoList[0].width;
+      canvas_new.height = canvasoList[0].height;
+
+      context_new = canvas_new.getContext('2d');
+
+      // copy active image to new
+      context_new.drawImage(canvasoList[getCanvasIndex(root)], 0, 0);
+
+      // add to lists
+      setCanvasIndex(root, getCanvasIndex(root)+1);
+      canvasoList[getCanvasIndex(root)] = canvas_new;
+      contextoList[getCanvasIndex(root)] = context_new;
+
+      var container = canvasoList[0].parentNode;
+      container.insertBefore(canvas_new, canvas);
+
+      // show
+      show_active_canvas();
+  }
+
+  function show_active_canvas() {
+      for(var i=0; i<canvasoList.length; i++) {
+          if(i == getCanvasIndex(root)) {
+              $(canvasoList[i]).show();
+          }
+          else {
+              $(canvasoList[i]).hide();
+          }
+      }
   }
 
   // This object holds the implementation of each drawing tool.
@@ -2003,6 +2108,8 @@ function createDrawingCanvas(element, color) {
   };
 
   init();
+
+  return this;
 }
 
 function touchHandler(event)
