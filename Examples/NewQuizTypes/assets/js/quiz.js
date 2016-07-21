@@ -1714,7 +1714,7 @@ function initiateDrawingCanvas() {
 }
 
 function calculateCanvasDimensions() {
-    var root = $('[qtype="'+quizTypes.DRAW+'"]');
+    var root = $('[qtype="'+quizTypes.DRAW+'"]:visible');
 
     root.each(function(i,e) {
         var div = $(this);
