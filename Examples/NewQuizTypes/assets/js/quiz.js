@@ -739,6 +739,8 @@ function showQuestionHere(button) {
         copyDrawing(div, orig);
     }
 
+    blockQuestion(div);
+
 
     var hideButton = '<button class="free_text_ref" id="'+id+'_ref" onclick="removeQuestionHere(this)">Ausblenden</button>';
     $(button).before(div);
@@ -755,16 +757,12 @@ function removeQuestionHere(button) {
 
 function copyFreeText(div, orig) {
     div.find("textarea").val(orig.find("textarea").val());
-    div.find("textarea").attr("readonly", "readonly");
 }
 
 function copyFillBlank(div, orig) {
     div.find("input").each(function(i, e) {
         // Kopiert ausgewählten Wert
         $(this).val($($(orig).find("input").get(i)).val());
-
-        // Disabled jedes input
-        $(this).attr("disabled", true);
     });
 }
 
@@ -772,16 +770,11 @@ function copyFillBlankChoice(div, orig) {
     div.find("select").each(function(i, e) {
         // Kopiert ausgewählten Wert
         $(this).val($($(orig).find("select").get(i)).val());
-
-        // Disabled jedes Select
-        $(this).attr("disabled", true);
     });
 }
 
 
 function copyHotspot(div) {
-    div.find('.hotspot').addClass("blocked");
-
     // hover funktionen
     div.find('.hotspot').mouseover(function(event) {
         if($(this).find('.descr').children().length > 0) $(this).find('.descr').show();
@@ -793,8 +786,6 @@ function copyHotspot(div) {
 }
 
 function copyDrawing(div, orig) {
-    div.find('.drawing_canvas').addClass("blocked");
-
     var canvas_orig = orig.find('.drawing_canvas').find('canvas.original')[0];
     var canvas = div.find('.drawing_canvas').find('canvas.original')[0];
 

@@ -1722,7 +1722,7 @@
                     kann eingegeben werden.
 
                     -->
-                    <div class="question" qtype="short_text">
+                    <div class="question" qtype="short_text" id="st_1">
                         <h4>Auf welcher Technologie basieren die digitalen Skripte? </h4> <!-- Fragentext -->
 
                         <div class="answers">
@@ -1757,13 +1757,24 @@
                         <a class="ans">644e5bfeb12517406338d351c4375248</a>
                     </div>
 
+                    <br><br>
+                    <!--
+                    Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+                    Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+                    und um "_ref" erweitert wird. (Referenz)
+                    -->
+                    <button id="st_1_ref" onclick="showQuestionHere(this)">
+                        Vorherige Antwort anzeigen
+                    </button>
+                    <br><br><br>
+
 
                     <!--
                     FRAGENTYP AUSWAHLFRAGE (Multiple/Single Choice)
 
                     Eine Frage mit mehrere Antwortmöglichkeiten.
                     -->
-                    <div class="question" qtype="choice">
+                    <div class="question" qtype="choice" id="ch_1">
                         <h4>Welche Unterordner werden in der Dateistruktur von digitalen Skripten erwartet?</h4>
 
 
@@ -1807,6 +1818,17 @@
                         <a class="ans">1fd302a9c89fc92eead418857a7e5a07</a>
                         <a class="ans">4fc364339b2127eb81c13ab986a27085</a>
                     </div>
+
+                    <br><br>
+                    <!--
+                    Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+                    Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+                    und um "_ref" erweitert wird. (Referenz)
+                    -->
+                    <button id="ch_1_ref" onclick="showQuestionHere(this)">
+                        Vorherige Antwort anzeigen
+                    </button>
+                    <br><br><br>
 
                     <p>Es existieren auch noch andere Fragetypen, diese sind in der Dokumentation vom qiuz.js beschrieben.</p>
 
