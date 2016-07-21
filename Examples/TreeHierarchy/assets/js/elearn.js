@@ -144,7 +144,7 @@ function initiateSideMenu() {
                             + '</tr>'
                             + '<tr class="side-menu-element" onclick="javascript: openInfo();">'
                                 + '<td class="side-menu-icon"><div class="icon-info"></div></td> '
-                                + '<td class="side-menu-content">Info</td>'
+                                + '<td class="side-menu-content">Impressum</td>'
                             + '</tr>'
                             + '<tr class="side-menu-element" id="menu-item-download" onclick="javascript: startDownload(\''+downloadUrl+'\');">'
                                 + '<td class="side-menu-icon"><div class="icon-zip"></div></td> '
@@ -440,13 +440,6 @@ function setProgressbarEnabled(b) {
 };
 
 
-function setNavigationTitle(text) {
-    navigationTitle = text;
-    if(allShown) {
-        $('#nav-title').text(text);
-    }
-}
-
 
 // -------------------------------------------------------------------------------------
 // Overview
@@ -621,7 +614,8 @@ function initiateInfo() {
         + "liegt bei den Autor/-innen.</small>"
         + '<img src="assets/img/logo-bmbf.gif" alt="Logo vom Bundesministerium für Bildung und Forschung">'
         + '<div style="clear: both;">'
-        +"</div>");
+        + '<a href="http://www.uni-hamburg.de" target="_blank"><img src="assets/img/logo-uhh.gif" alt="Logo der Universität Hamburg" style="padding:1em 1em 2em 1em;"></a>'
+        + "</div>");
 }
 
 /**
