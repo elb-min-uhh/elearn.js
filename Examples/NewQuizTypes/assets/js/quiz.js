@@ -1699,7 +1699,8 @@ function initiateDrawingCanvas() {
         div.find('.clear').click(function() {
             resetCanvas(div);
         });
-        createDrawingCanvas(div.find('.drawing_canvas').find('canvas'));
+        createDrawingCanvas(div.find('.drawing_canvas').find('canvas'),
+                            getCanvasStrokeColor(div));
         calculateCanvasDimensions();
     });
 }
@@ -1748,25 +1749,68 @@ function resetCanvas(div) {
     if(div.is('[qtype="'+quizTypes.DRAW+'"]')) {
         div.find('canvas').remove();
         div.find('.drawing_canvas').append('<canvas class="original"></canvas>');
-        createDrawingCanvas(div.find('.drawing_canvas').find('canvas'));
+        createDrawingCanvas(div.find('.drawing_canvas').find('canvas'),
+                            getCanvasStrokeColor(div));
 
         div.find('.drawing_canvas').removeClass(".blocked");
         calculateCanvasDimensions();
     }
 }
 
+/**
+* Gibt einen Farbcode String zurück wie zB "#FF0000"
+*
+* @param: div - das div.question[qtype=quizTypes.DRAW]
+*/
+function getCanvasStrokeColor(root) {
+    var color = "#000000";
+
+    var div = root.find('.drawing_canvas');
+
+    if(div.is('.black')) {
+        color = "#000000";
+    }
+    else if(div.is(".red")) {
+        color = "#FF0000";
+    }
+    else if(div.is(".green")) {
+        color = "#00FF00";
+    }
+    else if(div.is(".blue")) {
+        color = "#0000FF";
+    }
+    else if(div.is(".cyan")) {
+        color = "#00FFFF";
+    }
+    else if(div.is(".yellow")) {
+        color = "#FFFF00";
+    }
+    else if(div.is(".orange")) {
+        color = "#FF8000";
+    }
+    else if(div.is(".purple")) {
+        color = "#FF00FF";
+    }
+    else if(div.css("color") != undefined) {
+        color = div.css("color");
+    }
+
+    return color;
+}
 
 /* © 2009 ROBO Design
  * http://www.robodesign.ro
  */
 
 // Keep everything in anonymous function, called on window load.
-function createDrawingCanvas(element) {
+function createDrawingCanvas(element, color) {
 
   initTouchToMouse(element.closest('.drawing_canvas'));
 
   var canvas, context, canvaso, contexto;
   var root = element.closest('.drawing_canvas');
+
+  var strokeColor = color;
 
   // The active tool instance.
   var tool;
@@ -1870,6 +1914,7 @@ function createDrawingCanvas(element) {
     this.mousemove = function (ev) {
       if (tool.started) {
         context.lineTo(ev._x, ev._y);
+        context.strokeStyle = strokeColor;
         context.stroke();
       }
     };
