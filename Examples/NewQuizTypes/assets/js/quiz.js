@@ -1627,7 +1627,9 @@ function windowResizing() {
 }
 
 
-
+/**
+* Setzt eine Frage auf den Anfangszustand zurück
+*/
 function resetQuestion(div) {
     div.removeClass("answered");
     div.find(".feedback").hide();
@@ -1688,8 +1690,13 @@ function resetQuiz() {
 *                                                                            *
 *                                                                            *
 ******************************************************************************/
+// Für jede Frage wird hinterlegt, welcher Canvas angezeigt wird
+// genutzt für rückgängig/wiederholen Funktion
 var canvasIndex = [];
 
+/**
+* Initialisiert alle DrawingCanvas Elemente. Für Jede Frage dieses Typs.
+*/
 function initiateDrawingCanvas() {
     var root = $('[qtype="'+quizTypes.DRAW+'"]');
 
@@ -1727,6 +1734,10 @@ function initiateDrawingCanvas() {
     });
 }
 
+/**
+* Skaliert sichtbare Canvas auf aktuelle Größe
+* Falls nötig werden dabei die canvas inhalte neu gezeichnet
+*/
 function calculateCanvasDimensions() {
     var root = $('[qtype="'+quizTypes.DRAW+'"]:visible');
 
@@ -1767,6 +1778,14 @@ function calculateCanvasDimensions() {
     });
 }
 
+/**
+* Stellt den Startzustand wieder her.
+*
+* alle <canvas> Elemente werden entfernt
+* neuere original canvas wird erstellt und DrawingCanvas initialisiert
+* canvasIndex wird zurückgesetzt.
+* block wird aufgehoben
+*/
 function resetCanvas(div) {
     if(div.is('[qtype="'+quizTypes.DRAW+'"]')) {
         div.find('canvas').remove();
@@ -1780,6 +1799,11 @@ function resetCanvas(div) {
     }
 }
 
+/**
+* Geht einen gezeichneten Schritt zurück
+*
+* Dazu wird der ältere Canvas wieder angezeigt und der canvasIndex angepasst
+*/
 function canvasStepBack(div) {
     var c_Idx = getCanvasIndex(div);
 
@@ -1792,6 +1816,11 @@ function canvasStepBack(div) {
     }
 }
 
+/**
+* Wiederholt einen gezeichneten Schritt
+*
+* Dazu wird der neuere Canvas wieder angezeigt und der canvasIndex angepasst
+*/
 function canvasStepForward(div) {
     var c_Idx = getCanvasIndex(div);
 
@@ -1804,12 +1833,18 @@ function canvasStepForward(div) {
     }
 }
 
+/**
+* Gibt den aktuell angezeigten canvasIndex für ein .drawing_canvas Element zurück
+*/
 function getCanvasIndex(div) {
     var draw_can = $('[qtype="'+quizTypes.DRAW+'"]').find('.drawing_canvas');
 
     return canvasIndex[draw_can.index(div)];
 }
 
+/**
+* Setzt den aktuell angezeigten canvasIndex auf idx für ein .drawing_canvas Element
+*/
 function setCanvasIndex(div, idx) {
     var draw_can = $('[qtype="'+quizTypes.DRAW+'"]').find('.drawing_canvas');
 
@@ -1817,7 +1852,7 @@ function setCanvasIndex(div, idx) {
 }
 
 /**
-* Gibt einen Farbcode String zurück wie zB "#FF0000"
+* Gibt einen Farbcode String zurück wie zB "#FF0000" für eine Zeichenaufgabe
 *
 * @param: div - das div.question[qtype=quizTypes.DRAW]
 */
@@ -2112,6 +2147,9 @@ function createDrawingCanvas(element, color) {
   return this;
 }
 
+/**
+* Konvertiert Touch events in mouse events für DrawingCanvas auf Touchgeräten.
+*/
 function touchHandler(event)
 {
     event = event.originalEvent;
@@ -2142,6 +2180,9 @@ function touchHandler(event)
     event.stopPropagation();
 }
 
+/**
+* Initialisiert das Touch->Mouse für ein Element.
+*/
 function initTouchToMouse(element)
 {
     element.on("touchstart", touchHandler);
