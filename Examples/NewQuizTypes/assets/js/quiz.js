@@ -789,7 +789,7 @@ function copyDrawing(div, orig) {
     var canvas_orig = orig.find('.drawing_canvas').find('canvas.original')[0];
     var canvas = div.find('.drawing_canvas').find('canvas.original')[0];
 
-    div.find('.clear').remove();
+    div.find('.button_container').remove();
     div.find('.feedback.correct').show();
 
     canvas.getContext('2d').drawImage(canvas_orig, 0, 0);
@@ -1711,24 +1711,26 @@ function initiateDrawingCanvas() {
                             getCanvasStrokeColor(div));
 
 
-        // Bild komplett löschen
-        div.find('.drawing_canvas').after('<br><button class="clear">Löschen</button>');
-        div.find('.clear').click(function() {
-            resetCanvas(div);
-        });
+        div.find('.drawing_canvas').after('<div class="button_container"></div>');
 
         // Rückgängig und Wiederholen
         if(!div.find('.drawing_canvas').is('.no_steps')) {
-            div.find('.drawing_canvas').after('<br><button class="stepback">Rückgängig</button>');
-            div.find('.stepback').click(function() {
-                canvasStepBack(div.find('.drawing_canvas'));
-            });
-
-            div.find('.drawing_canvas').after('<br><button class="stepforw">Wiederholen</button>');
+            div.find('.button_container').append('<button class="stepforw">Wiederholen</button><br>');
             div.find('.stepforw').click(function() {
                 canvasStepForward(div.find('.drawing_canvas'));
             });
+
+            div.find('.button_container').append('<button class="stepback">Rückgängig</button><br>');
+            div.find('.stepback').click(function() {
+                canvasStepBack(div.find('.drawing_canvas'));
+            });
         }
+
+        // Bild komplett löschen Button
+        div.find('.button_container').append('<button class="clear">Löschen</button>');
+        div.find('.clear').click(function() {
+            resetCanvas(div);
+        });
 
         calculateCanvasDimensions();
     });
@@ -1793,7 +1795,7 @@ function resetCanvas(div) {
         createDrawingCanvas(div.find('.drawing_canvas').find('canvas'),
                             getCanvasStrokeColor(div));
 
-        setCanvasIndex(div, 0);
+        setCanvasIndex(div.find('.drawing_canvas'), 0);
         div.find('.drawing_canvas').removeClass(".blocked");
         calculateCanvasDimensions();
     }
@@ -2005,6 +2007,9 @@ function createDrawingCanvas(element, color) {
       canvas_new.height = canvasoList[0].height;
 
       context_new = canvas_new.getContext('2d');
+
+      console.log(getCanvasIndex(root));
+      console.log(canvasoList);
 
       // copy active image to new
       context_new.drawImage(canvasoList[getCanvasIndex(root)], 0, 0);
