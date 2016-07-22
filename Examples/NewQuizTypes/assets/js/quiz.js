@@ -108,13 +108,15 @@ function init() {
 
     addDragAndDropToClassification();
     addDragAndDropToOrderObjects();
+
+    resetQuiz();
+
+    initiateFreeText();
     initiateErrorText();
     initiateMatrix();
     initiateHotspotImage();
     initiatePetriImage();
     initiateDrawingCanvas();
-
-    resetQuiz();
 
     initTimers();
 }
@@ -231,17 +233,27 @@ function submitAns(button, force) {
         deleteLabelColoring(labels);
         div.children("div.feedback").filter(".correct").hide();
         div.children("div.feedback").filter(".incorrect").hide();
+        div.children("div.feedback").filter(".information").hide();
         div.children("div.feedback").filter(".noselection").show();
         return;
+    }
+    else if(div.is(".unbewertet")) {
+        deleteLabelColoring(div);
+        div.children("div.feedback").filter(".noselection").hide();
+        div.children("div.feedback").filter(".correct").hide();
+        div.children("div.feedback").filter(".incorrect").hide();
+        div.children("div.feedback").filter(".information").show();
     }
     else if(correct === true) {
         div.children("div.feedback").filter(".noselection").hide();
         div.children("div.feedback").filter(".incorrect").hide();
+        div.children("div.feedback").filter(".information").hide();
         div.children("div.feedback").filter(".correct").show();
     }
     else if(correct === false) {
         div.children("div.feedback").filter(".noselection").hide();
         div.children("div.feedback").filter(".correct").hide();
+        div.children("div.feedback").filter(".information").hide();
         div.children("div.feedback").filter(".incorrect").show();
     }
     // hide all (hotspot, petri when finished)
@@ -252,10 +264,7 @@ function submitAns(button, force) {
         div.children("div.feedback").filter(".information").show();
     }
 
-    // unbewertete Frage - Kein labelColoring
-    if(div.is(".unbewertet")) {
-        deleteLabelColoring(div);
-    }
+    blockQuestion(div);
 
     div.addClass("answered");
     div.next("button.quizButton").hide();
@@ -372,8 +381,6 @@ function getCorrectFillBlank(labels, answers, force) {
             correct = false;
             $(this).addClass("wrong");
         }
-
-        input.attr("disabled", true);
     });
 
     return correct;
@@ -403,8 +410,6 @@ function getCorrectFillBlankChoice(labels, answers, force) {
             correct = false;
             $(this).addClass("wrong");
         }
-
-        select.attr("disabled", true);
     });
 
     return correct;
@@ -533,7 +538,6 @@ function getCorrectMatrixChoice(rows, answers, force) {
         // keines ausgewählt in einer Zeile
         if(inputs.length > 0 && inputs.filter(':checked').length == 0
             && !force) {
-            rows.find('input').attr("disabled", false);
             correct = -1;
             deleteLabelColoring($(this).closest('.question'));
             return false;
@@ -553,8 +557,6 @@ function getCorrectMatrixChoice(rows, answers, force) {
                 correct = false;
                 $(this).closest('label').addClass("wrong");
             }
-
-            $(ee).attr("disabled", true);
         });
     });
 
@@ -581,21 +583,23 @@ function getCorrectHotspot(div, hss, answer, force) {
                                                     + div.find('.gesucht').html()
                                                     + "</div>");
 
-        if(correct) {
-            div.children("div.feedback").filter(".noselection").hide();
-            div.children("div.feedback").filter(".incorrect").hide();
-            div.children("div.feedback").filter(".correct").show();
+        if(!div.is('.unbewertet')) {
+            if(correct) {
+                div.children("div.feedback").filter(".noselection").hide();
+                div.children("div.feedback").filter(".incorrect").hide();
+                div.children("div.feedback").filter(".correct").show();
+            }
+            else {
+                div.children("div.feedback").filter(".noselection").hide();
+                div.children("div.feedback").filter(".correct").hide();
+                div.children("div.feedback").filter(".incorrect").show();
+            }
         }
-        else {
-            div.children("div.feedback").filter(".noselection").hide();
-            div.children("div.feedback").filter(".correct").hide();
-            div.children("div.feedback").filter(".incorrect").show();
-        }
+
 
         finished = !hotspotNextObject(div);
 
         if(finished) {
-            blockHotspot(div);
             findCorrectsHotspot(div);
             // for information show
             finished = 2;
@@ -652,7 +656,7 @@ function getCorrectPetri(div, places, answers, force) {
 
 
 function processFreeText(div) {
-    div.find(".answers").find("textarea").attr('readonly','readonly');
+    // do nothing
 }
 
 /**
@@ -668,7 +672,6 @@ function processPetri(div, force) {
         div.removeClass("show_feedback");
         petriNextPart(div);
         if(petriFinished(div)) {
-            blockPetri(div);
             // for information show
             correct = 2;
         }
@@ -837,6 +840,16 @@ function blockQuestion(div) {
     }
 }
 
+
+// --------------------------------------------------------------------------------------
+// FREE TEXT
+// --------------------------------------------------------------------------------------
+
+function initiateFreeText() {
+    var root = $('[qtype="'+quizTypes.FREE_TEXT+'"]');
+
+    root.addClass("unbewertet");
+}
 
 
 // --------------------------------------------------------------------------------------
@@ -1320,7 +1333,8 @@ function initiatePetriImage() {
 
 
 function petriClick(element) {
-    if(!element.is(".blocked")) {
+    var div = element.closest('.question');
+    if(!element.is(".blocked") && !div.is('.show_feedback')) {
         if(element.is(".act")) {
             element.removeClass("act");
         }
@@ -1702,6 +1716,8 @@ function initiateDrawingCanvas() {
 
     root.each(function(i,e) {
         var div = $(this);
+
+        div.addClass("unbewertet");
 
         setCanvasIndex(div.find('.drawing_canvas'), 0);
 
