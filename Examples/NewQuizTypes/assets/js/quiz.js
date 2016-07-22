@@ -2008,9 +2008,6 @@ function createDrawingCanvas(element, color) {
 
       context_new = canvas_new.getContext('2d');
 
-      console.log(getCanvasIndex(root));
-      console.log(canvasoList);
-
       // copy active image to new
       context_new.drawImage(canvasoList[getCanvasIndex(root)], 0, 0);
 
