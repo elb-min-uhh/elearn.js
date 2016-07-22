@@ -388,6 +388,10 @@ function toggleAllSections() {
         $(document).scrollTop($($('section')[visSection]).position().top - $('#navigation').height() - 10);
         allShown = true;
         resizeAllSliders();
+        // Ausführen registrierten funktionen
+        $.each(afterShow, function(key, fnc) {
+            fnc();
+        })
     }
 };
 

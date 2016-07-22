@@ -1470,31 +1470,35 @@ var timerAlertText ="";
 * initialisiert Timer für alle Aufgaben die welche haben
 */
 function initTimers() {
-    // Startet neuen Timer
-    if(start_time[eLearnJS.visSection] == undefined
-        || start_time[eLearnJS.visSection] == null) {
-        start_time[eLearnJS.visSection] = new Date();
-        passed_time[eLearnJS.visSection] = 0;
-    }
-    // Passt alten Timer an (Zeit weiterlaufen lassen)
-    else {
-        start_time[eLearnJS.visSection] = new Date();
-        start_time[eLearnJS.visSection].setTime(
-            start_time[eLearnJS.visSection].getTime()
-            - passed_time[eLearnJS.visSection]*1000);
-    }
 
-    // anzeigen der startzeit
-    $('.question:visible').not('.answered').each(function(i,e) {
-        var max_time = $(this).attr("max-time");
-        if(max_time != undefined && max_time.length != 0) {
-            max_time = parseInt(max_time);
-            $(this).find('.answered_hint.timer').remove();
-            $(this).find("h4").after("<div class='answered_hint timer'>"
-                            + max_time + ":00</div>");
+    for(var activeSection=0; activeSection < $('section').length; activeSection++) {
+        if(eLearnJS.allShown || activeSection == eLearnJS.visSection) {
+            // Startet neuen Timer
+            if(start_time[activeSection] == undefined
+                || start_time[activeSection] == null) {
+                start_time[activeSection] = new Date();
+                passed_time[activeSection] = 0;
+            }
+            // Passt alten Timer an (Zeit weiterlaufen lassen)
+            else {
+                start_time[activeSection] = new Date();
+                start_time[activeSection].setTime(
+                    start_time[activeSection].getTime()
+                    - passed_time[activeSection]*1000);
+            }
+
+            // anzeigen der startzeit
+            $($('section').get(activeSection)).find('.question:visible').not('.answered').each(function(i,e) {
+                var max_time = $(this).attr("max-time");
+                if(max_time != undefined && max_time.length != 0) {
+                    max_time = parseInt(max_time);
+                    $(this).find('.answered_hint.timer').remove();
+                    $(this).find("h4").after("<div class='answered_hint timer'>"
+                                    + max_time + ":00</div>");
+                }
+            });
         }
-    });
-
+    }
     updateTimers();
 }
 
@@ -1503,36 +1507,42 @@ function initTimers() {
 */
 function updateTimers() {
     var now = new Date();
-    var diff = (now.getTime() - start_time[eLearnJS.visSection].getTime())/1000;
-    passed_time[eLearnJS.visSection] = diff;
-    $('.answered_hint.timer:visible').each(function(i,e) {
-        var timer = $(this);
-        // time in seconds
-        var time = parseInt(timer.closest('.question').attr("max-time")) * 60;
-        var time_left = time - diff;
 
-        if(timer.closest('.question').is('.answered')) return true;
+    for(var activeSection=0; activeSection < $('section').length; activeSection++) {
+        if(eLearnJS.allShown || activeSection == eLearnJS.visSection) {
+            var diff = (now.getTime() - start_time[activeSection].getTime())/1000;
+            passed_time[activeSection] = diff;
+            $($('section').get(activeSection)).find('.answered_hint.timer:visible').each(function(i,e) {
+                var timer = $(this);
+                // time in seconds
+                var time = parseInt(timer.closest('.question').attr("max-time")) * 60;
+                var time_left = time - diff;
 
-        if(time_left > 0) {
-            var min = Math.floor(time_left/60);
-            var sec = Math.floor(time_left - min*60);
-            if(sec < 10) {
-                sec = "0" + sec;
-            }
-            $(this).html(min + ":" + sec);
+                if(timer.closest('.question').is('.answered')) return true;
+
+                if(time_left > 0) {
+                    var min = Math.floor(time_left/60);
+                    var sec = Math.floor(time_left - min*60);
+                    if(sec < 10) {
+                        sec = "0" + sec;
+                    }
+                    $(this).html(min + ":" + sec);
+                }
+                else if(!$(this).closest(".question").is('.answered')) {
+                    finishQuestion($(this).closest(".question"));
+                    blockQuestion($(this).closest(".question"));
+                    $(this).closest(".question").find('.feedback.noselection').hide();
+
+                    $(this).closest(".question").append("<div class='feedback timeup'>Die Zeit ist abgelaufen. Die Frage wurde automatisch beantwortet und gesperrt.</div>");
+
+                    if(timerAlertActivated) {
+                        alert(timerAlertText);
+                    }
+                }
+            });
         }
-        else if(!$(this).closest(".question").is('.answered')) {
-            finishQuestion($(this).closest(".question"));
-            blockQuestion($(this).closest(".question"));
-            $(this).closest(".question").find('.feedback.noselection').hide();
+    }
 
-            $(this).closest(".question").append("<div class='feedback timeup'>Die Zeit ist abgelaufen. Die Frage wurde automatisch beantwortet und gesperrt.</div>");
-
-            if(timerAlertActivated) {
-                alert(timerAlertText);
-            }
-        }
-    });
 
     setTimeout(function() { updateTimers(); }, 1000);
 }
