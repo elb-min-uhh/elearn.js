@@ -1377,7 +1377,8 @@ function setSwipeType() {
     }
     else if(!allShown
         && !swipeTarget.is("code") // Kein Code Element
-        && swipeTarget.prop("scrollWidth") == swipeTarget.width()) // Element nicht horizontal scrollbar
+        && (swipeTarget.prop("scrollWidth") == swipeTarget.innerWidth()
+            || swipeTarget.css("overflow-x") == 'hidden')) // Element nicht horizontal scrollbar
     {
         swipeType = "section";
     }
