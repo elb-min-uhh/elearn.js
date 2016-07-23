@@ -695,7 +695,7 @@ function processPetri(div, force) {
 }
 
 function processDrawing(div) {
-    div.find('.drawing_canvas').addClass("blocked");
+    div.find('.drawing_canvas_container').addClass("blocked");
 }
 
 // --------------------------------------------------------------------------------------
@@ -789,8 +789,10 @@ function copyHotspot(div) {
 }
 
 function copyDrawing(div, orig) {
-    var canvas_orig = orig.find('.drawing_canvas').find('canvas.original')[0];
-    var canvas = div.find('.drawing_canvas').find('canvas.original')[0];
+    var canvas_orig = orig.find('.drawing_canvas_container').find('canvas.drawing_canvas.act')[0];
+    var canvas = div.find('.drawing_canvas_container').find('canvas.drawing_canvas.act')[0];
+
+    div.find('.drawing_canvas_container').find('canvas').not('.act').remove();
 
     div.find('.button_container').remove();
     div.find('.feedback.correct').show();
@@ -836,7 +838,7 @@ function blockQuestion(div) {
         div.find('.place').addClass("blocked");
     }
     else if(type === quizTypes.DRAW) {
-        div.find('.drawing_canvas').addClass("blocked");
+        div.find('.drawing_canvas_container').addClass("blocked");
     }
 }
 
@@ -1672,13 +1674,22 @@ function resetQuestion(div) {
     div.find('.used').removeClass("used");
     div.find('.full').children().remove();
     div.find('.full').removeClass("full");
+
+    // alle geblockten elemente (mehrfach benutzt)
     div.find('.blocked').removeClass("blocked");
+
+    // alle aktiven elemente (mehrfach benutzt)
     div.find('.act').removeClass("act");
+
+    // hotspot
     div.find('.hotspot').find('.descr').children().remove();
+
+    // petrinetz
     div.find('.petri_image').find('img').hide();
+    // erste aufgabe anzeigen
     div.find('.petri_image').find('img').first().show();
     div.filter('[qtype="'+quizTypes.PETRI+'"]').find('.petri_aufgabe').find('img')
-        .filter('#'+div.find('.petri_image').find('img:visible').attr("id")).show();;
+        .filter('#'+div.find('.petri_image').find('img:visible').attr("id")).show();
     div.filter('[qtype="'+quizTypes.PETRI+'"]').find('.gesucht').html(div.find('.petri_image').find('img').first().attr("task"));
 
     resetCanvas(div);
@@ -1729,26 +1740,21 @@ function initiateDrawingCanvas() {
 
         div.addClass("unbewertet");
 
-        setCanvasIndex(div.find('.drawing_canvas'), 0);
+        resetCanvas(div);
 
-        div.find('.drawing_canvas').append('<canvas class="original"></canvas>');
-
-        createDrawingCanvas(div.find('.drawing_canvas').find('canvas'),
-                            getCanvasStrokeColor(div));
-
-
-        div.find('.drawing_canvas').after('<div class="button_container"></div>');
+        // Container für zusätzliche Steuerelemente
+        div.find('.drawing_canvas_container').after('<div class="button_container"></div>');
 
         // Rückgängig und Wiederholen
-        if(!div.find('.drawing_canvas').is('.no_steps')) {
+        if(!div.find('.drawing_canvas_container').is('.no_steps')) {
             div.find('.button_container').append('<button class="stepforw">Wiederholen</button><br>');
             div.find('.stepforw').click(function() {
-                canvasStepForward(div.find('.drawing_canvas'));
+                canvasStepForward(div.find('.drawing_canvas_container'));
             });
 
             div.find('.button_container').append('<button class="stepback">Rückgängig</button><br>');
             div.find('.stepback').click(function() {
-                canvasStepBack(div.find('.drawing_canvas'));
+                canvasStepBack(div.find('.drawing_canvas_container'));
             });
         }
 
@@ -1817,12 +1823,12 @@ function calculateCanvasDimensions() {
 function resetCanvas(div) {
     if(div.is('[qtype="'+quizTypes.DRAW+'"]')) {
         div.find('canvas').remove();
-        div.find('.drawing_canvas').append('<canvas class="original"></canvas>');
-        createDrawingCanvas(div.find('.drawing_canvas').find('canvas'),
+        div.find('.drawing_canvas_container').append('<canvas class="drawing_canvas act"></canvas>');
+        createDrawingCanvas(div.find('.drawing_canvas_container').find('canvas'),
                             getCanvasStrokeColor(div));
 
-        setCanvasIndex(div.find('.drawing_canvas'), 0);
-        div.find('.drawing_canvas').removeClass(".blocked");
+        setCanvasIndex(div.find('.drawing_canvas_container'), 0);
+        div.find('.drawing_canvas_container').removeClass(".blocked");
         calculateCanvasDimensions();
     }
 }
@@ -1838,8 +1844,8 @@ function canvasStepBack(div) {
     var canvasList = div.find('canvas').not('#imageTemp');
 
     if(c_Idx > 0) {
-        canvasList.hide();
-        $(canvasList.get(c_Idx - 1)).show();
+        canvasList.removeClass("act");
+        $(canvasList.get(c_Idx - 1)).addClass("act");
         setCanvasIndex(div, getCanvasIndex(div)-1);
     }
 }
@@ -1855,26 +1861,26 @@ function canvasStepForward(div) {
     var canvasList = div.find('canvas').not('#imageTemp');
 
     if(c_Idx < canvasList.length - 1) {
-        canvasList.hide();
-        $(canvasList.get(c_Idx + 1)).show();
+        canvasList.removeClass("act");
+        $(canvasList.get(c_Idx + 1)).addClass("act");
         setCanvasIndex(div, getCanvasIndex(div)+1);
     }
 }
 
 /**
-* Gibt den aktuell angezeigten canvasIndex für ein .drawing_canvas Element zurück
+* Gibt den aktuell angezeigten canvasIndex für ein .drawing_canvas_container Element zurück
 */
 function getCanvasIndex(div) {
-    var draw_can = $('[qtype="'+quizTypes.DRAW+'"]').find('.drawing_canvas');
+    var draw_can = $('[qtype="'+quizTypes.DRAW+'"]').find('.drawing_canvas_container');
 
     return canvasIndex[draw_can.index(div)];
 }
 
 /**
-* Setzt den aktuell angezeigten canvasIndex auf idx für ein .drawing_canvas Element
+* Setzt den aktuell angezeigten canvasIndex auf idx für ein .drawing_canvas_container Element
 */
 function setCanvasIndex(div, idx) {
-    var draw_can = $('[qtype="'+quizTypes.DRAW+'"]').find('.drawing_canvas');
+    var draw_can = $('[qtype="'+quizTypes.DRAW+'"]').find('.drawing_canvas_container');
 
     canvasIndex[draw_can.index(div)] = idx;
 }
@@ -1887,7 +1893,7 @@ function setCanvasIndex(div, idx) {
 function getCanvasStrokeColor(root) {
     var color = "#000000";
 
-    var div = root.find('.drawing_canvas');
+    var div = root.find('.drawing_canvas_container');
 
     if(div.is('.black')) {
         color = "#000000";
@@ -1927,10 +1933,10 @@ function getCanvasStrokeColor(root) {
 // Keep everything in anonymous function, called on window load.
 function createDrawingCanvas(element, color) {
 
-  initTouchToMouse(element.closest('.drawing_canvas'));
+  initTouchToMouse(element.closest('.drawing_canvas_container'));
 
   var canvas, context, canvasoList, contextoList;
-  var root = element.closest('.drawing_canvas');
+  var root = element.closest('.drawing_canvas_container');
 
   var strokeColor = color;
 
@@ -2014,7 +2020,9 @@ function createDrawingCanvas(element, color) {
   // #imageTemp is cleared. This function is called each time when the user
   // completes a drawing operation.
   function img_update () {
-    new_canvas();
+    if(!root.is('no_steps')) {
+        new_canvas();
+    }
     contextoList[getCanvasIndex(root)].drawImage(canvas, 0, 0);
     context.clearRect(0, 0, canvas.width, canvas.height);
   }
@@ -2029,6 +2037,7 @@ function createDrawingCanvas(element, color) {
       // create new canvas
       var canvas_new, context_new;
       canvas_new = document.createElement('canvas');
+      canvas_new.className = "drawing_canvas";
       canvas_new.width  = canvasoList[0].width;
       canvas_new.height = canvasoList[0].height;
 
@@ -2052,10 +2061,10 @@ function createDrawingCanvas(element, color) {
   function show_active_canvas() {
       for(var i=0; i<canvasoList.length; i++) {
           if(i == getCanvasIndex(root)) {
-              $(canvasoList[i]).show();
+              $(canvasoList[i]).addClass("act");
           }
           else {
-              $(canvasoList[i]).hide();
+              $(canvasoList[i]).removeClass("act");
           }
       }
   }
@@ -2071,9 +2080,11 @@ function createDrawingCanvas(element, color) {
     // This is called when you start holding down the mouse button.
     // This starts the pencil drawing.
     this.mousedown = function (ev) {
-        context.beginPath();
-        context.moveTo(ev._x, ev._y);
-        tool.started = true;
+        if(ev.which == 1) {
+            context.beginPath();
+            context.moveTo(ev._x, ev._y);
+            tool.started = true;
+        }
     };
 
     // This function is called every time you move the mouse. Obviously, it only
@@ -2103,9 +2114,11 @@ function createDrawingCanvas(element, color) {
     this.started = false;
 
     this.mousedown = function (ev) {
-      tool.started = true;
-      tool.x0 = ev._x;
-      tool.y0 = ev._y;
+      if(ev.which == 1) {
+          tool.started = true;
+          tool.x0 = ev._x;
+          tool.y0 = ev._y;
+      }
     };
 
     this.mousemove = function (ev) {
@@ -2142,9 +2155,11 @@ function createDrawingCanvas(element, color) {
     this.started = false;
 
     this.mousedown = function (ev) {
-      tool.started = true;
-      tool.x0 = ev._x;
-      tool.y0 = ev._y;
+      if(ev.which == 1) {
+          tool.started = true;
+          tool.x0 = ev._x;
+          tool.y0 = ev._y;
+      }
     };
 
     this.mousemove = function (ev) {
