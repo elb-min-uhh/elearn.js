@@ -1,11 +1,11 @@
 /*
-* v0.9 16/06/09 JavaScript eLearn.js - by Arne Westphal
+* v0.9.1 16/06/09 JavaScript eLearn.js - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 */
 
-var VERSION_NR = "0.9";
-var VERSION_DATE = "06/2016";
+var VERSION_NR = "0.9.1";
+var VERSION_DATE = "07/2016";
 
 // Will be set on first Touch event. See Help Functions at bottom
 var touchSupported = false;
@@ -1399,7 +1399,8 @@ function setSwipeType() {
     }
     else if(!allShown
         && !swipeTarget.is("code") // Kein Code Element
-        && swipeTarget.prop("scrollWidth") == swipeTarget.width()) // Element nicht horizontal scrollbar
+        && (swipeTarget.prop("scrollWidth") == swipeTarget.innerWidth()
+            || swipeTarget.css("overflow-x") == 'hidden')) // Element nicht horizontal scrollbar
     {
         swipeType = "section";
     }
