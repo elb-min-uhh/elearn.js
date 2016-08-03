@@ -309,15 +309,10 @@ function getCorrectForRadio(labels, c, colorLabels, force) {
 
         if(correctAnswer != input.is(':checked')) {
             correct = false;
+            $(this).addClass('wrong');
         }
-
-        if(colorLabels) {
-            if(correctAnswer) {
-                $(this).addClass('right');
-            }
-            else if(input.is(':checked')){
-                $(this).addClass('wrong');
-            }
+        else {
+            $(this).addClass('right');
         }
     });
     if(numberofchecked === 0 && !force) {

@@ -85,7 +85,11 @@
 /* -------------------------------- Image Selection -------------------------------- */
 
 .question label.img_radio{
-    display: inline;
+    border: 5px solid transparent;
+    display: inline-block;
+    overflow-y: auto;
+    float: left;
+    padding: 0;
 }
 
 .question label.img_radio:hover {
@@ -97,47 +101,30 @@
 }
 
 .question label.img_radio img{
-    border: 2px solid transparent;
-    padding: 5px;
-    border-radius: 4px;
+    border: 5px solid transparent;
+    padding: 0;
     margin:3px;
     max-width: calc(100% - 6px);
 }
 
 .question label.img_radio:hover img {
-    padding: 0;
-    border: 7px solid #dcdcdc;
+    border: 5px solid #dcdcdc;
 }
 
-.question label.img_radio:not(.wrong):not(.right) input:checked + img {
-    padding: 0;
-    border: 7px solid #CAE8F0;
+.question label.img_radio input:checked + img {
+    border: 5px solid #CAE8F0;
 }
 
 .question label.img_radio.right, .question label.img_radio.wrong {
     background: 0;
 }
 
-.question label.img_radio.right img{
-    border: 7px solid rgb(200,255,200);
-    padding: 0;
-    border-radius: 4px;
-    margin:3px;
+.question label.img_radio.right {
+    border: 5px solid rgb(200,255,200);
 }
 
-.question label.img_radio.right:hover img{
-    border: 7px solid rgb(200,245,200);
-}
-
-.question label.img_radio.wrong img{
-    border: 7px solid rgb(255,200,200);
-    padding: 0;
-    border-radius: 4px;
-    margin:3px;
-}
-
-.question label.img_radio.wrong:hover img{
-    border: 2px solid rgb(245,200,200);
+.question label.img_radio.wrong {
+    border: 5px solid rgb(255,200,200);
 }
 
 

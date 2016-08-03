@@ -1779,6 +1779,76 @@
 
 
                     <!--
+                    FRAGENTYP AUSWAHLFRAGE Mit Bildern (Multiple/Single Choice)
+
+                    Eine Frage mit mehrere Antwortmöglichkeiten.
+                    -->
+                    <div class="question" qtype="choice" id="ch_1">
+                        <h4>Bildauswahl</h4>
+
+                        Wie sieht das folgende Petri Netz aus, wenn <b>produce</b>
+                        geschaltet wird?
+
+                        <br>
+                        <img src="assets/img/producerConsumer.jpg"/>
+
+                        <div class="answers">
+                            <!--
+                            Definition der Antwortmöglichkeiten.
+                            type="checkbox" gibt an, dass es eine multiple Choice Frage ist.
+                            Bei single Choice wäre dies type="radio".
+                            name="q" sollte jeweils gleich sein bei Single Choice Fragen,
+                            damit immer nur eine Antwort auswählbar ist.
+
+                            Das value="..." wird jeweils als MD5 verschlüsselt als richtige Antwort angegeben.
+                            -->
+                            <label class="img_radio">
+                              <input type="radio" name="q" value="bild1"/>
+                              <img src ="assets/img/producerConsumer_1.jpg" style="max-width: 250px;"/>
+                            </label>
+                            <label class="img_radio">
+                              <input type="radio" name="q" value="bild2"/>
+                              <img src ="assets/img/producerConsumer_2.jpg" style="max-width: 250px;"/>
+                            </label>
+
+                        </div>
+
+                        <!--
+                        Diese Blöcke werden angezeigt, jenachdem ob die
+                        Antwort richtig (.correct) oder falsch (.incorrect) war.
+                        In diesem Block kann ein erklärender Text und auch Bilder
+                        verwendet werden.
+                        -->
+                        <div class="feedback correct">
+                            <b>Richtig</b>
+                        </div>
+                        <div class="feedback incorrect">
+                            <b>Falsch</b>
+                        </div>
+
+                        <!--
+                        Hier werden alle richtigen Antwortmöglichkeiten angegeben.
+                        (Verschlüsselt wird der value Wert)
+                        Diese werden einfach per MD5 verschlüsselt hier eingefügt.
+                        Je eine antwort in einem <a class="ans">...</a>
+                        -->
+                        <a class="ans">e0f7fbd4c18827653333ba13ca57d5c9</a>
+                    </div>
+
+                    <br><br>
+                    <!--
+                    Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+                    Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+                    und um "_ref" erweitert wird. (Referenz)
+                    -->
+                    <button id="ch_1_ref" onclick="showQuestionHere(this)">
+                        Vorherige Antwort anzeigen
+                    </button>
+                    <br><br><br>
+
+                    <p>Es existieren auch noch andere Fragetypen, diese sind in der Dokumentation vom qiuz.js beschrieben.</p>
+
+                    <!--
                     FRAGENTYP AUSWAHLFRAGE (Multiple/Single Choice)
 
                     Eine Frage mit mehrere Antwortmöglichkeiten.
