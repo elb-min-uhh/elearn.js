@@ -1,11 +1,11 @@
 /*
-* v0.9.1 16/06/09 JavaScript eLearn.js - by Arne Westphal
+* v0.9.2 16/08/04 JavaScript eLearn.js - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 */
 
-var VERSION_NR = "0.9.1";
-var VERSION_DATE = "07/2016";
+var VERSION_NR = "0.9.2";
+var VERSION_DATE = "08/2016";
 
 // Will be set on first Touch event. See Help Functions at bottom
 var touchSupported = false;
