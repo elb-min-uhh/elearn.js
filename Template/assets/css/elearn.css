@@ -244,7 +244,7 @@ h5 {
 }
 
 img, video, audio{
-    width:100%;
+    max-width:100%;
     margin:3em 0px 3em 0px;
 }
 
