@@ -815,7 +815,8 @@ function blockQuestion(div) {
     else if(type === quizTypes.SHORT_TEXT
             || type === quizTypes.CHOICE
             || type === quizTypes.FILL_BLANK
-            || type === quizTypes.MATRIX_CHOICE) {
+            || type === quizTypes.MATRIX_CHOICE
+            || type == undefined) {
         // Disabled jedes input
         div.find("input").attr("disabled", true);
     }
