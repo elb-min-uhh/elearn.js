@@ -1,6 +1,6 @@
 /*
-* Styles zum quiz.js v0.2.1 by Arne Westphal
-* Ergänzend zum elearn.js v0.6
+* Styles zum quiz.js v0.3.0 by Arne Westphal
+* Ergänzend zum elearn.js v0.9.2
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 */
 
@@ -18,12 +18,13 @@
     font-style: normal;
     font-weight: normal;
     background: rgb(240,240,240);
-    margin: 0 -1em 0;
+    margin: 0 -1em 1em;
     padding: 0.3em 1em 0.3em;
 }
 
 .question img {
     float:left;
+    width: auto;
     max-width:100%;
     margin:1em 0em 1em 0em;
 }
@@ -51,12 +52,30 @@
     background-color:rgb(240,255,240);
 }
 
+.question .right:after {
+    font-family: eLearn-icons;
+    font-size: 1.75em;
+    content: "r";
+    padding-left: 5px;
+    color: #007900;
+    vertical-align: middle;
+}
+
 .question label.right:hover {
     background-color: rgb(230,245,230);
 }
 
 .question label.wrong {
     background-color: rgb(255,240,240);
+}
+
+.question .wrong:after {
+    font-family: eLearn-icons;
+    font-size:1.75em;
+    content: "w";
+    padding-left: 5px;
+    color: #790000;
+    vertical-align: middle;
 }
 
 .question label.wrong:hover {
@@ -66,7 +85,11 @@
 /* -------------------------------- Image Selection -------------------------------- */
 
 .question label.img_radio{
-    display: inline;
+    border: 5px solid transparent;
+    display: inline-block;
+    overflow-y: auto;
+    float: left;
+    padding: 0;
 }
 
 .question label.img_radio:hover {
@@ -78,47 +101,30 @@
 }
 
 .question label.img_radio img{
-    border: 2px solid transparent;
-    padding: 5px;
-    border-radius: 4px;
+    border: 5px solid transparent;
+    padding: 0;
     margin:3px;
     max-width: calc(100% - 6px);
 }
 
 .question label.img_radio:hover img {
-    padding: 0;
-    border: 7px solid #dcdcdc;
+    border: 5px solid #dcdcdc;
 }
 
-.question label.img_radio:not(.wrong):not(.right) input:checked + img {
-    padding: 0;
-    border: 7px solid #CAE8F0;
+.question label.img_radio input:checked + img {
+    border: 5px solid #CAE8F0;
 }
 
 .question label.img_radio.right, .question label.img_radio.wrong {
     background: 0;
 }
 
-.question label.img_radio.right img{
-    border: 7px solid rgb(200,255,200);
-    padding: 0;
-    border-radius: 4px;
-    margin:3px;
+.question label.img_radio.right {
+    border: 5px solid rgb(200,255,200);
 }
 
-.question label.img_radio.right:hover img{
-    border: 7px solid rgb(200,245,200);
-}
-
-.question label.img_radio.wrong img{
-    border: 7px solid rgb(255,200,200);
-    padding: 0;
-    border-radius: 4px;
-    margin:3px;
-}
-
-.question label.img_radio.wrong:hover img{
-    border: 2px solid rgb(245,200,200);
+.question label.img_radio.wrong {
+    border: 5px solid rgb(255,200,200);
 }
 
 
@@ -141,6 +147,345 @@
     width: 100%;
 }
 
+
+
+/* BEREITS BEANTWORTETE FRAGE */
+.question .answered_hint {
+    float: right;
+    opacity: 0.5;
+    font-size: 80%;
+    margin-top: -1em;
+    padding-bottom: 0.5em;
+    padding-left: 0.5em;
+}
+
+
+/* -------------------------------- FREE TEXT -------------------------------- */
+
+.question .answers textarea {
+    display: block;
+    width: 100%;
+}
+
+.question.answered .answers textarea {
+    opacity: 0.6;
+    background: #eeeeee;
+}
+
+
+/* -------------------------------- FILL BLANK -------------------------------- */
+
+.question[qtype="fill_blank"] label,
+.question[qtype="fill_blank_choice"] label {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* ------------------------------- ERROR TEXT -------------------------------- */
+
+.question[qtype="error_text"] button.error_button {
+    width: auto;
+    padding: 3px;
+    font-size: 100%;
+}
+
+.question[qtype="error_text"] button.error_button.act {
+    text-decoration: line-through;
+    text-decoration-color: #f00;
+}
+
+.question[qtype="error_text"] .underline button.error_button.act {
+    text-decoration: underline;
+    text-decoration-color: #000;
+}
+
+.question[qtype="error_text"] label {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+/* ----------------------------- CLASSIFICATION ------------------------------ */
+
+.question[qtype="classification"] .answers .object,
+.question[qtype="order"] .answers .object {
+    display: inline-block;
+    border: 2px solid #dcdcdc;
+    overflow-y: auto;
+    cursor: move;
+    padding: 5px;
+
+    text-align: center;
+
+    min-width: 100px;
+    min-height: 50px;
+}
+
+.question[qtype="classification"] .answers .object:hover,
+.question[qtype="order"] .answers .object:hover {
+    border-color: #888;
+}
+
+.question[qtype="classification"] .answers .object.emph,
+.question[qtype="order"] .answers .object.emph {
+    background: #ddddff;
+    border: 2px dashed #b4b4b4;
+}
+
+.question[qtype="classification"] .answers .object.draggedover,
+.question[qtype="order"] .answers .object.draggedover {
+    background: #ccccee;
+    border: 2px dashed #888;
+}
+
+/* Kein Drop auf Objekte innerhalb der Blöcke */
+.question[qtype="classification"] .answers .object *,
+.question[qtype="order"] .answers .object * {
+    pointer-events: none;
+}
+
+.question[qtype="classification"] .answers .object.used *,
+.question[qtype="order"] .answers .object.used * {
+    opacity: 0.4;
+}
+
+.question[qtype="classification"] .answers .object.blocked,
+.question[qtype="order"] .answers .object.blocked {
+    opacity: 0.8;
+    background: #dcdcdc;
+}
+
+
+/* ORDER */
+
+.question[qtype="order"] .answers .object,
+.question[qtype="order"] .answers .destination {
+    float: left;
+    margin: 3px;
+}
+
+.question[qtype="order"] .answers.fill .object {
+    width: 95%;
+}
+
+.question[qtype="order"] .answers .destination {
+    display: none;
+}
+
+.question[qtype="order"] .answers .destination.vis {
+    display: inline-block;
+    border: 2px dashed #b4b4b4;
+    min-height: 50px;
+    min-width: 20px;
+    background: #ddddff;
+}
+
+.question[qtype="order"] .answers .destination.vis.draggedover {
+    background: #ccccee;
+    border: 2px dashed #888;
+}
+
+
+/* ----------------------------- MATRIX CHOICE ------------------------------ */
+
+.question[qtype="matrix_choice"] .answers .matrix {
+
+}
+
+.question[qtype="matrix_choice"] .answers .matrix label {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+.question[qtype="matrix_choice"] .answers .matrix td,
+.question[qtype="matrix_choice"] .answers .matrix th {
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #888;
+}
+
+
+/* ----------------------------- HOTSPOT ------------------------------ */
+
+.question[qtype="hotspot"] .answers .hotspot_image {
+    display: inline-block;
+    position: relative;
+    overflow-y: auto;
+    max-width: 100%;
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image img {
+    margin: 0;
+}
+
+/*
+.question[qtype="hotspot"] .answers .hotspot_image * {
+    pointer-events: none;
+}
+*/
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot {
+    display:none;
+    position: absolute;
+
+    /*
+    width is calculated in quiz.js
+    */
+
+    border: 1px solid white;
+    border-radius: 50%;
+
+    background: rgb(0,0,255);
+    background: rgba(0,0,255,0.3);
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image:hover .hotspot {
+    display: block;
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot:hover {
+    background: rgb(0,0,200);
+    background: rgba(0,0,255,0.6);
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot.act {
+    display: block !important;
+    background: rgb(255,0,0);
+    background: rgba(255,0,0,0.3);
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot.act:hover {
+    background: rgb(200,0,0);
+    background: rgba(255,0,0,0.6);
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot.blocked {
+    display: block !important;
+    background: rgb(150,150,150);
+    background: rgba(100,100,100,0.3);
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot.blocked:hover {
+    background: rgb(100,100,100);
+    background: rgba(100,100,100,0.6);
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot .descr {
+    display: none;
+    /* visibility in quiz.js */
+    position: absolute;
+    background: #fff;
+    border: 1px solid #dcdcdc;
+    padding: 3px;
+    z-index: 10;
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot .descr .cor {
+    color: #0a0;
+}
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot .descr .inc {
+    color: #a00;
+    text-decoration: line-through;
+}
+
+
+/* ----------------------------- PETRI-NETZ ------------------------------ */
+
+.question[qtype="petri"] .petri_aufgabe {
+    position: relative;
+    overflow-y: auto;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.question[qtype="petri"] .petri_image {
+    position: relative;
+    display: inline-block;
+    max-width: 90%;
+}
+
+.question[qtype="petri"] .petri_image img {
+    margin: 0;
+}
+
+.question[qtype="petri"] .petri_image .place {
+    position: absolute;
+    background: #dcdcdc;
+    background: rgba(220,220,220, 0.6);
+    width: 25px;
+    height: 25px;
+    margin-left: -10px;
+    margin-top: -10px;
+    border-radius: 50%;
+}
+
+.question[qtype="petri"] .petri_image .place:hover {
+    background: #b4b4b4;
+    background: rgba(150,150,150, 0.6);
+}
+
+.question[qtype="petri"] .petri_image .place.act {
+    background: #b4b4b4;
+    background: rgb(0,0,255);
+    background: rgba(0,0,255,0.5);
+}
+
+.question[qtype="petri"] .petri_image .place.blocked {
+    display: none;
+}
+
+.question[qtype="petri"] .place.right:after,
+.question[qtype="petri"] .place.wrong:after {
+    padding-left: 100%;
+}
+
+/* ----------------------------- ZEICHNEN ------------------------------ */
+
+.question[qtype="drawing"] .drawing_canvas_container {
+    display: inline-block;
+    position: relative;
+    overflow-y: auto;
+    border: 1px solid #888;
+    cursor: crosshair;
+}
+
+.question[qtype="drawing"] .drawing_canvas_container img {
+    margin: 0;
+}
+
+.question[qtype="drawing"] .drawing_canvas_container img.correct {
+    display: none;
+}
+
+.question[qtype="drawing"].answered .drawing_canvas_container img.correct {
+    display: block;
+}
+
+.question[qtype="drawing"].answered .drawing_canvas_container img.background {
+    display: none;
+}
+
+.question[qtype="drawing"] .drawing_canvas_container canvas {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.question[qtype="drawing"] .drawing_canvas_container canvas.drawing_canvas {
+    display: none;
+}
+
+.question[qtype="drawing"] .drawing_canvas_container canvas.drawing_canvas.act,
+.question[qtype="drawing"] .drawing_canvas_container canvas#imageTemp {
+    display: block;
+}
 
 
 /*Media-Querys für Responsivität*/
