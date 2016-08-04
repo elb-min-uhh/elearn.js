@@ -1,11 +1,11 @@
 /*
-* v0.9.1 16/06/09 JavaScript eLearn.js - by Arne Westphal
+* v0.9 16/06/09 JavaScript eLearn.js - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 */
 
-var VERSION_NR = "0.9.1";
-var VERSION_DATE = "07/2016";
+var VERSION_NR = "0.9";
+var VERSION_DATE = "06/2016";
 
 // Will be set on first Touch event. See Help Functions at bottom
 var touchSupported = false;
@@ -113,7 +113,6 @@ function initiateELearnJS() {
                 sHeight = $($('section')[i]).position().top - $('#navigation').height() - 15;
             }
             visSection = i;
-            updateContentOverview();
         }
     });
 }
@@ -155,7 +154,7 @@ function initiateSideMenu() {
                             + '</tr>'
                             + '<tr class="side-menu-element" onclick="javascript: openInfo();">'
                                 + '<td class="side-menu-icon"><div class="icon-info"></div></td> '
-                                + '<td class="side-menu-content">Impressum</td>'
+                                + '<td class="side-menu-content">Info</td>'
                             + '</tr>'
                             + '<tr class="side-menu-element" id="menu-item-download" onclick="javascript: startDownload(\''+downloadUrl+'\');">'
                                 + '<td class="side-menu-icon"><div class="icon-zip"></div></td> '
@@ -343,7 +342,6 @@ function showSection(i) {
     // section was updated
     if(i >= 0 && i < $('section').length) {
         visSection = i;
-        updateContentOverview();
         stopVideos();
     }
 
@@ -528,9 +526,6 @@ function setBlockProgressShowElement(enabled, text) {
 // -------------------------------------------------------------------------------------
 // Overview
 // -------------------------------------------------------------------------------------
-
-var sectionsVisited = [];
-
 /**
 * Erstellt ein Inhaltsverzeichnis. Wird #content-overview hinzugefügt.
 */
@@ -540,14 +535,12 @@ function createContentOverview() {
 
         for(var i=0; i<$('section').length; i++) {
             text += "<li onclick='showSection("+i+")'>";
-            text += "<div class='sectionRead'><div class='img'></div></div>";
             text += "<span class='title'>" + $($('section')[i]).attr('name') + "</span>";
             if($($('section')[i]).attr('desc') != undefined
                 && $($('section')[i]).attr('desc').length > 0) {
                 text += "<p>" + $($('section')[i]).attr('desc') + "</p>";
             }
             text += "</li>";
-            sectionsVisited.push(false);
         }
         text+="</ul>";
 
@@ -557,20 +550,6 @@ function createContentOverview() {
         });
     }
 }
-
-
-function updateContentOverview() {
-    sectionsVisited[visSection] = true;
-    for(var i=0; i<$('section').length; i++) {
-        if(sectionsVisited[i]) {
-            $($('#content-overview').find('li').get(i)).find('.sectionRead').addClass('read');
-        }
-        else {
-            $($('#content-overview').find('li').get(i)).find('.sectionRead').removeClass('read');
-        }
-    }
-}
-
 
 var justOpenedOverview = false;
 /**
@@ -698,8 +677,7 @@ function initiateInfo() {
         + "liegt bei den Autor/-innen.</small>"
         + '<img src="assets/img/logo-bmbf.gif" alt="Logo vom Bundesministerium für Bildung und Forschung">'
         + '<div style="clear: both;">'
-        + '<a href="http://www.uni-hamburg.de" target="_blank"><img src="assets/img/logo-uhh.gif" alt="Logo der Universität Hamburg" style="padding:1em 1em 2em 1em;"></a>'
-        + "</div>");
+        +"</div>");
 }
 
 /**
