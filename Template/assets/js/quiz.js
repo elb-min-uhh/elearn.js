@@ -1,9 +1,12 @@
 /*
-* quiz.js v0.2.1 - 15/12/04
-* Ergänzend zum elearn.js v0.6
+* quiz.js v0.3.0 - 16/07/20
+* Ergänzend zum elearn.js v0.9
 * JavaScript Quiz - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 */
+
+var start_time = [];
+var passed_time = [];
 
 /**
 * Aktiviert alle <button> mit der Klasse "quizButton" für das Quiz.
@@ -11,6 +14,11 @@
 */
 $(document).ready(function() {
     init();
+
+    // resize Funktion wird aufgerufen, wenn im eLearnJS eine neue section
+    // angezeigt wird
+    eLearnJS.registerAfterShow("quiz-resizing", windowResizing);
+    eLearnJS.registerAfterShow("quiz-timer-init", initTimers);
 });
 
 
@@ -23,8 +31,31 @@ var quizTypes = {
     FILL_BLANK_CHOICE : "fill_blank_choice",
     ERROR_TEXT : "error_text",
     HOTSPOT : "hotspot",
-    ORDER : "order"
+    CLASSIFICATION : "classification",
+    ORDER : "order",
+    MATRIX_CHOICE : "matrix_choice",
+    PETRI : "petri",
+    DRAW : "drawing"
 };
+
+var quizJS = this;
+
+
+// ------------------------------------------------------------
+// INTERFACE
+// ------------------------------------------------------------
+
+/**
+* Gibt zurück, ob alle sichtbaren Fragen beantwortet wurden. (bool)
+*/
+function getVisibleQuestionsAnswered() {
+    return $('.question:visible').filter('.answered').length
+            == $('.question:visible').length;
+}
+
+
+// ------------------------------------------------------------
+
 
 
 /**
@@ -60,7 +91,10 @@ function init() {
     // Submit with enter for every question possible
     $(".answers label").keyup(function(event) {
         if(event.which == 13) {
-            $(this).closest("div.question").next(':button').click();
+            var div = $(this).closest("div.question");
+            if(!div.is('[qtype="'+quizTypes.FREE_TEXT+'"]')) {
+                div.next(':button').click();
+            }
         }
     });
 
@@ -72,7 +106,19 @@ function init() {
         resetQuiz();
     });
 
+    addDragAndDropToClassification();
+    addDragAndDropToOrderObjects();
+
     resetQuiz();
+
+    initiateFreeText();
+    initiateErrorText();
+    initiateMatrix();
+    initiateHotspotImage();
+    initiatePetriImage();
+    initiateDrawingCanvas();
+
+    initTimers();
 }
 
 /**
@@ -80,7 +126,7 @@ function init() {
 * @param button - ist der geklickte Button von dem aus die beantwortete Frage
 *                 bestimmt wird.
 */
-function submitAns(button) {
+function submitAns(button, force) {
     if($(button).filter(".weiter").length > 0) {
         button = $(button).prev(":button");
     }
@@ -92,7 +138,7 @@ function submitAns(button) {
         return;
     }
 
-    var c = getCorrectAnswers(div);
+    var c = getCorrectAnswers(div.find("a.ans"));
 
     var labels = div.children('.answers').children('label');
     deleteLabelColoring(labels);
@@ -116,49 +162,114 @@ function submitAns(button) {
     // Für explizit definierten qtype
     else {
         if(type === quizTypes.SHORT_TEXT) {
-            correct = getCorrectForText(labels, c);
+            correct = getCorrectForText(labels, c, force);
         }
-        else if (type === quizTypes.CHOICE) {
-            correct = getCorrectForRadio(labels, c, true);
+        else if(type === quizTypes.CHOICE) {
+            correct = getCorrectForRadio(labels, c, true, force);
         }
-        else if (type === quizTypes.FREE_TEXT) {
+        else if(type === quizTypes.FREE_TEXT) {
             processFreeText(div);
         }
-        else if (type === quizTypes.FILL_BLANK) {
+        else if(type === quizTypes.FILL_BLANK) {
             var answers = div.find("a.ans");
-            correct = getCorrectFillBlank(labels, answers);
+            correct = getCorrectFillBlank(labels, answers, force);
         }
-        else if (type === quizTypes.FILL_BLANK_CHOICE) {
+        else if(type === quizTypes.FILL_BLANK_CHOICE) {
             var answers = div.find("a.ans");
-            correct = getCorrectFillBlankChoice(labels, answers);
+            correct = getCorrectFillBlankChoice(labels, answers, force);
         }
-        else if (type === quizTypes.ERROR_TEXT) {
+        else if(type === quizTypes.ERROR_TEXT) {
             var buttons = div.find(".error_button");
-            correct = getCorrectErrorText(buttons, c);
+            correct = getCorrectErrorText(buttons, c, force);
         }
+        else if(type === quizTypes.CLASSIFICATION) {
+            var dests = div.find(".destination");
+            var answers = div.find("a.ans");
+            correct = getCorrectClassification(dests, answers, force);
+            if(correct !== -1) {
+                div.find('.object').addClass("blocked");
+            }
+        }
+        else if(type === quizTypes.ORDER) {
+            var objects = div.find(".object").not(".destination");
+            var answers = div.find("a.ans");
+            correct = getCorrectOrder(objects, answers, force);
+            div.find('.object').addClass("blocked");
+        }
+        else if(type === quizTypes.MATRIX_CHOICE) {
+            var rows = div.find("tr");
+            var answers = div.find("a.ans");
+            correct = getCorrectMatrixChoice(rows, answers, force);
+        }
+        else if(type === quizTypes.HOTSPOT) {
+            var hss = div.find('.hotspot');
+            var gesucht = div.find('.gesucht').html();
+            var answer = div.find('a.ans').filter('[id="'+gesucht+'"]');
+            correct = getCorrectHotspot(div, hss, answer, force);
+            hss.filter('.act').removeClass('act');
+            if(correct !== -1 && correct !== true && correct !== 2) return;
+        }
+        else if(type === quizTypes.PETRI) {
+            correct = processPetri(div, force);
+            if(div.is(".unbewertet")) {
+                deleteLabelColoring(div);
+                div.find('.feedback').hide();
+            }
+            if(!correct) {
+                // unbewertete Frage - Kein labelColoring
+                return;
+            }
+        }
+        else if(type === quizTypes.DRAW) {
+            processDrawing(div);
+        }
+    }
+
+    if(correct == -1 && force === true) {
+        correct = false;
     }
 
     if(correct === -1) {
         deleteLabelColoring(labels);
         div.children("div.feedback").filter(".correct").hide();
         div.children("div.feedback").filter(".incorrect").hide();
+        div.children("div.feedback").filter(".information").hide();
         div.children("div.feedback").filter(".noselection").show();
         return;
     }
-    else if(correct) {
-        div.children("div.feedback").filter(".noselection").hide();
-        div.children("div.feedback").filter(".incorrect").hide();
-        div.children("div.feedback").filter(".correct").show();
-    }
-    else {
+    else if(div.is(".unbewertet")) {
+        deleteLabelColoring(div);
         div.children("div.feedback").filter(".noselection").hide();
         div.children("div.feedback").filter(".correct").hide();
+        div.children("div.feedback").filter(".incorrect").hide();
+        div.children("div.feedback").filter(".information").show();
+    }
+    else if(correct === true) {
+        div.children("div.feedback").filter(".noselection").hide();
+        div.children("div.feedback").filter(".incorrect").hide();
+        div.children("div.feedback").filter(".information").hide();
+        div.children("div.feedback").filter(".correct").show();
+    }
+    else if(correct === false) {
+        div.children("div.feedback").filter(".noselection").hide();
+        div.children("div.feedback").filter(".correct").hide();
+        div.children("div.feedback").filter(".information").hide();
         div.children("div.feedback").filter(".incorrect").show();
     }
+    // hide all (hotspot, petri when finished)
+    else if(correct === 2) {
+        div.children("div.feedback").filter(".noselection").hide();
+        div.children("div.feedback").filter(".correct").hide();
+        div.children("div.feedback").filter(".incorrect").hide();
+        div.children("div.feedback").filter(".information").show();
+    }
+
+    blockQuestion(div);
 
     div.addClass("answered");
     div.next("button.quizButton").hide();
-    div.nextUntil("div").filter("button.quizButton.weiter").show();
+
+    if(!div.is('.reset_blocked')) div.nextUntil("div").filter("button.quizButton.weiter").show();
 };
 
 
@@ -167,9 +278,9 @@ function submitAns(button) {
 * Liest für ein <div> alle als korrekt angegebenen Antworten aus.
 * Diese sollten MD5 Verschlüsselt sein.
 */
-function getCorrectAnswers(div) {
+function getCorrectAnswers(ans) {
     var c = [];
-    div.find('a.ans').each(function(i) {
+    ans.each(function(i) {
         c[c.length] = $(this).html();
     });
     return c;
@@ -185,7 +296,7 @@ function getCorrectAnswers(div) {
 *                            Es werden alle Antworten die richtigen Antworten auf die Frage grün gefärbt.
 *                            Fälschlicherweise angekreute Antworten werden rot markiert. Falsche und nicht angekreuzte Antworten bleiben weiß.
 */
-function getCorrectForRadio(labels, c, colorLabels) {
+function getCorrectForRadio(labels, c, colorLabels, force) {
     var correct = true;
     var numberofchecked = 0;
     labels.each(function(i) {
@@ -198,18 +309,13 @@ function getCorrectForRadio(labels, c, colorLabels) {
 
         if(correctAnswer != input.is(':checked')) {
             correct = false;
+            $(this).addClass('wrong');
         }
-
-        if(colorLabels) {
-            if(correctAnswer) {
-                $(this).addClass('right');
-            }
-            else if(input.is(':checked')){
-                $(this).addClass('wrong');
-            }
+        else {
+            $(this).addClass('right');
         }
     });
-    if(numberofchecked === 0) {
+    if(numberofchecked === 0 && !force) {
         correct = -1;
     }
     return correct;
@@ -220,14 +326,14 @@ function getCorrectForRadio(labels, c, colorLabels) {
 * Gibt zurück, ob die eingegebene Antwort zu den korrekten gehört.
 * -1 falls Textfeld leer.
 */
-function getCorrectForText(labels, c) {
+function getCorrectForText(labels, c, force) {
     var correct = true;
-    var ans = labels.children('input').val();
+    var ans = labels.children('input').val().trim();
     ans = encryptMD5(ans);
     if(!contains(c, ans)) {
         correct = false;
     }
-    if(labels.children('input').val().length == 0) {
+    if(labels.children('input').val().length == 0 && !force) {
         correct = -1;
     }
 
@@ -240,33 +346,48 @@ function getCorrectForText(labels, c) {
     return correct;
 };
 
-
-function getCorrectFillBlank(labels, answers) {
+/**
+* Lücken Text mit Textfeldern
+*
+* -1 falls nicht alle ausgefüllt
+*/
+function getCorrectFillBlank(labels, answers, force) {
     var correct = true;
 
     labels.each(function(i, e) {
         var input = $(this).find("input");
         var id = input.attr("id");
         var cor = answers.filter("#"+id).text();
-        var ans = encryptMD5(input.val());
+        var ans = encryptMD5(input.val().trim());
+
+        // nicht ausgefüllt
+        if(input.val().length == 0 && !force) {
+            correct = -1;
+            deleteLabelColoring($(this).closest('.question'));
+            return false;
+        }
 
         // antwort richtig
         if(cor == ans) {
-            //$(this).addClass("right");
+            $(this).addClass("right");
         }
         // antwort falsch
         else if(cor != ans) {
             correct = false;
-            //$(this).addClass("wrong");
+            $(this).addClass("wrong");
         }
-
-        input.attr("disabled", true);
     });
 
     return correct;
 }
 
-function getCorrectFillBlankChoice(labels, answers) {
+
+/**
+* Lücken Text mit Select
+*
+* kann nicht unbeantwortet sein
+*/
+function getCorrectFillBlankChoice(labels, answers, force) {
     var correct = true;
 
     labels.each(function(i, e) {
@@ -277,43 +398,252 @@ function getCorrectFillBlankChoice(labels, answers) {
 
         // antwort richtig
         if(cor == ans) {
-            //$(this).addClass("right");
+            $(this).addClass("right");
         }
         // antwort falsch
         else if(cor != ans) {
             correct = false;
-            //$(this).addClass("wrong");
+            $(this).addClass("wrong");
         }
-
-        select.attr("disabled", true);
     });
 
     return correct;
 }
 
-function getCorrectErrorText(buttons, c) {
+
+/**
+* Fehlertext. markierbare Wörter
+*
+* Kann nicht unausgefüllt sein
+*/
+function getCorrectErrorText(buttons, c, force) {
     var correct = true;
-    
+
     buttons.each(function(i, e) {
         var ans = encryptMD5($(this).text());
 
         var act = $(this).is(".act");
 
         // Wort markiert und in Antworten enthalten
-        if((contains(c, ans) && act) 
+        if((contains(c, ans) && act)
             || (!contains(c, ans) && !act)) {
             // richtig
+            $(this).closest('label').addClass("right");
         }
         // Nicht markiert oder nicht in Antworten
         else if(!contains(c, ans) ^ !act) {
             // falsch
             correct = false;
+            $(this).closest('label').addClass("wrong");
         }
     });
 
     return correct;
 }
 
+
+/**
+* Zuordnung
+*
+* -1 falls eines der Ziele nicht gefüllt
+*/
+function getCorrectClassification(dests, answers, force) {
+    var correct = true;
+
+    dests.each(function(i, e) {
+        var dest = $(this);
+        var id = dest.attr("id");
+        var cor = answers.filter("#"+id).text();
+
+        // leer
+        if(dest.children().length == 0 && !force) {
+            correct = -1;
+            deleteLabelColoring($(this).closest('.question'));
+            return false;
+        }
+
+        var ans = encryptMD5(dest.children().attr("id"));
+
+        // antwort richtig
+        if(cor == ans) {
+            $(this).addClass("right");
+        }
+        // antwort falsch
+        else if(cor != ans) {
+            correct = false;
+            $(this).addClass("wrong");
+        }
+    });
+
+    return correct;
+}
+
+
+/**
+* Reihenfolge
+*
+* Kann nicht unausgefüllt sein
+*/
+function getCorrectOrder(objects, answers, force) {
+    var correct = true;
+    var index = 0;
+
+    objects.each(function(i, e) {
+        var obj = $(this);
+        var id = obj.children().attr("id");
+        var cor = answers.filter("#"+id).text();
+
+        // check if found object is in correct position
+        // correct position is same or next active index
+
+        // same position
+        if(encryptMD5(""+index) == cor) {
+            $(this).addClass("right");
+        }
+        // antwort richtig
+        else if(encryptMD5(""+(index+1)) == cor) {
+            index++;
+            $(this).addClass("right");
+        }
+        // antwort falsch
+        else {
+            correct = false;
+            $(this).addClass("wrong");
+        }
+    });
+
+    return correct;
+}
+
+/**
+* Matrix (single/multiple) choice
+*
+* -1 wenn nicht in jeder Zeile mindest eines ausgewählt
+*/
+function getCorrectMatrixChoice(rows, answers, force) {
+    var correct = true;
+
+    rows.each(function(i, e) {
+        var row = $(this);
+        var id = row.attr("id");
+        var cor = getCorrectAnswers(answers.filter("#"+id)); // Mehrere Antworten können vorhanden sein
+
+        var inputs = row.find("input"); // alle Inputs der Zeile
+
+        // keines ausgewählt in einer Zeile
+        if(inputs.length > 0 && inputs.filter(':checked').length == 0
+            && !force) {
+            correct = -1;
+            deleteLabelColoring($(this).closest('.question'));
+            return false;
+        }
+
+        inputs.each(function(ii, ee) {
+            var ans = $(rows.find(".antwort").get(ii)).attr("id");
+            ans = encryptMD5(ans);
+
+            // ausgewählt und richtig oder nicht ausgewählt und nicht richtig (insg richtig)
+            if(($(ee).is(":checked") && contains(cor, ans))
+                || (!$(ee).is(":checked") && !contains(cor, ans))) {
+                $(this).closest('label').addClass("right");
+            }
+            // falsch
+            else {
+                correct = false;
+                $(this).closest('label').addClass("wrong");
+            }
+        });
+    });
+
+    return correct;
+}
+
+
+function getCorrectHotspot(div, hss, answer, force) {
+    var finished = false;
+
+    // nichts ausgewählt
+    if(hss.filter('.act').length == 0 && !force) {
+        return -1;
+    }
+    else {
+        var ans = hss.filter('.act').attr('id');
+        ans = encryptMD5(ans);
+
+        var correct = ans == answer.html();
+        var cl = "cor";
+        if(!correct) cl = "inc";
+
+        hss.filter('.act').find('.descr').append("<div class='"+cl+"'>"
+                                                    + div.find('.gesucht').html()
+                                                    + "</div>");
+
+        if(!div.is('.unbewertet')) {
+            if(correct) {
+                div.children("div.feedback").filter(".noselection").hide();
+                div.children("div.feedback").filter(".incorrect").hide();
+                div.children("div.feedback").filter(".correct").show();
+            }
+            else {
+                div.children("div.feedback").filter(".noselection").hide();
+                div.children("div.feedback").filter(".correct").hide();
+                div.children("div.feedback").filter(".incorrect").show();
+            }
+        }
+
+
+        finished = !hotspotNextObject(div);
+
+        if(finished) {
+            findCorrectsHotspot(div);
+            // for information show
+            finished = 2;
+        }
+    }
+    return finished;
+}
+
+
+function getCorrectPetri(div, places, answers, force) {
+
+    // nichts ausgewählt
+    if(places.filter('.act').length == 0 && !force) {
+        return -1;
+    }
+    else {
+        correct = true;
+        places.each(function(i,e) {
+            var ans = $(this).attr('id');
+            ans = encryptMD5(ans);
+
+            c = getCorrectAnswers(answers);
+
+            // markiert und richtig
+            if(($(this).is(".act") && contains(c, ans))
+                || (!$(this).is(".act") && !contains(c, ans))) {
+                $(this).addClass("right");
+            }
+            else {
+                correct = false;
+                $(this).addClass("wrong");
+            }
+        });
+
+        if(correct) {
+            div.children("div.feedback").filter(".noselection").hide();
+            div.children("div.feedback").filter(".incorrect").hide();
+            div.children("div.feedback").filter(".correct").show();
+        }
+        else {
+            div.children("div.feedback").filter(".noselection").hide();
+            div.children("div.feedback").filter(".correct").hide();
+            div.children("div.feedback").filter(".incorrect").show();
+        }
+
+        div.addClass("show_feedback");
+    }
+    return false;
+}
 
 // --------------------------------------------------------------------------------------
 // PROCESS ANSWER
@@ -321,9 +651,47 @@ function getCorrectErrorText(buttons, c) {
 
 
 function processFreeText(div) {
-    div.find(".answers").find("textarea").attr('readonly','readonly');
+    // do nothing
 }
 
+/**
+* Verarbeiten des "Lösen" Knopfes in einer Petri-Netz Aufgabe
+*/
+function processPetri(div, force) {
+    var places = div.find('.place');
+
+    var correct = 0;
+
+    // after answer
+    if(div.is('.show_feedback')) {
+        div.removeClass("show_feedback");
+        petriNextPart(div);
+        if(petriFinished(div)) {
+            // for information show
+            correct = 2;
+        }
+        else {
+            deleteLabelColoring(places);
+            places.filter('.act').removeClass('act');
+            correct = false;
+        }
+    }
+    // before answer - when answering
+    else {
+        var answers = div.find('a.ans').filter('[id="'+$('.petri_image').find('img:visible').attr("id")+'"]');
+        correct = getCorrectPetri(div, places, answers, force);
+        if(correct != -1) {
+            petriShowCorrectBG(div);
+            correct = false;
+        }
+    }
+
+    return correct;
+}
+
+function processDrawing(div) {
+    div.find('.drawing_canvas_container').addClass("blocked");
+}
 
 // --------------------------------------------------------------------------------------
 
@@ -346,6 +714,11 @@ function showQuestionHere(button) {
     // zählt immer als beantwortet
     div.addClass("answered");
 
+    // hinweis, dass nicht veränderbar
+    div.find(".answered_hint").remove();
+    div.find("h4").after(
+        '<span class="answered_hint">Nicht änderbar, da die Frage bereits beantwortet wurde</span>');
+
     var type = orig.attr("qtype");
     // Verarbeiten der vorherigen Eingaben
     if(type === quizTypes.FREE_TEXT) {
@@ -357,6 +730,14 @@ function showQuestionHere(button) {
     else if(type === quizTypes.FILL_BLANK_CHOICE) {
         copyFillBlankChoice(div, orig);
     }
+    else if(type === quizTypes.HOTSPOT) {
+        copyHotspot(div);
+    }
+    else if(type === quizTypes.DRAW) {
+        copyDrawing(div, orig);
+    }
+
+    blockQuestion(div);
 
 
     var hideButton = '<button class="free_text_ref" id="'+id+'_ref" onclick="removeQuestionHere(this)">Ausblenden</button>';
@@ -374,16 +755,12 @@ function removeQuestionHere(button) {
 
 function copyFreeText(div, orig) {
     div.find("textarea").val(orig.find("textarea").val());
-    div.find("textarea").attr("readonly", "readonly");
 }
 
 function copyFillBlank(div, orig) {
     div.find("input").each(function(i, e) {
         // Kopiert ausgewählten Wert
         $(this).val($($(orig).find("input").get(i)).val());
-
-        // Disabled jedes input
-        $(this).attr("disabled", true);
     });
 }
 
@@ -391,9 +768,652 @@ function copyFillBlankChoice(div, orig) {
     div.find("select").each(function(i, e) {
         // Kopiert ausgewählten Wert
         $(this).val($($(orig).find("select").get(i)).val());
+    });
+}
 
-        // Disabled jedes Select
-        $(this).attr("disabled", true);
+
+function copyHotspot(div) {
+    // hover funktionen
+    div.find('.hotspot').mouseover(function(event) {
+        if($(this).find('.descr').children().length > 0) $(this).find('.descr').show();
+        calculateHotspotDescriptions($(this).closest('[qtype="'+quizTypes.HOTSPOT+'"]'));
+    });
+    div.find('.hotspot').mouseout(function(event) {
+        $(this).find('.descr').hide();
+    });
+}
+
+function copyDrawing(div, orig) {
+    var canvas_orig = orig.find('.drawing_canvas_container').find('canvas.drawing_canvas.act')[0];
+    var canvas = div.find('.drawing_canvas_container').find('canvas.drawing_canvas.act')[0];
+
+    div.find('.drawing_canvas_container').find('canvas').not('.act').remove();
+
+    div.find('.button_container').remove();
+    div.find('.feedback.correct').show();
+
+    canvas.getContext('2d').drawImage(canvas_orig, 0, 0);
+}
+
+
+function finishQuestion(div) {
+    var try_count = 50;
+    while(!div.is(".answered") && try_count > 0) {
+        submitAns(div.next('button'), true);
+        try_count -= 1;
+    }
+}
+
+function blockQuestion(div) {
+    div.addClass("answered");
+
+    var type = div.attr("qtype");
+
+    if(type === quizTypes.FREE_TEXT) {
+        div.find("textarea").attr("readonly", "readonly");
+    }
+    else if(type === quizTypes.SHORT_TEXT
+            || type === quizTypes.CHOICE
+            || type === quizTypes.FILL_BLANK
+            || type === quizTypes.MATRIX_CHOICE
+            || type == undefined) {
+        // Disabled jedes input
+        div.find("input").attr("disabled", true);
+    }
+    else if(type === quizTypes.FILL_BLANK_CHOICE) {
+        div.find("select").attr("disabled", true);
+    }
+    else if(type === quizTypes.CLASSIFICATION
+            || type === quizTypes.ORDER) {
+        div.find('.object').addClass("blocked");
+    }
+    else if(type === quizTypes.HOTSPOT) {
+        div.find('.hotspot').addClass("blocked");
+    }
+    else if(type === quizTypes.PETRI) {
+        div.find('.place').addClass("blocked");
+    }
+    else if(type === quizTypes.DRAW) {
+        div.find('.drawing_canvas_container').addClass("blocked");
+    }
+}
+
+
+// --------------------------------------------------------------------------------------
+// FREE TEXT
+// --------------------------------------------------------------------------------------
+
+function initiateFreeText() {
+    var root = $('[qtype="'+quizTypes.FREE_TEXT+'"]');
+
+    root.addClass("unbewertet");
+}
+
+
+// --------------------------------------------------------------------------------------
+// ERROR TEXT (Buttons)
+// --------------------------------------------------------------------------------------
+
+function initiateErrorText() {
+    var root = $('[qtype="'+quizTypes.ERROR_TEXT+'"]');
+
+    root.find('.error_button').wrap("<label></label>");
+}
+
+// --------------------------------------------------------------------------------------
+// MATRIX
+// --------------------------------------------------------------------------------------
+
+function initiateMatrix() {
+    var root = $('[qtype="'+quizTypes.MATRIX_CHOICE+'"]');
+
+    root.find('input').wrap("<label></label>");
+}
+
+// --------------------------------------------------------------------------------------
+// DRAG AND DROP FUNCTIONS
+// --------------------------------------------------------------------------------------
+
+
+
+
+var draggedObjects = null;
+var startedObject = null;
+
+// CLASSIFICATION
+
+/**
+* Jedes Object kann gedragt und gedropt werden in jedem Object.
+*/
+function addDragAndDropToClassification() {
+    var root = $('[qtype="'+quizTypes.CLASSIFICATION+'"]');
+    root.find('.object').attr("draggable", "true");
+    root.find('.object').on("dragstart", function(event) {
+        dragObject(event.originalEvent);
+    });
+    root.find('.object').on("dragover", function(event) {
+        allowObjectDrop(event.originalEvent);
+    });
+    root.find('.object').on("drop", function(event) {
+        dropObject(event.originalEvent);
+    });
+
+    root.find('.object').on("dragend", function(event) {
+        dragReset(event.originalEvent);
+    });
+
+    root.find('.object').on("dragenter", function(event) {
+        draggedOver(event.originalEvent);
+    });
+    root.find('.object').on("dragleave", function(event) {
+        draggedOut(event.originalEvent);
+    });
+
+    // mobile unterstützung / Klick-Fallback. Auch am Desktop möglich
+    root.find('.object').on("click", function(event) {
+        if(startedObject == null) {
+            dragObject(event.originalEvent);
+        }
+        else {
+            dropObject(event.originalEvent);
+            dragReset(event.originalEvent);
+        }
+    });
+
+}
+
+
+// ORDER
+
+function addDragAndDropToOrderObjects() {
+    var root = $('[qtype="'+quizTypes.ORDER+'"]');
+    root.find('.object').attr("draggable", "true");
+    root.find('.object').on("dragstart", function(event) {
+        dragObject(event.originalEvent);
+    });
+
+    root.find('.object').on("dragend", function(event) {
+        dragReset(event.originalEvent);
+    });
+
+
+    // mobile unterstützung / Klick-Fallback. Auch am Desktop möglich
+    root.find('.object').on("click", function(event) {
+        if(startedObject == null) {
+            dragObject(event.originalEvent);
+        }
+        else {
+            dragReset(event.originalEvent);
+        }
+    });
+
+    addDragAndDropToOrderDestinations(root);
+}
+
+function addDragAndDropToOrderDestinations(root) {
+    root.find('.object').after(
+        "<div class='object destination'></div>");
+
+    root.find('.object').first().before(
+        "<div class='object destination'></div>");
+    root.find('.destination').on("dragover", function(event) {
+        allowObjectDrop(event.originalEvent);
+    });
+    root.find('.destination').on("drop", function(event) {
+        dropObject(event.originalEvent);
+    });
+
+    root.find('.destination').on("dragend", function(event) {
+        dragReset(event.originalEvent);
+    });
+
+    root.find('.destination').on("dragenter", function(event) {
+        draggedOver(event.originalEvent);
+    });
+    root.find('.destination').on("dragleave", function(event) {
+        draggedOut(event.originalEvent);
+    });
+
+    // mobile unterstützung / Klick-Fallback. Auch am Desktop möglich
+    root.find('.destination').on("click", function(event) {
+        if(startedObject == null) {
+        }
+        else {
+            dropObject(event.originalEvent);
+            dragReset(event.originalEvent);
+        }
+    });
+}
+
+
+// DRAG & DROP --------------------------
+
+
+/**
+* Fügt dem Datentransfer alle zu verschiebenen Objekte hinzu
+*/
+function dragObject(e) {
+    // get type
+    var type = $(e.target).closest(".question").attr("qtype");
+
+    var target = $(e.target).closest('.object')[0];
+
+    // für firefox notwendig, sonst startet drag nicht
+    // try da Microsoft edge sonst abbricht
+    try {
+        if(e.type === "dragstart") e.dataTransfer.setData("transer", "data");
+    }
+    catch(e) {
+        // do nothing
+    }
+
+    if(type === quizTypes.CLASSIFICATION) {
+        // Falls noch nicht benutzt
+        if(!$(target).is(".used") && !$(target).is(".blocked")) {
+            draggedObjects = $(target).children();
+            startedObject = $(target);
+            $(target).css("opacity", "0.4");
+            $(target).css("background", "#888");
+            $(target).closest(".answers").find(".destination").not(".full").addClass("emph");
+
+            $(target).closest(".question").find(".object.used").each(function(i,e) {
+                if($(this).children().attr("id") == draggedObjects.attr("id")) {
+                    $(this).addClass("emph");
+                }
+            });
+        }
+        else {
+            e.preventDefault();
+        }
+    }
+    else if(type === quizTypes.ORDER) {
+        if(!$(target).is(".blocked")) {
+            startedObject = $(target);
+            $(target).css("opacity", "0.4");
+            $(target).css("background", "#888");
+            setTimeout(function() {
+                $(target).closest(".answers").find(".destination").addClass("vis");
+                $(target).prev().removeClass("vis");
+                $(target).next().removeClass("vis");
+            }, 0);
+        }
+        else {
+            e.preventDefault();
+        }
+    }
+
+}
+
+
+/**
+* Verhindert Standardfunktionen
+*/
+function allowObjectDrop(e) {
+    e.preventDefault();
+}
+
+/**
+* Verschiebt alle Objekte in das Ziel
+*/
+function dropObject(e) {
+    // get type
+    var type = $(e.target).closest(".question").attr("qtype");
+
+    var target = $(e.target).closest('.object')[0];
+
+    if(type === quizTypes.CLASSIFICATION) {
+        var dragBackToStart = draggedObjects.attr('id') == $(target).children().attr('id');
+
+        // Ablegen an freiem Platz aus StartObjekt (!= Zielobjekt)
+        if(!startedObject.is(".destination")
+                && $(target).is(".object.destination")
+                && $(target).is(".object")
+                && !$(target).is(".full")
+                && !$(target).is(".blocked")) {
+            e.preventDefault();
+            startedObject.addClass("used");
+            $(target).append(draggedObjects.clone());
+            $(target).addClass("full");
+            dragReset();
+        }
+        // Ablegen an freiem Platz aus Zielobjekt (verschieben)
+        else if(startedObject.is(".destination")
+                && $(target).is(".object.destination")
+                && !$(target).is(".full")
+                && !dragBackToStart
+                && !$(target).is(".blocked")) {
+            startedObject.removeClass("full");
+            $(target).append(draggedObjects);
+            $(target).addClass("full");
+            dragReset();
+        }
+        // Zurücklegen an ursprünglichen Ort
+        else if($(target).is(".object") && $(target).is(".used")
+            && dragBackToStart
+            && !$(target).is(".blocked")) {
+            startedObject.removeClass("full");
+            draggedObjects.remove();
+            $(target).removeClass("used");
+            dragReset();
+        }
+    }
+    else if(type === quizTypes.ORDER) {
+        $(target).after(startedObject);
+
+        var root = $(target).closest(".question");
+        root.find(".destination").remove();
+
+        addDragAndDropToOrderDestinations(root);
+        dragReset();
+    }
+}
+
+/**
+* Setzt Sachen zurück die während des Dragvorgangs verwendet werden.
+*/
+function dragReset(e) {
+    // remove emphasis
+    if(e != undefined) $(e.target).closest(".answers").find(".emph").removeClass("emph");
+
+    $('.draggedover').removeClass("draggedover");
+    $(".object").css("opacity", false);
+    $(".object").css("background", false);
+    $('.question[qtype="'+quizTypes.ORDER+'"]').find(".destination").removeClass("vis");
+    draggedObjects = null;
+    startedObject = null;
+}
+
+function draggedOver(e) {
+    var target = $(e.target).closest('.object')[0];
+    // Leer oder zurücklegen zur Ursprungsort
+    if(!$(target).is(".full")
+        || draggedObjects == $(target).children()) $(target).addClass("draggedover");
+}
+
+function draggedOut(e) {
+    var target = $(e.target).closest('.object')[0];
+    // Leer oder zurücklegen zur Ursprungsort
+    if(!$(target).is(".full")
+        || draggedObjects == $(target).children()) $(target).removeClass("draggedover");
+}
+
+
+
+
+// --------------------------------------------------------------------------------------
+// HOTSPOT
+// --------------------------------------------------------------------------------------
+
+var activeElement = 0;
+
+function initiateHotspotImage() {
+    var root = $('[qtype="'+quizTypes.HOTSPOT+'"]');
+
+    // Descr (richtige und falsche antworten) hinzufügen
+    root.find('.hotspot').append('<div class="descr"></div>')
+
+    // hover funktionen
+    root.find('.hotspot').mouseover(function(event) {
+        if($(this).find('.descr').children().length > 0) $(this).find('.descr').show();
+        calculateHotspotDescriptions($(this).closest('[qtype="'+quizTypes.HOTSPOT+'"]'));
+    });
+    root.find('.hotspot').mouseout(function(event) {
+        $(this).find('.descr').hide();
+    });
+
+
+    // Klicken auf Hotspot
+    root.find('.hotspot').click(function() {
+        hotspotClick($(this));
+    });
+
+
+    // zeigt erstes gesuchtes objekt in .gesucht an
+    root.each(function(i,e) {
+        hotspotNextObject($(e));
+    });
+
+    // berechnet Größe der Hotspots
+    calculateHotspotDimensions();
+}
+
+
+function hotspotClick(hs) {
+    if(!hs.is('.blocked')) {
+        hs.closest('[qtype="'+quizTypes.HOTSPOT+'"]').find('.hotspot').removeClass("act");
+        hs.addClass("act");
+    }
+}
+
+/**
+* Setzt in .gesucht das nächste Gesuchte Objekt ein
+* gibt zurück ob ein nicht beantwortetes Objekt gefunden wurde (bool)
+*/
+function hotspotNextObject(root) {
+    var doShuffle = root.find('.hotspot_image').is('.shuffle');
+
+    var ans = root.find('a.ans').not('.used');
+    if(doShuffle) {
+        shuffle(ans);
+    }
+
+    root.find('.gesucht').html(ans.first().attr('id'));
+    ans.first().addClass("used");
+
+    return ans.length > 0;
+}
+
+function calculateHotspotDimensions() {
+    var root = $('[qtype="'+quizTypes.HOTSPOT+'"]');
+
+    root.each(function(i, e) {
+        var imgWidth = root.find('.hotspot_image').width();
+        var width = imgWidth * 0.05;
+
+        $(e).find('.hotspot_image').find('.hotspot').css({
+            "width" : width + "px",
+            "height" : width + "px",
+            "margin-top": "-" + (width/2) + "px",
+            "margin-left": "-" + (width/2) + "px"
+        });
+    });
+}
+
+function calculateHotspotDescriptions(root) {
+    const descr_margin = {
+        top : 5,
+        left : 0
+    };
+
+    root.each(function(i, e) {
+        var imgWidth = root.find('.hotspot_image').width();
+        var width = imgWidth * 0.05;
+
+
+        var hs_img = $(e).find('.hotspot_image').find('img');
+
+        var hss = $(e).find('.hotspot_image').find('.hotspot');
+
+        hss.each(function(i,e) {
+            hs = $(e);
+            if(hs.find('.descr').length > 0) {
+                var hs_width = hs.width();
+                var des_width = hs.find('.descr').outerWidth();
+                var des_height = hs.find('.descr').outerHeight();
+
+                var top = (hs_width + descr_margin.top) + "px";
+                var left = 0;
+
+                // zu hoch um darunter angezeigt zu werden
+                if((hs.offset().top
+                    - hs_img.offset().top
+                    + hs_width
+                    + des_height
+                    + descr_margin.top)
+                    > hs_img.height()) {
+                    top = "-" + (des_height + descr_margin.top) + "px";
+                }
+
+                // zu breit um nach rechts angezeigt zu werden
+                if((hs.offset().left
+                    - hs_img.offset().left
+                    + hs_width
+                    + des_width
+                    + descr_margin.left)
+                    > hs_img.width()) {
+                    left = "-" + (des_width - hs_width - descr_margin.left) + "px";
+                }
+
+                hs.find('.descr').css({
+                    "top" : top,
+                    "left" : left
+                });
+            }
+        });
+    });
+}
+
+function blockHotspot(div) {
+    div.find('.hotspot').addClass('blocked');
+}
+
+
+function findCorrectsHotspot(div) {
+    var hss = div.find('.hotspot');
+    var ans = div.find('a.ans');
+
+    hss.each(function(i,e) {
+        var hs = $(e);
+        // bisher nicht korrekt
+        if(hs.find('.cor').length == 0) {
+            var id = hs.attr("id");
+            var enc = encryptMD5(id);
+
+            ans.each(function(ii, ee) {
+                // korrekte antwort
+                if($(ee).html() == enc) {
+                    hs.find('.descr').prepend("<div class='cor'>"+$(ee).attr("id")+"</div>");
+                }
+            });
+        }
+    });
+}
+
+
+
+// ---------------------------------- PETRI IMAGE --------------------------------------
+
+function initiatePetriImage() {
+    var root = $('[qtype="'+quizTypes.PETRI+'"]');
+
+    root.each(function(i,e) {
+        var div = $(this);
+
+
+        div.find('.petri_image').find('img').hide();
+        div.find('.petri_image').find('img').first().show();
+
+        div.find('.petri_aufgabe').find('img').hide();
+        div.find('.petri_aufgabe').find(
+            '#'+div.find('.petri_image').find('img').first().attr("id")).show();
+
+        div.find('.gesucht').html(div.find('.petri_image').find('img').first().attr("task"));
+
+        // Klicken auf Hotspot
+        div.find('.place').click(function() {
+            petriClick($(this));
+        });
+
+        // berechnet Größe der Plätze
+        calculatePetriDimensions();
+    });
+}
+
+
+function petriClick(element) {
+    var div = element.closest('.question');
+    if(!element.is(".blocked") && !div.is('.show_feedback')) {
+        if(element.is(".act")) {
+            element.removeClass("act");
+        }
+        else {
+            element.addClass("act");
+        }
+    }
+}
+
+function petriShowCorrectBG(div) {
+    var imgs = div.find('.petri_image').find('img.correct');
+
+    var act_img = div.find('.petri_image').find('img:visible');
+
+    var cor_img = imgs.filter('#'+act_img.attr('id'));
+
+    if(cor_img.length > 0) {
+        act_img.hide();
+        cor_img.show();
+    }
+}
+
+function petriNextImage(div) {
+    var imgs = div.find('.petri_image').find('img').not('.correct');
+
+    var act_img = div.find('.petri_image').find('img:visible');
+
+    var idx = imgs.index(imgs.filter('#'+act_img.attr("id")));
+
+    if(imgs.length > idx + 1) {
+        next_img = $(imgs.get(idx+1));
+
+        act_img.hide();
+        next_img.show();
+    }
+}
+
+function petriNextAufgabenImage(div) {
+    div.find('.petri_aufgabe').find('img').hide();
+    div.find('.petri_aufgabe').find('#'+div.find('.petri_image').find('img:visible').attr("id")).show();
+}
+
+function petriNextPart(div) {
+    div.find('.feedback').hide();
+    petriNextImage(div);
+    petriNextAufgabenImage(div);
+    div.find('.gesucht').html(div.find('.petri_image').find('img:visible').attr("task"));
+}
+
+function petriFinished(div) {
+    var finished = false;
+
+    var act_img = div.find('.petri_image').find('img:visible');
+
+    var idx = div.find('.petri_image').find('img').index(act_img);
+
+    if(idx >= div.find('.petri_image').find('img').length - 1) {
+        finished = true;
+    }
+
+    return finished;
+}
+
+function blockPetri(div) {
+    div.find('.place').addClass("blocked");
+}
+
+
+function calculatePetriDimensions() {
+    var root = $('[qtype="'+quizTypes.PETRI+'"]');
+
+    root.each(function(i, e) {
+        var imgWidth = root.find('.petri_image').width();
+        var width = imgWidth * 0.05;
+
+        $(e).find('.petri_image').find('.place').css({
+            "width" : width + "px",
+            "height" : width + "px",
+            "margin-top": "-" + (width/2) + "px",
+            "margin-left": "-" + (width/2) + "px"
+        });
     });
 }
 
@@ -412,18 +1432,18 @@ function toggleErrorButton(button) {
             $(button).addClass("act");
         }
     }
-    
+
 }
 
 
 /**
 * Entfernt für alle übergebenen Labels die färbenden Klassen "right" und "wrong"
 */
-function deleteLabelColoring(labels) {
-    labels.each(function() {
-        $(this).removeClass('right');
-        $(this).removeClass('wrong');
-    });
+function deleteLabelColoring(div) {
+    div.removeClass('right');
+    div.removeClass('wrong');
+    div.find('.right').removeClass('right');
+    div.find('.wrong').removeClass('wrong');
 };
 
 /**
@@ -439,6 +1459,96 @@ function contains(array, val) {
     }
     return found;
 };
+
+
+var timerAlertActivated = false;
+var timerAlertText ="";
+
+/**
+* initialisiert Timer für alle Aufgaben die welche haben
+*/
+function initTimers() {
+
+    for(var activeSection=0; activeSection < $('section').length; activeSection++) {
+        if(eLearnJS.allShown || activeSection == eLearnJS.visSection) {
+            // Startet neuen Timer
+            if(start_time[activeSection] == undefined
+                || start_time[activeSection] == null) {
+                start_time[activeSection] = new Date();
+                passed_time[activeSection] = 0;
+            }
+            // Passt alten Timer an (Zeit weiterlaufen lassen)
+            else {
+                start_time[activeSection] = new Date();
+                start_time[activeSection].setTime(
+                    start_time[activeSection].getTime()
+                    - passed_time[activeSection]*1000);
+            }
+
+            // anzeigen der startzeit
+            $($('section').get(activeSection)).find('.question:visible').not('.answered').each(function(i,e) {
+                var max_time = $(this).attr("max-time");
+                if(max_time != undefined && max_time.length != 0) {
+                    max_time = parseInt(max_time);
+                    $(this).find('.answered_hint.timer').remove();
+                    $(this).find("h4").after("<div class='answered_hint timer'>"
+                                    + max_time + ":00</div>");
+                }
+            });
+        }
+    }
+    updateTimers();
+}
+
+/**
+* Aktualisieren aller Timer
+*/
+function updateTimers() {
+    var now = new Date();
+
+    for(var activeSection=0; activeSection < $('section').length; activeSection++) {
+        if(eLearnJS.allShown || activeSection == eLearnJS.visSection) {
+            var diff = (now.getTime() - start_time[activeSection].getTime())/1000;
+            passed_time[activeSection] = diff;
+            $($('section').get(activeSection)).find('.answered_hint.timer:visible').each(function(i,e) {
+                var timer = $(this);
+                // time in seconds
+                var time = parseInt(timer.closest('.question').attr("max-time")) * 60;
+                var time_left = time - diff;
+
+                if(timer.closest('.question').is('.answered')) return true;
+
+                if(time_left > 0) {
+                    var min = Math.floor(time_left/60);
+                    var sec = Math.floor(time_left - min*60);
+                    if(sec < 10) {
+                        sec = "0" + sec;
+                    }
+                    $(this).html(min + ":" + sec);
+                }
+                else if(!$(this).closest(".question").is('.answered')) {
+                    finishQuestion($(this).closest(".question"));
+                    blockQuestion($(this).closest(".question"));
+                    $(this).closest(".question").find('.feedback.noselection').hide();
+
+                    $(this).closest(".question").append("<div class='feedback timeup'>Die Zeit ist abgelaufen. Die Frage wurde automatisch beantwortet und gesperrt.</div>");
+
+                    if(timerAlertActivated) {
+                        alert(timerAlertText);
+                    }
+                }
+            });
+        }
+    }
+
+
+    setTimeout(function() { updateTimers(); }, 1000);
+}
+
+function setTimerAlert(bool, text) {
+    timerAlertActivated = bool;
+    timerAlertText = text;
+}
 
 
 /**
@@ -532,21 +1642,53 @@ function windowResizing() {
             $(this).children('div.answers').css("padding-left", maxWidth + "px");
         }
     });
+
+    calculateHotspotDimensions();
+    calculatePetriDimensions();
+    calculateCanvasDimensions();
 }
 
 
-
+/**
+* Setzt eine Frage auf den Anfangszustand zurück
+*/
 function resetQuestion(div) {
     div.removeClass("answered");
     div.find(".feedback").hide();
-    deleteLabelColoring(div.find("label"));
+    deleteLabelColoring(div);
+
     div.find("input:text").val("");
     div.find("input:radio").prop("checked", false);
     div.find("input:checkbox").prop("checked", false);
 
     div.find('textarea').attr('readonly', false);
+    div.find('textarea').val("");
     div.find("select").attr("disabled", false);
     div.find("input").attr("disabled", false);
+
+    // Zuordnung (Classfication)
+    div.find('.used').removeClass("used");
+    div.find('.full').children().remove();
+    div.find('.full').removeClass("full");
+
+    // alle geblockten elemente (mehrfach benutzt)
+    div.find('.blocked').removeClass("blocked");
+
+    // alle aktiven elemente (mehrfach benutzt)
+    div.find('.act').removeClass("act");
+
+    // hotspot
+    div.find('.hotspot').find('.descr').children().remove();
+
+    // petrinetz
+    div.find('.petri_image').find('img').hide();
+    // erste aufgabe anzeigen
+    div.find('.petri_image').find('img').first().show();
+    div.filter('[qtype="'+quizTypes.PETRI+'"]').find('.petri_aufgabe').find('img')
+        .filter('#'+div.find('.petri_image').find('img:visible').attr("id")).show();
+    div.filter('[qtype="'+quizTypes.PETRI+'"]').find('.gesucht').html(div.find('.petri_image').find('img').first().attr("task"));
+
+    resetCanvas(div);
 
     div.nextAll("button.quizButton").first().show();
     div.nextAll("button.quizButton.weiter").first().hide();
@@ -564,8 +1706,529 @@ function resetQuiz() {
     $("input:checkbox").prop("checked", false);
 
     $('.question').find('textarea').attr('readonly', false);
+
+    $(".question").each(function() {
+        resetQuestion($(this));
+    });
 }
 
+
+
+/** **************************************************************************
+*                                                                            *
+*                                                                            *
+*                             DRAWING CANVAS                                 *
+*                                                                            *
+*                                                                            *
+******************************************************************************/
+// Für jede Frage wird hinterlegt, welcher Canvas angezeigt wird
+// genutzt für rückgängig/wiederholen Funktion
+var canvasIndex = [];
+
+/**
+* Initialisiert alle DrawingCanvas Elemente. Für Jede Frage dieses Typs.
+*/
+function initiateDrawingCanvas() {
+    var root = $('[qtype="'+quizTypes.DRAW+'"]');
+
+    root.each(function(i,e) {
+        var div = $(this);
+
+        div.addClass("unbewertet");
+
+        resetCanvas(div);
+
+        // Container für zusätzliche Steuerelemente
+        div.find('.drawing_canvas_container').after('<div class="button_container"></div>');
+
+        // Rückgängig und Wiederholen
+        if(!div.find('.drawing_canvas_container').is('.no_steps')) {
+            div.find('.button_container').append('<button class="stepforw">Wiederholen</button><br>');
+            div.find('.stepforw').click(function() {
+                canvasStepForward(div.find('.drawing_canvas_container'));
+            });
+
+            div.find('.button_container').append('<button class="stepback">Rückgängig</button><br>');
+            div.find('.stepback').click(function() {
+                canvasStepBack(div.find('.drawing_canvas_container'));
+            });
+        }
+
+        // Bild komplett löschen Button
+        div.find('.button_container').append('<button class="clear">Löschen</button>');
+        div.find('.clear').click(function() {
+            resetCanvas(div);
+        });
+
+        calculateCanvasDimensions();
+    });
+}
+
+/**
+* Skaliert sichtbare Canvas auf aktuelle Größe
+* Falls nötig werden dabei die canvas inhalte neu gezeichnet
+*/
+function calculateCanvasDimensions() {
+    var root = $('[qtype="'+quizTypes.DRAW+'"]:visible');
+
+    root.each(function(i,e) {
+        var div = $(this);
+        div.find('canvas').each(function(ii,ee) {
+
+            // canvas to scale
+            var canvas = $(this);
+
+            // clear prev. timeouts if existent
+            if(this.redrawTimeout != undefined && this.redrawTimeout != null) {
+                clearTimeout(this.redrawTimeout);
+            }
+
+            // create new timeout
+            var timeout = setTimeout(function() {
+                // clone before resize
+                var oldCanvas = canvas[0];
+                var newCanvas = document.createElement('canvas');
+                var context = newCanvas.getContext('2d');
+                newCanvas.width = oldCanvas.width;
+                newCanvas.height = oldCanvas.height;
+                context.drawImage(oldCanvas, 0, 0);
+
+                // change dimensions
+                canvas.attr("width", canvas.width());
+                canvas.attr("height", canvas.height());
+
+                // redraw frome cloned canvas
+                oldCanvas.getContext('2d').drawImage(newCanvas, 0, 0, canvas.width(), canvas.height());
+                $(newCanvas).remove();
+            }, 100);
+
+            // add this timeout to the element
+            this.redrawTimeout = timeout;
+        });
+    });
+}
+
+/**
+* Stellt den Startzustand wieder her.
+*
+* alle <canvas> Elemente werden entfernt
+* neuere original canvas wird erstellt und DrawingCanvas initialisiert
+* canvasIndex wird zurückgesetzt.
+* block wird aufgehoben
+*/
+function resetCanvas(div) {
+    if(div.is('[qtype="'+quizTypes.DRAW+'"]')) {
+        div.find('canvas').remove();
+        div.find('.drawing_canvas_container').append('<canvas class="drawing_canvas act"></canvas>');
+        createDrawingCanvas(div.find('.drawing_canvas_container').find('canvas'),
+                            getCanvasStrokeColor(div));
+
+        setCanvasIndex(div.find('.drawing_canvas_container'), 0);
+        div.find('.drawing_canvas_container').removeClass(".blocked");
+        calculateCanvasDimensions();
+    }
+}
+
+/**
+* Geht einen gezeichneten Schritt zurück
+*
+* Dazu wird der ältere Canvas wieder angezeigt und der canvasIndex angepasst
+*/
+function canvasStepBack(div) {
+    var c_Idx = getCanvasIndex(div);
+
+    var canvasList = div.find('canvas').not('#imageTemp');
+
+    if(c_Idx > 0) {
+        canvasList.removeClass("act");
+        $(canvasList.get(c_Idx - 1)).addClass("act");
+        setCanvasIndex(div, getCanvasIndex(div)-1);
+    }
+}
+
+/**
+* Wiederholt einen gezeichneten Schritt
+*
+* Dazu wird der neuere Canvas wieder angezeigt und der canvasIndex angepasst
+*/
+function canvasStepForward(div) {
+    var c_Idx = getCanvasIndex(div);
+
+    var canvasList = div.find('canvas').not('#imageTemp');
+
+    if(c_Idx < canvasList.length - 1) {
+        canvasList.removeClass("act");
+        $(canvasList.get(c_Idx + 1)).addClass("act");
+        setCanvasIndex(div, getCanvasIndex(div)+1);
+    }
+}
+
+/**
+* Gibt den aktuell angezeigten canvasIndex für ein .drawing_canvas_container Element zurück
+*/
+function getCanvasIndex(div) {
+    var draw_can = $('[qtype="'+quizTypes.DRAW+'"]').find('.drawing_canvas_container');
+
+    return canvasIndex[draw_can.index(div)];
+}
+
+/**
+* Setzt den aktuell angezeigten canvasIndex auf idx für ein .drawing_canvas_container Element
+*/
+function setCanvasIndex(div, idx) {
+    var draw_can = $('[qtype="'+quizTypes.DRAW+'"]').find('.drawing_canvas_container');
+
+    canvasIndex[draw_can.index(div)] = idx;
+}
+
+/**
+* Gibt einen Farbcode String zurück wie zB "#FF0000" für eine Zeichenaufgabe
+*
+* @param: div - das div.question[qtype=quizTypes.DRAW]
+*/
+function getCanvasStrokeColor(root) {
+    var color = "#000000";
+
+    var div = root.find('.drawing_canvas_container');
+
+    if(div.is('.black')) {
+        color = "#000000";
+    }
+    else if(div.is(".red")) {
+        color = "#FF0000";
+    }
+    else if(div.is(".green")) {
+        color = "#00FF00";
+    }
+    else if(div.is(".blue")) {
+        color = "#0000FF";
+    }
+    else if(div.is(".cyan")) {
+        color = "#00FFFF";
+    }
+    else if(div.is(".yellow")) {
+        color = "#FFFF00";
+    }
+    else if(div.is(".orange")) {
+        color = "#FF8000";
+    }
+    else if(div.is(".purple")) {
+        color = "#FF00FF";
+    }
+    else if(div.css("color") != undefined) {
+        color = div.css("color");
+    }
+
+    return color;
+}
+
+/* © 2009 ROBO Design
+ * http://www.robodesign.ro
+ */
+
+// Keep everything in anonymous function, called on window load.
+function createDrawingCanvas(element, color) {
+
+  initTouchToMouse(element.closest('.drawing_canvas_container'));
+
+  var canvas, context, canvasoList, contextoList;
+  var root = element.closest('.drawing_canvas_container');
+
+  var strokeColor = color;
+
+  // The active tool instance.
+  var tool;
+  var tool_default = 'pencil';
+
+  function init () {
+
+    canvasoList = [];
+    contextoList = [];
+
+    // Find the canvas element.
+    canvasoList[0] = element[0];
+    if (!canvasoList[0]) {
+      //alert('Error: I cannot find the canvas element!');
+      return;
+    }
+
+    if (!canvasoList[0].getContext) {
+      //alert('Error: no canvas.getContext!');
+      return;
+    }
+
+    // Get the 2D canvas context.
+    contextoList[0] = canvasoList[0].getContext('2d');
+    if (!contextoList[0]) {
+      //alert('Error: failed to getContext!');
+      return;
+    }
+
+    // Add the temporary canvas.
+    var container = canvasoList[0].parentNode;
+    canvas = document.createElement('canvas');
+    if (!canvas) {
+      //alert('Error: I cannot create a new canvas element!');
+      return;
+    }
+
+    canvas.id     = 'imageTemp';
+    canvas.width  = canvasoList[0].width;
+    canvas.height = canvasoList[0].height;
+    container.appendChild(canvas);
+
+    context = canvas.getContext('2d');
+
+
+    // Activate the default tool.
+    if (tools[tool_default]) {
+      tool = new tools[tool_default]();
+    }
+
+    // Attach the mousedown, mousemove and mouseup event listeners.
+    canvas.addEventListener('mousedown', ev_canvas, false);
+    canvas.addEventListener('mousemove', ev_canvas, false);
+    canvas.addEventListener('mouseup',   ev_canvas, false);
+  }
+
+  // The general-purpose event handler. This function just determines the mouse
+  // position relative to the canvas element.
+  function ev_canvas (ev) {
+    if(!root.is('.blocked')) {
+      if (ev.layerX || ev.layerX == 0) { // Firefox
+        ev._x = ev.layerX;
+        ev._y = ev.layerY;
+      } else if (ev.offsetX || ev.offsetX == 0) { // Opera
+        ev._x = ev.offsetX;
+        ev._y = ev.offsetY;
+      }
+
+      // Call the event handler of the tool.
+      var func = tool[ev.type];
+      if (func) {
+        func(ev);
+      }
+    }
+  }
+
+
+  // This function draws the #imageTemp canvas on top of #imageView, after which
+  // #imageTemp is cleared. This function is called each time when the user
+  // completes a drawing operation.
+  function img_update () {
+    if(!root.is('no_steps')) {
+        new_canvas();
+    }
+    contextoList[getCanvasIndex(root)].drawImage(canvas, 0, 0);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function new_canvas() {
+      // clear all others after this
+      var canvasList = root.find('canvas').not('#imageTemp');
+      for(var i = getCanvasIndex(root)+1; i<canvasList.length; i++) {
+          $(canvasList.get(i)).remove();
+      }
+
+      // create new canvas
+      var canvas_new, context_new;
+      canvas_new = document.createElement('canvas');
+      canvas_new.className = "drawing_canvas";
+      canvas_new.width  = canvasoList[0].width;
+      canvas_new.height = canvasoList[0].height;
+
+      context_new = canvas_new.getContext('2d');
+
+      // copy active image to new
+      context_new.drawImage(canvasoList[getCanvasIndex(root)], 0, 0);
+
+      // add to lists
+      setCanvasIndex(root, getCanvasIndex(root)+1);
+      canvasoList[getCanvasIndex(root)] = canvas_new;
+      contextoList[getCanvasIndex(root)] = context_new;
+
+      var container = canvasoList[0].parentNode;
+      container.insertBefore(canvas_new, canvas);
+
+      // show
+      show_active_canvas();
+  }
+
+  function show_active_canvas() {
+      for(var i=0; i<canvasoList.length; i++) {
+          if(i == getCanvasIndex(root)) {
+              $(canvasoList[i]).addClass("act");
+          }
+          else {
+              $(canvasoList[i]).removeClass("act");
+          }
+      }
+  }
+
+  // This object holds the implementation of each drawing tool.
+  var tools = {};
+
+  // The drawing pencil.
+  tools.pencil = function () {
+    var tool = this;
+    this.started = false;
+
+    // This is called when you start holding down the mouse button.
+    // This starts the pencil drawing.
+    this.mousedown = function (ev) {
+        if(ev.which == 1) {
+            context.beginPath();
+            context.moveTo(ev._x, ev._y);
+            tool.started = true;
+        }
+    };
+
+    // This function is called every time you move the mouse. Obviously, it only
+    // draws if the tool.started state is set to true (when you are holding down
+    // the mouse button).
+    this.mousemove = function (ev) {
+      if (tool.started) {
+        context.lineTo(ev._x, ev._y);
+        context.strokeStyle = strokeColor;
+        context.stroke();
+      }
+    };
+
+    // This is called when you release the mouse button.
+    this.mouseup = function (ev) {
+      if (tool.started) {
+        tool.mousemove(ev);
+        tool.started = false;
+        img_update();
+      }
+    };
+  };
+
+  // The rectangle tool.
+  tools.rect = function () {
+    var tool = this;
+    this.started = false;
+
+    this.mousedown = function (ev) {
+      if(ev.which == 1) {
+          tool.started = true;
+          tool.x0 = ev._x;
+          tool.y0 = ev._y;
+      }
+    };
+
+    this.mousemove = function (ev) {
+      if (!tool.started) {
+        return;
+      }
+
+      var x = Math.min(ev._x,  tool.x0),
+          y = Math.min(ev._y,  tool.y0),
+          w = Math.abs(ev._x - tool.x0),
+          h = Math.abs(ev._y - tool.y0);
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (!w || !h) {
+        return;
+      }
+
+      context.strokeRect(x, y, w, h);
+    };
+
+    this.mouseup = function (ev) {
+      if (tool.started) {
+        tool.mousemove(ev);
+        tool.started = false;
+        img_update();
+      }
+    };
+  };
+
+  // The line tool.
+  tools.line = function () {
+    var tool = this;
+    this.started = false;
+
+    this.mousedown = function (ev) {
+      if(ev.which == 1) {
+          tool.started = true;
+          tool.x0 = ev._x;
+          tool.y0 = ev._y;
+      }
+    };
+
+    this.mousemove = function (ev) {
+      if (!tool.started) {
+        return;
+      }
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      context.beginPath();
+      context.moveTo(tool.x0, tool.y0);
+      context.lineTo(ev._x,   ev._y);
+      context.stroke();
+      context.closePath();
+    };
+
+    this.mouseup = function (ev) {
+      if (tool.started) {
+        tool.mousemove(ev);
+        tool.started = false;
+        img_update();
+      }
+    };
+  };
+
+  init();
+
+  return this;
+}
+
+/**
+* Konvertiert Touch events in mouse events für DrawingCanvas auf Touchgeräten.
+*/
+function touchHandler(event)
+{
+    event = event.originalEvent;
+    var touches = event.changedTouches,
+        first = touches[0],
+        type = "";
+    switch(event.type)
+    {
+        case "touchstart": type = "mousedown"; break;
+        case "touchmove":  type = "mousemove"; break;
+        case "touchend":   type = "mouseup";   break;
+        default:           return;
+    }
+
+    // initMouseEvent(type, canBubble, cancelable, view, clickCount,
+    //                screenX, screenY, clientX, clientY, ctrlKey,
+    //                altKey, shiftKey, metaKey, button, relatedTarget);
+
+    var simulatedEvent = document.createEvent("MouseEvent");
+
+    simulatedEvent.initMouseEvent(type, true, true, window, 1,
+                                  first.screenX, first.screenY,
+                                  first.clientX, first.clientY, false,
+                                  false, false, false, 0/*left*/, null);
+
+    first.target.dispatchEvent(simulatedEvent);
+    event.preventDefault();
+    event.stopPropagation();
+}
+
+/**
+* Initialisiert das Touch->Mouse für ein Element.
+*/
+function initTouchToMouse(element)
+{
+    element.on("touchstart", touchHandler);
+    element.on("touchmove", touchHandler);
+    element.on("touchend", touchHandler);
+    element.on("touchcancel", touchHandler);
+}
 
 
 /** *********************************************************************

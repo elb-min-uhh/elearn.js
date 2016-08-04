@@ -19,10 +19,21 @@ var backbuttonEnabled = false;
 var backpage = 0;
 var backpagetype = "index";
 
+
+var blockProgressQuizJS = false;
+var blockProgressAlertActivated = false;
+var blockProgressAlertText = "";
+var blockProgressShowElementActivated = false;
+var blockProgressShowElementText = "";
+
 // Zum generellen Aktivieren oder Deaktivieren der Knöpfe
 var dirButtonsEnabled = true;
 var keyNavigationEnabled = true;
 var progressbarEnabled = true;
+
+// Funktionen die aufgerufen werden, wenn eine neue section angezeigt wird
+// diese sind registrierbar mit registerAfterShow(KEY, FNC)
+var afterShow = {};
 
 // Nur damit Scriptaufrufe übersichtlicher sind.
 var eLearnJS = this;
@@ -287,7 +298,12 @@ function showPrev() {
 * Funktioniert nur, wenn nicht alle Sections angezeigt werden.
 */
 function showNext() {
-    showSection(visSection+1);
+
+    // nur wenn entweder nicht blockiert bei unbeantworteter Frage
+    // oder alle (sichtbaren) Fragen beantwortet
+    if(!checkBlockProgress()) {
+        showSection(visSection+1);
+    }
 };
 
 /**
@@ -332,7 +348,20 @@ function showSection(i) {
     if(!allShown) {
         setDirectionButtonsEnabledIdx(visSection);
     }
+
+    // Ausführen registrierten funktionen
+    $.each(afterShow, function(key, fnc) {
+        fnc();
+    })
 };
+
+/**
+* Registriert eine Funktion, die ausgeführt wird, nachdem eine neue Section
+* angezeigt wurde.
+*/
+function registerAfterShow(key, fnc) {
+    afterShow[key] = fnc;
+}
 
 /**
 * Aktualisiert den Fortschritt der progressbar
@@ -359,6 +388,10 @@ function toggleAllSections() {
         $(document).scrollTop($($('section')[visSection]).position().top - $('#navigation').height() - 10);
         allShown = true;
         resizeAllSliders();
+        // Ausführen registrierten funktionen
+        $.each(afterShow, function(key, fnc) {
+            fnc();
+        })
     }
 };
 
@@ -436,6 +469,57 @@ function setProgressbarEnabled(b) {
         }
     }
 };
+
+
+/**
+* Aktiviert oder deaktiviert das Blocken des Weitergehens (in showNext())
+*/
+function setBlockProgressIfQuestionsNotAnswered(b) {
+    blockProgressQuizJS = b;
+}
+
+/**
+* Gibt zurück ob der Fortschritt geblockt werden soll.
+* Zeigt außerdem Blocknachrichten an.
+*/
+function checkBlockProgress() {
+    var block = blockProgressQuizJS && !getVisibleQuestionsAnswered();
+
+    if(block) {
+        // Zeigt alert
+        if(blockProgressAlertActivated) {
+            alert(blockProgressAlertText);
+        }
+
+        // zeigt gesetztes Element an
+        if(blockProgressShowElementActivated) {
+            $(blockProgressShowElementText).show();
+        }
+    }
+    else {
+        // blendet gesetztes Element wieder aus
+        if(blockProgressShowElementActivated) {
+            $(blockProgressShowElementText).hide();
+        }
+    }
+
+    return block;
+}
+
+/**
+* Aktiviert oder deaktiviert einen Alert im Blockfall und setzt ggf. die
+* Nachricht die angezeigt wird.
+*/
+function setBlockProgressAlert(enabled, text) {
+    blockProgressAlertActivated = enabled;
+    blockProgressAlertText = text;
+}
+
+
+function setBlockProgressShowElement(enabled, text) {
+    blockProgressShowElementActivated = enabled;
+    blockProgressShowElementText = text;
+}
 
 
 
