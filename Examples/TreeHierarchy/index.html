@@ -16,16 +16,34 @@
 
 		<script>
 		    window.onload = function() {
+
+                // Erweiterungen hier einfügen
+
+                // Ende der Erweiterungen
+
                 /* Mögliche Erweiterungen
 
-                eLearnJS.toggleAllSections(); // Zeigt alle Sections an
+                Alle nachfolgenden Erweiterungen sind 'auskommentiert'.
+                Das bedeutet, sie haben keine Funktion solange sie innerhalb
+                des /* ... * / Blocks sind. (Abschluss ohne Leerzeichen zwischen * und /)
+                Möchte man also etwas einbauen/nutzen, muss die jeilige Zeile
+                außerhalb des Kommentarblocks stehen.
+                Jeder Befehl endet mit einem ';'. Alles hinter den // ist
+                ein weiterer erklärender Kommentar.
 
+
+                eLearnJS.toggleAllSections(); // Zeigt alle Sections an
                 eLearnJS.setNavigationTitle("Überschrift"); // Die Überschrift, wenn alle Sections sichtbar sind
 
-				eLearnJS.setBackButtonEnabled(true); // Zurück button im Header
-                eLearnJS.setBackButtonText("Übersicht"); // "Übersicht" als Text, statt "Zurück"
+				eLearnJS.setBackButtonEnabled(true); // Zurück button im Header aktivieren
+                eLearnJS.setBackButtonText("Übersicht"); // "Übersicht" als Text, statt "Zurück" für den Button
 
                 // Beispiele für BackPages (Was geöffnet wird beim Back button):
+                // Der erste Parameter entspricht dem jeweiligen Ziel
+                // der zweite Parameter gibt die Art des Ziels an.
+                // Bei "index" wird der erste Parameter als Index einer
+                // Section erkannt. "name" wäre der Name einer Section.
+                // "link" funktioniert wie ein href link eines <a>
                 eLearnJS.setBackPage(2, "index"); // Die 3. section
                 eLearnJS.setBackPage("Inhaltsverzeichnis", "name"); // Die section mit name="Inhaltsverzeichnis"
 				eLearnJS.setBackPage("../", "link"); // Im Pfad einen Schritt zurück

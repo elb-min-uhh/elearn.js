@@ -201,8 +201,7 @@ function initiateSideMenu() {
 function checkParameters() {
     if(QueryString.s != undefined) {
         var sectionName = decodeURI(QueryString.s);
-        var idx = $('section').index($('section[name="' + sectionName + '"]').get(0));
-        showSection(idx);
+        showSection(sectionName);
     }
     else if(QueryString.p != undefined) {
         var idx = parseInt(QueryString.p);
@@ -314,6 +313,11 @@ function showNext() {
 function showSection(i) {
     overviewShown = true;
     showSectionOverview();
+
+    // get section to name
+    if(typeof i === 'string' || i instanceof String) {
+        i = $('section').index($('section[name="' + i + '"]').get(0));
+    }
 
     // show only this section
     if(!allShown && i >= 0 && i < $('section').length) {
