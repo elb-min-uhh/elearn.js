@@ -138,7 +138,7 @@ function submitAns(button, force) {
         return;
     }
 
-    var c = getCorrectAnswers(div.find("a.ans"));
+    var c = elementsToTextArray(div.find("a.ans"));
 
     var labels = div.children('.answers').children('label');
     deleteLabelColoring(labels);
@@ -278,7 +278,7 @@ function submitAns(button, force) {
 * Liest für ein <div> alle als korrekt angegebenen Antworten aus.
 * Diese sollten MD5 Verschlüsselt sein.
 */
-function getCorrectAnswers(ans) {
+function elementsToTextArray(ans) {
     var c = [];
     ans.each(function(i) {
         c[c.length] = $(this).html();
@@ -357,7 +357,9 @@ function getCorrectFillBlank(labels, answers, force) {
     labels.each(function(i, e) {
         var input = $(this).find("input");
         var id = input.attr("id");
-        var cor = answers.filter("#"+id).text();
+
+        // alle richtigen antworten zu der ID
+        var cor = elementsToTextArray(answers.filter("#"+id));
         var ans = encryptMD5(input.val().trim());
 
         // nicht ausgefüllt
@@ -368,11 +370,11 @@ function getCorrectFillBlank(labels, answers, force) {
         }
 
         // antwort richtig
-        if(cor == ans) {
+        if(contains(cor, ans) || cor.length == 0) {
             $(this).addClass("right");
         }
         // antwort falsch
-        else if(cor != ans) {
+        else if(!contains(cor, ans)) {
             correct = false;
             $(this).addClass("wrong");
         }
@@ -393,15 +395,17 @@ function getCorrectFillBlankChoice(labels, answers, force) {
     labels.each(function(i, e) {
         var select = $(this).find("select");
         var id = select.attr("id");
-        var cor = answers.filter("#"+id).text();
+
+        // alle richtigen antworten zu der ID
+        var cor = elementsToTextArray(answers.filter("#"+id));
         var ans = encryptMD5(select.val());
 
         // antwort richtig
-        if(cor == ans) {
+        if(contains(cor, ans) || cor.length == 0) {
             $(this).addClass("right");
         }
         // antwort falsch
-        else if(cor != ans) {
+        else if(!contains(cor, ans)) {
             correct = false;
             $(this).addClass("wrong");
         }
@@ -453,10 +457,12 @@ function getCorrectClassification(dests, answers, force) {
     dests.each(function(i, e) {
         var dest = $(this);
         var id = dest.attr("id");
-        var cor = answers.filter("#"+id).text();
+
+        // alle richtigen antworten zu der ID
+        var cor = elementsToTextArray(answers.filter("#"+id));
 
         // leer
-        if(dest.children().length == 0 && !force) {
+        if(dest.children().length == 0 && cor.length != 0 && !force) {
             correct = -1;
             deleteLabelColoring($(this).closest('.question'));
             return false;
@@ -465,11 +471,11 @@ function getCorrectClassification(dests, answers, force) {
         var ans = encryptMD5(dest.children().attr("id"));
 
         // antwort richtig
-        if(cor == ans) {
+        if(contains(cor, ans) || cor.length == 0) {
             $(this).addClass("right");
         }
         // antwort falsch
-        else if(cor != ans) {
+        else if(!contains(cor, ans)) {
             correct = false;
             $(this).addClass("wrong");
         }
@@ -526,7 +532,7 @@ function getCorrectMatrixChoice(rows, answers, force) {
     rows.each(function(i, e) {
         var row = $(this);
         var id = row.attr("id");
-        var cor = getCorrectAnswers(answers.filter("#"+id)); // Mehrere Antworten können vorhanden sein
+        var cor = elementsToTextArray(answers.filter("#"+id)); // Mehrere Antworten können vorhanden sein
 
         var inputs = row.find("input"); // alle Inputs der Zeile
 
@@ -616,7 +622,7 @@ function getCorrectPetri(div, places, answers, force) {
             var ans = $(this).attr('id');
             ans = encryptMD5(ans);
 
-            c = getCorrectAnswers(answers);
+            c = elementsToTextArray(answers);
 
             // markiert und richtig
             if(($(this).is(".act") && contains(c, ans))
