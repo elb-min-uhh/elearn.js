@@ -1470,6 +1470,9 @@ function contains(array, val) {
 var timerAlertActivated = false;
 var timerAlertText ="";
 
+
+var quizTimer = null;
+
 /**
 * initialisiert Timer für alle Aufgaben die welche haben
 */
@@ -1547,8 +1550,8 @@ function updateTimers() {
         }
     }
 
-
-    setTimeout(function() { updateTimers(); }, 1000);
+    clearTimeout(quizTimer);
+    quizTimer = setTimeout(function() { updateTimers(); }, 1000);
 }
 
 function setTimerAlert(bool, text) {
