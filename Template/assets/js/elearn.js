@@ -4,7 +4,7 @@
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 */
 
-var VERSION_NR = "0.9.2";
+var VERSION_NR = "0.9.3";
 var VERSION_DATE = "08/2016";
 
 // Will be set on first Touch event. See Help Functions at bottom
@@ -49,6 +49,8 @@ $(document).ready(function() {
     initiateGalleries();
     initiateSideMenu();
     initiateTooltips();
+    initiateHideables();
+    initiateTabbedBoxes();
 
     checkParameters();
 
@@ -1285,6 +1287,77 @@ function closeTooltips() {
 
 
 // --------------------------------------------------------------------------------------
+// Hideables
+// --------------------------------------------------------------------------------------
+
+function initiateHideables() {
+    $('.hideable').each(function() {
+        var div = $(this);
+        div.wrap('<div class="hideable-container"></div>');
+        div.before('<button onclick="toggleHideable(this);">'
+                        + div.attr('show') + " " + div.attr('name')
+                        + '</button>');
+
+        div.hide();
+    });
+}
+
+function toggleHideable(element) {
+    var div = $(element).nextAll().first('.hideable');
+
+    // hide
+    if(div.is(':visible')) {
+        div.hide();
+        $(element).html(div.attr('show') + " " + div.attr('name'));
+    }
+    // show
+    else {
+        div.show();
+        $(element).html(div.attr('hide') + " " + div.attr('name'));
+    }
+}
+
+// --------------------------------------------------------------------------------------
+// Tabbed boxes
+// --------------------------------------------------------------------------------------
+
+function initiateTabbedBoxes() {
+    $('.tabbed-box').each(function() {
+        var div = $(this);
+
+        div.wrap('<div class="tabbed-container"></div>');
+
+        div.before('<div class="tabs"></div>');
+
+        var tabs = div.parent().find('.tabs');
+
+        div.find('.tab').each(function() {
+            var tab = $(this);
+            tabs.append('<div class="tab-select" onclick="selectTab(this);">'
+                            + tab.attr('name')
+                            + '</div>');
+        });
+
+        // set active tab to first
+        div.find('.tab').hide();
+        div.find('.tab').first().show();
+        tabs.find('.tab-select').first().addClass('act');
+    });
+}
+
+function selectTab(element) {
+    var e = $(element);
+    var div = e.parent().nextAll().first('.tabbed-box');
+
+    // show only new
+    div.find('.tab').hide();
+    div.find('.tab').filter('[name="' + e.html() + '"]').show();
+    e.parent().find('.tab-select').removeClass("act");
+    e.addClass("act");
+}
+
+
+// --------------------------------------------------------------------------------------
 // Stop Videos
 // --------------------------------------------------------------------------------------
 
@@ -1839,14 +1912,14 @@ var QueryString = function () {
   var vars = query.split("&");
   for (var i=0;i<vars.length;i++) {
     var pair = vars[i].split("=");
-    	// If first entry with this name
+    // If first entry with this name
     if (typeof query_string[pair[0]] === "undefined") {
       query_string[pair[0]] = pair[1];
-    	// If second entry with this name
+    // If second entry with this name
     } else if (typeof query_string[pair[0]] === "string") {
       var arr = [ query_string[pair[0]], pair[1] ];
       query_string[pair[0]] = arr;
-    	// If third or later entry with this name
+    // If third or later entry with this name
     } else {
       query_string[pair[0]].push(pair[1]);
     }
