@@ -35,7 +35,10 @@
                 eLearnJS.toggleAllSections(); // Zeigt alle Sections an
                 eLearnJS.setNavigationTitle("Überschrift"); // Die Überschrift, wenn alle Sections sichtbar sind
 
-				eLearnJS.setBackButtonEnabled(true); // Zurück button im Header aktivieren
+                // Folgendes fügt einen zusätzlichen Knopf in der Navigationsleiste ein
+                // Eine beispielhafte Verwendung ist in quiz-types.html zu finden.
+                // Auf die quiz-types.html wird auch hier in der section "Quiz" verwiesen.
+                eLearnJS.setBackButtonEnabled(true); // Zurück button im Header aktivieren
                 eLearnJS.setBackButtonText("Übersicht"); // "Übersicht" als Text, statt "Zurück" für den Button
 
                 // Beispiele für BackPages (Was geöffnet wird beim Back button):
@@ -46,12 +49,12 @@
                 // "link" funktioniert wie ein href link eines <a>
                 eLearnJS.setBackPage(2, "index"); // Die 3. section
                 eLearnJS.setBackPage("Inhaltsverzeichnis", "name"); // Die section mit name="Inhaltsverzeichnis"
-				eLearnJS.setBackPage("../", "link"); // Im Pfad einen Schritt zurück
+                eLearnJS.setBackPage("../", "link"); // Im Pfad einen Schritt zurück
                 eLearnJS.setBackPage("http://google.de", "link"); // Google wird geöffnet
 
-				eLearnJS.generalDirectionButtonsEnabled(false); // keine Nav. Buttons
-				eLearnJS.setKeyNavigationEnabled(false); // keine Tastaturnavigation
-				eLearnJS.generalProgressbarEnabled(false); // keine Fortschrittsleiste
+                eLearnJS.generalDirectionButtonsEnabled(false); // keine Nav. Buttons
+                eLearnJS.setKeyNavigationEnabled(false); // keine Tastaturnavigation
+                eLearnJS.generalProgressbarEnabled(false); // keine Fortschrittsleiste
                 */
             }
         </script>
@@ -263,7 +266,10 @@
 							<a class="ans">1fd302a9c89fc92eead418857a7e5a07</a>
 							<a class="ans">4fc364339b2127eb81c13ab986a27085</a>
 					</div>
-					<p>Es existieren auch noch andere Fragetypen, diese sind in der Dokumentation vom qiuz.js beschrieben.</p>
+					<p>
+                        Es existieren auch noch andere Fragetypen, diese sind in der Dokumentation vom quiz.js beschrieben.
+                        Beispiele sind hier zu finden: <a href="quiz-types.html">Link</a>.
+                    </p>
 
 				</section><section name="Literatur">
 					<h3>Literatur</h3>

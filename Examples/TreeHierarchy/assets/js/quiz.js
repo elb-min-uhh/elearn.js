@@ -618,11 +618,12 @@ function getCorrectPetri(div, places, answers, force) {
     }
     else {
         correct = true;
+        var ans_id = div.find('.petri_image').find('img:visible').attr('id');
+        var c = elementsToTextArray(answers.filter('#'+ans_id));
+
         places.each(function(i,e) {
             var ans = $(this).attr('id');
             ans = encryptMD5(ans);
-
-            c = elementsToTextArray(answers);
 
             // markiert und richtig
             if(($(this).is(".act") && contains(c, ans))
@@ -684,7 +685,7 @@ function processPetri(div, force) {
     }
     // before answer - when answering
     else {
-        var answers = div.find('a.ans').filter('[id="'+$('.petri_image').find('img:visible').attr("id")+'"]');
+        var answers = div.find('a.ans');
         correct = getCorrectPetri(div, places, answers, force);
         if(correct != -1) {
             petriShowCorrectBG(div);

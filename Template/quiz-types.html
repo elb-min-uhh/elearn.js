@@ -17,9 +17,23 @@
         <script>
             window.onload = function() {
 
+
+
                 // Erweiterungen hier einfügen
 
+                // Der "Back-Button" verweist zurück auf die index.html
+                // und springt dort direkt zur Section (s) "Quiz"
+                eLearnJS.setBackButtonEnabled(true); // Zurück button im Header aktivieren
+                eLearnJS.setBackButtonText("Hauptseite"); // "Übersicht" als Text, statt "Zurück" für den Button
+                eLearnJS.setBackPage("index.html?s=Quiz", "link"); // Im Pfad einen Schritt zurück
+
+
+                quizJS.setTimerAlert(true, "Deine Zeit für die Aufgabe ist abgelaufen. \r\n"
+                                            + "Bitte speichere diese Seite (via Drucken als pdf)\r\n"
+                                            + "und reiche deine Ergebnisse am Ende als E-Mail ein.");
+
                 // Ende der Erweiterungen
+
 
                 /* Mögliche Erweiterungen
 
@@ -35,7 +49,7 @@
                 eLearnJS.toggleAllSections(); // Zeigt alle Sections an
                 eLearnJS.setNavigationTitle("Überschrift"); // Die Überschrift, wenn alle Sections sichtbar sind
 
-				eLearnJS.setBackButtonEnabled(true); // Zurück button im Header aktivieren
+                eLearnJS.setBackButtonEnabled(true); // Zurück button im Header aktivieren
                 eLearnJS.setBackButtonText("Übersicht"); // "Übersicht" als Text, statt "Zurück" für den Button
 
                 // Beispiele für BackPages (Was geöffnet wird beim Back button):
@@ -46,12 +60,12 @@
                 // "link" funktioniert wie ein href link eines <a>
                 eLearnJS.setBackPage(2, "index"); // Die 3. section
                 eLearnJS.setBackPage("Inhaltsverzeichnis", "name"); // Die section mit name="Inhaltsverzeichnis"
-				eLearnJS.setBackPage("../", "link"); // Im Pfad einen Schritt zurück
+                eLearnJS.setBackPage("../", "link"); // Im Pfad einen Schritt zurück
                 eLearnJS.setBackPage("http://google.de", "link"); // Google wird geöffnet
 
-				eLearnJS.generalDirectionButtonsEnabled(false); // keine Nav. Buttons
-				eLearnJS.setKeyNavigationEnabled(false); // keine Tastaturnavigation
-				eLearnJS.generalProgressbarEnabled(false); // keine Fortschrittsleiste
+                eLearnJS.generalDirectionButtonsEnabled(false); // keine Nav. Buttons
+                eLearnJS.setKeyNavigationEnabled(false); // keine Tastaturnavigation
+                eLearnJS.generalProgressbarEnabled(false); // keine Fortschrittsleiste
 
 
                 // ---- Zu quiz.js ----
@@ -69,16 +83,13 @@
                 eLearnJS.setBlockProgressShowElement(true, ".feedback.noselection");
 
 
-                // Erweiterung der Timer. Hinweis
+                // Erweiterung der Timer. Hinweis, der angezeigt wird, wenn die
+                // Zeit abgelaufen ist.
                 quizJS.setTimerAlert(true, "Deine Zeit für die Aufgabe ist abgelaufen. \r\n"
                                             + "Bitte speichere diese Seite (via Drucken als pdf)\r\n"
                                             + "und reiche deine Ergebnisse am Ende als E-Mail ein.");
 
                 */
-
-                quizJS.setTimerAlert(true, "Deine Zeit für die Aufgabe ist abgelaufen. \r\n"
-                                            + "Bitte speichere diese Seite (via Drucken als pdf)\r\n"
-                                            + "und reiche deine Ergebnisse am Ende als E-Mail ein.");
             }
         </script>
 
@@ -153,12 +164,12 @@
                                 Wie bei .correct auch, lässt sich die Sichtbarkeit des Bildes anpassen, per
                                 <img ... style="opacity: 0.5;" .../> ist es bspw. nur 50% sichtbar.
                                 -->
-                                <img class="background" style="opacity: 0.5" src="assets/img/parabel_bg.png"/>
+                                <img class="background" style="opacity: 0.5" src="assets/img/quiz-images/parabel_bg.png"/>
                                 <!--
                                 .correct wird nach klicken auf Lösen als Hintergrund der
                                 Zeichnung angezeigt. Ersetzt .background, wenn Nutzer auf "lösen" klickt.
                                 -->
-                                <img class="correct" style="opacity: 0.5" src="assets/img/parabel.png"/>
+                                <img class="correct" style="opacity: 0.5" src="assets/img/quiz-images/parabel.png"/>
                             </div>
 
                         </div>
@@ -219,8 +230,8 @@
                         So ist es in diesem Beispiel.
                         -->
                         <div class="petri_aufgabe" style="max-width: 60%;">
-                            <img id="0" src="assets/img/producerConsumer.jpg"/>
-                            <img id="1" src="assets/img/producerConsumer_1.jpg"/>
+                            <img id="0" src="assets/img/quiz-images/producerConsumer.jpg"/>
+                            <img id="1" src="assets/img/quiz-images/producerConsumer_1.jpg"/>
                         </div>
                         <br>
                         <hr>
@@ -243,20 +254,20 @@
                                 Unterscheiden sollten sich maximal Markierte Transition
                                 oder die Position der Marken.
                                 -->
-                                <img id="0" task="produce" src="assets/img/producerConsumer_empty.jpg"/>
+                                <img id="0" task="produce" src="assets/img/quiz-images/producerConsumer_empty.jpg"/>
                                 <!-- das .correct Objekt wird zum Vergleich der Lösung als Hintergrund eingeblendet -->
-                                <img id="0" task="produce" class="correct" src="assets/img/producerConsumer_1.jpg"/>
+                                <img id="0" task="produce" class="correct" src="assets/img/quiz-images/producerConsumer_1.jpg"/>
 
-                                <img id="1" task="deliver" src="assets/img/producerConsumer_empty.jpg"/>
+                                <img id="1" task="deliver" src="assets/img/quiz-images/producerConsumer_empty.jpg"/>
                                 <!-- das .correct Objekt wird zum Vergleich der Lösung als Hintergrund eingeblendet -->
-                                <img id="1" task="deliver" class="correct" src="assets/img/producerConsumer_2.jpg"/>
+                                <img id="1" task="deliver" class="correct" src="assets/img/quiz-images/producerConsumer_2.jpg"/>
 
                                 <!-- Das letzte Bild, wenn alles fertig ist, hat KEINE ID! -->
                                 <!--
                                 Dieses Bild bleibt einfach als Letztes einzeln über.
                                 Es sind hier keine Ergebnisse mehr zu sehen.
                                 -->
-                                <img src="assets/img/producerConsumer_2.jpg"/>
+                                <img src="assets/img/quiz-images/producerConsumer_2.jpg"/>
 
 
                                 <!--
@@ -331,7 +342,7 @@
                         So ist es in diesem Beispiel.
                         -->
                         <div class="petri_aufgabe" style="max-width: 60%;">
-                            <img id="0" src="assets/img/petrinetz_1.png"/>
+                            <img id="0" src="assets/img/quiz-images/petrinetz_1.png"/>
                         </div>
                         <br>
                         <hr>
@@ -354,16 +365,16 @@
                                 Unterscheiden sollten sich maximal Markierte Transition
                                 oder die Position der Marken.
                                 -->
-                                <img id="0" task="" src="assets/img/petrinetz_empty.png"/>
+                                <img id="0" task="" src="assets/img/quiz-images/petrinetz_empty.png"/>
                                 <!-- das .correct Objekt wird zum Vergleich der Lösung als Hintergrund eingeblendet -->
-                                <img id="0" task="" class="correct" src="assets/img/petrinetz_fin.png"/>
+                                <img id="0" task="" class="correct" src="assets/img/quiz-images/petrinetz_fin.png"/>
 
                                 <!-- Das letzte Bild, wenn alles fertig ist, hat KEINE ID! -->
                                 <!--
                                 Dieses Bild bleibt einfach als Letztes einzeln über.
                                 Es sind hier keine Ergebnisse mehr zu sehen.
                                 -->
-                                <img src="assets/img/petrinetz_fin.png"/>
+                                <img src="assets/img/quiz-images/petrinetz_fin.png"/>
 
 
                                 <!--
@@ -609,7 +620,7 @@
                                 den Block .classification_image ausfüllt.
                                 Die nachfolgenden <div> liegen dann auf diesem Bild.
                                 -->
-                                <img src="assets/img/UeberblickWi_empty.png"/>
+                                <img src="assets/img/quiz-images/UeberblickWi_empty.png"/>
 
                                 <!--
                                 Angaben der auswählbaren Ziele
@@ -651,12 +662,12 @@
                         <div class="feedback correct">
                             <b>Richtig</b>
                             <br>
-                            <img src="assets/img/UeberblickWi.png"/>
+                            <img src="assets/img/quiz-images/UeberblickWi.png"/>
                         </div>
                         <div class="feedback incorrect">
                             <b>Falsch</b>
                             <br>
-                            <img src="assets/img/UeberblickWi.png"/>
+                            <img src="assets/img/quiz-images/UeberblickWi.png"/>
                         </div>
 
                         <!--
@@ -735,7 +746,7 @@
                                 markiert werden können. Wo diese Punkte sind wird
                                 direkt danach definiert.
                                 -->
-                                <img src="assets/img/UeberblickWi_empty.png"/>
+                                <img src="assets/img/quiz-images/UeberblickWi_empty.png"/>
 
                                 <!--
                                 Angaben der auswählbaren Objekte
@@ -777,7 +788,7 @@
                         -->
                         <div class="feedback information">
                             Informationstext, wenn alle Teile beantwortet.
-                            <img src="assets/img/UeberblickWi.png"/>
+                            <img src="assets/img/quiz-images/UeberblickWi.png"/>
                         </div>
 
                         <!--
@@ -1410,7 +1421,7 @@
                         <a class="ans" id="2">693a9fdd4c2fd0700968fba0d07ff3c0</a>
                         <!-- ID zeigt welches .destination Objekt hierzu gehört -->
                         <a class="ans" id="3">fbfba2e45c2045dc5cab22a5afe83d9d</a>
-                        
+
                         <!-- Mehrere richtige Antworten, Beispiel -->
                         <!-- in 4 und 5 kann jeweils #ab3-1 und #ab3-2 -->
                         <a class="ans" id="4">d6c7c95b5b31b50f221d80cf514e23c0</a>
@@ -1844,7 +1855,7 @@
                         geschaltet wird?
 
                         <br>
-                        <img src="assets/img/producerConsumer.jpg"/>
+                        <img src="assets/img/quiz-images/producerConsumer.jpg"/>
 
                         <div class="answers">
                             <!--
@@ -1858,11 +1869,11 @@
                             -->
                             <label class="img_radio">
                               <input type="radio" name="q" value="bild1"/>
-                              <img src ="assets/img/producerConsumer_1.jpg" style="max-width: 250px;"/>
+                              <img src ="assets/img/quiz-images/producerConsumer_1.jpg" style="max-width: 250px;"/>
                             </label>
                             <label class="img_radio">
                               <input type="radio" name="q" value="bild2"/>
-                              <img src ="assets/img/producerConsumer_2.jpg" style="max-width: 250px;"/>
+                              <img src ="assets/img/quiz-images/producerConsumer_2.jpg" style="max-width: 250px;"/>
                             </label>
 
                         </div>
