@@ -32,8 +32,8 @@ At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praese
 
 Bilder können als einzelne Abbildungen oder als Galerien eingebunden werden.Für die Galerien wird das elearn.js benötigt. es bietet verschiedene Varianten. Das erste Beispiel zeigt eine Slideshow mit Vorschau und Loop-Funktion.
 
-<div class="slider preview-nav loop" style="max-height: 500px">
-<ul class="img-gallery" id="x">
+<div class="slider preview-nav loop">
+<ul class="img-gallery" id="x" style="list-style:none;">
 <li><img src="assets/img/md-illu_1.png" alt="md-produktion" /><p>Markdown ist kinderleicht zu erlernen.</p></li>
 <li><img src="assets/img/md-illu_2.png" alt="Components" /><p>Zusammenspiel der Komponenten bei der Produktion von digitalen Skripten mit Markdown.</p>"</li>
 <li><img src="assets/img/md-illu_3.png" alt="Future" /><p>Die Zukunft von Markdown als Autorensprache.</p></li>
@@ -64,7 +64,7 @@ Hier sollen vor allem Video und Audio-Einbindung demonstriert werden. At vero eo
 
 Hier wird ein Video eingebunden, welches sich direkt im Asset-Ordner des Skrips befindet. Diese Lösung ist nur für relativ kurze Videos empfehlenswert (max. fünf Minuten).
 
-<video preload="auto" controls="controls">
+<video preload="auto" controls="controls" style="max-width:100%">
     <source src="assets/img/beispiel-video.mp4" type="video/mpeg">
     <source src="assets/img/beispiel-video.webm" type="video/webm">
            Dein Browser unterstützt kein HTML5-Video. Um dir das Video dennoch ansehen zu können,
@@ -156,7 +156,7 @@ In deiner Antwort ist mindestens ein Ordner, der nicht unbedingt benötigt wird.
 <a class="ans">a66ed4f718095c6e9d9d13a5d5ad60a3</a>
 </div>
 
-Es existieren auch noch andere Fragetypen, diese sind in der Dokumentation vom qiuz.js beschrieben.
+Es existieren auch noch andere Fragetypen, diese sind in der Dokumentation vom quiz.js beschrieben.
 
 \\\Literatur///
 
