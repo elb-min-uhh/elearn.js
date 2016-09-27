@@ -908,6 +908,38 @@ function initiateMatrix() {
     var root = $('[qtype="'+quizTypes.MATRIX_CHOICE+'"]');
 
     root.find('input').wrap("<label></label>");
+
+    // for each question
+    root.each(function(i,e) {
+        var div = $(this);
+
+        var ans = div.find('.answers');
+
+        var type = "checkbox";
+        if(ans.is(".single") || ans.find('input[type="radio"]').length > 0) {
+            type = "radio";
+        }
+
+        // check row and fill with TD
+        var rows = ans.find('tr');
+        rows.each(function(ii,ee) {
+            if(ii === 0) return true;
+
+            var row = $(ee);
+
+            // append td's
+            while((row.find('td').length + row.find('th').length)
+                < (rows.first().find('td').length + rows.first().find('th').length)) {
+                row.append('<td><label><input/></label></td>');
+            }
+
+            // set name for each row
+            row.find('input').attr("name", "choice_" + i + "_row_" + ii);
+        });
+
+        // set type
+        ans.find('input').attr("type", type);
+    });
 }
 
 // --------------------------------------------------------------------------------------
