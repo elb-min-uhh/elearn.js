@@ -867,8 +867,14 @@ function initiateChoice() {
         else if(ans.is('.single')) {
             ans.find('input').attr("type", "radio");
         }
-        
+
         ans.find('input').attr("name", "choice_" + i);
+
+        ans.find('input').each(function(ii,ee) {
+            var input = $(ee);
+            input.val(input.attr('val'));
+            input.attr('val', "");
+        });
     });
 }
 
