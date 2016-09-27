@@ -111,6 +111,7 @@ function init() {
 
     resetQuiz();
 
+    initiateChoice();
     initiateFreeText();
     initiateErrorText();
     initiateMatrix();
@@ -843,6 +844,32 @@ function blockQuestion(div) {
     else if(type === quizTypes.DRAW) {
         div.find('.drawing_canvas_container').addClass("blocked");
     }
+}
+
+
+
+// --------------------------------------------------------------------------------------
+// CHOICE
+// --------------------------------------------------------------------------------------
+
+// changes type to multiple/single if .answers has class .multiple or .single
+function initiateChoice() {
+    var root = $('[qtype="'+quizTypes.CHOICE+'"]');
+
+    root.each(function(i,e) {
+        var div = $(this);
+
+        var ans = div.find('.answers');
+
+        if(ans.is('.multiple')) {
+            ans.find('input').attr("type", "checkbox");
+        }
+        else if(ans.is('.single')) {
+            ans.find('input').attr("type", "radio");
+        }
+        
+        ans.find('input').attr("name", "choice_" + i);
+    });
 }
 
 
