@@ -1,11 +1,11 @@
 /*
-* v0.9.2 16/08/04 JavaScript eLearn.js - by Arne Westphal
+* v0.9.4 16/09/28 JavaScript eLearn.js - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 */
 
-var VERSION_NR = "0.9.3";
-var VERSION_DATE = "08/2016";
+var VERSION_NR = "0.9.4";
+var VERSION_DATE = "09/2016";
 
 // Will be set on first Touch event. See Help Functions at bottom
 var touchSupported = false;
@@ -51,6 +51,7 @@ $(document).ready(function() {
     initiateTooltips();
     initiateHideables();
     initiateTabbedBoxes();
+    updateNavBarWidth();
 
     checkParameters();
 
@@ -192,6 +193,18 @@ function initiateSideMenu() {
 }
 
 
+function updateNavBarWidth() {
+    var headerSpace = 15; // standard wert
+    $('#nav-bar').children().not('#btnExp').each(function(i,e){
+        if($(this).attr("id") != undefined && $(this).attr("id").length)
+            headerSpace += $(this).outerWidth(true);
+
+        console.log($(this).attr("id") + " - " + $(this).outerWidth(true));
+    });
+    $('#btnExp').css("width", "calc(100% - " + headerSpace + "px)");
+}
+
+
 /**
 * In der URL können Parameter angegeben werden, um das direkte Anzeigen einer
 * Section zu ermöglichen.
@@ -243,6 +256,7 @@ function isBackButtonEnabled() {
 */
 function setBackButtonText(text) {
     $('#btnBackText').text(text);
+    updateNavBarWidth();
 }
 
 
@@ -1409,7 +1423,7 @@ $(window).resize(function() {
         resizeAllSliders();
         $('#sideMenu').css('right', "-"+($('#sideMenu').width()+10)+"px");
     }, 250);
-
+    updateNavBarWidth();
 });
 
 // --------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 /*
-* quiz.js v0.3.1 - 16/08/24
-* Ergänzend zum elearn.js v0.9.3
+* quiz.js v0.3.2 - 16/09/28
+* Ergänzend zum elearn.js v0.9.4
 * JavaScript Quiz - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 */
@@ -111,6 +111,7 @@ function init() {
 
     resetQuiz();
 
+    initiateChoice();
     initiateFreeText();
     initiateErrorText();
     initiateMatrix();
@@ -454,19 +455,19 @@ function getCorrectErrorText(buttons, c, force) {
 function getCorrectClassification(dests, answers, force) {
     var correct = true;
 
+    // nicht min. 1 platziert
+    if(dests.filter('.full').length == 0 && answers.length != 0 && !force) {
+        correct = -1;
+        deleteLabelColoring($(this).closest('.question'));
+        return correct;
+    }
+
     dests.each(function(i, e) {
         var dest = $(this);
         var id = dest.attr("id");
 
         // alle richtigen antworten zu der ID
         var cor = elementsToTextArray(answers.filter("#"+id));
-
-        // leer
-        if(dest.children().length == 0 && cor.length != 0 && !force) {
-            correct = -1;
-            deleteLabelColoring($(this).closest('.question'));
-            return false;
-        }
 
         var ans = encryptMD5(dest.children().attr("id"));
 
@@ -846,6 +847,38 @@ function blockQuestion(div) {
 }
 
 
+
+// --------------------------------------------------------------------------------------
+// CHOICE
+// --------------------------------------------------------------------------------------
+
+// changes type to multiple/single if .answers has class .multiple or .single
+function initiateChoice() {
+    var root = $('[qtype="'+quizTypes.CHOICE+'"]');
+
+    root.each(function(i,e) {
+        var div = $(this);
+
+        var ans = div.find('.answers');
+
+        if(ans.is('.multiple')) {
+            ans.find('input').attr("type", "checkbox");
+        }
+        else if(ans.is('.single')) {
+            ans.find('input').attr("type", "radio");
+        }
+
+        ans.find('input').attr("name", "choice_" + i);
+
+        ans.find('input').each(function(ii,ee) {
+            var input = $(ee);
+            input.val(input.attr('val'));
+            input.attr('val', "");
+        });
+    });
+}
+
+
 // --------------------------------------------------------------------------------------
 // FREE TEXT
 // --------------------------------------------------------------------------------------
@@ -875,6 +908,38 @@ function initiateMatrix() {
     var root = $('[qtype="'+quizTypes.MATRIX_CHOICE+'"]');
 
     root.find('input').wrap("<label></label>");
+
+    // for each question
+    root.each(function(i,e) {
+        var div = $(this);
+
+        var ans = div.find('.answers');
+
+        var type = "checkbox";
+        if(ans.is(".single") || ans.find('input[type="radio"]').length > 0) {
+            type = "radio";
+        }
+
+        // check row and fill with TD
+        var rows = ans.find('tr');
+        rows.each(function(ii,ee) {
+            if(ii === 0) return true;
+
+            var row = $(ee);
+
+            // append td's
+            while((row.find('td').length + row.find('th').length)
+                < (rows.first().find('td').length + rows.first().find('th').length)) {
+                row.append('<td><label><input/></label></td>');
+            }
+
+            // set name for each row
+            row.find('input').attr("name", "choice_" + i + "_row_" + ii);
+        });
+
+        // set type
+        ans.find('input').attr("type", type);
+    });
 }
 
 // --------------------------------------------------------------------------------------
@@ -1517,10 +1582,11 @@ function updateTimers() {
     var now = new Date();
 
     for(var activeSection=0; activeSection < $('section').length; activeSection++) {
-        if(eLearnJS.allShown || activeSection == eLearnJS.visSection) {
+        if((eLearnJS.allShown || activeSection == eLearnJS.visSection)
+            && $('.answered_hint.timer:visible').length > 0) {
             var diff = (now.getTime() - start_time[activeSection].getTime())/1000;
             passed_time[activeSection] = diff;
-            $($('section').get(activeSection)).find('.answered_hint.timer:visible').each(function(i,e) {
+            $($('section').get(activeSection)).find('.answered_hint').filter('.timer').filter(':visible').each(function(i,e) {
                 var timer = $(this);
                 // time in seconds
                 var time = parseInt(timer.closest('.question').attr("max-time")) * 60;
