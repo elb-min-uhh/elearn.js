@@ -1188,14 +1188,12 @@ angegebenen Möglichkeiten übereinstimmt.</p>
     verwendet werden.
     -->
     <div class="feedback correct">
-        Richtig<br>
-        <b>Richtige Antwort:</b><br>
-        Text mit Antworten
+        <b>Richtig</b>
     </div>
     <div class="feedback incorrect">
-        Falsch<br>
-        <b>Richtige Antwort:</b><br>
-        Text mit Antworten
+        <b>Falsch</b><br>
+        Der korrekte Text lautet: In einer solchen Aufgabe muss dann jeweils ein
+        <i>Satzbaustein</i> in ein zugehöriges <i>Ziel</i> gezogen werden.
     </div>
 
 
@@ -1269,6 +1267,84 @@ weiter hochgezählt.</p>
 sind, erhalten sie beide die Position &quot;1&quot;. Karl hingegen ist eindeutig
 größer und erhält somit die Poisition &quot;2&quot;. Es darf <strong>niemals</strong> eine Zahl
 übersprungen werden.</p>
+
+<p>Ein Beispiel für eine Sortieraufgabe:</p>
+<div class="question" qtype="order" id="o_1">
+    <h4>Sortieren</h4>
+
+
+    <!-- Einleitender Aufgabentext -->
+    Die folgenden Objekte müssen in die korrekte Reihenfolge gebracht werden
+    (zwischen einzelnen Objekten könnte die Reihenfolge egal sein):<br>
+    <br>
+
+    <!--
+    .fill sorgt dafür das .object die volle Breite einnehmen
+    Das fill kann auf Wunsch entfernt werden.
+    -->
+    <div class="answers">
+        Es gibt die Vier Brüder Gert, Karl, Heinrich und Otto. Gert ist der
+        Kleinste und Karl ist der Größte. Sortiere die Brüder der Größe
+        nach von klein zu groß.
+
+        <br>
+        <br>
+
+        <div class="object">
+            <span id="0">Gert</span>
+        </div>
+        <div class="object">
+            <span id="1">Karl</span>
+        </div>
+        <div class="object">
+            <span id="2">Heinrich</span>
+        </div>
+        <div class="object">
+            <span id="3">Otto</span>
+        </div>
+    </div>
+
+    <!--
+    Diese Blöcke werden angezeigt, jenachdem ob die
+    Antwort richtig (.correct) oder falsch (.incorrect) war.
+    In diesem Block kann ein erklärender Text und auch Bilder
+    verwendet werden.
+    -->
+    <div class="feedback correct">
+        <b>Richtig</b>
+    </div>
+    <div class="feedback incorrect">
+        <b>Falsch</b><br>
+        Die korrekten Möglichkeiten sind:<br>
+        Gert, Heinrich, Otto, Karl<br>
+        Gert, Otto, Heinrich, Karl
+    </div>
+
+    <!--
+        Verschlüsselt ist der Index in der Richtigen Reihenfolge.
+        Also z.B. das Objekt mit der ID 0 gehört an Stelle 0,
+        dann ist der Wert md5("0").
+        Das Objekt mit der ID 1 gehört an Stelle 2 (3. Position),
+        dann ist der Wert md5("2").
+        Es wird hochgezählt von 0.
+
+        Sollten zwei Objekte nebeneinander keine direkte Reihenfolge
+        haben (zB Aufwachen, Wecker ausmachen, Augen öffnen könnte
+        genauso Aufwachen, Augen öffnen, Wecker ausmachen sein)
+        dann kriegen beide DENSELBEN index.
+        In diesem Beispiel also Gert(0), Heinrich(1),
+        Otto(1), Karl(2).
+    -->
+    <!-- ID zeigt welches Objekt in answers hierzu gehört -->
+    <!-- verschlüsselt ist "0" -->
+    <a class="ans" id="0">cfcd208495d565ef66e7dff9f98764da</a>
+    <!-- verschlüsselt ist "2" -->
+    <a class="ans" id="1">c81e728d9d4c2f636f067f89cc14862c</a>
+    <!-- verschlüsselt ist "1" -->
+    <a class="ans" id="2">c4ca4238a0b923820dcc509a6f75849b</a>
+    <!-- verschlüsselt ist "1" -->
+    <a class="ans" id="3">c4ca4238a0b923820dcc509a6f75849b</a>
+</div>
 </section>
 
 
@@ -1382,6 +1458,69 @@ Text wie &quot;Leider falsch&quot; einzutragen. Wurden alle Begriffe zugeordnet,
 wird das <em>div.feedback.information</em> angezeigt. Hier kann man also
 abschließend zum Beispiel ein Bild mit allen Schritten anzeigen und eine
 Erklärung geben.</p>
+<p>Ein Beispiel für eine Petrinetzaufgabe:</p>
+<div class="question" qtype="petri" id="o_1">
+    <h4>Petrinetz</h4>
+
+    Markiere die Plätze an denen mindestens eine Marke
+    vorhanden ist, wenn Transition
+    <b><span class="gesucht"></span></b> geschaltet wird.
+
+    <br><br>
+
+    Hier die Ausgangssituation:<br>
+    <div class="petri_aufgabe" style="max-width: 600px; width: 80%;">
+        <img id="0" src="assets/img/quiz-images/producerConsumer.jpg"/>
+        <img id="1" src="assets/img/quiz-images/producerConsumer_1.jpg"/>
+        <img id="2" src="assets/img/quiz-images/producerConsumer.jpg"/>
+    </div>
+
+    <hr>
+
+    <div class="answers">
+        <div class="petri_image">
+
+            <img id="0" task="produce" src="assets/img/quiz-images/producerConsumer_empty.jpg"/>
+            <img id="0" task="produce" class="correct" src="assets/img/quiz-images/producerConsumer_1.jpg"/>
+
+            <img id="1" task="deliver" src="assets/img/quiz-images/producerConsumer_empty.jpg"/>
+            <img id="1" task="deliver" class="correct" src="assets/img/quiz-images/producerConsumer_2.jpg"/>
+
+            <img id="2" src="assets/img/quiz-images/producerConsumer_fin.jpg"/>
+
+            <div style="top: 28%; left: 22.5%;" class="place" id="p1"></div>
+            <div style="top: 39%; left: 48.2%;" class="place" id="p2"></div>
+            <div style="top: 27%; left: 73.7%;" class="place" id="p3"></div>
+            <div style="top: 68%; left: 22.5%;" class="place" id="p4"></div>
+            <div style="top: 61%; left: 47.7%;" class="place" id="p5"></div>
+            <div style="top: 68%; left: 74%;" class="place" id="p6"></div>
+        </div>
+    </div>
+
+    <!--
+    Diese Blöcke werden angezeigt, jenachdem ob die
+    Antwort richtig (.correct) oder falsch (.incorrect) war.
+    In diesem Block kann ein erklärender Text und auch Bilder
+    verwendet werden.
+    -->
+    <div class="feedback correct">
+        <b>Richtig</b>
+    </div>
+    <div class="feedback incorrect">
+        <b>Falsch</b>
+    </div>
+    <div class="feedback information">
+        Die korrekte Lösung ist in einzelnen Schritten zu sehen.
+    </div>
+
+
+    <a id="0" class="ans">ec6ef230f1828039ee794566b9c58adc</a>
+    <a id="0" class="ans">ed92eff813a02a31a2677be0563a0739</a>
+    <a id="0" class="ans">c6c27fc98633c82571d75dcb5739bbdf</a>
+
+    <a id="1" class="ans">1d665b9b1467944c128a5575119d1cfd</a>
+    <a id="1" class="ans">c6c27fc98633c82571d75dcb5739bbdf</a>
+</div>
 </section>
 
 
@@ -1441,6 +1580,63 @@ also auch Bilder möglich. Das Beispiel <em>b</em> druckt den Text innerhalb
 fett.
 Diese Art von Feedbacktext wird auch noch bei anderen Fragetypen
 genutzt.</p>
+<p>Ein Beispiel für eine Zeichenaufgabe:</p>
+<div class="question" qtype="drawing" id="dr_1">
+    <h4>Zeichnen</h4>
+
+    Ergänze die Linie zu einer Parabel:<br>
+    <br>
+    <div class="answers">
+
+        <!--
+        Das zusätzliche red verändert die Farbe des Strichs
+        Verfügbar sind:
+        red (#FF0000)
+        blue (#0000FF)
+        green (#00FF00)
+        cyan (#00FFFF)
+        yellow (#FFFF00)
+        orange (#FF8000)
+        purple (#FF00FF)
+        black (#000000)
+
+        Die Farbe kann auch per style="color: #e2001a;" verändert werden.
+
+        no_steps sorgt dafür, dass man Schritte nicht Rückgängig machen kann
+        -->
+        <div class="drawing_canvas_container red">
+            <!--
+            .background ist vor dem Lösen sichtbar. Hierauf wird gemalt
+            Hier könnten z.B. Achsen zu sehen sein.
+            .background und .correct sollten IMMER exakt gleich groß sein.
+            Notfalls ist das per <img ... style="width: 100px; height: 100px" .../>
+            zu erreichen.
+            Wie bei .correct auch, lässt sich die Sichtbarkeit des Bildes anpassen, per
+            <img ... style="opacity: 0.5;" .../> ist es bspw. nur 50% sichtbar.
+            -->
+            <img class="background" style="opacity: 0.5" src="assets/img/quiz-images/parabel_bg.png"/>
+            <!--
+            .correct wird nach klicken auf Lösen als Hintergrund der
+            Zeichnung angezeigt. Ersetzt .background, wenn Nutzer auf "lösen" klickt.
+            -->
+            <img class="correct" style="opacity: 0.5" src="assets/img/quiz-images/parabel.png"/>
+        </div>
+
+    </div>
+
+    <!--
+    Dies hier ist der Hinweistext, der eingeblendet wird,
+    wenn die Aufgabe "gelöst" wurde. Er kann auch weitere Bilder
+    enthalten.
+    -->
+    <div class="feedback information">
+        Eine unverschobene und ungestauchte Parabel ist
+        symmetrisch zur Y-Achse und geht außerdem durch den
+        Ursprung des Graphen. Zur Illustration wird hier
+        X² verwendet.
+    </div>
+
+</div>
 </section>
 
 
@@ -1473,6 +1669,37 @@ die Klasse <em>information</em> hat. Dieser sieht dann beispielsweise so aus:</p
 &lt;/div&gt;
 </code></pre>
 <p>Bei unbewerteten Fragen können alle <em>a.ans</em> weggelassen werden.</p>
+<p>Ein Beispiel für eine unbewertete Frage:</b><br>
+<div class="question unbewertet" qtype="matrix_choice" id="ub_1">
+    <h4>Wähle aus, ob die Aussagen wahr oder falsch sind</h4>
+    <div class="answers single">
+    <table class="matrix">
+            <tr>
+                <td>Aufgabe</td>
+                <th id="wahr" class="antwort">Wahr</th>
+                <th id="falsch" class="antwort">Falsch</th>
+            </tr>
+
+            <tr id="0">
+                <td>Ein Elefant ist grau.</td>
+            </tr>
+
+            <tr id="1">
+                <td>Lügen haben lange Beine.</td>
+            </tr>
+        </table>
+    </div>
+
+    <!--
+    Diese Blöcke werden angezeigt, jenachdem ob die
+    Antwort richtig (.correct) oder falsch (.incorrect) war.
+    In diesem Block kann ein erklärender Text und auch Bilder
+    verwendet werden.
+    -->
+    <div class="feedback information">
+        Im Normalfalls sind Elefanten grau und Lügen haben <i>kurze</i> Beine.
+    </div>
+</div>
 </section>
 
 
@@ -1491,6 +1718,31 @@ der Frage eine Klasse hinzu. In diesem Fall wird dem <em>div.question</em> die K
 Das sieht dann zum Beispiel so aus:</p>
 <pre><code>&lt;div class=&quot;question reset_blocked&quot; qtype=&quot;choice&quot; id=&quot;choice_1&quot;&gt;
 </code></pre>
+<p>Ein Beispiel für eine nicht zurücksetzbare Frage:</b><br>
+<div class="question reset_blocked" qtype="free_text" id="rb_1">
+    <h4>Welche Unterordner werden in der Dateistruktur von digitalen Skripten erwartet?</h4>
+
+    Bei digitalen Skripten könnten viele verschiedene Ordner angelegt werden.
+    Welche davon sind aber wirklich wichtig und werden generell erwartet?
+    <br>
+
+    <div class="answers">
+        <label>
+            Antwort:
+            <textarea></textarea>
+        </label>
+    </div>
+
+    <!--
+    Dieser Block wird angezeigt, wenn die Frage beantwortet wurde.
+    In diesem Block kann ein erklärender Text und auch Bilder
+    verwendet werden.
+    -->
+    <div class="feedback information">
+        <b>Richtige Antwort:</b><br>
+        Die Ordner "assets", "img" und "css" sollten immer vorhanden sein.
+    </div>
+</div>
 </section>
 
 
@@ -1514,6 +1766,83 @@ und somit jeder Frage eine individuelle Zeit zuweisen oder man macht eine <em>se
 in der sich alle Fragen befinden und somit laufen alle Zeiten gleichmäßig runter.
 Letzteres ist z.B. bei eine Probeklausur sinnvoll. Dort könnte man dann jeder
 Frage eine zeitliche Begrenzung der maximalen Bearbeitungszeit insgesamt geben.</p>
+<p>Ein Beispiel für eine zeitlich begrenzte Aufgabe:</p>
+<div class="question" qtype="order" id="zb_1" max-time="5">
+    <h4>Sortieren</h4>
+
+
+    <!-- Einleitender Aufgabentext -->
+    Die folgenden Objekte müssen in die korrekte Reihenfolge gebracht werden
+    (zwischen einzelnen Objekten könnte die Reihenfolge egal sein):<br>
+    <br>
+
+    <!--
+    .fill sorgt dafür das .object die volle Breite einnehmen
+    Das fill kann auf Wunsch entfernt werden.
+    -->
+    <div class="answers">
+        Es gibt die Vier Brüder Gert, Karl, Heinrich und Otto. Gert ist der
+        Kleinste und Karl ist der Größte. Sortiere die Brüder der Größe
+        nach von klein zu groß.
+
+        <br>
+        <br>
+
+        <div class="object">
+            <span id="0">Gert</span>
+        </div>
+        <div class="object">
+            <span id="1">Karl</span>
+        </div>
+        <div class="object">
+            <span id="2">Heinrich</span>
+        </div>
+        <div class="object">
+            <span id="3">Otto</span>
+        </div>
+    </div>
+
+    <!--
+    Diese Blöcke werden angezeigt, jenachdem ob die
+    Antwort richtig (.correct) oder falsch (.incorrect) war.
+    In diesem Block kann ein erklärender Text und auch Bilder
+    verwendet werden.
+    -->
+    <div class="feedback correct">
+        <b>Richtig</b>
+    </div>
+    <div class="feedback incorrect">
+        <b>Falsch</b><br>
+        Die korrekten Möglichkeiten sind:<br>
+        Gert, Heinrich, Otto, Karl<br>
+        Gert, Otto, Heinrich, Karl
+    </div>
+
+    <!--
+        Verschlüsselt ist der Index in der Richtigen Reihenfolge.
+        Also z.B. das Objekt mit der ID 0 gehört an Stelle 0,
+        dann ist der Wert md5("0").
+        Das Objekt mit der ID 1 gehört an Stelle 2 (3. Position),
+        dann ist der Wert md5("2").
+        Es wird hochgezählt von 0.
+
+        Sollten zwei Objekte nebeneinander keine direkte Reihenfolge
+        haben (zB Aufwachen, Wecker ausmachen, Augen öffnen könnte
+        genauso Aufwachen, Augen öffnen, Wecker ausmachen sein)
+        dann kriegen beide DENSELBEN index.
+        In diesem Beispiel also Gert(0), Heinrich(1),
+        Otto(1), Karl(2).
+    -->
+    <!-- ID zeigt welches Objekt in answers hierzu gehört -->
+    <!-- verschlüsselt ist "0" -->
+    <a class="ans" id="0">cfcd208495d565ef66e7dff9f98764da</a>
+    <!-- verschlüsselt ist "2" -->
+    <a class="ans" id="1">c81e728d9d4c2f636f067f89cc14862c</a>
+    <!-- verschlüsselt ist "1" -->
+    <a class="ans" id="2">c4ca4238a0b923820dcc509a6f75849b</a>
+    <!-- verschlüsselt ist "1" -->
+    <a class="ans" id="3">c4ca4238a0b923820dcc509a6f75849b</a>
+</div>
 </section>
 
 
@@ -1539,6 +1868,17 @@ der Knopf auch seine Funktionalität hat.
 Der Text &quot;Vorherige Antwort anzeigen&quot; kann beliebig verändert werden.
 Um um den Button herum Platz zu schaffen, kann es hilfreich sein, davor oder
 danach einen oder mehrere <em>&lt;br&gt;</em> einzufügen.</p>
+
+<p>Als Beispiel hier ein Button der eine vorherige Frage wieder anzeigt:</p>
+<!--
+Zum wieder Anzeigen des darauf bezogenen Frageblocks. Kopiert diesen hier her
+Wichtig ist, dass die ID der ID des Frageblocks entspricht auf den es sich bezieht
+und um "_ref" erweitert wird. (Referenz)
+-->
+<button id="q_choice_ref" onclick="showQuestionHere(this)">
+    Zeige Multiple-Choice Frage
+</button>
+<br><br><br>
 </section>
 
 
