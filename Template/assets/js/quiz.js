@@ -455,7 +455,7 @@ function getCorrectErrorText(buttons, c, force) {
 function getCorrectClassification(dests, answers, force) {
     var correct = true;
 
-    // nicht min. 1 platziert 
+    // nicht min. 1 platziert
     if(dests.filter('.full').length == 0 && answers.length != 0 && !force) {
         correct = -1;
         deleteLabelColoring($(this).closest('.question'));
@@ -1582,10 +1582,11 @@ function updateTimers() {
     var now = new Date();
 
     for(var activeSection=0; activeSection < $('section').length; activeSection++) {
-        if(eLearnJS.allShown || activeSection == eLearnJS.visSection) {
+        if((eLearnJS.allShown || activeSection == eLearnJS.visSection)
+            && $('.answered_hint.timer:visible').length > 0) {
             var diff = (now.getTime() - start_time[activeSection].getTime())/1000;
             passed_time[activeSection] = diff;
-            $($('section').get(activeSection)).find('.answered_hint.timer:visible').each(function(i,e) {
+            $($('section').get(activeSection)).find('.answered_hint').filter('.timer').filter(':visible').each(function(i,e) {
                 var timer = $(this);
                 // time in seconds
                 var time = parseInt(timer.closest('.question').attr("max-time")) * 60;

@@ -1,4 +1,5 @@
 *~
 .*
 !/.gitignore
-
+*.pdf
+Dokumenation/eLearnJS_Dokumentation.html
