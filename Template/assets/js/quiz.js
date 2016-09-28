@@ -455,19 +455,19 @@ function getCorrectErrorText(buttons, c, force) {
 function getCorrectClassification(dests, answers, force) {
     var correct = true;
 
+    // nicht min. 1 platziert 
+    if(dests.filter('.full').length == 0 && answers.length != 0 && !force) {
+        correct = -1;
+        deleteLabelColoring($(this).closest('.question'));
+        return correct;
+    }
+
     dests.each(function(i, e) {
         var dest = $(this);
         var id = dest.attr("id");
 
         // alle richtigen antworten zu der ID
         var cor = elementsToTextArray(answers.filter("#"+id));
-
-        // leer
-        if(dest.children().length == 0 && cor.length != 0 && !force) {
-            correct = -1;
-            deleteLabelColoring($(this).closest('.question'));
-            return false;
-        }
 
         var ans = encryptMD5(dest.children().attr("id"));
 
