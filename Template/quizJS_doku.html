@@ -16,8 +16,13 @@
 
         <script>
             window.onload = function() {
-
                 // Erweiterungen hier einfügen
+
+                // Der "Back-Button" verweist zurück auf die index.html
+                // und springt dort direkt zur Section (s) "Quiz"
+                eLearnJS.setBackButtonEnabled(true); // Zurück button im Header aktivieren
+                eLearnJS.setBackButtonText("Hauptseite"); // "Übersicht" als Text, statt "Zurück" für den Button
+                eLearnJS.setBackPage("index.html?s=Quiz", "link"); // Im Pfad einen Schritt zurück
 
                 // Ende der Erweiterungen
 
@@ -66,11 +71,11 @@
                 <div class="lightbox">
                     <div class="info-wrapper">
                         <!--Der inhalt der Info-Box kann frei mit html-Inhalt gefüllt werden. -->
-                         <h4>Produktion digitaler Skripte</h4>
-                        <p>
-                            Michael Heinecke<br>
-                            Universität Hamburg
-                        <p>
+			         	<h4>Erstellung von Quizelementen für eLearn.js mit quiz.js</h4>
+				        <p>
+				            Arne Westphal<br>
+				            Universität Hamburg
+				        <p>
                     </div>
                 </div>
             </div>
@@ -108,7 +113,9 @@ Diese Teile lassen sich beliebig oft aneinander hängen.</p>
 <p>Durch die Erweiterungen in quiz.js Version 0.3.0 wurde viele Quiztypen
 hinzugefügt. Da der OSAEditor diese nicht unterstützt, lohnt sich eine
 manuelle Erstellung der Elelemente im Quelltext.</p>
-<p>Um dies zu vereinfachen folgen detaillierte Beispiele.</p>
+<p>Um dies zu vereinfachen folgen detaillierte Beispiele. Zusätzliche Beispiele,
+mit Quelltext Kommentaren sind in der "quizJS_examples.html" zu finden.
+Ansehen kann man sich diese hier: <a href="quizJS_examples.html">Link</a></p>
 </section>
 
 

@@ -27,7 +27,9 @@ Durch die Erweiterungen in quiz.js Version 0.3.0 wurde viele Quiztypen
 hinzugefügt. Da der OSAEditor diese nicht unterstützt, lohnt sich eine
 manuelle Erstellung der Elelemente im Quelltext.
 
-Um dies zu vereinfachen folgen detaillierte Beispiele.
+Um dies zu vereinfachen folgen detaillierte Beispiele. Zusätzliche Beispiele,
+mit Quelltext Kommentaren sind in der "quizJS_examples.html" zu finden.
+Ansehen kann man sich diese hier: <a href="quizJS_examples.html">Link</a>.
 
 \\\Grundgerüst///
 
