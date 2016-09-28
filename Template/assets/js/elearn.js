@@ -198,8 +198,6 @@ function updateNavBarWidth() {
     $('#nav-bar').children().not('#btnExp').each(function(i,e){
         if($(this).attr("id") != undefined && $(this).attr("id").length)
             headerSpace += $(this).outerWidth(true);
-
-        console.log($(this).attr("id") + " - " + $(this).outerWidth(true));
     });
     $('#btnExp').css("width", "calc(100% - " + headerSpace + "px)");
 }
