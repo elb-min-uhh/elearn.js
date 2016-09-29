@@ -1430,7 +1430,7 @@ $(window).resize(function() {
 /**
 * Fügt Pfeiltastennavigation durch Sections hinzu.
 */
-$(document).keyup(function(e){
+$(document).keydown(function(e){
     if(!allShown && keyNavigationEnabled) {
         if(e.keyCode == 37) {
             showPrev();
