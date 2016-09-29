@@ -1,16 +1,148 @@
-# quiz.js
+# Erstellung von Selbsttests
 
-Arne Westphal  
+Julia Kühnemund und Arne Westphal
 eLearning Büro - MIN
 cc by-sa | 2016
 
+![Titelbild](assets/img/quiz-images/quizjs_uebersicht.png)
 
-\\\Grundlage///
 
-## Grundlage
+\\\Verwendung von Selbsttestaufgaben///
+
+## Verwendung von Selbsttestaufgaben
+
+Die Quizfragen dienen dazu, die Aufmerksamkeit der Studierenden zu wecken
+und sich selbst zu überprüfen. Sie geben die Möglichkeit, die wichtigsten
+Aspekte in den Vordergrund zu rücken. Durch verschiedene Fragentypen kann man
+abhängig vom Lernziel helfen, das Material u.a. zu verstehen, wiederholen,
+einzuordnen oder zu lernen.
+
+
+### Fragentypen
+
+Die Fragen können _offen_ oder _geschlossen_ sein. Fragen mit kurzen Antworten kann
+man als _halboffene_ oder _halbgeschlossene_ Fragen bezeichnen.
+
+Die _geschlossene_ Form verlangt eine eindeutige Antwort, z.B. „Ja“ oder „Nein“.
+Bei diesen Fragen sind die Antwortmöglichkeiten vorgegeben.
+
+Die _offenen_ Fragen ermöglichen Antworten in beliebiger Form. Dabei
+ist die Antwortform nur vom Lernziel abhängig. Die Studierenden können
+ihre Antwort durch Auswählen oder Verschieben von Objekten und auch in Form
+einer Zeichnung geben.
+
+Alle diese Fragentypen haben ihre __Vor- und Nachteile__ und  müssen Lernziel
+abhängig verwendet sein.
+
+
+\\\Geschlossene und offene Fragen///
+
+### Geschlossene und offene Fragen
+
+__Geschlossene__ (konvergente) Fragen können automatisch ausgewertet werden,
+d.h. die Studierenden können sofort nach jeder Frage oder am Ende des ganzen
+Quiz ihren Kenntnisstand überprüfen und wenn vorgesehen bewerten lassen.
+Außerdem ist die Benotung objektiv, da der Computer
+immer die gleiche Bewertung für eine bestimmte Antwort gibt, ohne dabei
+emotionale Bestandteile in die Benotung (schlechte Laune, Frustration oder
+Ablenkung) einfließen zu lassen. Als Nachteil wird oft die Zufallsrate benannt,
+d.h. die Studierende klicken ohne nachzudenken oder merken sich vorgegebene
+Muster. Technischen Probleme können auch die Benotung beeinflussen. Aus diesem
+Grund sind computerbasierte Prüfungen noch nicht sehr verbreitet. Und an den
+Stellen, an denen computerbasierte Prüfungen stattfinden, gibt es die
+Möglichkeit, den ganzen Prüfungsprozess durch Menschen zu kontrollieren,
+z.B. in Papierform. Außerdem fehlt oft der rechtliche und organisatorische
+Hintergrund.
+
+Zurzeit sind folgende geschlossene Fragentypen verbreitet:
+
+* Multiple-Choice
+* Single-Choice
+* Wahr-Falsch
+* Zuordnung
+* Rang-/Reihenfolge
+* Kprim
+
+
+Die __halbgeschlossenen__ Fragen können auch automatisch ausgewertet werden,
+jedoch darf die Antwort nur aus einen vorgegeben, begrenzte Anzahl von Wörtern
+bestehen. Bei Aufzählungen in der Antwort muss man zusätzliche Anweisungen
+geben, z.B. „nur in alphabetische Reihenfolge“ oder „keine Wiederholung“, um
+die Eindeutigkeit der Antwort zu gewährleisten.
+
+Zu den halbgeschlossenen Fragen gehören: Kurztext, Lückentext, Hotspot und alle
+andere Fragenformen, beim denen man etwas eintippen muss.  
+
+__Offene__ Fragen können in der Regel nicht automatisch ausgewertet werden. Als
+Alternative werden Musterlösungen dargestellt, welche man nach einer
+bestimmten Zeit, auf Knopfduck oder nach der Abgabe der eigenen Antwort zum
+Vergleich sehen kann.
+
+Der Vorteil ist hier, dass die Frage nicht extra in eine geschlossene
+umformuliert werden muss und die Studierenden beim Antworten in Struktur
+und Form frei sind, wodurch sie unter Umständen ihre Kenntnisse besser
+darstellen können. Die Bewertung ist aber nur durch eine Person und nicht
+durch Computer realisierbar. Die Menschen sind immer subjektiv.
+
+Die offene Aufgabenform ist vielseitig. Hier sind einige Beispiele:
+Freitextaufgabe, Zeichnungsaufgabe, Begründungsaufgabe, Problemaufgabe
+und Offene Situation.
+
+
+### Auswahl des passenden Typen
+
+<!-- TODO Text erweitern mit Beispieltypen -->
+
+Welcher Fragentyp gewählt wird sollte abhängig vom gewünschten Lernziel sein.
+
+
+
+\\\Selbsttests mit quiz.js///
+
+## Selbsttests mit quiz.js
+
+Mit der quiz.js Erweiterung zum eLearn.js Projekt sind folgende Fragentypen
+relisierbar:
+
+<!-- TODO LINKS -->
+
+* Multiple-Choice
+* Single-Choice
+* Kprim
+* Wahr-Falsch
+* Zuordnung/Einordnen
+* Rang-/Reihenfolge
+* Lückentext
+  * mit Auswahl vorgegebener Wörter
+  * mit Eingabemöglichkeit
+  * mit Eingabe vorgegebener Wörter
+  * Ergänzung einer Tabelle/Matrix
+* Markierung
+  * Falsche oder richtige Wörter
+  * Hotspot
+* Kurztext
+* Freitext
+* Bild/Graph zeichnen
+* Einfache Petrinetzaufgaben
+
+
+Bei allen Fragentypen kann die eigene Antwort mit einer Musterlösung
+verglichen werden. Zudem können die geschlossenen Fragen automatisch ausgewertet
+werden, z.B. durch eine Anzeige von "Richtig" oder "Falsch". Die abgegebene
+Antwort und die Musterlösung kann an einer beliebigen Stelle vom Skript
+abgerufen/gezeigt, wieder geschlossen und zurückgesetzt werden.
+
+
+\\\Technische Grundlage///
+
+## Technische Grundlage
 
 Im folgenden werden HTML Elemente immer wieder abgekürzt beschrieben.
-Dabei handelt es sich um die CSS Schreibweisen.
+Dabei handelt es sich um die CSS Schreibweisen zur Spezifikation von Elementen.
+CSS ist eine Sprache, um das Aussehen der angezeigten Seite zu definieren.
+Wie man mit CSS das Aussehen verändert wird im Abschnitt
+<a href="#" onclick="showSection('Veränderte Darstellung (CSS)')">_Veränderte Darstellung (CSS)_</a>
+noch grundsätzlich erklärt.
 Elemente wie _\<div\>_ werden dabei einfach nur _div_ genannt.
 Die Klassen der Elemente werden jeweils mit einem einzelnen Punkt begonnen.
 _div.eins_ würde also z.B. _\<div class="eins"\>_ entsprechen.
@@ -27,8 +159,8 @@ Durch die Erweiterungen in quiz.js Version 0.3.0 wurde viele Quiztypen
 hinzugefügt. Da der OSAEditor diese nicht unterstützt, lohnt sich eine
 manuelle Erstellung der Elelemente im Quelltext.
 
-Um dies zu vereinfachen folgen detaillierte Beispiele. Zusätzliche Beispiele,
-mit Quelltext Kommentaren sind in der "quizJS_examples.html" zu finden.
+Um dies zu vereinfachen folgen detaillierte Beispiele. Zusätzliche Beispiele
+mit Quelltextkommentaren sind in der "quizJS_examples.html" zu finden.
 Ansehen kann man sich diese hier: <a href="quizJS_examples.html">Link</a>.
 
 \\\Grundgerüst///
@@ -74,16 +206,15 @@ Es ergibt sich:
 
 ### Fragetypen
 
-In der ersten Zeile
+In der ersten Zeile tauchen bereits Variable Werte auf, die angepasst werden müssen.
 
     <div class="question" qtype="short_text" id="short_1">
 
-tauchen bereits Variable Werte auf, die angepasst werden müssen.
 In diesem Fall die Felder __qtype__ und __id__. Die __id__ ist nur für das
 Referenzieren einer Frage, dazu gibt es den extra Abschnitt Referenzieren.
 
 Das Feld __qtype__ definiert den Typ der Frage. Hier gibt es mittlerweile einige
-verschiedene. Hier eine Liste aller Fragetypen aus der aktuellen Version (0.3.0):
+verschiedene. Hier eine Liste aller Fragetypen aus der aktuellen Version (0.3.2):
 
 * __short_text__: Ein kleines Textfeld. Normalerweise für ein Wort
 * __choice__: Auswahl als Single- oder Multiple-Choice (Auch Bilderauswahl)
@@ -1273,3 +1404,8 @@ Dieser JQuery _load_ Befehl macht nicht anderes, als den kompletten Code der
 _quiz.html_ in das DIV zu kopieren. Möchte man also auf JQuery verzichten,
 kann man auch per Hand die Script und Style Dateien aus dem _head_ der
 _quiz.html_ kopieren und anschließend den gesamten _body_ in das gewünschte _div_\.
+
+
+
+
+<!-- TODO LINKSAMMLUNG -->

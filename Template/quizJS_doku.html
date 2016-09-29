@@ -84,20 +84,134 @@
 
 
 
-                <section name="quiz.js">
-
-<!--Hier den Markdown-Export einfügen-->
-
-<h1 id="quizjs">quiz.js</h1>
-<p>Arne Westphal<br>
-eLearning Büro - MIN
+<section name="Erstellung von Selbsttests">
+<h1 id="erstellung-von-selbsttests">Erstellung von Selbsttests</h1>
+<p>Julia Kühnemund und Arne Westphal<br>
+eLearning Büro - MIN<br>
 cc by-sa | 2016</p>
+
+<img src="assets/img/quiz-images/quizjs_uebersicht.png" alt="Titelbild">
 </section>
 
-<section name="Grundlage">
-<h2 id="grundlage">Grundlage</h2>
+
+<section name="Verwendung von Selbsttestaufgaben">
+
+<h2 id="verwendung-von-selbsttestaufgaben">Verwendung von Selbsttestaufgaben</h2>
+<p>Die Quizfragen dienen dazu, die Aufmerksamkeit der Studierenden zu wecken
+und sich selbst zu überprüfen. Sie geben die Möglichkeit, die wichtigsten
+Aspekte in den Vordergrund zu rücken. Durch verschiedene Fragentypen kann man
+abhängig vom Lernziel helfen, das Material u.a. zu verstehen, wiederholen,
+einzuordnen oder zu lernen.</p>
+<h3 id="fragentypen">Fragentypen</h3>
+<p>Die Fragen können <em>offen</em> oder <em>geschlossen</em> sein. Fragen mit kurzen Antworten kann
+man als <em>halboffene</em> oder <em>halbgeschlossene</em> Fragen bezeichnen.</p>
+<p>Die <em>geschlossene</em> Form verlangt eine eindeutige Antwort, z.B. „Ja“ oder „Nein“.
+Bei diesen Fragen sind die Antwortmöglichkeiten vorgegeben.</p>
+<p>Die <em>offenen</em> Fragen ermöglichen Antworten in beliebiger Form. Dabei
+ist die Antwortform nur vom Lernziel abhängig. Die Studierenden können
+ihre Antwort durch Auswählen oder Verschieben von Objekten und auch in Form
+einer Zeichnung geben.</p>
+<p>Alle diese Fragentypen haben ihre <strong>Vor- und Nachteile</strong> und  müssen Lernziel
+abhängig verwendet sein.</p>
+</section>
+
+
+<section name="Geschlossene und offene Fragen">
+<h3 id="geschlossene-und-offene-fragen">Geschlossene und offene Fragen</h3>
+<p><strong>Geschlossene</strong> (konvergente) Fragen können automatisch ausgewertet werden,
+d.h. die Studierenden können sofort nach jeder Frage oder am Ende des ganzen
+Quiz ihren Kenntnisstand überprüfen und wenn vorgesehen bewerten lassen.
+Außerdem ist die Benotung objektiv, da der Computer
+immer die gleiche Bewertung für eine bestimmte Antwort gibt, ohne dabei
+emotionale Bestandteile in die Benotung (schlechte Laune, Frustration oder
+Ablenkung) einfließen zu lassen. Als Nachteil wird oft die Zufallsrate benannt,
+d.h. die Studierende klicken ohne nachzudenken oder merken sich vorgegebene
+Muster. Technischen Probleme können auch die Benotung beeinflussen. Aus diesem
+Grund sind computerbasierte Prüfungen noch nicht sehr verbreitet. Und an den
+Stellen, an denen computerbasierte Prüfungen stattfinden, gibt es die
+Möglichkeit, den ganzen Prüfungsprozess durch Menschen zu kontrollieren,
+z.B. in Papierform. Außerdem fehlt oft der rechtliche und organisatorische
+Hintergrund.</p>
+<p>Zurzeit sind folgende geschlossene Fragentypen verbreitet:</p>
+<ul>
+<li>Multiple-Choice</li>
+<li>Single-Choice</li>
+<li>Wahr-Falsch</li>
+<li>Zuordnung</li>
+<li>Rang-/Reihenfolge</li>
+<li>Kprim</li>
+</ul>
+<p>Die <strong>halbgeschlossenen</strong> Fragen können auch automatisch ausgewertet werden,
+jedoch darf die Antwort nur aus einen vorgegeben, begrenzte Anzahl von Wörtern
+bestehen. Bei Aufzählungen in der Antwort muss man zusätzliche Anweisungen
+geben, z.B. „nur in alphabetische Reihenfolge“ oder „keine Wiederholung“, um
+die Eindeutigkeit der Antwort zu gewährleisten.</p>
+<p>Zu den halbgeschlossenen Fragen gehören: Kurztext, Lückentext, Hotspot und alle
+andere Fragenformen, beim denen man etwas eintippen muss.</p>
+<p><strong>Offene</strong> Fragen können in der Regel nicht automatisch ausgewertet werden. Als
+Alternative werden Musterlösungen dargestellt, welche man nach einer
+bestimmten Zeit, auf Knopfduck oder nach der Abgabe der eigenen Antwort zum
+Vergleich sehen kann.</p>
+<p>Der Vorteil ist hier, dass die Frage nicht extra in eine geschlossene
+umformuliert werden muss und die Studierenden beim Antworten in Struktur
+und Form frei sind, wodurch sie unter Umständen ihre Kenntnisse besser
+darstellen können. Die Bewertung ist aber nur durch eine Person und nicht
+durch Computer realisierbar. Die Menschen sind immer subjektiv.</p>
+<p>Die offene Aufgabenform ist vielseitig. Hier sind einige Beispiele:
+Freitextaufgabe, Zeichnungsaufgabe, Begründungsaufgabe, Problemaufgabe
+und Offene Situation.</p>
+</section>
+
+<section name="Selbsttests mit quiz.js">
+
+<h2 id="selbsttests-mit-quizjs">Selbsttests mit quiz.js</h2>
+<p>Mit der quiz.js Erweiterung zum eLearn.js Projekt sind folgende Fragentypen
+relisierbar:</p>
+
+<!-- TODO LINKS -->
+<ul>
+    <li>Multiple-Choice</li>
+    <li>Single-Choice</li>
+    <li>Kprim</li>
+    <li>Wahr-Falsch</li>
+    <li>Zuordnung/Einordnen</li>
+    <li>Rang-/Reihenfolge</li>
+    <li>Lückentext
+    <ul>
+        <li>mit Auswahl vorgegebener Wörter</li>
+        <li>mit Eingabemöglichkeit</li>
+        <li>mit Eingabe vorgegebener Wörter</li>
+        <li>Ergänzung einer Tabelle/Matrix</li>
+    </ul>
+    </li>
+    <li>Markierung
+    <ul>
+        <li>Falsche oder richtige Wörter</li>
+        <li>Hotspot</li>
+    </ul>
+    </li>
+    <li>Kurztext</li>
+    <li>Freitext</li>
+    <li>Bild/Graph zeichnen</li>
+    <li>Einfache Petrinetzaufgaben</li>
+</ul>
+<p>Bei allen Fragentypen kann die eigene Antwort mit einer Musterlösung
+verglichen werden. Zudem können die geschlossenen Fragen automatisch ausgewertet
+werden, z.B. durch eine Anzeige von &quot;Richtig&quot; oder &quot;Falsch&quot;. Die abgegebene
+Antwort und die Musterlösung kann an einer beliebigen Stelle vom Skript
+abgerufen/gezeigt, wieder geschlossen und zurückgesetzt werden.</p>
+
+
+</section>
+
+<section name="Technische Grundlage">
+<h2 id="grundlage">Technische Grundlage</h2>
 <p>Im folgenden werden HTML Elemente immer wieder abgekürzt beschrieben.
-Dabei handelt es sich um die CSS Schreibweisen.
+Dabei handelt es sich um die CSS Schreibweisen zur Spezifikation von Elementen.
+CSS ist eine Sprache, um das Aussehen der angezeigten Seite zu definieren.
+Wie man mit CSS das Aussehen verändert wird im Abschnitt
+<a href="#" onclick="showSection('Veränderte Darstellung (CSS)')"><i>Veränderte Darstellung (CSS)</i></a>
+noch grundsätzlich erklärt.
 Elemente wie <em>&lt;div&gt;</em> werden dabei einfach nur <em>div</em> genannt.
 Die Klassen der Elemente werden jeweils mit einem einzelnen Punkt begonnen.
 <em>div.eins</em> würde also z.B. <em>&lt;div class=&quot;eins&quot;&gt;</em> entsprechen.
@@ -185,14 +299,13 @@ Block indem Antworten stehen
 <section name="Fragetypen">
 
 <h3 id="fragetypen">Fragetypen</h3>
-<p>In der ersten Zeile</p>
+<p>In der ersten Zeile tauchen bereits Variable Werte auf, die angepasst werden müssen.</p>
 <pre><code>&lt;div class=&quot;question&quot; qtype=&quot;short_text&quot; id=&quot;short_1&quot;&gt;
 </code></pre>
-<p>tauchen bereits Variable Werte auf, die angepasst werden müssen.
-In diesem Fall die Felder <strong>qtype</strong> und <strong>id</strong>. Die <strong>id</strong> ist nur für das
+<p>In diesem Fall die Felder <strong>qtype</strong> und <strong>id</strong>. Die <strong>id</strong> ist nur für das
 Referenzieren einer Frage, dazu gibt es den extra Abschnitt Referenzieren.</p>
 <p>Das Feld <strong>qtype</strong> definiert den Typ der Frage. Hier gibt es mittlerweile einige
-verschiedene. Hier eine Liste aller Fragetypen aus der aktuellen Version (0.3.0):</p>
+verschiedene. Hier eine Liste aller Fragetypen aus der aktuellen Version (0.3.2):</p>
 <ul>
 <li><strong>short_text</strong>: Ein kleines Textfeld. Normalerweise für ein Wort</li>
 <li><strong>choice</strong>: Auswahl als Single- oder Multiple-Choice (Auch Bilderauswahl)</li>
