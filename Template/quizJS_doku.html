@@ -99,10 +99,10 @@ cc by-sa | 2016</p>
 <h2 id="verwendung-von-selbsttestaufgaben">Verwendung von Selbsttestaufgaben</h2>
 <p>Die Quizfragen dienen dazu, die Aufmerksamkeit der Studierenden zu wecken
 und sich selbst zu überprüfen. Sie geben die Möglichkeit, die wichtigsten
-Aspekte in den Vordergrund zu rücken. Durch verschiedene Fragentypen kann man
+Aspekte in den Vordergrund zu rücken. Durch verschiedene Fragetypen kann man
 abhängig vom Lernziel helfen, das Material u.a. zu verstehen, wiederholen,
 einzuordnen oder zu lernen.</p>
-<h3 id="fragentypen">Fragentypen</h3>
+<h3 id="Fragetypen">Fragetypen</h3>
 <p>Die Fragen können <em>offen</em> oder <em>geschlossen</em> sein. Fragen mit kurzen Antworten kann
 man als <em>halboffene</em> oder <em>halbgeschlossene</em> Fragen bezeichnen.</p>
 <p>Die <em>geschlossene</em> Form verlangt eine eindeutige Antwort, z.B. „Ja“ oder „Nein“.
@@ -111,7 +111,7 @@ Bei diesen Fragen sind die Antwortmöglichkeiten vorgegeben.</p>
 ist die Antwortform nur vom Lernziel abhängig. Die Studierenden können
 ihre Antwort durch Auswählen oder Verschieben von Objekten und auch in Form
 einer Zeichnung geben.</p>
-<p>Alle diese Fragentypen haben ihre <strong>Vor- und Nachteile</strong> und  müssen Lernziel
+<p>Alle diese Fragetypen haben ihre <strong>Vor- und Nachteile</strong> und  müssen Lernziel
 abhängig verwendet sein.</p>
 </section>
 
@@ -132,14 +132,13 @@ Stellen, an denen computerbasierte Prüfungen stattfinden, gibt es die
 Möglichkeit, den ganzen Prüfungsprozess durch Menschen zu kontrollieren,
 z.B. in Papierform. Außerdem fehlt oft der rechtliche und organisatorische
 Hintergrund.</p>
-<p>Zurzeit sind folgende geschlossene Fragentypen verbreitet:</p>
+<p>Zurzeit sind folgende geschlossene Fragetypen verbreitet:</p>
 <ul>
 <li>Multiple-Choice</li>
 <li>Single-Choice</li>
 <li>Wahr-Falsch</li>
 <li>Zuordnung</li>
 <li>Rang-/Reihenfolge</li>
-<li>Kprim</li>
 </ul>
 <p>Die <strong>halbgeschlossenen</strong> Fragen können auch automatisch ausgewertet werden,
 jedoch darf die Antwort nur aus einen vorgegeben, begrenzte Anzahl von Wörtern
@@ -165,37 +164,36 @@ und Offene Situation.</p>
 <section name="Selbsttests mit quiz.js">
 
 <h2 id="selbsttests-mit-quizjs">Selbsttests mit quiz.js</h2>
-<p>Mit der quiz.js Erweiterung zum eLearn.js Projekt sind folgende Fragentypen
+<p>Mit der quiz.js Erweiterung zum eLearn.js Projekt sind folgende Fragetypen
 relisierbar:</p>
 
-<!-- TODO LINKS -->
 <ul>
-    <li>Multiple-Choice</li>
-    <li>Single-Choice</li>
-    <li>Kprim</li>
-    <li>Wahr-Falsch</li>
-    <li>Zuordnung/Einordnen</li>
-    <li>Rang-/Reihenfolge</li>
-    <li>Lückentext
-    <ul>
-        <li>mit Auswahl vorgegebener Wörter</li>
-        <li>mit Eingabemöglichkeit</li>
-        <li>mit Eingabe vorgegebener Wörter</li>
-        <li>Ergänzung einer Tabelle/Matrix</li>
-    </ul>
-    </li>
-    <li>Markierung
-    <ul>
-        <li>Falsche oder richtige Wörter</li>
-        <li>Hotspot</li>
-    </ul>
-    </li>
-    <li>Kurztext</li>
-    <li>Freitext</li>
-    <li>Bild/Graph zeichnen</li>
-    <li>Einfache Petrinetzaufgaben</li>
+<li><a href="#" onclick="showSection('Einfach-, Mehrfach- und Bilderauswahl')">Multiple-Choice</a></li>
+<li><a href="#" onclick="showSection('Einfach-, Mehrfach- und Bilderauswahl')">Single-Choice</a></li>
+<li><a href="#" onclick="showSection('Einfach-, Mehrfach- und Bilderauswahl')">Wahr-Falsch</a></li>
+<li><a href="#" onclick="showSection('Matrix oder Tabellenaufgaben')">Matrix</a></li>
+<li><a href="#" onclick="showSection('Zuordnung (Drag and Drop)')">Zuordnung/Einordnen</a></li>
+<li><a href="#" onclick="showSection('Sortieren (Drag and Drop)')">Rang-/Reihenfolge/Sortieren</a></li>
+<li><a href="#" onclick="showSection('Lückentext mit Textfeldern')">Lückentext</a>
+<ul>
+<li><a href="#" onclick="showSection('Lückentext mit Auswahl')">mit Auswahl vorgegebener Wörter</a></li>
+<li><a href="#" onclick="showSection('Lückentext mit Textfeldern')">mit Eingabemöglichkeit</a></li>
+<li><a href="#" onclick="showSection('Lückentext mit Textfeldern')">mit Eingabe vorgegebener Wörter</a></li>
+<li><a href="#" onclick="showSection('Lückentext mit Textfeldern')">Ergänzung einer Tabelle/Matrix</a></li>
 </ul>
-<p>Bei allen Fragentypen kann die eigene Antwort mit einer Musterlösung
+</li>
+<li><a href="#" onclick="showSection('Fehlertext oder Wortmarkierung')">Markierung</a>
+<ul>
+<li><a href="#" onclick="showSection('Fehlertext oder Wortmarkierung')">Falsche oder richtige Wörter</a></li>
+<li><a href="#" onclick="showSection('Hotspot')">Hotspot</a></li>
+</ul>
+</li>
+<li><a href="#" onclick="showSection('Kurzantworten')">Kurztext</a></li>
+<li><a href="#" onclick="showSection('Freitextaufgaben')">Freitext</a></li>
+<li><a href="#" onclick="showSection('Zeichnen')">Bild/Graph zeichnen</a></li>
+<li><a href="#" onclick="showSection('Petrinetzaufgaben')">Einfache Petrinetzaufgaben</a></li>
+</ul>
+<p>Bei allen Fragetypen kann die eigene Antwort mit einer Musterlösung
 verglichen werden. Zudem können die geschlossenen Fragen automatisch ausgewertet
 werden, z.B. durch eine Anzeige von &quot;Richtig&quot; oder &quot;Falsch&quot;. Die abgegebene
 Antwort und die Musterlösung kann an einer beliebigen Stelle vom Skript
@@ -240,7 +238,7 @@ Ansehen kann man sich diese hier: <a href="quizJS_examples.html">Link</a></p>
 &lt;h4&gt;
   &lt;b&gt;Frage 1:&lt;/b&gt;&lt;br&gt;
   Freitext Frage
-&lt;/h4&gt; &lt;!-- Fragentext --&gt;
+&lt;/h4&gt; &lt;!-- Fragetext --&gt;
 
 &lt;!--
 Block indem Antworten stehen
@@ -272,7 +270,7 @@ einzufügen.</p>
 <h4>
   <b>Frage 1:</b><br>
   Freitext Frage
-</h4> <!-- Fragentext -->
+</h4> <!-- Fragetext -->
 
 <!--
 Block indem Antworten stehen
@@ -449,18 +447,13 @@ in ihrer Funktionsweise und Verwendung erklärt.</p>
 <section name="Kurzantworten">
 
 <h3 id="kurzantworten-short-text">Kurzantworten: <em>short_text</em></h3>
-<p>Dieser Typ funktioniert genau wie oben beschrieben. In dem
-<em>div.answers</em> befindet sich folgendes</p>
-<pre><code>&lt;label&gt;Lösung: &lt;input type=&quot;text&quot; name=&quot;q&quot;&gt;&lt;/label&gt;
-</code></pre>
-<p>Dabei kann natürlich der Text &quot;Lösung:&quot; beliebig verändert werden. Er
-kann auch außerhalb des <em>label</em> stehen.</p>
+
 <p>Beispiel:</p>
 <div class="question" qtype="short_text" id="q_short_text_2">
 <h4>
   <b>Frage 1:</b><br>
   Gib das Wort "antwort" ein.
-</h4> <!-- Fragentext -->
+</h4> <!-- Fragetext -->
 
 <!--
 Block indem Antworten stehen
@@ -481,18 +474,24 @@ Block indem Antworten stehen
 
 <a class="ans">693da517cf61c81742ef090221bfd5d6</a>
 </div>
+
+<h4>Technische Umsetzung</h4>
+
+<p>Dieser Typ funktioniert genau wie oben beschrieben. In dem
+<em>div.answers</em> befindet sich folgendes</p>
+<pre><code>&lt;label&gt;Lösung: &lt;input type=&quot;text&quot; name=&quot;q&quot;&gt;&lt;/label&gt;
+</code></pre>
+<p>Dabei kann natürlich der Text &quot;Lösung:&quot; beliebig verändert werden. Er
+kann auch außerhalb des <em>label</em> stehen.</p>
 </section>
 
 
 <section name="Einfach-, Mehrfach- und Bilderauswahl">
 
 <h3 id="einfach-mehrfach-und-bilderauswahl-choice">Einfach-, Mehrfach- und Bilderauswahl: <em>choice</em></h3>
-<p>Auch hiervon wurden Teile bereits zuvor bereits beschrieben. Hierzu sollte man
-im Bereich <strong>Antworten</strong> nachsehen.</p>
-
 <p>Hier ein Beispiel für eine Mehrfachauswahl:</p>
 <!--
-FRAGENTYP AUSWAHLFRAGE (Multiple/Single Choice)
+FragetYP AUSWAHLFRAGE (Multiple/Single Choice)
 
 Eine Frage mit mehrere Antwortmöglichkeiten.
 -->
@@ -541,6 +540,10 @@ Eine Frage mit mehrere Antwortmöglichkeiten.
     <a class="ans">4fc364339b2127eb81c13ab986a27085</a>
 </div>
 
+<h4>Technische Umsetzung</h4>
+
+<p>Auch hiervon wurden Teile bereits zuvor bereits beschrieben. Hierzu sollte man
+im Bereich <strong>Antworten</strong> nachsehen.</p>
 
 <p>Die Bildauswahl ist das vermutlich einzige Konstrukt welches in vielen
 Fällen speziell angepasst werden muss. Der Umgang mit verschieden großen
@@ -608,33 +611,8 @@ vorgeben, wie die Bilder genau dargestellt werden sollen.</p>
 <h3 id="freitextaufgaben-free-text">Freitextaufgaben: <em>free_text</em></h3>
 <p>Hierbei handelt es sich um ein größeres Textfeld in das längere
 Antworten eingegeben werden können. Diese werden <strong>nicht</strong>
-überprüft. Dieser Typ ist also nur für Aufgaben mit Selbstkontrolle
-geeignet.</p>
-<p>Hierzu wird im <em>div.answers</em> folgendes eingefügt:</p>
-<pre><code>&lt;label&gt;
-    Antwort:
-    &lt;textarea&gt;&lt;/textarea&gt;
-&lt;/label&gt;
-</code></pre>
-<p>Natürlich ist auch hier der Text &quot;Antwort:&quot; beliebig veränderbar.
-Er kann auch weggelassen werden.</p>
-<p>Da diese Aufgabe nicht kontrolliert wird, müssen auch keine
-richtigen Antworten angegeben werden. Im Feedbacktext kann man
-natürlich korrekte Lösungen erklären.</p>
-<p>Anders als oben beschrieben gibt es hier keinen Feedbacktext für
-richtige Antworten und ebenfalls keinen für falsche sondern
-nur einen generellen, der immer nach der Beantwortung angezeigt
-wird. Dieser sieht wie folgt aus:</p>
-<pre><code>&lt;div class=&quot;feedback information&quot;&gt;
-    &lt;b&gt;Richtige Antwort:&lt;/b&gt;&lt;br&gt;
-    Text
-&lt;/div&gt;
-</code></pre>
-<p>Innerhalb dieses <em>div</em> kann man einfügen was man möchte. Es sind
-also auch Bilder möglich. Das Beispiel <em>b</em> druckt den Text innerhalb
-fett.
-Diese Art von Feedbacktext wird auch noch bei anderen Fragetypen
-genutzt.</p>
+überprüft, das es sich um einen offenen Fragetypen handelt. Dieser Typ ist also
+nur für Aufgaben mit Selbstkontrolle geeignet.</p>
 
 <p>Ein Beispiel für eine Freitextfrage:</p>
 <div class="question" qtype="free_text" id="q_free_text">
@@ -661,12 +639,74 @@ genutzt.</p>
         Die Ordner "assets", "img" und "css" sollten immer vorhanden sein.
     </div>
 </div>
+
+<h4>Technische Umsetzung</h4>
+
+<p>Hierzu wird im <em>div.answers</em> folgendes eingefügt:</p>
+<pre><code>&lt;label&gt;
+    Antwort:
+    &lt;textarea&gt;&lt;/textarea&gt;
+&lt;/label&gt;
+</code></pre>
+<p>Natürlich ist auch hier der Text &quot;Antwort:&quot; beliebig veränderbar.
+Er kann auch weggelassen werden.</p>
+<p>Da diese Aufgabe nicht kontrolliert wird, müssen auch keine
+richtigen Antworten angegeben werden. Im Feedbacktext kann man
+natürlich korrekte Lösungen erklären.</p>
+<p>Anders als oben beschrieben gibt es hier keinen Feedbacktext für
+richtige Antworten und ebenfalls keinen für falsche sondern
+nur einen generellen, der immer nach der Beantwortung angezeigt
+wird. Dieser sieht wie folgt aus:</p>
+<pre><code>&lt;div class=&quot;feedback information&quot;&gt;
+    &lt;b&gt;Richtige Antwort:&lt;/b&gt;&lt;br&gt;
+    Text
+&lt;/div&gt;
+</code></pre>
+<p>Innerhalb dieses <em>div</em> kann man einfügen was man möchte. Es sind
+also auch Bilder möglich. Das Beispiel <em>b</em> druckt den Text innerhalb
+fett.
+Diese Art von Feedbacktext wird auch noch bei anderen Fragetypen
+genutzt.</p>
 </section>
 
 
 <section name="Lückentext mit Textfeldern">
 
 <h3 id="luckentext-mit-textfeldern-fill-blank">Lückentext mit Textfeldern: <em>fill_blank</em></h3>
+
+<p>Ein Beispiel für einen Lückentext:</p>
+<div class="question" qtype="fill_blank" id="q_fill_blank">
+    <h4>Fülle die Lücken im Text wie oben beschrieben!</h4>
+
+    <div class="answers">
+        Hier wäre ein langer Text mit
+        <label><input id="0" type="text"></label>
+        und diese müssen
+        <label><input id="1" type="text"></label>
+        werden.
+    </div>
+
+    <!--
+    Dieser Block wird angezeigt, wenn die Frage beantwortet wurde.
+    In diesem Block kann ein erklärender Text und auch Bilder
+    verwendet werden.
+    -->
+    <div class="feedback correct">
+        <b>Richtig!</b><br>
+    </div>
+    <div class="feedback incorrect">
+        <b>Falsch.</b><br>
+        Der Text sollte wie folgt lauten:
+        <i>Hier wäre ein langer Text mit <b>Lücken</b>
+        und diese müssen <b>gefüllt</b> werden.</i>
+    </div>
+
+    <a class="ans" id="0">6497dcbced26ee0f510bf82de5234653</a>
+    <a class="ans" id="1">2c8b2465235308f69defd8ae2e46cdd3</a>
+</div>
+
+<h4>Technische Umsetzung</h4>
+
 <p>Dieser Aufgabentyp erlaubt es mehrere Textfelder zu haben, die
 alle funktionieren wie in einer <em>short_text</em> Aufgabe. Als korrekt
 gilt die Antwort nur, wenn alle eingegebenen Wörter korrekt sind.</p>
@@ -703,88 +743,12 @@ man mehrere <em>a</em> mit derselben <em>id</em> die unterschiedliche verschlüs
 Antworten enthalten. Überprüft wird, ob die gegebene Antwort mit einer der
 angegebenen Möglichkeiten übereinstimmt.</p>
 
-<p>Ein Beispiel für einen Lückentext:</p>
-<div class="question" qtype="fill_blank" id="q_fill_blank">
-    <h4>Fülle die Lücken im Text wie oben beschrieben!</h4>
-
-    <div class="answers">
-        Hier wäre ein langer Text mit
-        <label><input id="0" type="text"></label>
-        und diese müssen
-        <label><input id="1" type="text"></label>
-        werden.
-    </div>
-
-    <!--
-    Dieser Block wird angezeigt, wenn die Frage beantwortet wurde.
-    In diesem Block kann ein erklärender Text und auch Bilder
-    verwendet werden.
-    -->
-    <div class="feedback correct">
-        <b>Richtig!</b><br>
-    </div>
-    <div class="feedback incorrect">
-        <b>Falsch.</b><br>
-        Der Text sollte wie folgt lauten:
-        <i>Hier wäre ein langer Text mit <b>Lücken</b>
-        und diese müssen <b>gefüllt</b> werden.</i>
-    </div>
-
-    <a class="ans" id="0">6497dcbced26ee0f510bf82de5234653</a>
-    <a class="ans" id="1">2c8b2465235308f69defd8ae2e46cdd3</a>
-</div>
 </section>
 
 
 <section name="Lückentext mit Auswahl">
 
 <h3 id="luckentext-mit-auswahl-fill-blank-choice">Lückentext mit Auswahl: <em>fill_blank_choice</em></h3>
-<p>Diese Art von Lückentext funktioniert ähnlich wie die vorherige.
-Allerdings wird hier für jede Lücke eine Auswahl an
-Antwortmöglichkeiten vorgegeben, von denen nur eine richtig ist.</p>
-<p>Innerhalb des <em>div.answers</em> werden die <em>input</em> ersetzt durch
-<em>select</em>:</p>
-<pre><code>Hier wäre ein langer Text mit
-
-&lt;!-- Auswahlblock --&gt;
-&lt;label&gt;
-    &lt;select id=&quot;0&quot;&gt;
-        &lt;option&gt;Elefanten&lt;/option&gt;
-        &lt;option&gt;Lücken&lt;/option&gt;
-    &lt;/select&gt;
-&lt;/label&gt;
-
-und diese müssen
-
-&lt;!-- weiterer Auswahlblock --&gt;
-&lt;label&gt;
-    &lt;select id=&quot;1&quot;&gt;
-        &lt;option&gt;gefüllt&lt;/option&gt;
-        &lt;option&gt;überbacken&lt;/option&gt;
-    &lt;/select&gt;
-&lt;/label&gt;
-
-werden.
-</code></pre>
-<p>Jedes <em>select</em> muss in einem <em>label</em> sein. Innerhalb eines <em>select</em>
-können beliebig viele <em>option</em> eingebaut werden. Diese können
-auch in verschiedenen <em>select</em> mehrfach auftauchen.</p>
-<p>Die Angabe der Antworten erfolgt ähnlich wie bereits zuvor.
-Hier der Block für dieses Beispiel:</p>
-<pre><code>&lt;a class=&quot;ans&quot; id=&quot;0&quot;&gt;6497dcbced26ee0f510bf82de5234653&lt;/a&gt;
-&lt;a class=&quot;ans&quot; id=&quot;1&quot;&gt;2c8b2465235308f69defd8ae2e46cdd3&lt;/a&gt;
-</code></pre>
-<p>Das erste <em>a</em> verweist durch seine <em>id</em> auf das erste <em>select</em>,
-welches dieselbe <em>id</em> hat. Hier verschlüsselt ist also die Antwort
-für diese Lücke. Verschlüsselt wird die Antwort wie bereits zuvor
-erklärt.
-Für jedes <em>select</em> muss also ein <em>a</em> mit übereinstimmender <em>id</em>
-erstellt werden, indem die jeweilige Antwort verschlüsselt ist.
-Möchte man für ein Feld mehrere richtige Antwortmöglichkeiten angeben, erstellt
-man mehrere <em>a</em> mit derselben <em>id</em> die unterschiedliche verschlüsselte
-Antworten enthalten. Überprüft wird, ob die gegebene Antwort mit einer der
-angegebenen Möglichkeiten übereinstimmt.</p>
-
 <p>Ein Beispiel für einen Lückentext:</p>
 <div class="question" qtype="fill_blank_choice" id="q_fill_blank_choice">
     <h4>Fülle die Lücken im Text wie oben beschrieben!</h4>
@@ -831,37 +795,60 @@ angegebenen Möglichkeiten übereinstimmt.</p>
     <a class="ans" id="0">6497dcbced26ee0f510bf82de5234653</a>
     <a class="ans" id="1">2c8b2465235308f69defd8ae2e46cdd3</a>
 </div>
+
+<h4>Technische Umsetzung</h4>
+
+<p>Diese Art von Lückentext funktioniert ähnlich wie die vorherige.
+Allerdings wird hier für jede Lücke eine Auswahl an
+Antwortmöglichkeiten vorgegeben, von denen nur eine richtig ist.</p>
+<p>Innerhalb des <em>div.answers</em> werden die <em>input</em> ersetzt durch
+<em>select</em>:</p>
+<pre><code>Hier wäre ein langer Text mit
+
+&lt;!-- Auswahlblock --&gt;
+&lt;label&gt;
+    &lt;select id=&quot;0&quot;&gt;
+        &lt;option&gt;Elefanten&lt;/option&gt;
+        &lt;option&gt;Lücken&lt;/option&gt;
+    &lt;/select&gt;
+&lt;/label&gt;
+
+und diese müssen
+
+&lt;!-- weiterer Auswahlblock --&gt;
+&lt;label&gt;
+    &lt;select id=&quot;1&quot;&gt;
+        &lt;option&gt;gefüllt&lt;/option&gt;
+        &lt;option&gt;überbacken&lt;/option&gt;
+    &lt;/select&gt;
+&lt;/label&gt;
+
+werden.
+</code></pre>
+<p>Jedes <em>select</em> muss in einem <em>label</em> sein. Innerhalb eines <em>select</em>
+können beliebig viele <em>option</em> eingebaut werden. Diese können
+auch in verschiedenen <em>select</em> mehrfach auftauchen.</p>
+<p>Die Angabe der Antworten erfolgt ähnlich wie bereits zuvor.
+Hier der Block für dieses Beispiel:</p>
+<pre><code>&lt;a class=&quot;ans&quot; id=&quot;0&quot;&gt;6497dcbced26ee0f510bf82de5234653&lt;/a&gt;
+&lt;a class=&quot;ans&quot; id=&quot;1&quot;&gt;2c8b2465235308f69defd8ae2e46cdd3&lt;/a&gt;
+</code></pre>
+<p>Das erste <em>a</em> verweist durch seine <em>id</em> auf das erste <em>select</em>,
+welches dieselbe <em>id</em> hat. Hier verschlüsselt ist also die Antwort
+für diese Lücke. Verschlüsselt wird die Antwort wie bereits zuvor
+erklärt.
+Für jedes <em>select</em> muss also ein <em>a</em> mit übereinstimmender <em>id</em>
+erstellt werden, indem die jeweilige Antwort verschlüsselt ist.
+Möchte man für ein Feld mehrere richtige Antwortmöglichkeiten angeben, erstellt
+man mehrere <em>a</em> mit derselben <em>id</em> die unterschiedliche verschlüsselte
+Antworten enthalten. Überprüft wird, ob die gegebene Antwort mit einer der
+angegebenen Möglichkeiten übereinstimmt.</p>
 </section>
 
 
 <section name="Fehlertext oder Wortmarkierung">
 
 <h3 id="fehlertext-oder-wortmarkierung-error-text">Fehlertext oder Wortmarkierung: <em>error_text</em></h3>
-<p>Dieser Aufgabentyp ist dazu gedacht, in einem Fließtext Wörter
-durch- oder unterstreichen zu können. So kann man z.B. falsche
-Wörter durchstreichen oder richtige Wörter unterstreichen. Je
-Aufgabe ist allerdings nur eine Art der Markierung möglich.</p>
-<p>Standardmäßig werden angeklickte Wörter durchgestrichen. Um das
-umzuschalten und eine Unterstreichen zu ermöglichen, muss das
-<em>div.answers</em> um die Klasse <strong>underline</strong> erweitert werden.</p>
-<pre><code>&lt;div class=&quot;answers underline&quot;&gt;
-</code></pre>
-<p>In das <em>div.answers</em> schreibt man dann den gewünschten Text.
-Markierbare Wörter werden wie folgt eingebaut:</p>
-<pre><code>&lt;button class=&quot;error_button&quot;&gt;Wort&lt;/button&gt;
-</code></pre>
-<p>Hier kann der Text &quot;Wort&quot; wieder beliebig verändert werden. Es
-können theoretisch auch Ganze Sätze innerhalb eines Buttons
-verwendet werden. Jedes markierbare Wort muss in einen solchen
-<em>button</em> eingebaut werden. Es kann beliebig viele <em>button</em> geben.</p>
-<p>Als richtige Antwort wird angegeben, welche Wörter <strong>markiert</strong>
-werden sollen, also entweder unter- oder durchgestrichen.
-Verschlüsselt wird der Teil innerhalb des <em>button</em>.
-Im oberen Beispiel müsste also &quot;Wort&quot; verschlüsselt werden, was
-folgendes ergibt:</p>
-<pre><code>&lt;a class=&quot;ans&quot;&gt;7e2aa751bdcb1636344f39483040e3e1&lt;/a&gt;
-</code></pre>
-<p>Wörter die nicht markiert werden sollen, werden ignoriert.</p>
 <p>Ein Beispiel für einen Fehlertext:</p>
 <div class="question" qtype="error_text" id="et_1">
     <h4>Streiche falsche Wörter</h4>
@@ -906,11 +893,88 @@ folgendes ergibt:</p>
     <a class="ans">54b851fdfcb598592d15214f24c6fdc7</a>
     <a class="ans">14c5492ce2fe855f408481fdbd13f7a6</a>
 </div>
+
+<h4>Technische Umsetzung</h4>
+
+<p>Dieser Aufgabentyp ist dazu gedacht, in einem Fließtext Wörter
+durch- oder unterstreichen zu können. So kann man z.B. falsche
+Wörter durchstreichen oder richtige Wörter unterstreichen. Je
+Aufgabe ist allerdings nur eine Art der Markierung möglich.</p>
+<p>Standardmäßig werden angeklickte Wörter durchgestrichen. Um das
+umzuschalten und eine Unterstreichen zu ermöglichen, muss das
+<em>div.answers</em> um die Klasse <strong>underline</strong> erweitert werden.</p>
+<pre><code>&lt;div class=&quot;answers underline&quot;&gt;
+</code></pre>
+<p>In das <em>div.answers</em> schreibt man dann den gewünschten Text.
+Markierbare Wörter werden wie folgt eingebaut:</p>
+<pre><code>&lt;button class=&quot;error_button&quot;&gt;Wort&lt;/button&gt;
+</code></pre>
+<p>Hier kann der Text &quot;Wort&quot; wieder beliebig verändert werden. Es
+können theoretisch auch Ganze Sätze innerhalb eines Buttons
+verwendet werden. Jedes markierbare Wort muss in einen solchen
+<em>button</em> eingebaut werden. Es kann beliebig viele <em>button</em> geben.</p>
+<p>Als richtige Antwort wird angegeben, welche Wörter <strong>markiert</strong>
+werden sollen, also entweder unter- oder durchgestrichen.
+Verschlüsselt wird der Teil innerhalb des <em>button</em>.
+Im oberen Beispiel müsste also &quot;Wort&quot; verschlüsselt werden, was
+folgendes ergibt:</p>
+<pre><code>&lt;a class=&quot;ans&quot;&gt;7e2aa751bdcb1636344f39483040e3e1&lt;/a&gt;
+</code></pre>
+<p>Wörter die nicht markiert werden sollen, werden ignoriert.</p>
+
 </section>
 
 <section name="Matrix oder Tabellenaufgaben">
 
 <h3 id="matrix-matrix-choice">Matrix: <em>matrix_choice</em></h3>
+<p>Ein Beispiel für eine Matrixaufgabe:</p>
+<div class="question" qtype="matrix_choice" id="mc_1">
+    <h4>Wähle aus, ob die Aussagen richtig oder falsch sind</h4>
+    <div class="answers single">
+    <table class="matrix">
+            <tr>
+                <td>Aufgabe</td>
+                <th id="wahr" class="antwort">Wahr</th>
+                <th id="falsch" class="antwort">Falsch</th>
+            </tr>
+
+            <tr id="0">
+                <td>Ein Elefant ist grau.</td>
+            </tr>
+
+            <tr id="1">
+                <td>Lügen haben lange Beine.</td>
+            </tr>
+        </table>
+    </div>
+
+    <!--
+    Diese Blöcke werden angezeigt, jenachdem ob die
+    Antwort richtig (.correct) oder falsch (.incorrect) war.
+    In diesem Block kann ein erklärender Text und auch Bilder
+    verwendet werden.
+    -->
+    <div class="feedback correct">
+        <b>Richtig!</b><br>
+    </div>
+    <div class="feedback incorrect">
+        <b>Falsch.</b><br>
+        Elefanten sind grau und Lügen haben sprichwörtlich <i>kurze</i> Beine.
+    </div>
+
+    <!--
+    Hier werden die zu markierenden Wörter definiert.
+    Da hier falsche Wörter durchgestrichen werden sollen,
+    sind dies die Wörter "Wolga" und "Mississippi".
+    Diese Wörter werden per MD5 Verschlüsselt und hier eingetragen.
+    Die hier vorhandenen Blöcke geben bereits Wolga und Mississippi an.
+    -->
+    <a id="0" class="ans">c90c13507fc364353401f4e04939a619</a>
+    <a id="1" class="ans">8042c2ef76e94fb1b546ec621c46c769</a>
+</div>
+
+<h4>Technische Umsetzung</h4>
+
 <p>Matrix Aufgaben funktionieren wie <em>choice</em> Aufgaben in einer
 Tabellenform. Dabei können mehrere Aufgaben mit gleichen
 Antwortmöglichkeiten untereinander abgefragt werden.</p>
@@ -981,120 +1045,13 @@ die MD5-Verschlüsselte Form von &quot;wahr&quot; als inneren Text.</p>
 <p>Müssen in einer Zeile mehrere Spalten markiert werden, gibt es mehrere
 <em>a.ans</em> mit derselben <em>id</em>, aber unterschiedlichen Werten. Dies ist nur
 bei Mehrfachauswahl möglich.</p>
-<p>Ein Beispiel für eine Matrixaufgabe:</p>
-<div class="question" qtype="matrix_choice" id="mc_1">
-    <h4>Wähle aus, ob die Aussagen richtig oder falsch sind</h4>
-    <div class="answers single">
-    <table class="matrix">
-            <tr>
-                <td>Aufgabe</td>
-                <th id="wahr" class="antwort">Wahr</th>
-                <th id="falsch" class="antwort">Falsch</th>
-            </tr>
 
-            <tr id="0">
-                <td>Ein Elefant ist grau.</td>
-            </tr>
-
-            <tr id="1">
-                <td>Lügen haben lange Beine.</td>
-            </tr>
-        </table>
-    </div>
-
-    <!--
-    Diese Blöcke werden angezeigt, jenachdem ob die
-    Antwort richtig (.correct) oder falsch (.incorrect) war.
-    In diesem Block kann ein erklärender Text und auch Bilder
-    verwendet werden.
-    -->
-    <div class="feedback correct">
-        <b>Richtig!</b><br>
-    </div>
-    <div class="feedback incorrect">
-        <b>Falsch.</b><br>
-        Elefanten sind grau und Lügen haben sprichwörtlich <i>kurze</i> Beine.
-    </div>
-
-    <!--
-    Hier werden die zu markierenden Wörter definiert.
-    Da hier falsche Wörter durchgestrichen werden sollen,
-    sind dies die Wörter "Wolga" und "Mississippi".
-    Diese Wörter werden per MD5 Verschlüsselt und hier eingetragen.
-    Die hier vorhandenen Blöcke geben bereits Wolga und Mississippi an.
-    -->
-    <a id="0" class="ans">c90c13507fc364353401f4e04939a619</a>
-    <a id="1" class="ans">8042c2ef76e94fb1b546ec621c46c769</a>
-</div>
 </section>
 
 
 <section name="Hotspot">
 
 <h3 id="hotspot-hotspot">Hotspot: <em>hotspot</em></h3>
-<p>Bei Hotspot Aufgaben, werden auf einem Bild verschiedene Punkte
-platziert. Im folgenden werden dann Begriffe abgefragt und der
-Nutzer muss den zugehörigen Punkt auswählen. Es sollte also
-zu jedem Begriff nur einen Punkt geben der korrekt ist.
-Außerdem sollten möglichst alle Punkte abgefragt werden, damit am
-Ende die richtige Lösung auf den Punkten angegeben werden kann.</p>
-<p>Die Erstellung einer Hotspot-Aufgabe ist aufwendiger, da die
-Positionierung der Punkte per Ausprobieren stattfindet.</p>
-<p>Als Grundlage für diese Aufgabe muss ein Bild mit den Punkten innerhalb
-des <em>div.answers</em> definiert werden:</p>
-<pre><code>&lt;div class=&quot;hotspot_image&quot;&gt;
-
-    &lt;!-- Hintergrundbild --&gt;
-    &lt;img src=&quot;bild.png&quot;/&gt;
-
-    &lt;!-- Markierbarer Punkt --&gt;
-    &lt;div style=&quot;top: 25%; left: 50%;&quot; class=&quot;hotspot&quot; id=&quot;obj1&quot;&gt;&lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
-<p>Das Bild wird ganz normal eingebaut, hierzu muss nur der <em>src</em> Wert
-verändert werden.
-Die markierbaren Punkte werden dann wie in dem Beispiel eingebaut. Jeder
-Punkt entspricht einem <em>div.hotspot</em> und muss eine einzigartige <em>id</em>
-haben. Die Position wird prozentual auf dem Bild festgelegt, basierend
-auf dem Abstand zum oberen und Linken Rand des Bildes, und muss
-per Probieren angepasst werden. Sichtbar sind die Punkte nur, wenn die
-Maus auf dem Bild liegt.
-Es können beliebig viele Punkte hinzugefügt werden, diese müssen
-lediglich eine unterschiedliche <em>id</em> haben.</p>
-<p>Angegebene Begriffe werden in dem <em>span.gesucht</em> angezeigt. Dieses kann frei
-innerhalb des Fragenblocks platziert werden. Die Begriffe werden bei der Angabe
-der richtigen Antworten erstellt. Ein möglicher Text der die Begriffe abfragt
-könnte wie folgt aussehen:</p>
-<pre><code>Markiere &lt;b&gt;&lt;span class=&quot;gesucht&quot;&gt;&lt;/span&gt;&lt;/b&gt; in dem Bild.
-</code></pre>
-<p>Um die abgefragten Begriffe anzugeben und den Punkten zuzuordnen werden
-die <em>a.ans</em> verwendet. In diesem Fall entspricht die <em>id</em> des <em>a.ans</em>
-dem abgefragten Begriff der so angezeigt wird wie er dort eingetragen
-wurde. Verschlüsselt innerhalb des <em>a.ans</em> ist die <em>id</em> des zugehörigen
-<em>div.hotspot</em>, in diesem Beispiel &quot;obj1&quot;.</p>
-<pre><code>&lt;a id=&quot;Begriff Nummer 1&quot; class=&quot;ans&quot;&gt;24f682f769992022dba3cf73550b7da0&lt;/a&gt;
-</code></pre>
-<p>Die Begriffe werden normalerweise in der Reihenfolge der angegebenen
-Antworten abgefragt. Möchte man eine zufällige Reihenfolge,
-muss das <em>div.hotspot_image</em> um die Klasse <em>shuffle</em> erweitert werden:</p>
-<pre><code>&lt;div class=&quot;hotspot_image shuffle&quot;&gt;
-</code></pre>
-<p>Das Feedback funktioniert bei diesem Aufgabentyp anders. Nach jedem
-zugeordneten Begriff wird entweder das <em>div.feedback.correct</em> oder
-<em>div.feedback.incorrect</em> angezeigt. Also die Blöcke die bereits zuvor
-erklärt wurden. Hier eignet es sich einfach nur einen kurzen, allgemeinen
-Text wie &quot;Leider falsch&quot; einzutragen. Wurden alle Begriffe zugeordnet,
-wird das <em>div.feedback.information</em> angezeigt. Hier kann man also
-abschließend zum Beispiel ein Bild mit allen Begriffen anzeigen und eine
-Erklärung geben.</p>
-<p>Zusätzlich wird beim fahren über die Punkte jeweils angezeigt welche
-Begriffe den Punkten zugeordnet wurde. Falsche Begriffe sind dabei
-durchgestrichen und richtige Begriffe nicht. Wurden alle Begriffe
-zugeordnet, wird für jedes <em>a.ans</em> außerdem dem zugehörigen
-<em>div.hotspot</em> der richtige Begriff zugeordnet, sodass dieser beim
-Herüberfahren angezeigt wird. Falsch zugeordnete Begriffe bleiben in der
-Anzeige erhalten. </p>
-
 <p>Ein Beispiel für eine Hotspot-Aufgabe:</p>
 <div class="question" qtype="hotspot" id="hs_1">
     <h4>Hotspot</h4>
@@ -1180,76 +1137,78 @@ Anzeige erhalten. </p>
     <a id="Projektmanagement" class="ans">f8bf8558a8a955083984dcdd887608c4</a>
     <a id="Datenbanken / Modellierung" class="ans">6c7169e4667d2d39b782b290c502152a</a>
 </div>
+
+<h4>Technische Umsetzung</h4>
+
+<p>Bei Hotspot Aufgaben, werden auf einem Bild verschiedene Punkte
+platziert. Im folgenden werden dann Begriffe abgefragt und der
+Nutzer muss den zugehörigen Punkt auswählen. Es sollte also
+zu jedem Begriff nur einen Punkt geben der korrekt ist.
+Außerdem sollten möglichst alle Punkte abgefragt werden, damit am
+Ende die richtige Lösung auf den Punkten angegeben werden kann.</p>
+<p>Die Erstellung einer Hotspot-Aufgabe ist aufwendiger, da die
+Positionierung der Punkte per Ausprobieren stattfindet.</p>
+<p>Als Grundlage für diese Aufgabe muss ein Bild mit den Punkten innerhalb
+des <em>div.answers</em> definiert werden:</p>
+<pre><code>&lt;div class=&quot;hotspot_image&quot;&gt;
+
+    &lt;!-- Hintergrundbild --&gt;
+    &lt;img src=&quot;bild.png&quot;/&gt;
+
+    &lt;!-- Markierbarer Punkt --&gt;
+    &lt;div style=&quot;top: 25%; left: 50%;&quot; class=&quot;hotspot&quot; id=&quot;obj1&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Das Bild wird ganz normal eingebaut, hierzu muss nur der <em>src</em> Wert
+verändert werden.
+Die markierbaren Punkte werden dann wie in dem Beispiel eingebaut. Jeder
+Punkt entspricht einem <em>div.hotspot</em> und muss eine einzigartige <em>id</em>
+haben. Die Position wird prozentual auf dem Bild festgelegt, basierend
+auf dem Abstand zum oberen und Linken Rand des Bildes, und muss
+per Probieren angepasst werden. Sichtbar sind die Punkte nur, wenn die
+Maus auf dem Bild liegt.
+Es können beliebig viele Punkte hinzugefügt werden, diese müssen
+lediglich eine unterschiedliche <em>id</em> haben.</p>
+<p>Angegebene Begriffe werden in dem <em>span.gesucht</em> angezeigt. Dieses kann frei
+innerhalb des Fragenblocks platziert werden. Die Begriffe werden bei der Angabe
+der richtigen Antworten erstellt. Ein möglicher Text der die Begriffe abfragt
+könnte wie folgt aussehen:</p>
+<pre><code>Markiere &lt;b&gt;&lt;span class=&quot;gesucht&quot;&gt;&lt;/span&gt;&lt;/b&gt; in dem Bild.
+</code></pre>
+<p>Um die abgefragten Begriffe anzugeben und den Punkten zuzuordnen werden
+die <em>a.ans</em> verwendet. In diesem Fall entspricht die <em>id</em> des <em>a.ans</em>
+dem abgefragten Begriff der so angezeigt wird wie er dort eingetragen
+wurde. Verschlüsselt innerhalb des <em>a.ans</em> ist die <em>id</em> des zugehörigen
+<em>div.hotspot</em>, in diesem Beispiel &quot;obj1&quot;.</p>
+<pre><code>&lt;a id=&quot;Begriff Nummer 1&quot; class=&quot;ans&quot;&gt;24f682f769992022dba3cf73550b7da0&lt;/a&gt;
+</code></pre>
+<p>Die Begriffe werden normalerweise in der Reihenfolge der angegebenen
+Antworten abgefragt. Möchte man eine zufällige Reihenfolge,
+muss das <em>div.hotspot_image</em> um die Klasse <em>shuffle</em> erweitert werden:</p>
+<pre><code>&lt;div class=&quot;hotspot_image shuffle&quot;&gt;
+</code></pre>
+<p>Das Feedback funktioniert bei diesem Aufgabentyp anders. Nach jedem
+zugeordneten Begriff wird entweder das <em>div.feedback.correct</em> oder
+<em>div.feedback.incorrect</em> angezeigt. Also die Blöcke die bereits zuvor
+erklärt wurden. Hier eignet es sich einfach nur einen kurzen, allgemeinen
+Text wie &quot;Leider falsch&quot; einzutragen. Wurden alle Begriffe zugeordnet,
+wird das <em>div.feedback.information</em> angezeigt. Hier kann man also
+abschließend zum Beispiel ein Bild mit allen Begriffen anzeigen und eine
+Erklärung geben.</p>
+<p>Zusätzlich wird beim fahren über die Punkte jeweils angezeigt welche
+Begriffe den Punkten zugeordnet wurde. Falsche Begriffe sind dabei
+durchgestrichen und richtige Begriffe nicht. Wurden alle Begriffe
+zugeordnet, wird für jedes <em>a.ans</em> außerdem dem zugehörigen
+<em>div.hotspot</em> der richtige Begriff zugeordnet, sodass dieser beim
+Herüberfahren angezeigt wird. Falsch zugeordnete Begriffe bleiben in der
+Anzeige erhalten. </p>
+
 </section>
 
 
 <section name="Zuordnung (Drag and Drop)">
 
 <h3 id="zuordnung-drag-and-drop-classification">Zuordnung (Drag and Drop): <em>classification</em></h3>
-<p>Zuordnungsaufgaben sind dazu gedacht Objekte in etwas einzusortieren.
-So können z.B. Satzbausteine in Lücken gezogen werden oder Bilder zu ihnen
-entsprechenden Definitionen sortiert werden.</p>
-<p>Es gibt verschiedene Art der Darstellung einer solchen Aufgabe.
-Generell wird von der Verwendung, Bildausschnitte in ein Bild
-einzusortieren, abgeraten. In diesem Fall ist zum einen die Erstellung
-der Aufgabe sehr aufwendig und zum anderen häufig die Darstellung auf
-kleineren Geräten/Displays nicht wie ursprünglich erwünscht, was sogar zur
-Unlösbarkeit der Aufgabe führen kann. Sollte man die Aufgabe unbedingt
-so haben wollen, sollte jemand mit genug CSS Kenntnis dies erstellen und
-testen.</p>
-<p>Generell wird zu Darstellungen geraten, die möglichst variabel sind, wie
-das Einsortieren von Textbausteinen in Sätze oder das Zuordnen von Bildern
-zu Überschriften oder Beschreibungen.</p>
-<p>Es ist möglich, für ein Feld mehrere mögliche Antworten anzugeben.
-Man kann also z.B. eine Tabelle bauen, an der die Position innerhalb der
-Spalten irrelevant ist.</p>
-<p>Wieder wird das Grundgerüst von oben verwendet. In dem <em>div.answers</em>
-werden dann die Objekte definiert die einsortiert werden sollen.
-Jedes Objekt entspricht dabei einem solchen Block:</p>
-<pre><code>&lt;div class=&quot;object&quot;&gt;
-    &lt;span id=&quot;obj1&quot;&gt;Satzbaustein&lt;/span&gt;
-&lt;/div&gt;
-</code></pre>
-<p>Dabei ist es <strong>wichtig</strong>, dass innerhalb des <em>div.object</em> nur ein Element
-zu finden ist, welches eine einzigartige <em>id</em> haben muss. Diese können
-durchnummeriert werden. Zu empfehlen ist für Texte ein <em>span</em> Element,
-für Bilder ein <em>img</em> Element wie folgendes:</p>
-<pre><code>&lt;div class=&quot;object&quot;&gt;
-    &lt;img id=&quot;obj2&quot; src=&quot;bild.png&quot;/&gt;
-&lt;/div&gt;
-</code></pre>
-<p>Jedes dieser <strong>Objekte</strong> kann nur einmal verwendet werden innerhalb der
-Aufgabe. Außerdem kann jedem Zielfeld nur genau <strong>ein</strong> Objekt zugewiesen
-werden.</p>
-<p>Um diese Objekte herum können beschreibende Texte oder Bilder zu finden
-sein. Hier kann jeglicher HTML Code verwendet werden.</p>
-<p>Für die Objekte müssen <strong>Zielfelder</strong> erstellt werden. Zu jedem Objekt gibt
-es genau ein festdefiniertes Zielfeld in das es gezogen werden muss.
-Dies kann z.B. so aussehen:</p>
-<pre><code>In einer solchen Aufgabe muss dann jeweils ein
-&lt;div class=&quot;object destination&quot; id=&quot;ziel0&quot;&gt;&lt;/div&gt;
-in ein zugehöriges Ziel gezogen werden.
-</code></pre>
-<p>In diesem Fall handelt es sich um einen Text in dem ein Feld ist, in
-welches das Wort &quot;Satzbaustein&quot;, das oben als Objekt definiert wurde,
-gezogen werden soll.
-Jedes dieser Zielfelder muss ein <em>div</em> mit den Klassen <em>object</em> und
-<em>destination</em> sein. Außerdem muss jedes dieser Zielfelder, ähnlich wie die
-Objekte, eine einzigartige <em>id</em> haben. Diese können wieder durchnummeriert
-werden.</p>
-<p>Um nun zu definieren welches Objekt in welches Zielfeld gehört werden
-wieder die <em>a.ans</em> verwendet. Für jedes Zielfeld wird ein <em>a.ans</em>
-erstellt, welches dieselbe <em>id</em> wie das <em>div.object.destination</em> hat.
-Verschlüsselt wird in das Feld dann die <em>id</em> des Objekts eingetragen.</p>
-<pre><code>&lt;a class=&quot;ans&quot; id=&quot;ziel0&quot;&gt;24f682f769992022dba3cf73550b7da0&lt;/a&gt;
-</code></pre>
-<p>Hier wird für das Zielfeld <em>#ziel0</em> die MD5 verschlüsselte Version von
-&quot;obj1&quot; eingetragen.
-Für jedes Zielfeld wird nun ein solches <em>a.ans</em> erstellt.
-Möchte man für ein Feld mehrere richtige Antwortmöglichkeiten angeben, erstellt
-man mehrere <em>a</em> mit derselben <em>id</em> die unterschiedliche verschlüsselte
-Antworten enthalten. Überprüft wird, ob die gegebene Antwort mit einer der
-angegebenen Möglichkeiten übereinstimmt.</p>
 <p>Ein Beispiel für eine Zuordnungsaufgabe:</p>
 <div class="question" qtype="classification" id="cl_1">
     <h4>Zuordnung in Satz</h4>
@@ -1326,67 +1285,80 @@ angegebenen Möglichkeiten übereinstimmt.</p>
     <!-- ID zeigt welches .destination Objekt hierzu gehört -->
     <a class="ans" id="ziel1">edbab45572c72a5d9440b40bcc0500c0</a>
 </div>
+
+<h4>Technische Umsetzung</h4>
+
+<p>Zuordnungsaufgaben sind dazu gedacht Objekte in etwas einzusortieren.
+So können z.B. Satzbausteine in Lücken gezogen werden oder Bilder zu ihnen
+entsprechenden Definitionen sortiert werden.</p>
+<p>Es gibt verschiedene Art der Darstellung einer solchen Aufgabe.
+Generell wird von der Verwendung, Bildausschnitte in ein Bild
+einzusortieren, abgeraten. In diesem Fall ist zum einen die Erstellung
+der Aufgabe sehr aufwendig und zum anderen häufig die Darstellung auf
+kleineren Geräten/Displays nicht wie ursprünglich erwünscht, was sogar zur
+Unlösbarkeit der Aufgabe führen kann. Sollte man die Aufgabe unbedingt
+so haben wollen, sollte jemand mit genug CSS Kenntnis dies erstellen und
+testen.</p>
+<p>Generell wird zu Darstellungen geraten, die möglichst variabel sind, wie
+das Einsortieren von Textbausteinen in Sätze oder das Zuordnen von Bildern
+zu Überschriften oder Beschreibungen.</p>
+<p>Es ist möglich, für ein Feld mehrere mögliche Antworten anzugeben.
+Man kann also z.B. eine Tabelle bauen, an der die Position innerhalb der
+Spalten irrelevant ist.</p>
+<p>Wieder wird das Grundgerüst von oben verwendet. In dem <em>div.answers</em>
+werden dann die Objekte definiert die einsortiert werden sollen.
+Jedes Objekt entspricht dabei einem solchen Block:</p>
+<pre><code>&lt;div class=&quot;object&quot;&gt;
+    &lt;span id=&quot;obj1&quot;&gt;Satzbaustein&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Dabei ist es <strong>wichtig</strong>, dass innerhalb des <em>div.object</em> nur ein Element
+zu finden ist, welches eine einzigartige <em>id</em> haben muss. Diese können
+durchnummeriert werden. Zu empfehlen ist für Texte ein <em>span</em> Element,
+für Bilder ein <em>img</em> Element wie folgendes:</p>
+<pre><code>&lt;div class=&quot;object&quot;&gt;
+    &lt;img id=&quot;obj2&quot; src=&quot;bild.png&quot;/&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Jedes dieser <strong>Objekte</strong> kann nur einmal verwendet werden innerhalb der
+Aufgabe. Außerdem kann jedem Zielfeld nur genau <strong>ein</strong> Objekt zugewiesen
+werden.</p>
+<p>Um diese Objekte herum können beschreibende Texte oder Bilder zu finden
+sein. Hier kann jeglicher HTML Code verwendet werden.</p>
+<p>Für die Objekte müssen <strong>Zielfelder</strong> erstellt werden. Zu jedem Objekt gibt
+es genau ein festdefiniertes Zielfeld in das es gezogen werden muss.
+Dies kann z.B. so aussehen:</p>
+<pre><code>In einer solchen Aufgabe muss dann jeweils ein
+&lt;div class=&quot;object destination&quot; id=&quot;ziel0&quot;&gt;&lt;/div&gt;
+in ein zugehöriges Ziel gezogen werden.
+</code></pre>
+<p>In diesem Fall handelt es sich um einen Text in dem ein Feld ist, in
+welches das Wort &quot;Satzbaustein&quot;, das oben als Objekt definiert wurde,
+gezogen werden soll.
+Jedes dieser Zielfelder muss ein <em>div</em> mit den Klassen <em>object</em> und
+<em>destination</em> sein. Außerdem muss jedes dieser Zielfelder, ähnlich wie die
+Objekte, eine einzigartige <em>id</em> haben. Diese können wieder durchnummeriert
+werden.</p>
+<p>Um nun zu definieren welches Objekt in welches Zielfeld gehört werden
+wieder die <em>a.ans</em> verwendet. Für jedes Zielfeld wird ein <em>a.ans</em>
+erstellt, welches dieselbe <em>id</em> wie das <em>div.object.destination</em> hat.
+Verschlüsselt wird in das Feld dann die <em>id</em> des Objekts eingetragen.</p>
+<pre><code>&lt;a class=&quot;ans&quot; id=&quot;ziel0&quot;&gt;24f682f769992022dba3cf73550b7da0&lt;/a&gt;
+</code></pre>
+<p>Hier wird für das Zielfeld <em>#ziel0</em> die MD5 verschlüsselte Version von
+&quot;obj1&quot; eingetragen.
+Für jedes Zielfeld wird nun ein solches <em>a.ans</em> erstellt.
+Möchte man für ein Feld mehrere richtige Antwortmöglichkeiten angeben, erstellt
+man mehrere <em>a</em> mit derselben <em>id</em> die unterschiedliche verschlüsselte
+Antworten enthalten. Überprüft wird, ob die gegebene Antwort mit einer der
+angegebenen Möglichkeiten übereinstimmt.</p>
+
 </section>
 
 
 <section name="Sortieren (Drag and Drop)">
 
 <h3 id="sortieren-drag-and-drop-order">Sortieren (Drag and Drop): <em>order</em></h3>
-<p>Bei Sortieraufgaben werden mehrere Objekte vorgegeben, die in eine
-Reihenfolge gebracht werden sollen.
-Diese Reihenfolge kann nicht zu variabel sein. Für jedes Objekt muss eine
-Position angegeben werden. Mehrere Objekte können dieselbe Position haben
-und wären somit untereinander austauschbar.</p>
-<p>Die zu sortierenden Objekte funktionieren wie bei einer Zuordnungsaufgabe.
-Jedes Objekt kann aus einem Text oder einem Bild bestehen.
-Hier eine Beispielaufgabe mit Text:</p>
-<pre><code>&lt;div class=&quot;answers&quot;&gt;
-    Es gibt die Vier Brüder Gert, Karl, Heinrich und Otto. Gert ist der
-    Kleinste und Karl ist der Größte. Sortiere die Brüder der Größe
-    nach von klein zu groß.
-
-    &lt;br&gt;
-    &lt;br&gt;
-
-    &lt;div class=&quot;object&quot;&gt;
-        &lt;span id=&quot;obj0&quot;&gt;Gert&lt;/span&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;object&quot;&gt;
-        &lt;span id=&quot;obj1&quot;&gt;Karl&lt;/span&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;object&quot;&gt;
-        &lt;span id=&quot;obj2&quot;&gt;Heinrich&lt;/span&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;object&quot;&gt;
-        &lt;span id=&quot;obj3&quot;&gt;Otto&lt;/span&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
-<p>Wieder können die <em>span</em> Elemente durch <em>img</em> ausgetauscht werden, wenn
-man Bilder statt Text verwenden möchte.</p>
-<pre><code>&lt;div class=&quot;object&quot;&gt;
-    &lt;img id=&quot;0&quot; src=&quot;bild.png&quot;/&gt;
-&lt;/div&gt;
-</code></pre>
-<p>Die Objekte sind dabei immer nur so breit, wie sie müssen. Möchte man,
-dass jedes Objekt die volle Breite einnimmt und damit alle Objekte
-untereinander stehen muss man dem <em>div.answers</em> die Klasse <em>fill</em>
-hinzufügen.</p>
-<pre><code>&lt;div class=&quot;answers fill&quot;&gt;
-</code></pre>
-<p>Nun muss für jedes Objekt die Position definiert werden. Das Objekt,
-welches an vorderster Stelle stehen soll bekommt die Position 0.
-Man erstellt also ein <em>a.ans</em> mit derselben ID wie das zugehörige Objekt
-und verschlüsselt per MD5 die Zahl &quot;0&quot;. Es ergibt sich:</p>
-<pre><code>&lt;a class=&quot;ans&quot; id=&quot;obj0&quot;&gt;cfcd208495d565ef66e7dff9f98764da&lt;/a&gt;
-</code></pre>
-<p>Kann ein weiteres Objekt an derselben Stelle sein, wird auch dieselbe Zahl
-verschlüsselt angegeben. Ansonsten wird für das jeweils nächste Objekt
-weiter hochgezählt.</p>
-<p>Da in unserem Beispiel Heinrich und Otto nicht eindeutig zu sortieren
-sind, erhalten sie beide die Position &quot;1&quot;. Karl hingegen ist eindeutig
-größer und erhält somit die Poisition &quot;2&quot;. Es darf <strong>niemals</strong> eine Zahl
-übersprungen werden.</p>
 
 <p>Ein Beispiel für eine Sortieraufgabe:</p>
 <div class="question" qtype="order" id="o_1">
@@ -1465,12 +1437,137 @@ größer und erhält somit die Poisition &quot;2&quot;. Es darf <strong>niemals<
     <!-- verschlüsselt ist "1" -->
     <a class="ans" id="3">c4ca4238a0b923820dcc509a6f75849b</a>
 </div>
+
+<h4>Technische Umsetzung</h4>
+
+<p>Bei Sortieraufgaben werden mehrere Objekte vorgegeben, die in eine
+Reihenfolge gebracht werden sollen.
+Diese Reihenfolge kann nicht zu variabel sein. Für jedes Objekt muss eine
+Position angegeben werden. Mehrere Objekte können dieselbe Position haben
+und wären somit untereinander austauschbar.</p>
+<p>Die zu sortierenden Objekte funktionieren wie bei einer Zuordnungsaufgabe.
+Jedes Objekt kann aus einem Text oder einem Bild bestehen.
+Hier eine Beispielaufgabe mit Text:</p>
+<pre><code>&lt;div class=&quot;answers&quot;&gt;
+    Es gibt die Vier Brüder Gert, Karl, Heinrich und Otto. Gert ist der
+    Kleinste und Karl ist der Größte. Sortiere die Brüder der Größe
+    nach von klein zu groß.
+
+    &lt;br&gt;
+    &lt;br&gt;
+
+    &lt;div class=&quot;object&quot;&gt;
+        &lt;span id=&quot;obj0&quot;&gt;Gert&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;object&quot;&gt;
+        &lt;span id=&quot;obj1&quot;&gt;Karl&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;object&quot;&gt;
+        &lt;span id=&quot;obj2&quot;&gt;Heinrich&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;object&quot;&gt;
+        &lt;span id=&quot;obj3&quot;&gt;Otto&lt;/span&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Wieder können die <em>span</em> Elemente durch <em>img</em> ausgetauscht werden, wenn
+man Bilder statt Text verwenden möchte.</p>
+<pre><code>&lt;div class=&quot;object&quot;&gt;
+    &lt;img id=&quot;0&quot; src=&quot;bild.png&quot;/&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Die Objekte sind dabei immer nur so breit, wie sie müssen. Möchte man,
+dass jedes Objekt die volle Breite einnimmt und damit alle Objekte
+untereinander stehen muss man dem <em>div.answers</em> die Klasse <em>fill</em>
+hinzufügen.</p>
+<pre><code>&lt;div class=&quot;answers fill&quot;&gt;
+</code></pre>
+<p>Nun muss für jedes Objekt die Position definiert werden. Das Objekt,
+welches an vorderster Stelle stehen soll bekommt die Position 0.
+Man erstellt also ein <em>a.ans</em> mit derselben ID wie das zugehörige Objekt
+und verschlüsselt per MD5 die Zahl &quot;0&quot;. Es ergibt sich:</p>
+<pre><code>&lt;a class=&quot;ans&quot; id=&quot;obj0&quot;&gt;cfcd208495d565ef66e7dff9f98764da&lt;/a&gt;
+</code></pre>
+<p>Kann ein weiteres Objekt an derselben Stelle sein, wird auch dieselbe Zahl
+verschlüsselt angegeben. Ansonsten wird für das jeweils nächste Objekt
+weiter hochgezählt.</p>
+<p>Da in unserem Beispiel Heinrich und Otto nicht eindeutig zu sortieren
+sind, erhalten sie beide die Position &quot;1&quot;. Karl hingegen ist eindeutig
+größer und erhält somit die Poisition &quot;2&quot;. Es darf <strong>niemals</strong> eine Zahl
+übersprungen werden.</p>
+
 </section>
 
 
 <section name="Petrinetzaufgaben">
 
 <h3 id="petrinetzaufgaben-petri">Petrinetzaufgaben: <em>petri</em></h3>
+<p>Ein Beispiel für eine Petrinetzaufgabe:</p>
+<div class="question" qtype="petri" id="o_1">
+    <h4>Petrinetz</h4>
+
+    Markiere die Plätze an denen mindestens eine Marke
+    vorhanden ist, wenn Transition
+    <b><span class="gesucht"></span></b> geschaltet wird.
+
+    <br><br>
+
+    Hier die Ausgangssituation:<br>
+    <div class="petri_aufgabe" style="max-width: 600px; width: 80%;">
+        <img id="0" src="assets/img/quiz-images/producerConsumer.jpg"/>
+        <img id="1" src="assets/img/quiz-images/producerConsumer_1.jpg"/>
+        <img id="2" src="assets/img/quiz-images/producerConsumer.jpg"/>
+    </div>
+
+    <hr>
+
+    <div class="answers">
+        <div class="petri_image">
+
+            <img id="0" task="produce" src="assets/img/quiz-images/producerConsumer_empty.jpg"/>
+            <img id="0" task="produce" class="correct" src="assets/img/quiz-images/producerConsumer_1.jpg"/>
+
+            <img id="1" task="deliver" src="assets/img/quiz-images/producerConsumer_empty.jpg"/>
+            <img id="1" task="deliver" class="correct" src="assets/img/quiz-images/producerConsumer_2.jpg"/>
+
+            <img id="2" src="assets/img/quiz-images/producerConsumer_fin.jpg"/>
+
+            <div style="top: 28%; left: 22.5%;" class="place" id="p1"></div>
+            <div style="top: 39%; left: 48.2%;" class="place" id="p2"></div>
+            <div style="top: 27%; left: 73.7%;" class="place" id="p3"></div>
+            <div style="top: 68%; left: 22.5%;" class="place" id="p4"></div>
+            <div style="top: 61%; left: 47.7%;" class="place" id="p5"></div>
+            <div style="top: 68%; left: 74%;" class="place" id="p6"></div>
+        </div>
+    </div>
+
+    <!--
+    Diese Blöcke werden angezeigt, jenachdem ob die
+    Antwort richtig (.correct) oder falsch (.incorrect) war.
+    In diesem Block kann ein erklärender Text und auch Bilder
+    verwendet werden.
+    -->
+    <div class="feedback correct">
+        <b>Richtig</b>
+    </div>
+    <div class="feedback incorrect">
+        <b>Falsch</b>
+    </div>
+    <div class="feedback information">
+        Die korrekte Lösung ist in einzelnen Schritten zu sehen.
+    </div>
+
+
+    <a id="0" class="ans">ec6ef230f1828039ee794566b9c58adc</a>
+    <a id="0" class="ans">ed92eff813a02a31a2677be0563a0739</a>
+    <a id="0" class="ans">c6c27fc98633c82571d75dcb5739bbdf</a>
+
+    <a id="1" class="ans">1d665b9b1467944c128a5575119d1cfd</a>
+    <a id="1" class="ans">c6c27fc98633c82571d75dcb5739bbdf</a>
+</div>
+
+<h4>Technische Umsetzung</h4>
+
 <p>Der Petrinetzaufgabentyp ermöglicht einfache Petrinetzaufgaben. Dabei
 können jedoch immer nur ganze Plätze markiert werden. Es kann also keine
 Anzahl von Marken auf einem Platz abgefragt werden.</p>
@@ -1578,128 +1675,13 @@ Text wie &quot;Leider falsch&quot; einzutragen. Wurden alle Begriffe zugeordnet,
 wird das <em>div.feedback.information</em> angezeigt. Hier kann man also
 abschließend zum Beispiel ein Bild mit allen Schritten anzeigen und eine
 Erklärung geben.</p>
-<p>Ein Beispiel für eine Petrinetzaufgabe:</p>
-<div class="question" qtype="petri" id="o_1">
-    <h4>Petrinetz</h4>
 
-    Markiere die Plätze an denen mindestens eine Marke
-    vorhanden ist, wenn Transition
-    <b><span class="gesucht"></span></b> geschaltet wird.
-
-    <br><br>
-
-    Hier die Ausgangssituation:<br>
-    <div class="petri_aufgabe" style="max-width: 600px; width: 80%;">
-        <img id="0" src="assets/img/quiz-images/producerConsumer.jpg"/>
-        <img id="1" src="assets/img/quiz-images/producerConsumer_1.jpg"/>
-        <img id="2" src="assets/img/quiz-images/producerConsumer.jpg"/>
-    </div>
-
-    <hr>
-
-    <div class="answers">
-        <div class="petri_image">
-
-            <img id="0" task="produce" src="assets/img/quiz-images/producerConsumer_empty.jpg"/>
-            <img id="0" task="produce" class="correct" src="assets/img/quiz-images/producerConsumer_1.jpg"/>
-
-            <img id="1" task="deliver" src="assets/img/quiz-images/producerConsumer_empty.jpg"/>
-            <img id="1" task="deliver" class="correct" src="assets/img/quiz-images/producerConsumer_2.jpg"/>
-
-            <img id="2" src="assets/img/quiz-images/producerConsumer_fin.jpg"/>
-
-            <div style="top: 28%; left: 22.5%;" class="place" id="p1"></div>
-            <div style="top: 39%; left: 48.2%;" class="place" id="p2"></div>
-            <div style="top: 27%; left: 73.7%;" class="place" id="p3"></div>
-            <div style="top: 68%; left: 22.5%;" class="place" id="p4"></div>
-            <div style="top: 61%; left: 47.7%;" class="place" id="p5"></div>
-            <div style="top: 68%; left: 74%;" class="place" id="p6"></div>
-        </div>
-    </div>
-
-    <!--
-    Diese Blöcke werden angezeigt, jenachdem ob die
-    Antwort richtig (.correct) oder falsch (.incorrect) war.
-    In diesem Block kann ein erklärender Text und auch Bilder
-    verwendet werden.
-    -->
-    <div class="feedback correct">
-        <b>Richtig</b>
-    </div>
-    <div class="feedback incorrect">
-        <b>Falsch</b>
-    </div>
-    <div class="feedback information">
-        Die korrekte Lösung ist in einzelnen Schritten zu sehen.
-    </div>
-
-
-    <a id="0" class="ans">ec6ef230f1828039ee794566b9c58adc</a>
-    <a id="0" class="ans">ed92eff813a02a31a2677be0563a0739</a>
-    <a id="0" class="ans">c6c27fc98633c82571d75dcb5739bbdf</a>
-
-    <a id="1" class="ans">1d665b9b1467944c128a5575119d1cfd</a>
-    <a id="1" class="ans">c6c27fc98633c82571d75dcb5739bbdf</a>
-</div>
 </section>
 
 
 <section name="Zeichnen">
 
 <h3 id="zeichnen-drawing">Zeichnen: <em>drawing</em></h3>
-<p>Beim Zeichnen kann der Nutzer auf einem vorgegebenen Untergrund frei zeichnen.
-Dabei können keine besonderen Formen verwendet oder getippt werden. Lediglich
-die Mausbewegung bzw. die Touchbewegung ist möglich.</p>
-<p>Beim Lösen der Aufgabe wird das Hintergrundbild ersetzt. So kann z.B. die
-Musterlösung angezeigt werden. Es kann aber auch beide male das selbe Bild
-angezeigt werden.
-Zudem gibt es das generelle Feedback wie bei allen anderen Aufgabentypen.</p>
-<p>Zur Erstellung muss innerhalb des <em>div.answers</em> lediglich folgendes
-eingefügt werden:</p>
-<pre><code>&lt;div class=&quot;drawing_canvas_container red&quot;&gt;
-
-    &lt;img class=&quot;background&quot; style=&quot;opacity: 0.5&quot; src=&quot;assets/img/parabel_bg.png&quot;/&gt;
-
-    &lt;img class=&quot;correct&quot; style=&quot;opacity: 0.5&quot; src=&quot;assets/img/parabel.png&quot;/&gt;
-
-&lt;/div&gt;
-</code></pre>
-<p>Dabei entspricht das <em>div.drawing_canvas_container</em> dem Bereich indem gemalt
-werden kann.
-Die zusätzliche Klasse <em>red</em> gibt an, dass die Zeichnung &quot;rot&quot; ist.
-Es gibt folgende vordefinierte Farben: red (#FF0000), blue (#0000FF),
-green (#00FF00), cyan (#00FFFF), yellow (#FFFF00), orange (#FF8000),
-purple (#FF00FF), black (#000000).
-Es kann nur eine dieser Farben angegeben werden. Diese kann nicht während
-des Zeichnens verändert werden.</p>
-<p>Der Nutzer hat die Möglichkeit seine Schritte einzeln Rückgängig zumachen
-oder das gesamte Bild zu löschen. Möchte man, dass das einzelne
-Rückgängigmachen nicht möglich ist, kann man zusätzlich zu der Klasse für
-die Farbe die Klasse <em>no_steps</em> hinzufügen.</p>
-<pre><code>&lt;div class=&quot;drawing_canvas_container red no_steps&quot;&gt;
-</code></pre>
-<p>Innerhalb dieses <em>div.drawing_canvas_container</em> werden nun die beiden
-Hintergrundbilder definiert. Das <em>img.background</em> ist das Bild, welches beim
-Zeichnen aktiv als Hintergrund genutzt wird. Das <em>img.correct</em> entspricht
-dem Bild, welches nach dem Lösen angezeigt wird. Beide Bilder können gleich
-sein. <strong>Wichtig</strong> ist, dass beide Bilder gleich groß sein sollten, da es
-sonst zu fehlerhaften Darstellungen der Zeichnung kommen kann.</p>
-<p>Das zusätzliche <em>style=&quot;opacity: 0.5&quot;</em> sorgt dafür, dass die Bilder nur 50%
-sichtbar sind. Dieser Wert ist anpassbar.</p>
-<p>Anders als oben beschrieben gibt es hier keinen Feedbacktext für
-richtige Antworten und ebenfalls keinen für falsche sondern
-nur einen generellen, der immer nach der Beantwortung angezeigt
-wird. Dieser sieht wie folgt aus:</p>
-<pre><code>&lt;div class=&quot;feedback information&quot;&gt;
-    &lt;b&gt;Richtige Antwort:&lt;/b&gt;&lt;br&gt;
-    Text
-&lt;/div&gt;
-</code></pre>
-<p>Innerhalb dieses <em>div</em> kann man einfügen was man möchte. Es sind
-also auch Bilder möglich. Das Beispiel <em>b</em> druckt den Text innerhalb
-fett.
-Diese Art von Feedbacktext wird auch noch bei anderen Fragetypen
-genutzt.</p>
 <p>Ein Beispiel für eine Zeichenaufgabe:</p>
 <div class="question" qtype="drawing" id="dr_1">
     <h4>Zeichnen</h4>
@@ -1757,6 +1739,63 @@ genutzt.</p>
     </div>
 
 </div>
+
+<h4>Technische Umsetzung</h4>
+
+<p>Beim Zeichnen kann der Nutzer auf einem vorgegebenen Untergrund frei zeichnen.
+Dabei können keine besonderen Formen verwendet oder getippt werden. Lediglich
+die Mausbewegung bzw. die Touchbewegung ist möglich.</p>
+<p>Beim Lösen der Aufgabe wird das Hintergrundbild ersetzt. So kann z.B. die
+Musterlösung angezeigt werden. Es kann aber auch beide male das selbe Bild
+angezeigt werden.
+Zudem gibt es das generelle Feedback wie bei allen anderen Aufgabentypen.</p>
+<p>Zur Erstellung muss innerhalb des <em>div.answers</em> lediglich folgendes
+eingefügt werden:</p>
+<pre><code>&lt;div class=&quot;drawing_canvas_container red&quot;&gt;
+
+    &lt;img class=&quot;background&quot; style=&quot;opacity: 0.5&quot; src=&quot;assets/img/parabel_bg.png&quot;/&gt;
+
+    &lt;img class=&quot;correct&quot; style=&quot;opacity: 0.5&quot; src=&quot;assets/img/parabel.png&quot;/&gt;
+
+&lt;/div&gt;
+</code></pre>
+<p>Dabei entspricht das <em>div.drawing_canvas_container</em> dem Bereich indem gemalt
+werden kann.
+Die zusätzliche Klasse <em>red</em> gibt an, dass die Zeichnung &quot;rot&quot; ist.
+Es gibt folgende vordefinierte Farben: red (#FF0000), blue (#0000FF),
+green (#00FF00), cyan (#00FFFF), yellow (#FFFF00), orange (#FF8000),
+purple (#FF00FF), black (#000000).
+Es kann nur eine dieser Farben angegeben werden. Diese kann nicht während
+des Zeichnens verändert werden.</p>
+<p>Der Nutzer hat die Möglichkeit seine Schritte einzeln Rückgängig zumachen
+oder das gesamte Bild zu löschen. Möchte man, dass das einzelne
+Rückgängigmachen nicht möglich ist, kann man zusätzlich zu der Klasse für
+die Farbe die Klasse <em>no_steps</em> hinzufügen.</p>
+<pre><code>&lt;div class=&quot;drawing_canvas_container red no_steps&quot;&gt;
+</code></pre>
+<p>Innerhalb dieses <em>div.drawing_canvas_container</em> werden nun die beiden
+Hintergrundbilder definiert. Das <em>img.background</em> ist das Bild, welches beim
+Zeichnen aktiv als Hintergrund genutzt wird. Das <em>img.correct</em> entspricht
+dem Bild, welches nach dem Lösen angezeigt wird. Beide Bilder können gleich
+sein. <strong>Wichtig</strong> ist, dass beide Bilder gleich groß sein sollten, da es
+sonst zu fehlerhaften Darstellungen der Zeichnung kommen kann.</p>
+<p>Das zusätzliche <em>style=&quot;opacity: 0.5&quot;</em> sorgt dafür, dass die Bilder nur 50%
+sichtbar sind. Dieser Wert ist anpassbar.</p>
+<p>Anders als oben beschrieben gibt es hier keinen Feedbacktext für
+richtige Antworten und ebenfalls keinen für falsche sondern
+nur einen generellen, der immer nach der Beantwortung angezeigt
+wird. Dieser sieht wie folgt aus:</p>
+<pre><code>&lt;div class=&quot;feedback information&quot;&gt;
+    &lt;b&gt;Richtige Antwort:&lt;/b&gt;&lt;br&gt;
+    Text
+&lt;/div&gt;
+</code></pre>
+<p>Innerhalb dieses <em>div</em> kann man einfügen was man möchte. Es sind
+also auch Bilder möglich. Das Beispiel <em>b</em> druckt den Text innerhalb
+fett.
+Diese Art von Feedbacktext wird auch noch bei anderen Fragetypen
+genutzt.</p>
+
 </section>
 
 

@@ -13,12 +13,12 @@ cc by-sa | 2016
 
 Die Quizfragen dienen dazu, die Aufmerksamkeit der Studierenden zu wecken
 und sich selbst zu überprüfen. Sie geben die Möglichkeit, die wichtigsten
-Aspekte in den Vordergrund zu rücken. Durch verschiedene Fragentypen kann man
+Aspekte in den Vordergrund zu rücken. Durch verschiedene Fragetypen kann man
 abhängig vom Lernziel helfen, das Material u.a. zu verstehen, wiederholen,
 einzuordnen oder zu lernen.
 
 
-### Fragentypen
+### Fragetypen
 
 Die Fragen können _offen_ oder _geschlossen_ sein. Fragen mit kurzen Antworten kann
 man als _halboffene_ oder _halbgeschlossene_ Fragen bezeichnen.
@@ -31,7 +31,7 @@ ist die Antwortform nur vom Lernziel abhängig. Die Studierenden können
 ihre Antwort durch Auswählen oder Verschieben von Objekten und auch in Form
 einer Zeichnung geben.
 
-Alle diese Fragentypen haben ihre __Vor- und Nachteile__ und  müssen Lernziel
+Alle diese Fragetypen haben ihre __Vor- und Nachteile__ und  müssen Lernziel
 abhängig verwendet sein.
 
 
@@ -54,14 +54,13 @@ Möglichkeit, den ganzen Prüfungsprozess durch Menschen zu kontrollieren,
 z.B. in Papierform. Außerdem fehlt oft der rechtliche und organisatorische
 Hintergrund.
 
-Zurzeit sind folgende geschlossene Fragentypen verbreitet:
+Zurzeit sind folgende geschlossene Fragetypen verbreitet:
 
 * Multiple-Choice
 * Single-Choice
 * Wahr-Falsch
 * Zuordnung
 * Rang-/Reihenfolge
-* Kprim
 
 
 Die __halbgeschlossenen__ Fragen können auch automatisch ausgewertet werden,
@@ -91,9 +90,14 @@ und Offene Situation.
 
 ### Auswahl des passenden Typen
 
-<!-- TODO Text erweitern mit Beispieltypen -->
+Welcher Fragetyp gewählt wird sollte abhängig vom gewünschten Lernziel sein.
+Dabei ist beispielsweise Kurztext eine Möglichkeit, um das begriffliche
+Lernen zu unterstützen. Lückentexte können verwendet werden, um die
+Aufmerksamkeit zu überprüfen. Um das Verständnis einer Person abzufragen,
+eignen sich Markierungsaufgaben.
 
-Welcher Fragentyp gewählt wird sollte abhängig vom gewünschten Lernziel sein.
+Für jede Frage, die man einbauen möchte, sollte man sich genau überlegen,
+was das Ziel der Frage ist.
 
 
 
@@ -101,32 +105,30 @@ Welcher Fragentyp gewählt wird sollte abhängig vom gewünschten Lernziel sein.
 
 ## Selbsttests mit quiz.js
 
-Mit der quiz.js Erweiterung zum eLearn.js Projekt sind folgende Fragentypen
+Mit der quiz.js Erweiterung zum eLearn.js Projekt sind folgende Fragetypen
 relisierbar:
 
-<!-- TODO LINKS -->
-
-* Multiple-Choice
-* Single-Choice
-* Kprim
-* Wahr-Falsch
-* Zuordnung/Einordnen
-* Rang-/Reihenfolge
-* Lückentext
-  * mit Auswahl vorgegebener Wörter
-  * mit Eingabemöglichkeit
-  * mit Eingabe vorgegebener Wörter
-  * Ergänzung einer Tabelle/Matrix
-* Markierung
-  * Falsche oder richtige Wörter
-  * Hotspot
-* Kurztext
-* Freitext
-* Bild/Graph zeichnen
-* Einfache Petrinetzaufgaben
+* <a href="#" onclick="showSection('Einfach-, Mehrfach- und Bilderauswahl')">Multiple-Choice</a>
+* <a href="#" onclick="showSection('Einfach-, Mehrfach- und Bilderauswahl')">Single-Choice</a>
+* <a href="#" onclick="showSection('Einfach-, Mehrfach- und Bilderauswahl')">Wahr-Falsch</a>
+* <a href="#" onclick="showSection('Matrix oder Tabellenaufgaben')">Matrix</a>
+* <a href="#" onclick="showSection('Zuordnung (Drag and Drop)')">Zuordnung/Einordnen</a>
+* <a href="#" onclick="showSection('Sortieren (Drag and Drop)')">Rang-/Reihenfolge/Sortieren</a>
+* <a href="#" onclick="showSection('Lückentext mit Textfeldern')">Lückentext</a>
+  * <a href="#" onclick="showSection('Lückentext mit Auswahl')">mit Auswahl vorgegebener Wörter</a>
+  * <a href="#" onclick="showSection('Lückentext mit Textfeldern')">mit Eingabemöglichkeit</a>
+  * <a href="#" onclick="showSection('Lückentext mit Textfeldern')">mit Eingabe vorgegebener Wörter</a>
+  * <a href="#" onclick="showSection('Lückentext mit Textfeldern')">Ergänzung einer Tabelle/Matrix</a>
+* <a href="#" onclick="showSection('Fehlertext oder Wortmarkierung')">Markierung</a>
+  * <a href="#" onclick="showSection('Fehlertext oder Wortmarkierung')">Falsche oder richtige Wörter</a>
+  * <a href="#" onclick="showSection('Hotspot')">Hotspot</a>
+* <a href="#" onclick="showSection('Kurzantworten')">Kurztext</a>
+* <a href="#" onclick="showSection('Freitextaufgaben')">Freitext</a>
+* <a href="#" onclick="showSection('Zeichnen')">Bild/Graph zeichnen</a>
+* <a href="#" onclick="showSection('Petrinetzaufgaben')">Einfache Petrinetzaufgaben</a>
 
 
-Bei allen Fragentypen kann die eigene Antwort mit einer Musterlösung
+Bei allen Fragetypen kann die eigene Antwort mit einer Musterlösung
 verglichen werden. Zudem können die geschlossenen Fragen automatisch ausgewertet
 werden, z.B. durch eine Anzeige von "Richtig" oder "Falsch". Die abgegebene
 Antwort und die Musterlösung kann an einer beliebigen Stelle vom Skript
@@ -171,7 +173,7 @@ Ansehen kann man sich diese hier: <a href="quizJS_examples.html">Link</a>.
     <h4>
       <b>Frage 1:</b><br>
       Freitext Frage
-    </h4> <!-- Fragentext -->
+    </h4> <!-- Fragetext -->
 
     <!--
     Block indem Antworten stehen
