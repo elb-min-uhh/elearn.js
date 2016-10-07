@@ -1,11 +1,11 @@
 /*
-* v0.9.4 16/09/28 JavaScript eLearn.js - by Arne Westphal
+* v0.9.5 16/10/05 JavaScript eLearn.js - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 */
 
-var VERSION_NR = "0.9.4";
-var VERSION_DATE = "09/2016";
+var VERSION_NR = "0.9.5";
+var VERSION_DATE = "10/2016";
 
 // Will be set on first Touch event. See Help Functions at bottom
 var touchSupported = false;
@@ -571,18 +571,36 @@ function createContentOverview() {
             if(sec.is('.sub')) sec_level = levels.SUB;
             if(sec.is('.subsub')) sec_level = levels.SUBSUB;
 
-            // higher level
-            while(level < sec_level) {
-                text += "<ul>";
-                level++;
+            if($('#content-overview').is('.kachel')) {
+                // es kann nur eine ebenen zur zeit geöffnet werden
+                // aufgrund der Schachtelung in li's einzige logische Variante
+                if(level < sec_level) {
+                    // ende des li zum schachteln entfernen
+                    text = text.substring(0, text.length - 5);
+                    text += "<ul>\r\n";
+                    level++;
+                }
+                // mehrere ebenen können gleichzeitig beendet werden
+                while(level > sec_level) {
+                    text += "</ul></li>\r\n";
+                    level--;
+                }
             }
-            // lower level
-            while(level > sec_level) {
-                text += "</ul>";
-                level--;
+            // listenansicht
+            else {
+                // higher level
+                while(level < sec_level) {
+                    text += "<ul>";
+                    level++;
+                }
+                // lower level
+                while(level > sec_level) {
+                    text += "</ul>";
+                    level--;
+                }
             }
 
-            text += "<li onclick='showSection("+i+")'>";
+            text += "<li onclick='showSection("+i+"); event.stopPropagation();'>";
 
             text += "<div class='sectionRead'><div class='img'></div></div>";
             text += "<span class='title'>" + sec.attr('name') + "</span>";
@@ -601,7 +619,15 @@ function createContentOverview() {
             level--;
         }
 
+        console.log(text);
+
         $('#content-overview').html(text);
+        $('#content-overview').find('li').each(function(i,e) {
+            console.log(i);
+            if($(this).children('ul').length != 0) {
+                $(this).addClass("wide");
+            }
+        });
         $('#content-overview').find("a").click(function(e) {
             e.preventDefault();
         });
@@ -611,13 +637,21 @@ function createContentOverview() {
 
 function updateContentOverview() {
     sectionsVisited[visSection] = true;
+    var li_idx = 0;
     for(var i=0; i<$('section').length; i++) {
+
+        if($('section').eq(i).is('.hide-in-overview')) {
+            continue;
+        }
+
         if(sectionsVisited[i] && !$('#content-overview').is('.hide-read')) {
-            $($('#content-overview').find('li').get(i)).find('.sectionRead').addClass('read');
+            $($('#content-overview').find('li').get(li_idx)).children('.sectionRead').first().addClass('read');
         }
         else {
-            $($('#content-overview').find('li').get(i)).find('.sectionRead').removeClass('read');
+            $($('#content-overview').find('li').get(li_idx)).children('.sectionRead').first().removeClass('read');
         }
+
+        li_idx++;
     }
 }
 
@@ -635,7 +669,7 @@ function createSectionOverview() {
         if(sec.is('.sub')) cls=" sub";
         if(sec.is('.subsub')) cls=" subsub";
 
-        text += "<label><div class='section-overview-element btn"+cls+"' onclick='showSection("+i+")'>"
+        text += "<label><div class='section-overview-element btn"+cls+"' onclick='showSection("+i+");'>"
                     + sec.attr('name')
                 +"</div></label>";
     }

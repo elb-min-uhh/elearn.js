@@ -3,7 +3,7 @@
 * Created by Michael Heinecke
 * Improved by Arne Westphal
 * eLearning-office MIN, Universität Hamburg
-* v0.9.3 16/08/24 cc-by-sa
+* v0.9.5 16/10/05 cc-by-sa
 */
 
 
@@ -356,8 +356,23 @@ a:active {
     word-wrap: break-word;
 }
 
-.kachel ul li > * {
+.kachel ul li ul li {
+    padding: 2px;
+    border: 1px solid #cecece;
+}
+
+/*
+.kachel ul li ul li ul li {
+    border: #cecece;
+}
+*/
+
+.kachel ul li > span, .kachel ul li > p {
     max-width: 150px;
+}
+
+.kachel ul li.wide > * {
+    max-width: none;
 }
 
 .kachel .sectionRead {
