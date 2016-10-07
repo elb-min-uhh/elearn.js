@@ -84,7 +84,7 @@
 
 
 
-<section name="Erstellung von Selbsttests">
+<section name="Erstellung von Selbsttests" class="hide-in-overview">
 <h1 id="erstellung-von-selbsttests">Erstellung von Selbsttests</h1>
 <p>Julia Kühnemund und Arne Westphal<br>
 eLearning Büro - MIN<br>
@@ -93,6 +93,18 @@ cc by-sa | 2016</p>
 <img src="assets/img/quiz-images/quizjs_uebersicht.png" alt="Titelbild">
 </section>
 
+<section name="Inhaltsverzeichnis" class="hide-in-overview">
+    <h2>Inhaltsverzeichnis</h2>
+    <!-- Zusatz class="kachel" ändert die Darstellung -->
+    <!-- Zusatz class="hide-read" verhindert die Anzeige gelesener Sections -->
+    <div id="content-overview">
+        <!--
+            Hier wird automatisch ein Inhaltsverzeichnis
+            eingefügt, wenn das div#content-overview vorhanden
+            ist.
+        -->
+    </div>
+</section>
 
 <section name="Verwendung von Selbsttestaufgaben">
 
@@ -231,7 +243,7 @@ Ansehen kann man sich diese hier: <a href="quizJS_examples.html">Link</a></p>
 </section>
 
 
-<section name="Grundgerüst">
+<section name="Grundgerüst" class="sub">
 
 <h3 id="grundgerust">Grundgerüst</h3>
 <pre><code>&lt;div class=&quot;question&quot; qtype=&quot;short_text&quot; id=&quot;short_1&quot;&gt;
@@ -294,7 +306,7 @@ Block indem Antworten stehen
 </section>
 
 
-<section name="Fragetypen">
+<section name="Fragetypen" class="sub">
 
 <h3 id="fragetypen">Fragetypen</h3>
 <p>In der ersten Zeile tauchen bereits Variable Werte auf, die angepasst werden müssen.</p>
@@ -325,7 +337,7 @@ Unter- oder Durchstreichen</li>
 </section>
 
 
-<section name="Überschrift">
+<section name="Überschrift" class="sub">
 
 <h3 id="uberschrift">Überschrift</h3>
 <p>Die einzelnen Bereiche sind schnell erklärt.</p>
@@ -339,7 +351,7 @@ Unter- oder Durchstreichen</li>
 </section>
 
 
-<section name="Antworten">
+<section name="Antworten" class="sub">
 
 <h3 id="antworten">Antworten</h3>
 <pre><code>&lt;div class=&quot;answers&quot;&gt;
@@ -391,7 +403,7 @@ sind die sichtbaren Antworten die angezeigt werden.</li>
 </section>
 
 
-<section name="Feedbacktexte">
+<section name="Feedbacktexte" class="sub">
 
 <h3 id="feedbacktexte">Feedbacktexte</h3>
 <pre><code>&lt;!-- Feedback für eine richtige und falsche Antwort --&gt;
@@ -408,7 +420,7 @@ Bereiche wie in dem Grundgerüst gezeigt aufteilen.</p>
 </section>
 
 
-<section name="Angabe der richtigen Antworten">
+<section name="Angabe der richtigen Antworten" class="sub">
 
 <h3 id="angabe-der-richtigen-antworten">Angabe der richtigen Antworten</h3>
 <p>Für jede richtige Antwort wird genau ein <em>a</em> Block verwendet.</p>
@@ -444,7 +456,7 @@ in ihrer Funktionsweise und Verwendung erklärt.</p>
 </section>
 
 
-<section name="Kurzantworten">
+<section name="Kurzantworten" class="sub">
 
 <h3 id="kurzantworten-short-text">Kurzantworten: <em>short_text</em></h3>
 
@@ -486,7 +498,7 @@ kann auch außerhalb des <em>label</em> stehen.</p>
 </section>
 
 
-<section name="Einfach-, Mehrfach- und Bilderauswahl">
+<section name="Einfach-, Mehrfach- und Bilderauswahl" class="sub">
 
 <h3 id="einfach-mehrfach-und-bilderauswahl-choice">Einfach-, Mehrfach- und Bilderauswahl: <em>choice</em></h3>
 <p>Hier ein Beispiel für eine Mehrfachauswahl:</p>
@@ -606,7 +618,7 @@ vorgeben, wie die Bilder genau dargestellt werden sollen.</p>
 </section>
 
 
-<section name="Freitextaufgaben">
+<section name="Freitextaufgaben" class="sub">
 
 <h3 id="freitextaufgaben-free-text">Freitextaufgaben: <em>free_text</em></h3>
 <p>Hierbei handelt es sich um ein größeres Textfeld in das längere
@@ -670,7 +682,7 @@ genutzt.</p>
 </section>
 
 
-<section name="Lückentext mit Textfeldern">
+<section name="Lückentext mit Textfeldern" class="sub">
 
 <h3 id="luckentext-mit-textfeldern-fill-blank">Lückentext mit Textfeldern: <em>fill_blank</em></h3>
 
@@ -746,7 +758,7 @@ angegebenen Möglichkeiten übereinstimmt.</p>
 </section>
 
 
-<section name="Lückentext mit Auswahl">
+<section name="Lückentext mit Auswahl" class="sub">
 
 <h3 id="luckentext-mit-auswahl-fill-blank-choice">Lückentext mit Auswahl: <em>fill_blank_choice</em></h3>
 <p>Ein Beispiel für einen Lückentext:</p>
@@ -846,7 +858,7 @@ angegebenen Möglichkeiten übereinstimmt.</p>
 </section>
 
 
-<section name="Fehlertext oder Wortmarkierung">
+<section name="Fehlertext oder Wortmarkierung" class="sub">
 
 <h3 id="fehlertext-oder-wortmarkierung-error-text">Fehlertext oder Wortmarkierung: <em>error_text</em></h3>
 <p>Ein Beispiel für einen Fehlertext:</p>
@@ -924,7 +936,7 @@ folgendes ergibt:</p>
 
 </section>
 
-<section name="Matrix oder Tabellenaufgaben">
+<section name="Matrix oder Tabellenaufgaben" class="sub">
 
 <h3 id="matrix-matrix-choice">Matrix: <em>matrix_choice</em></h3>
 <p>Ein Beispiel für eine Matrixaufgabe:</p>
@@ -1049,7 +1061,7 @@ bei Mehrfachauswahl möglich.</p>
 </section>
 
 
-<section name="Hotspot">
+<section name="Hotspot" class="sub">
 
 <h3 id="hotspot-hotspot">Hotspot: <em>hotspot</em></h3>
 <p>Ein Beispiel für eine Hotspot-Aufgabe:</p>
@@ -1206,7 +1218,7 @@ Anzeige erhalten. </p>
 </section>
 
 
-<section name="Zuordnung (Drag and Drop)">
+<section name="Zuordnung (Drag and Drop)" class="sub">
 
 <h3 id="zuordnung-drag-and-drop-classification">Zuordnung (Drag and Drop): <em>classification</em></h3>
 <p>Ein Beispiel für eine Zuordnungsaufgabe:</p>
@@ -1356,7 +1368,7 @@ angegebenen Möglichkeiten übereinstimmt.</p>
 </section>
 
 
-<section name="Sortieren (Drag and Drop)">
+<section name="Sortieren (Drag and Drop)" class="sub">
 
 <h3 id="sortieren-drag-and-drop-order">Sortieren (Drag and Drop): <em>order</em></h3>
 
@@ -1499,7 +1511,7 @@ größer und erhält somit die Poisition &quot;2&quot;. Es darf <strong>niemals<
 </section>
 
 
-<section name="Petrinetzaufgaben">
+<section name="Petrinetzaufgaben" class="sub">
 
 <h3 id="petrinetzaufgaben-petri">Petrinetzaufgaben: <em>petri</em></h3>
 <p>Ein Beispiel für eine Petrinetzaufgabe:</p>
@@ -1679,7 +1691,7 @@ Erklärung geben.</p>
 </section>
 
 
-<section name="Zeichnen">
+<section name="Zeichnen" class="sub">
 
 <h3 id="zeichnen-drawing">Zeichnen: <em>drawing</em></h3>
 <p>Ein Beispiel für eine Zeichenaufgabe:</p>
@@ -1807,7 +1819,7 @@ Welche Funktionen möglich sind, wird im folgenden Bereich erklärt.</p>
 </section>
 
 
-<section name="Unbewertete Fragen">
+<section name="Unbewertete Fragen" class="sub">
 
 <h3 id="unbewertete-fragen">Unbewertete Fragen</h3>
 <p>Es gibt neuere Fragetypen die nicht bewertet werden können oder sollen.
@@ -1862,7 +1874,7 @@ die Klasse <em>information</em> hat. Dieser sieht dann beispielsweise so aus:</p
 </section>
 
 
-<section name="Nicht zurücksetzbare Fragen">
+<section name="Nicht zurücksetzbare Fragen" class="sub">
 
 <h3 id="nicht-zurucksetzbare-fragen">Nicht zurücksetzbare Fragen</h3>
 <p>Normalerweise kann jede Frage nachdem sie beantwortet wurde zurückgesetzt werden.
@@ -1905,7 +1917,7 @@ Das sieht dann zum Beispiel so aus:</p>
 </section>
 
 
-<section name="Zeitlich begrenzte Fragen">
+<section name="Zeitlich begrenzte Fragen" class="sub">
 
 <h3 id="zeitlich-begrenzte-fragen">Zeitlich begrenzte Fragen</h3>
 <p>Für den Fall, dass man Fragen zeitlich begrenzen möchte, kann man eine maximale
@@ -2005,7 +2017,7 @@ Frage eine zeitliche Begrenzung der maximalen Bearbeitungszeit insgesamt geben.<
 </section>
 
 
-<section name="Referenzieren vorheriger Fragen">
+<section name="Referenzieren vorheriger Fragen" class="sub">
 
 <h3 id="referenzieren">Referenzieren</h3>
 <p>Falls man in einem späteren Block eine vorher bearbeitete Frage noch einmal
@@ -2041,7 +2053,7 @@ und um "_ref" erweitert wird. (Referenz)
 </section>
 
 
-<section name="Veränderte Darstellung (CSS)">
+<section name="Veränderte Darstellung (CSS)" class="sub">
 
 <h3 id="veranderte-darstellung-css">Veränderte Darstellung (CSS)</h3>
 <p>Um die Frage auf eine bestimmte Weise darzustellen, kann es nötig sein,

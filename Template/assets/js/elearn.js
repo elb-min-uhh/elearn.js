@@ -630,8 +630,13 @@ function createSectionOverview() {
     var text = "<div>";
 
     for(var i=0; i<$('section').length; i++) {
-        text += "<label><div class='section-overview-element btn' onclick='showSection("+i+")'>"
-                    + $($('section')[i]).attr('name')
+        var sec = $($('section')[i]);
+        var cls = "";
+        if(sec.is('.sub')) cls=" sub";
+        if(sec.is('.subsub')) cls=" subsub";
+
+        text += "<label><div class='section-overview-element btn"+cls+"' onclick='showSection("+i+")'>"
+                    + sec.attr('name')
                 +"</div></label>";
     }
     text+="</div>";

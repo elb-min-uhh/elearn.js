@@ -571,10 +571,29 @@ a:active {
     padding: 5px 0 5px 130px;
 }
 
+.section-overview-element.sub {
+    width: calc(100% - 150px);
+    padding: 5px 0 5px 150px;
+}
+
+.section-overview-element.subsub {
+    width: calc(100% - 170px);
+    padding: 5px 0 5px 170px;
+}
+
+
 .section-overview-element.active {
     border-left: 3px solid #e2001a;
     background:rgb(220,220,220);
     padding: 5px 0 5px 127px;
+}
+
+.section-overview-element.active.sub {
+    padding: 5px 0 5px 147px;
+}
+
+.section-overview-element.active.subsub {
+    padding: 5px 0 5px 167px;
 }
 
 .section-overview-element:hover,  .side-menu-element:hover {
@@ -1252,8 +1271,23 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
         padding: 5px 0 5px 125px;
         width: calc(100% - 125px);
     }
+    .section-overview-element.sub {
+        padding: 5px 0 5px 145px;
+        width: calc(100% - 145px);
+    }
+    .section-overview-element.subsub {
+        padding: 5px 0 5px 165px;
+        width: calc(100% - 165px);
+    }
+
     .section-overview-element.active {
         padding: 5px 0 5px 122px;
+    }
+    .section-overview-element.active.sub {
+        padding: 5px 0 5px 142px;
+    }
+    .section-overview-element.active.subsub {
+        padding: 5px 0 5px 162px;
     }
 }
 
@@ -1311,8 +1345,23 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
         padding: 5px 0 5px 82px;
         width: calc(100% - 82px);
     }
+    .section-overview-element.sub {
+        padding: 5px 0 5px 92px;
+        width: calc(100% - 92px);
+    }
+    .section-overview-element.subsub {
+        padding: 5px 0 5px 102px;
+        width: calc(100% - 102px);
+    }
+
     .section-overview-element.active {
         padding: 5px 0 5px 79px;
+    }
+    .section-overview-element.active.sub {
+        padding: 5px 0 5px 89px;
+    }
+    .section-overview-element.active.subsub {
+        padding: 5px 0 5px 99px;
     }
     #btnBackText, #btnAllText, #btnHelpText {
         display:none;
