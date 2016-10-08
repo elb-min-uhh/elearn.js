@@ -243,7 +243,7 @@ h5 {
     font-weight:600;
 }
 
-img, video, audio{
+img, .elearnjs-video, audio{
     max-width:100%;
     margin:3em 0px 3em 0px;
 }
@@ -312,6 +312,143 @@ a:active {
     text-decoration: underline;
 }
 
+
+/* --------------------------------------- VIDEOS ------------------------------------- */
+
+.elearnjs-video {
+    position: relative;
+    cursor: none;
+    line-height: 0;
+}
+
+.elearnjs-video.full {
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    width:100%;
+    height:100%;
+    margin:0;
+    padding: 0;
+}
+.elearnjs-video.full video {
+    position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; width: auto; height: auto; z-index: -100;
+}
+
+.elearnjs-video > * {
+    max-width: 100%;
+}
+
+.elearnjs-video.hovered {
+    cursor: pointer;
+}
+
+.elearnjs-video .controls {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 5px;
+    transition: opacity 0.2s ease-out;
+
+    background: #222222; /* For browsers that do not support gradients */
+    background: rgba(0,0,0, 0.7); /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(transparent, black); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(transparent, black); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(transparent, black); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(transparent, black); /* Standard syntax */
+}
+
+.elearnjs-video.hovered .controls {
+    pointer-events: auto;
+    opacity: 1;
+}
+
+.elearnjs-video .controls > * {
+    display: inline-block;
+    height: 24px;
+    line-height: 24px;
+}
+
+/* PROGRESSBAR */
+
+.elearnjs-video .controls .video-progress-con {
+    position: relative;
+    vertical-align: bottom;
+    margin: 3px 5px;
+}
+
+
+.elearnjs-video .controls .video-progress {
+    position: absolute;
+    cursor: pointer;
+    top: 10px; /* (24Height - 4Height) / 2 */
+    width: 100%;
+    height: 4px;
+    transition: 0.1s ease-out;
+    background: #888;
+    background: rgba(136, 136, 136, 0.5);
+}
+
+.elearnjs-video .controls .video-progress-con:hover .video-progress {
+    height: 8px;
+    top: 8px; /* (24Height - 8Height) / 2 */
+}
+
+
+.elearnjs-video .controls .video-progress-con .video-progress-bar,
+.elearnjs-video .controls .video-progress-con .video-progress-loaded,
+.elearnjs-video .controls .video-progress-con .video-progress-hover {
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+}
+
+.elearnjs-video .controls .video-progress-con .video-progress-bar
+{
+    background: #e2001a;
+    background: rgba(226, 0, 26, 0.75);
+    transition: 0.2s ease-out;
+}
+
+.elearnjs-video .controls .video-progress-con .video-progress-loaded {
+    background: #b4b4b4;
+    background: rgba(136, 136, 136, 0.3);
+}
+
+.elearnjs-video .controls .video-progress-con .video-progress-hover {
+    background: #888;
+    background: rgba(200, 200, 200, 0.8);
+}
+
+
+
+/* TEXT AND ICONS IN CONTROLS */
+
+.elearnjs-video .controls .icon, .elearnjs-video .controls .text {
+    margin: 3px;
+    color: white;
+}
+
+.elearnjs-video .controls .icon {
+    width: 24px;
+    cursor: pointer;
+
+    /* test */
+    color: black;
+    background: white;
+    border-radius: 50%;
+    text-align: center;
+}
+
+.elearnjs-video .controls .text {
+    cursor: default;
+    text-align: center;
+}
 
 /* --------------------------------------- CONTENT OVERVIEW ------------------------------------- */
 

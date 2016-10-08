@@ -61,6 +61,7 @@ $(document).ready(function() {
         "text": window.location.href
     });
     $('#qr_overlay').click(function() {$('#qr_overlay').hide();});
+    initiateVideoPlayers();
 });
 
 /**
@@ -298,6 +299,315 @@ function setBackPage(val, type) {
     backpage = val;
 }
 
+// ----------------------------------------------------------------------------
+// ------------------------- VIDEO PLAYER -------------------------------------
+// ----------------------------------------------------------------------------
+
+var video_hover_timers = {};
+
+function initiateVideoPlayers() {
+    $('video').each(function(i,e) {
+        this.controls = false;
+        $(this).wrap("<div class='elearnjs-video'>");
+        $(this).after("<div class='controls'>"
+                        + "<div class='icon playpause playing' title='Play'>P</div>"
+                        + "<div class='icon volume 3' title='Mute'>3</div>"
+                        + "<div class='text playtime' title='Time'></div>"
+                        + "<div class='video-progress-con'>"
+                            + "<div class='video-progress'><div class='video-progress-bar'></div><div class='video-progress-loaded'></div></div>"
+                        + "</div>"
+                        + "<div class='text timeleft' title='Time left'></div>"
+                        + "<div class='icon fullscreen' title='Fullscreen'>F</div>"
+                    + "</div>");
+
+
+        var div = $(this).parent();
+        addVideoPlayerListener(div);
+    });
+    $(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange', function() {
+        checkVideoFullscreen();
+    });
+    resizeAllVideoPlayers();
+}
+
+function addVideoPlayerListener(div) {
+    // buttons
+    div.find('.playpause').click(function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        videoTogglePlay(div);
+    });
+    div.find('.fullscreen').click(function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        videoToggleFullscreen(div);
+    });
+
+    // progressbar
+    div.find('.video-progress-con').on('mouseenter', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        videoProgressMouseEnter(div, event);
+    });
+    div.find('.video-progress-con').on('mouseleave', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        videoProgressMouseLeave(div, event);
+    });
+    div.find('.video-progress-con').on('mousemove', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        videoProgressMouseMove(div, event);
+    });
+    div.find('.video-progress-con').click(function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        videoProgressClick(div, event);
+    });
+
+
+
+    // general player
+    div.on('touchStart', function(event) {
+        videoHover(div);
+    });
+    div.on('mousemove', function(event) {
+        videoHover(div);
+    });
+    div.on('click', function(event) {
+        if(!isTouchSupported()) {
+            event.preventDefault();
+            event.stopPropagation();
+            videoTogglePlay(div);
+        }
+    });
+    div.on('dblclick', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        videoToggleFullscreen(div);
+    });
+    div.find('video').on('ended', function(event) {
+        var btn = div.find('.playpause')[0];
+        btn.title = 'Play';
+        btn.innerHTML = 'P';
+        div.find('.playpause').addClass("playing");
+        div.find('.playpause').removeClass("paused");
+    });
+    div.find('video').on('timeupdate', function(event) {
+        updateVideoTime(div);
+    });
+}
+
+
+// HOVER ---------------------------------------------------
+
+function videoHover(div) {
+    if(!div.is(".hovered")) {
+        div.addClass("hovered");
+        resizeVideoPlayer(div);
+    }
+    var idx = $('.elearnjs-video').index(div);
+    if(video_hover_timers[idx] != undefined) clearTimeout(video_hover_timers[idx]);
+    video_hover_timers[idx] = setTimeout(function(){
+        videoHoverEnd(div);
+    }, 2500);
+}
+
+function videoHoverEnd(div) {
+    div.removeClass("hovered");
+}
+
+// FULLSCREEN -----------------------------------------------
+
+function checkVideoFullscreen() {
+    var isFullScreen = document.fullScreen ||
+                   document.mozFullScreen ||
+                   document.webkitIsFullScreen;
+
+    if(!isFullScreen) {
+        $('.elearnjs-video').removeClass("full");
+    }
+};
+
+// BUTTONS --------------------------------------------------
+
+function videoTogglePlay(div) {
+    var vid = div.find('video')[0];
+    var btn = div.find('.playpause')[0];
+
+    // play
+    if(vid.paused || vid.ended) {
+        btn.title = 'Pause';
+        btn.innerHTML = 'H';
+        div.find('.playpause').removeClass("playing");
+        div.find('.playpause').addClass("paused");
+        vid.play();
+    }
+    // pause
+    else {
+        btn.title = 'Play';
+        btn.innerHTML = 'P';
+        div.find('.playpause').addClass("playing");
+        div.find('.playpause').removeClass("paused");
+        vid.pause();
+    }
+}
+
+
+
+function videoToggleFullscreen(div) {
+    // to fullscreen
+    if(!div.is(".full")) {
+        var elem = div[0];
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen();
+        } else {
+            // no fullscreen (?)
+            return;
+        }
+        div.addClass("full");
+    }
+    else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        }
+        div.removeClass("full");
+    }
+}
+
+// PROGRESSBAR ----------------------------------------------
+
+function videoProgressMouseEnter(div, e) {
+    var con = div.find('.video-progress-con');
+    var back = con.find('.video-progress');
+    back.prepend('<div class="video-progress-hover">');
+    console.log(e);
+}
+
+function videoProgressMouseLeave(div, e) {
+    var con = div.find('.video-progress-con');
+    con.find('.video-progress-hover').remove();
+}
+
+function videoProgressMouseMove(div, e) {
+    var pos = e.offsetX;
+    var pos_perc = pos / div.find('.video-progress').width();
+    div.find('.video-progress-hover').css("width", pos_perc*100 + "%");
+}
+
+function videoProgressClick(div, e) {
+    var vid = div.find('video')[0];
+    var pos = e.offsetX;
+    var pos_perc = pos / div.find('.video-progress').width();
+    vid.currentTime = vid.duration * pos_perc;
+}
+
+// GENERAL VIDEO PLAYER -------------------------------------
+
+function updateVideoTime(div) {
+    var vid = div.find('video')[0];
+    var time_field = div.find('.playtime');
+    var timeleft_field = div.find('.timeleft');
+
+    var time = vid.currentTime;
+    var timeleft = Math.floor(vid.duration) - Math.floor(vid.currentTime);
+
+    // time fields
+    time_field.html(timeToString(time));
+    timeleft_field.html("- " + timeToString(timeleft));
+
+    // progress bar
+    var progress_bar = div.find('.video-progress-bar');
+    progress_bar.css("width", (vid.currentTime*100)/vid.duration + "%");
+
+    // buffered bar
+    var latest_end = 0;
+    for(var i=0; i<vid.buffered.length; i++) {
+        if(vid.buffered.end(i) > latest_end) {
+            latest_end = vid.buffered.end(i);
+        }
+    }
+    var buffered_perc = latest_end / vid.duration;
+    div.find('.video-progress-loaded').css("width", buffered_perc*100 + "%");
+
+    resizeVideoPlayer(div);
+}
+
+
+function timeToString(seconds) {
+    seconds = Math.floor(seconds);
+    var hours = Math.floor(seconds / (60*60));
+    seconds -= hours*60*60;
+    var minutes = Math.floor(seconds / 60);
+    seconds -= minutes*60;
+
+    var time_str = seconds;
+    if(seconds < 10) {
+        time_str = "0" + time_str;
+    }
+    time_str = minutes + ":" + time_str;
+    if(hours > 0) {
+        if(minutes < 10) {
+                time_str = "0" + time_str;
+        }
+        time_str = hours + ":" + time_str;
+    }
+
+    return time_str;
+}
+
+function resizeAllVideoPlayers() {
+    $('.elearnjs-video:visible').each(function(i,e) {
+        resizeVideoPlayer($(this));
+    });
+}
+
+
+function resizeVideoPlayer(div) {
+    // check text field sizes
+    var time_field = div.find('.playtime');
+    var timeleft_field = div.find('.timeleft');
+
+    if(time_field.width() > parseInt(time_field.css("min-width").replace("px", ""))) {
+        var min_width = time_field.width() + 10;
+        time_field.css("min-width", min_width + "px");
+    }
+    if(timeleft_field.width() > parseInt(timeleft_field.css("min-width").replace("px", ""))) {
+        var min_width = timeleft_field.width() + 10;
+        timeleft_field.css("min-width", min_width + "px");
+    }
+
+    // calculate progress bar width
+    var icon_width = 0.0;
+
+    div.find('.controls').children().each(function(i,e) {
+        if(!$(this).is('.video-progress-con')) {
+            icon_width += $(this).outerWidth(true);
+        }
+    });
+
+    var progress_width = div.find('.controls').width() - icon_width
+                        - parseInt(div.find('.video-progress-con').css("margin-left").replace("px", ""))
+                        - parseInt(div.find('.video-progress-con').css("margin-right").replace("px", ""));
+    div.find('.video-progress-con').css("width", progress_width + "px");
+}
+
+
+// ----------------------------------------------------------------------------
+// ------------------------- GENERAL ------------------------------------------
+// ----------------------------------------------------------------------------
 
 /**
 * Zeigt die vorherige Section
@@ -619,11 +929,8 @@ function createContentOverview() {
             level--;
         }
 
-        console.log(text);
-
         $('#content-overview').html(text);
         $('#content-overview').find('li').each(function(i,e) {
-            console.log(i);
             if($(this).children('ul').length != 0) {
                 $(this).addClass("wide");
             }
@@ -1490,6 +1797,7 @@ $(window).resize(function() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function(){
         resizeAllSliders();
+        resizeAllVideoPlayers();
         $('#sideMenu').css('right', "-"+($('#sideMenu').width()+10)+"px");
     }, 250);
     updateNavBarWidth();
@@ -1550,6 +1858,29 @@ function doesURLExist(url, callback) {
 function isFunction(functionToCheck) {
  var getType = {};
  return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+}
+
+
+function getOuterWidth(e, outer) {
+    var element = e[0];
+    var rect = element.getBoundingClientRect();
+
+    var width;
+    if (rect.width) {
+      // `width` is available for IE9+
+      width = rect.width;
+    } else {
+      // Calculate width for IE8 and below
+      width = rect.right - rect.left;
+    }
+
+    if(outer) {
+        var style = element.currentStyle || window.getComputedStyle(element);
+        var margin = parseFloat(style.marginLeft) + parseFloat(style.marginRight);
+        width += margin;
+    }
+
+    return width;
 }
 
 // --------------------------------------------------------------------------------------
