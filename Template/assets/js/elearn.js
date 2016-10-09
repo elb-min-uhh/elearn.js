@@ -308,7 +308,7 @@ var video_hover_timers = {};
 function initiateVideoPlayers() {
     $('video').each(function(i,e) {
         this.controls = false;
-        $(this).wrap("<div class='elearnjs-video'>");
+        $(this).wrap("<div class='elearnjs-video hovered'>");
         $(this).after("<div class='controls'>"
                         + "<div class='icon playpause playing' title='Play'>P</div>"
                         + "<div class='icon volume 3' title='Mute'>3</div>"
@@ -354,30 +354,47 @@ function addVideoPlayerListener(div) {
         event.stopPropagation();
         videoProgressMouseLeave(div, event);
     });
-    div.find('.video-progress-con').on('mousemove', function(event) {
+    div.find('.video-progress-con').on('mousemove touchmove', function(event) {
         event.preventDefault();
         event.stopPropagation();
         videoProgressMouseMove(div, event);
     });
-    div.find('.video-progress-con').click(function(event) {
+    div.find('.video-progress-con').on('mousedown touchstart', function(event) {
         event.preventDefault();
         event.stopPropagation();
-        videoProgressClick(div, event);
+        setVideoMouseDown(div, true);
+        videoProgressMouseMove(div, event);
     });
-
-
-
-    // general player
-    div.on('touchStart', function(event) {
-        videoHover(div);
-    });
-    div.on('mousemove', function(event) {
-        videoHover(div);
-    });
-    div.on('click', function(event) {
-        if(!isTouchSupported()) {
+    $(document).on('mouseup touchend', function(event) {
+        if(videoMouseDown) {
             event.preventDefault();
             event.stopPropagation();
+            setVideoMouseDown(div, false);
+            return false;
+        }
+    });
+
+    // general player
+    div.on('mousemove', function(event) {
+        if(!isTouchSupported()) {
+            videoHover(div);
+        }
+    });
+    div.on('mouseup touchend', function(event) {
+        // other listeneres take care of these
+        if(videoMouseDown
+            || $(event.target).is('.controls *')) {
+            return true;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+        // touch
+        if(isTouchSupported()) {
+            videoToggleHover(div);
+        }
+        // no touch
+        else {
             videoTogglePlay(div);
         }
     });
@@ -392,6 +409,7 @@ function addVideoPlayerListener(div) {
         btn.innerHTML = 'P';
         div.find('.playpause').addClass("playing");
         div.find('.playpause').removeClass("paused");
+        videoHover(div);
     });
     div.find('video').on('timeupdate', function(event) {
         updateVideoTime(div);
@@ -400,6 +418,15 @@ function addVideoPlayerListener(div) {
 
 
 // HOVER ---------------------------------------------------
+
+function videoToggleHover(div) {
+    if(div.is('.hovered')) {
+        videoHoverEnd(div);
+    }
+    else {
+        videoHover(div);
+    }
+}
 
 function videoHover(div) {
     if(!div.is(".hovered")) {
@@ -414,7 +441,10 @@ function videoHover(div) {
 }
 
 function videoHoverEnd(div) {
-    div.removeClass("hovered");
+    var vid = div.find('video')[0];
+    if(!vid.paused && !vid.ended) {
+        div.removeClass("hovered");
+    }
 }
 
 // FULLSCREEN -----------------------------------------------
@@ -489,11 +519,27 @@ function videoToggleFullscreen(div) {
 
 // PROGRESSBAR ----------------------------------------------
 
+var videoMouseDown = false;
+var videoPausedBefore = false;
+
+function setVideoMouseDown(div, b) {
+    var vid = div.find('video')[0];
+    if(b) {
+        videoPausedBefore = vid.paused || vid.ended;
+        vid.pause();
+    }
+    else {
+        if(!videoPausedBefore) {
+            vid.play();
+        }
+    }
+    videoMouseDown = b;
+}
+
 function videoProgressMouseEnter(div, e) {
     var con = div.find('.video-progress-con');
     var back = con.find('.video-progress');
     back.prepend('<div class="video-progress-hover">');
-    console.log(e);
 }
 
 function videoProgressMouseLeave(div, e) {
@@ -502,16 +548,23 @@ function videoProgressMouseLeave(div, e) {
 }
 
 function videoProgressMouseMove(div, e) {
-    var pos = e.offsetX;
+    var vid = div.find('video')[0];
+    var pos = 0;
+    if(e.type.toLowerCase() === "mousemove"
+        || e.type.toLowerCase() === "mousedown") {
+        pos = e.offsetX;
+    }
+    else if(e.type.toLowerCase() === "touchmove"
+            || e.type.toLowerCase() === "touchstart"){
+        pos = e.originalEvent.touches[0].clientX - $(e.target).offset().left;
+    }
     var pos_perc = pos / div.find('.video-progress').width();
     div.find('.video-progress-hover').css("width", pos_perc*100 + "%");
-}
 
-function videoProgressClick(div, e) {
-    var vid = div.find('video')[0];
-    var pos = e.offsetX;
-    var pos_perc = pos / div.find('.video-progress').width();
-    vid.currentTime = vid.duration * pos_perc;
+    if(videoMouseDown) {
+        div.find('.video-progress-bar').css("width", pos_perc*100 + "%");
+        vid.currentTime = vid.duration * pos_perc;
+    }
 }
 
 // GENERAL VIDEO PLAYER -------------------------------------
@@ -598,7 +651,7 @@ function resizeVideoPlayer(div) {
         }
     });
 
-    var progress_width = div.find('.controls').width() - icon_width
+    var progress_width = div.find('.controls').width() - icon_width - 5
                         - parseInt(div.find('.video-progress-con').css("margin-left").replace("px", ""))
                         - parseInt(div.find('.video-progress-con').css("margin-right").replace("px", ""));
     div.find('.video-progress-con').css("width", progress_width + "px");
