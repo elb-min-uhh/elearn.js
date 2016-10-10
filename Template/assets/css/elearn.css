@@ -578,6 +578,12 @@ a:active {
     font-size: 48pt;
     color: white;
     line-height: 80px;
+    text-shadow: 0px 0px 15px rgba(0, 0, 0, 1);
+}
+
+.elearnjs-video.mobile .mobile-overlay .icon:hover,
+.elearnjs-video .play-overlay .play:hover {
+    font-size: 50pt;
 }
 
 .elearnjs-video .mobile-overlay .icon.playpause.playing:before {
@@ -1678,6 +1684,10 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     .elearnjs-video.mobile .mobile-overlay .icon,
     .elearnjs-video .play-overlay .play {
         font-size: 36pt;
+    }
+    .elearnjs-video.mobile .mobile-overlay .icon:hover,
+    .elearnjs-video .play-overlay .play:hover {
+        font-size: 38pt;
     }
 }
 
