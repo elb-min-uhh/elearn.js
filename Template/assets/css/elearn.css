@@ -367,7 +367,7 @@ a:active {
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 5px;
+    padding: 8px;
     transition: opacity 0.2s ease-out;
 
     background: #222222; /* For browsers that do not support gradients */
@@ -394,7 +394,7 @@ a:active {
 .elearnjs-video .controls .video-progress-con {
     position: relative;
     vertical-align: bottom;
-    margin: 3px 5px;
+    margin: 5px 5px;
     max-width:100%;
 }
 
@@ -458,7 +458,7 @@ a:active {
 /* TEXT AND ICONS IN CONTROLS */
 
 .elearnjs-video .controls .icon, .elearnjs-video .controls .text {
-    margin: 3px;
+    margin: 5px;
     color: white;
     line-height: 24px;
 }

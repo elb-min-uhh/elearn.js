@@ -366,7 +366,6 @@ function addVideoPlayerListener(div) {
     div.find('.play-overlay').on('mouseup touchend', function(event) {
         event.preventDefault();
         event.stopPropagation();
-        console.log(event);
         if(event.type === "touchend"
             || event.button == 0) {
                 videoTogglePlay(div);
@@ -533,6 +532,7 @@ function videoUpdatePlayPauseButton(div) {
         div.find('.playpause').attr("title", 'Play');
         div.find('.playpause').removeClass("playing");
         div.find('.playpause').addClass("paused");
+        div.addClass("hovered");
     }
     // pause
     else {
