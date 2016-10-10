@@ -306,10 +306,20 @@ function setBackPage(val, type) {
 var video_hover_timers = {};
 
 function initiateVideoPlayers() {
-    $('video').each(function(i,e) {
+        $('video').each(function(i,e) {
         this.controls = false;
         $(this).wrap("<div class='elearnjs-video hovered'>");
-        $(this).after("<div class='controls'>"
+
+        var div = $(this).parent();
+
+        div.append("<div class='mobile-overlay'><div class='icon playpause paused'></div></div>");
+        if(this.autoplay) {
+            this.play();
+        }
+        else {
+            div.append("<div class='play-overlay'><div class='icon play'></div></div>");
+        }
+        div.append("<div class='controls'>"
                         + "<div class='icon playpause playing' title='Play'>P</div>"
                         + "<div class='icon volume 3' title='Mute'>3</div>"
                         + "<div class='text playtime' title='Time'></div>"
@@ -321,12 +331,12 @@ function initiateVideoPlayers() {
                     + "</div>");
 
 
-        var div = $(this).parent();
         addVideoPlayerListener(div);
     });
     $(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange', function() {
         checkVideoFullscreen();
     });
+    registerAfterShow("resizeVideos", resizeAllVideoPlayers);
     resizeAllVideoPlayers();
 }
 
@@ -341,6 +351,14 @@ function addVideoPlayerListener(div) {
         event.preventDefault();
         event.stopPropagation();
         videoToggleFullscreen(div);
+    });
+
+    // overlay
+    div.find('.play-overlay').on('mouseup touchend', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        videoTogglePlay(div);
+        div.find('.play-overlay').remove();
     });
 
     // progressbar
@@ -383,7 +401,9 @@ function addVideoPlayerListener(div) {
     div.on('mouseup touchend', function(event) {
         // other listeneres take care of these
         if(videoMouseDown
-            || $(event.target).is('.controls *')) {
+            || $(event.target).is('.controls *')
+            || $(event.target).is('.play-overlay') || $(event.target).is('.play-overlay *')
+            || $(event.target).is('.mobile-overlay .playpause')) {
             return true;
         }
 
@@ -404,15 +424,16 @@ function addVideoPlayerListener(div) {
         videoToggleFullscreen(div);
     });
     div.find('video').on('ended', function(event) {
-        var btn = div.find('.playpause')[0];
-        btn.title = 'Play';
-        btn.innerHTML = 'P';
-        div.find('.playpause').addClass("playing");
-        div.find('.playpause').removeClass("paused");
         videoHover(div);
     });
     div.find('video').on('timeupdate', function(event) {
         updateVideoTime(div);
+    });
+    div.find('video').on('play', function(event) {
+        videoUpdatePlayPauseButton(div);
+    });
+    div.find('video').on('pause', function(event) {
+        videoUpdatePlayPauseButton(div);
     });
 }
 
@@ -465,21 +486,33 @@ function videoTogglePlay(div) {
     var vid = div.find('video')[0];
     var btn = div.find('.playpause')[0];
 
-    // play
+    // paused now -> play
     if(vid.paused || vid.ended) {
-        btn.title = 'Pause';
-        btn.innerHTML = 'H';
-        div.find('.playpause').removeClass("playing");
-        div.find('.playpause').addClass("paused");
         vid.play();
     }
     // pause
     else {
+        vid.pause();
+    }
+
+    videoUpdatePlayPauseButton(div);
+}
+
+function videoUpdatePlayPauseButton(div) {
+    var vid = div.find('video')[0];
+    var btn = div.find('.playpause')[0];
+
+    // paused now -> play
+    if(vid.paused || vid.ended) {
         btn.title = 'Play';
-        btn.innerHTML = 'P';
+        div.find('.playpause').removeClass("playing");
+        div.find('.playpause').addClass("paused");
+    }
+    // pause
+    else {
+        btn.title = 'Pause';
         div.find('.playpause').addClass("playing");
         div.find('.playpause').removeClass("paused");
-        vid.pause();
     }
 }
 
@@ -539,7 +572,7 @@ function setVideoMouseDown(div, b) {
 function videoProgressMouseEnter(div, e) {
     var con = div.find('.video-progress-con');
     var back = con.find('.video-progress');
-    back.prepend('<div class="video-progress-hover">');
+    back.append('<div class="video-progress-hover">');
 }
 
 function videoProgressMouseLeave(div, e) {
@@ -629,6 +662,8 @@ function resizeAllVideoPlayers() {
 
 
 function resizeVideoPlayer(div) {
+    if(isTouchSupported()) div.addClass("mobile");
+
     // check text field sizes
     var time_field = div.find('.playtime');
     var timeleft_field = div.find('.timeleft');
@@ -645,7 +680,7 @@ function resizeVideoPlayer(div) {
     // calculate progress bar width
     var icon_width = 0.0;
 
-    div.find('.controls').children().each(function(i,e) {
+    div.find('.controls').children(':visible').each(function(i,e) {
         if(!$(this).is('.video-progress-con')) {
             icon_width += $(this).outerWidth(true);
         }

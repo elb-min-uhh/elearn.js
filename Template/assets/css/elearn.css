@@ -331,9 +331,18 @@ a:active {
     height:100%;
     margin:0;
     padding: 0;
+    background: #000;
 }
 .elearnjs-video.full video {
-    position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; width: auto; height: auto; z-index: -100;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    background: #000;
 }
 
 .elearnjs-video > * {
@@ -411,7 +420,7 @@ a:active {
 .elearnjs-video .controls .video-progress-con .video-progress-bar
 {
     background: #e2001a;
-    background: rgba(226, 0, 26, 0.75);
+    background: rgba(226, 0, 26, 0.95);
     transition: 0.2s ease-out;
 }
 
@@ -422,7 +431,7 @@ a:active {
 
 .elearnjs-video .controls .video-progress-con .video-progress-hover {
     background: #888;
-    background: rgba(200, 200, 200, 0.8);
+    background: rgba(200, 200, 200, 0.2);
 }
 
 
@@ -448,6 +457,57 @@ a:active {
 .elearnjs-video .controls .text {
     cursor: default;
     text-align: center;
+}
+
+/* PLAY OVERLAY (before starting) + MOBILE*/
+
+.elearnjs-video .play-overlay,
+.elearnjs-video .mobile-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: none;
+    background: rgba(0,0,0,0.2);
+}
+
+.elearnjs-video .play-overlay + .controls {
+    display: none;
+}
+
+.elearnjs-video .play-overlay .play,
+.elearnjs-video .mobile-overlay .playpause {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80px;
+    height: 80px;
+    margin-top: -40px;
+    margin-left: -40px;
+
+    background: #fff;
+    border-radius: 50%;
+}
+
+.elearnjs-video .mobile-overlay {
+    display: none;
+}
+
+.elearnjs-video.mobile .mobile-overlay {
+    display: block;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-out;
+}
+
+.elearnjs-video.mobile.hovered .mobile-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.elearnjs-video.mobile .controls .playpause {
+    display: none;
 }
 
 /* --------------------------------------- CONTENT OVERVIEW ------------------------------------- */
