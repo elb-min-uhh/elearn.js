@@ -1579,6 +1579,11 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     .section-overview-element.active.subsub {
         padding: 5px 0 5px 162px;
     }
+
+    /* VIDEOS */
+    .elearnjs-video .controls {
+        padding: 5px;
+    }
 }
 
 @media screen and (max-width:440px) {
@@ -1664,6 +1669,15 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     }
     #btnHelp {
         margin-right: 0;
+    }
+
+    /* VIDEOS */
+    .elearnjs-video .controls {
+        padding: 3px;
+    }
+    .elearnjs-video.mobile .mobile-overlay .icon,
+    .elearnjs-video .play-overlay .play {
+        font-size: 36pt;
     }
 }
 
