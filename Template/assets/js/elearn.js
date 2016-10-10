@@ -325,7 +325,7 @@ function initiateVideoPlayers() {
                         + "<div class='icon volume high' title='Mute'></div>"
                         + "<div class='text playtime' title='Time'></div>"
                         + "<div class='video-progress-con'>"
-                            + "<div class='video-progress'><div class='video-progress-bar'></div><div class='video-progress-loaded'></div></div>"
+                            + "<div class='video-progress'><div class='video-progress-loaded'></div><div class='video-progress-bar'></div></div>"
                         + "</div>"
                         + "<div class='text timeleft' title='Time left'></div>"
                         + "<div class='icon fullscreen' title='Fullscreen'></div>"
