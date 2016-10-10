@@ -370,6 +370,7 @@ function addVideoPlayerListener(div) {
         if(event.type === "touchend"
             || event.button == 0) {
                 videoTogglePlay(div);
+                videoHover(div);
                 div.find('.play-overlay').remove();
         }
     });
