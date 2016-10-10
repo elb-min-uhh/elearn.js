@@ -17,6 +17,13 @@
 }
 
 @font-face {
+    font-family: 'eLearn-Video';
+    font-style: normal;
+    font-weight: normal;
+    src: url('../font/eLearn-Video.woff') format('woff');
+}
+
+@font-face {
     font-family: 'Open Sans';
     font-style: normal;
     font-weight: 400;
@@ -388,6 +395,7 @@ a:active {
     position: relative;
     vertical-align: bottom;
     margin: 3px 5px;
+    max-width:100%;
 }
 
 
@@ -435,29 +443,87 @@ a:active {
 }
 
 
+.elearnjs-video .progress-hover-time {
+    position: absolute;
+    bottom: 40px;
+    font-size: 12px;
+    line-height: 12px;
+    padding: 3px 5px;
+    background: #222222;
+    color: white;
+    border-radius: 3px;
+}
+
 
 /* TEXT AND ICONS IN CONTROLS */
 
 .elearnjs-video .controls .icon, .elearnjs-video .controls .text {
     margin: 3px;
     color: white;
+    line-height: 24px;
+}
+
+.elearnjs-video .icon {
+    font-family: eLearn-video;
+    text-align: center;
+    color: white;
+    font-size: 13pt;
+    line-height: 100%;
+}
+
+.elearnjs-video .icon:before {
+    width: 100%;
+    line-height: 24px;
+}
+
+.elearnjs-video .icon:hover {
+    color: #e2001a;
 }
 
 .elearnjs-video .controls .icon {
     width: 24px;
+    height: 24px;
     cursor: pointer;
-
-    /* test */
-    color: black;
-    background: white;
-    border-radius: 50%;
-    text-align: center;
+    vertical-align: bottom;
 }
 
 .elearnjs-video .controls .text {
     cursor: default;
     text-align: center;
 }
+
+/* PLAY PAUSE */
+.elearnjs-video .controls .icon.playpause.playing:before {
+    content: '\e903';
+}
+.elearnjs-video .controls .icon.playpause.paused:before {
+    content: '\e905';
+}
+
+/* FULLSCREEN */
+.elearnjs-video .controls .icon.fullscreen:before {
+    content: '\e902';
+}
+.elearnjs-video.full .controls .icon.fullscreen:before {
+    content: '\e901';
+}
+
+/* SOUND */
+.elearnjs-video .controls .icon.volume.mute:before {
+    content: '\e906';
+}
+.elearnjs-video .controls .icon.volume.low:before {
+    content: '\e907';
+}
+.elearnjs-video .controls .icon.volume.medium:before {
+    content: '\e908';
+}
+.elearnjs-video .controls .icon.volume.high:before {
+    content: '\e909';
+}
+
+
+
 
 /* PLAY OVERLAY (before starting) + MOBILE*/
 
@@ -485,9 +551,6 @@ a:active {
     height: 80px;
     margin-top: -40px;
     margin-left: -40px;
-
-    background: #fff;
-    border-radius: 50%;
 }
 
 .elearnjs-video .mobile-overlay {
@@ -508,6 +571,21 @@ a:active {
 
 .elearnjs-video.mobile .controls .playpause {
     display: none;
+}
+
+.elearnjs-video.mobile .mobile-overlay .icon,
+.elearnjs-video .play-overlay .play {
+    font-size: 48pt;
+    color: white;
+    line-height: 80px;
+}
+
+.elearnjs-video .mobile-overlay .icon.playpause.playing:before {
+    content: '\e904';
+}
+.elearnjs-video .mobile-overlay .icon.playpause.paused:before,
+.elearnjs-video .play-overlay .play:before {
+    content: '\e900';
 }
 
 /* --------------------------------------- CONTENT OVERVIEW ------------------------------------- */
