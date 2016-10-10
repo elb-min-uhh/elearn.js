@@ -665,6 +665,10 @@ function videoProgressMouseMove(div, e) {
             || e.type.toLowerCase() === "touchstart"){
         pos = e.originalEvent.touches[0].clientX - $(e.target).offset().left;
     }
+
+    if(pos < 0) pos = 0;
+    if(pos > div.find('.video-progress').width()) pos = div.find('.video-progress').width();
+
     var pos_perc = pos / div.find('.video-progress').width();
     div.find('.video-progress-hover').css("width", pos_perc*100 + "%");
 
