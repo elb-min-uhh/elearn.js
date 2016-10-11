@@ -436,6 +436,9 @@ function addVideoPlayerListener(div) {
                 || $(event.target).is('.mobile-overlay .playpause')) {
                 return true;
             }
+            
+            event.preventDefault();
+            event.stopPropagation();
 
             // touch
             if(event.type === "touchend") {
