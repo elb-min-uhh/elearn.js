@@ -308,12 +308,27 @@ function getCorrectForRadio(labels, c, colorLabels, force) {
             numberofchecked++;
         }
 
+        // wrong answer
         if(correctAnswer != input.is(':checked')) {
             correct = false;
-            $(this).addClass('wrong');
         }
+        // correct answer
         else {
-            $(this).addClass('right');
+
+        }
+
+        // should be checked
+        if(correctAnswer){
+            $(this).addClass("right_icon");
+
+            if(input.is(':checked')) $(this).addClass("right");
+            else $(this).addClass("wrong");
+        }
+        // should not be checked
+        else {
+            $(this).addClass("wrong_icon");
+
+            if(input.is(':checked')) $(this).addClass("wrong");
         }
     });
     if(numberofchecked === 0 && !force) {
@@ -340,9 +355,11 @@ function getCorrectForText(labels, c, force) {
 
     if(correct) {
         labels.addClass("right");
+        labels.addClass("right_icon");
     }
     else {
         labels.addClass("wrong");
+        labels.addClass("wrong_icon");
     }
     return correct;
 };
@@ -373,11 +390,13 @@ function getCorrectFillBlank(labels, answers, force) {
         // antwort richtig
         if(contains(cor, ans) || cor.length == 0) {
             $(this).addClass("right");
+            $(this).addClass("right_icon");
         }
         // antwort falsch
         else if(!contains(cor, ans)) {
             correct = false;
             $(this).addClass("wrong");
+            $(this).addClass("wrong_icon");
         }
     });
 
@@ -404,11 +423,13 @@ function getCorrectFillBlankChoice(labels, answers, force) {
         // antwort richtig
         if(contains(cor, ans) || cor.length == 0) {
             $(this).addClass("right");
+            $(this).addClass("right_icon");
         }
         // antwort falsch
         else if(!contains(cor, ans)) {
             correct = false;
             $(this).addClass("wrong");
+            $(this).addClass("wrong_icon");
         }
     });
 
@@ -434,12 +455,14 @@ function getCorrectErrorText(buttons, c, force) {
             || (!contains(c, ans) && !act)) {
             // richtig
             $(this).closest('label').addClass("right");
+            $(this).closest('label').addClass("right_icon");
         }
         // Nicht markiert oder nicht in Antworten
         else if(!contains(c, ans) ^ !act) {
             // falsch
             correct = false;
             $(this).closest('label').addClass("wrong");
+            $(this).closest('label').addClass("wrong_icon");
         }
     });
 
@@ -474,11 +497,13 @@ function getCorrectClassification(dests, answers, force) {
         // antwort richtig
         if(contains(cor, ans) || cor.length == 0) {
             $(this).addClass("right");
+            $(this).addClass("right_icon");
         }
         // antwort falsch
         else if(!contains(cor, ans)) {
             correct = false;
             $(this).addClass("wrong");
+            $(this).addClass("wrong_icon");
         }
     });
 
@@ -506,16 +531,19 @@ function getCorrectOrder(objects, answers, force) {
         // same position
         if(encryptMD5(""+index) == cor) {
             $(this).addClass("right");
+            $(this).addClass("right_icon");
         }
         // antwort richtig
         else if(encryptMD5(""+(index+1)) == cor) {
             index++;
             $(this).addClass("right");
+            $(this).addClass("right_icon");
         }
         // antwort falsch
         else {
             correct = false;
             $(this).addClass("wrong");
+            $(this).addClass("wrong_icon");
         }
     });
 
@@ -553,11 +581,13 @@ function getCorrectMatrixChoice(rows, answers, force) {
             if(($(ee).is(":checked") && contains(cor, ans))
                 || (!$(ee).is(":checked") && !contains(cor, ans))) {
                 $(this).closest('label').addClass("right");
+                $(this).closest('label').addClass("right_icon");
             }
             // falsch
             else {
                 correct = false;
                 $(this).closest('label').addClass("wrong");
+                $(this).closest('label').addClass("wrong_icon");
             }
         });
     });
@@ -630,10 +660,12 @@ function getCorrectPetri(div, places, answers, force) {
             if(($(this).is(".act") && contains(c, ans))
                 || (!$(this).is(".act") && !contains(c, ans))) {
                 $(this).addClass("right");
+                $(this).addClass("right_icon");
             }
             else {
                 correct = false;
                 $(this).addClass("wrong");
+                $(this).addClass("wrong_icon");
             }
         });
 

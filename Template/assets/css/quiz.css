@@ -49,15 +49,15 @@
 }
 
 .question label.right {
+    color: #007900;
     background-color:rgb(240,255,240);
 }
 
-.question .right:after {
+.question .answers label.right_icon:before {
     font-family: eLearn-icons;
     font-size: 1.75em;
     content: "r";
     padding-left: 5px;
-    color: #007900;
     vertical-align: middle;
 }
 
@@ -66,15 +66,15 @@
 }
 
 .question label.wrong {
+    color: #790000;
     background-color: rgb(255,240,240);
 }
 
-.question .wrong:after {
+.question .answers label.wrong_icon:before {
     font-family: eLearn-icons;
     font-size:1.75em;
     content: "w";
     padding-left: 5px;
-    color: #790000;
     vertical-align: middle;
 }
 
