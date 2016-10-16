@@ -22,6 +22,11 @@
     padding: 0.3em 1em 0.3em;
 }
 
+.question input[type="checkbox"],
+.question input[type="radio"] {
+    vertical-align: middle;
+}
+
 .question img {
     float:left;
     width: auto;
@@ -48,38 +53,52 @@
     background-color: rgb(240,240,240);
 }
 
-.question label.right {
-    color: #007900;
+
+.question label.right,
+.question .object.right {
     background-color:rgb(240,255,240);
 }
 
-.question .answers label.right_icon:before {
+.question label.right:hover,
+.question .object.right:hover {
+    background-color: rgb(230,245,230);
+}
+
+
+.question label.wrong {
+    background-color: rgb(255,240,240);
+}
+
+.question label.wrong:hover {
+    background-color: rgb(245,230,230);
+}
+
+
+.question .right_icon:after {
     font-family: eLearn-icons;
     font-size: 1.75em;
     content: "r";
     padding-left: 5px;
     vertical-align: middle;
+    color: #888;
 }
 
-.question label.right:hover {
-    background-color: rgb(230,245,230);
-}
-
-.question label.wrong {
-    color: #790000;
-    background-color: rgb(255,240,240);
-}
-
-.question .answers label.wrong_icon:before {
+.question .wrong_icon:after {
     font-family: eLearn-icons;
     font-size:1.75em;
     content: "w";
     padding-left: 5px;
     vertical-align: middle;
+    color: #888;
 }
 
-.question label.wrong:hover {
-    background-color: rgb(245,230,230);
+.question .right.right_icon:after,
+.question .wrong.right_icon:after {
+    color: #007900;
+}
+.question .right.wrong_icon:after,
+.question .wrong.wrong_icon:after {
+    color: #790000;
 }
 
 /* -------------------------------- Image Selection -------------------------------- */
@@ -157,6 +176,40 @@
     margin-top: -1em;
     padding-bottom: 0.5em;
     padding-left: 0.5em;
+}
+
+/* -------------------------------- CHOICE -------------------------------- */
+
+.question[qtype="choice"] label.right_icon:after,
+.question[qtype="choice"] label.wrong_icon:after {
+    content: none;
+}
+
+.question[qtype="choice"] label.right_icon:before {
+    font-family: eLearn-icons;
+    font-size: 1.75em;
+    content: "r";
+    padding-left: 5px;
+    vertical-align: middle;
+    color: #888;
+}
+
+.question[qtype="choice"] label.wrong_icon:before {
+    font-family: eLearn-icons;
+    font-size:1.75em;
+    content: "w";
+    padding-left: 5px;
+    vertical-align: middle;
+    color: #888;
+}
+
+/* .question[qtype="choice"] label.right.right_icon:before, */
+.question[qtype="choice"] label.wrong.right_icon:before {
+    color: #007900;
+}
+/* .question[qtype="choice"] label.right.wrong_icon:before, */
+.question[qtype="choice"] label.wrong.wrong_icon:before {
+    color: #790000;
 }
 
 
@@ -307,6 +360,38 @@
     border: 1px solid #888;
 }
 
+
+.question[qtype="matrix_choice"] label.right_icon:after,
+.question[qtype="matrix_choice"] label.wrong_icon:after {
+    content: none;
+}
+
+.question[qtype="matrix_choice"] label.right_icon:before {
+    font-family: eLearn-icons;
+    font-size: 1.75em;
+    content: "r";
+    padding-left: 5px;
+    vertical-align: middle;
+    color: #888;
+}
+
+.question[qtype="matrix_choice"] label.wrong_icon:before {
+    font-family: eLearn-icons;
+    font-size:1.75em;
+    content: "w";
+    padding-left: 5px;
+    vertical-align: middle;
+    color: #888;
+}
+
+/* .question[qtype="matrix_choice"] label.right.right_icon:before, */
+.question[qtype="matrix_choice"] label.wrong.right_icon:before {
+    color: #007900;
+}
+/* .question[qtype="matrix_choice"] label.right.wrong_icon:before, */
+.question[qtype="matrix_choice"] label.wrong.wrong_icon:before {
+    color: #790000;
+}
 
 /* ----------------------------- HOTSPOT ------------------------------ */
 

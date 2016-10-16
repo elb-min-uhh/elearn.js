@@ -329,6 +329,7 @@ function getCorrectForRadio(labels, c, colorLabels, force) {
             $(this).addClass("wrong_icon");
 
             if(input.is(':checked')) $(this).addClass("wrong");
+            else $(this).addClass("right");
         }
     });
     if(numberofchecked === 0 && !force) {
@@ -580,14 +581,25 @@ function getCorrectMatrixChoice(rows, answers, force) {
             // ausgewählt und richtig oder nicht ausgewählt und nicht richtig (insg richtig)
             if(($(ee).is(":checked") && contains(cor, ans))
                 || (!$(ee).is(":checked") && !contains(cor, ans))) {
-                $(this).closest('label').addClass("right");
-                $(this).closest('label').addClass("right_icon");
             }
             // falsch
             else {
                 correct = false;
-                $(this).closest('label').addClass("wrong");
+            }
+
+            // should be checked
+            if(contains(cor, ans)) {
+                $(this).closest('label').addClass("right_icon");
+
+                if($(ee).is(":checked")) $(this).closest('label').addClass("right");
+                else $(this).closest('label').addClass("wrong");
+            }
+            // should not be checked
+            else {
                 $(this).closest('label').addClass("wrong_icon");
+
+                if($(ee).is(":checked")) $(this).closest('label').addClass("wrong");
+                else $(this).closest('label').addClass("right");
             }
         });
     });
@@ -1548,6 +1560,10 @@ function deleteLabelColoring(div) {
     div.removeClass('wrong');
     div.find('.right').removeClass('right');
     div.find('.wrong').removeClass('wrong');
+    div.removeClass('right_icon');
+    div.removeClass('wrong_icon');
+    div.find('.right_icon').removeClass('right_icon');
+    div.find('.wrong_icon').removeClass('wrong_icon');
 };
 
 /**

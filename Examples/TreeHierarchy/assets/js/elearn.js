@@ -195,7 +195,7 @@ function initiateSideMenu() {
 
 function updateNavBarWidth() {
     var headerSpace = 15; // standard wert
-    $('#nav-bar').children().not('#btnExp').each(function(i,e){
+    $('#nav-bar').children(':visible').not('#btnExp').each(function(i,e){
         if($(this).attr("id") != undefined && $(this).attr("id").length)
             headerSpace += $(this).outerWidth(true);
     });
