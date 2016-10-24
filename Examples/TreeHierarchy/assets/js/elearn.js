@@ -1450,6 +1450,7 @@ function selectTab(element) {
 function stopVideos() {
     // stop all HTML5 videos
     $('video').each(function() {this.pause()});
+    $('audio').each(function() {this.pause()});
 
     // reload sources for every lecture2go video
     // set source from hsrc (hidden source, set below)
