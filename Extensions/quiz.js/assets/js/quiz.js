@@ -141,7 +141,7 @@ function submitAns(button, force) {
 
     var c = elementsToTextArray(div.find("a.ans"));
 
-    var labels = div.children('.answers').children('label');
+    var labels = div.find('.answers').find('label');
     deleteLabelColoring(labels);
 
     var type = div.attr("qtype");
@@ -151,7 +151,7 @@ function submitAns(button, force) {
 
     // Für alte Versionen oder nichtdefinierte Fragetypen
     if(type === undefined) {
-        type = labels.children('input').attr("type");
+        type = labels.find('input').attr("type");
 
         if(type === "text") {
             correct = getCorrectForText(labels, c);
@@ -376,6 +376,8 @@ function getCorrectFillBlank(labels, answers, force) {
     labels.each(function(i, e) {
         var input = $(this).find("input");
         var id = input.attr("id");
+
+        console.log("test");
 
         // alle richtigen antworten zu der ID
         var cor = elementsToTextArray(answers.filter("#"+id));
