@@ -205,7 +205,7 @@
 
 /* .question[qtype="choice"] label.right.right_icon:before, */
 .question[qtype="choice"] label.wrong.right_icon:before {
-    color: #007900;
+    color: #790000;
 }
 /* .question[qtype="choice"] label.right.wrong_icon:before, */
 .question[qtype="choice"] label.wrong.wrong_icon:before {
@@ -386,7 +386,7 @@
 
 /* .question[qtype="matrix_choice"] label.right.right_icon:before, */
 .question[qtype="matrix_choice"] label.wrong.right_icon:before {
-    color: #007900;
+    color: #790000;
 }
 /* .question[qtype="matrix_choice"] label.right.wrong_icon:before, */
 .question[qtype="matrix_choice"] label.wrong.wrong_icon:before {
