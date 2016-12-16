@@ -388,8 +388,8 @@ Fällen speziell angepasst werden muss. Der Umgang mit verschieden großen
 Bildern ist nicht genug automatisiert. Hier muss man also per __style__
 vorgeben, wie die Bilder genau dargestellt werden sollen.
 
-Bei der Bildauswahl kann man für das _input_ Element als __type__ sowohl
-_checkbox_ als auch _radio_ nehmen.
+Bei der Bildauswahl kann man für das _.answers_ Element als __class__ sowohl
+_.multiple_ als auch _.single_ nehmen.
 
 Ein Beispiel für eine Bild-Einzelauswahl wäre:
 

@@ -3,7 +3,7 @@
 * Created by Michael Heinecke
 * Improved by Arne Westphal
 * eLearning-office MIN, Universität Hamburg
-* v0.9.5 16/10/05 cc-by-sa
+* v0.9.6 16/11/10 cc-by-sa
 */
 
 
@@ -859,6 +859,48 @@ a:active {
 .tabbed-box {
     background-color: #dcdcdc;
     padding: 1.8em;
+}
+
+/* ------------------------------------------ THOVER INFO ------------------------------------------ */
+
+.hover-info,
+.hover-info .title,
+.hover-info > div:last-child {
+    display: inline;
+}
+
+.hover-info .title {
+    background: #dcdcdc;
+    padding: 0 3px;
+    cursor: pointer;
+}
+
+.hover-info .hover-info-block {
+    position: absolute;
+    background: #dcdcdc;
+    padding: 5px;
+}
+
+.hover-info .title .icon-info {
+    margin-left: -5px;
+    margin-right: -5px;
+}
+
+.hover-info > div:last-child:before {
+    content: "(";
+}
+
+.hover-info > div:last-child:after {
+    content: ")";
+}
+
+.hover-info div.hide {
+    display: none;
+}
+
+.hover-info > div.hover-info-block:before,
+.hover-info > div.hover-info-block:after {
+    content: none;
 }
 
 

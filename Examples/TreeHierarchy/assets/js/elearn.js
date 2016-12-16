@@ -4,8 +4,8 @@
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 */
 
-var VERSION_NR = "0.9.5";
-var VERSION_DATE = "10/2016";
+var VERSION_NR = "0.9.6";
+var VERSION_DATE = "11/2016";
 
 // Will be set on first Touch event. See Help Functions at bottom
 var touchSupported = false;
@@ -51,6 +51,7 @@ $(document).ready(function() {
     initiateTooltips();
     initiateHideables();
     initiateTabbedBoxes();
+    initiateHoverInfos();
     updateNavBarWidth();
 
     checkParameters();
@@ -195,7 +196,7 @@ function initiateSideMenu() {
 
 function updateNavBarWidth() {
     var headerSpace = 15; // standard wert
-    $('#nav-bar').children().not('#btnExp').each(function(i,e){
+    $('#nav-bar').children(':visible').not('#btnExp').each(function(i,e){
         if($(this).attr("id") != undefined && $(this).attr("id").length)
             headerSpace += $(this).outerWidth(true);
     });
@@ -1441,6 +1442,108 @@ function selectTab(element) {
 
 
 // --------------------------------------------------------------------------------------
+// Hover Infos
+// --------------------------------------------------------------------------------------
+
+function initiateHoverInfos() {
+    $('.hover-info').each(function() {
+        div = $(this);
+
+        var title = div.clone().children().remove().end().html();
+        var children = div.clone().children();
+
+        div.html("");
+        div.append("<div class='title'>" + title + "</div>");
+        div.append(children);
+
+        title = div.children('.title');
+        title.append('<span class="icon-info">');
+
+        info = div.children('div').last();
+        info.addClass("hide");
+        info.addClass("hover-info-block");
+
+        div.on('mouseenter', function(event) {
+            if(!isTouchSupported())
+                hoverInfoShow(div);
+        });
+        div.on('mouseleave', function(event) {
+            hoverInfoHide(div);
+        });
+        title.on('click', function(event) {
+            hoverInfoTrigger(div);
+        });
+    });
+}
+
+function hoverInfoSetPositions() {
+    $('.hover-info').each(function() {
+        hoverInfoSetPosition($(this));
+    });
+}
+
+function hoverInfoSetPosition(div) {
+    const min_width = 200;
+    const perc_from = 400;
+
+    var width = 0;
+    if(div.closest('section').width() > perc_from) {
+        width = div.closest('section').width() * 0.5;
+    }
+    else if(div.closest('section').width() < min_width){
+        width = min_width;
+    }
+    else {
+        var fact = 1 - ((div.closest('section').width() - min_width) / ((perc_from - min_width)*2));
+        width = div.closest('section').width() * fact;
+    }
+
+    var left = "auto";
+    var right = "auto";
+    if(($(window).width() - div.offset().left)
+            > (div.offset().left + div.outerWidth(true))) {
+        left = div.offset().left;
+        margin = "0 1em 0 0";
+    }
+    else {
+        right = $(window).width() - div.offset().left - div.outerWidth(true);
+        margin = "0 0 0 1em";
+    }
+
+    var parent = div.closest('section');
+
+    info.css({
+        "top": div.offset().top + div.outerHeight(true),
+        "left": left,
+        "right": right,
+        "margin": margin,
+        "max-width": width
+    });
+}
+
+function hoverInfoShow(div) {
+    info = div.children('div.hover-info-block');
+    info.removeClass("hide");
+
+    hoverInfoSetPosition(div);
+}
+
+function hoverInfoHide(div) {
+    info = div.children('div.hover-info-block');
+    info.addClass("hide");
+}
+
+function hoverInfoTrigger(div) {
+    info = div.children('div.hover-info-block');
+    if(info.is('.hide')) {
+        hoverInfoShow(div);
+    }
+    else {
+        hoverInfoHide(div);
+    }
+}
+
+// --------------------------------------------------------------------------------------
 // Stop Videos
 // --------------------------------------------------------------------------------------
 
@@ -1450,6 +1553,7 @@ function selectTab(element) {
 function stopVideos() {
     // stop all HTML5 videos
     $('video').each(function() {this.pause()});
+    $('audio').each(function() {this.pause()});
 
     // reload sources for every lecture2go video
     // set source from hsrc (hidden source, set below)
@@ -1493,6 +1597,7 @@ $(window).resize(function() {
         $('#sideMenu').css('right', "-"+($('#sideMenu').width()+10)+"px");
     }, 250);
     updateNavBarWidth();
+    hoverInfoSetPositions();
 });
 
 // --------------------------------------------------------------------------------------
