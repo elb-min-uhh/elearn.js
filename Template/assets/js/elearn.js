@@ -339,9 +339,6 @@ function initiateVideoPlayers() {
 
         addVideoPlayerListener(div);
     });
-    $(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange', function() {
-        checkVideoFullscreen();
-    });
     registerAfterShow("resizeVideos", resizeAllVideoPlayers);
     resizeAllVideoPlayers();
 }
@@ -436,7 +433,7 @@ function addVideoPlayerListener(div) {
                 || $(event.target).is('.mobile-overlay .playpause')) {
                 return true;
             }
-            
+
             event.preventDefault();
             event.stopPropagation();
 
@@ -471,6 +468,17 @@ function addVideoPlayerListener(div) {
     });
     div.find('video').on('pause', function(event) {
         videoUpdatePlayPauseButton(div);
+    });
+
+
+    $(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange', function() {
+        checkVideoFullscreen();
+    });
+    div.on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(event) {
+        checkVideoFullscreen();
+    });
+    div.find('video').on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(event) {
+        checkVideoFullscreen();
     });
 }
 
@@ -637,8 +645,24 @@ function videoToggleFullscreen(div) {
             elem.mozRequestFullScreen();
         } else if (elem.webkitRequestFullscreen) {
             elem.webkitRequestFullscreen();
+        } else if (elem.webkitEnterFullscreen) {
+            elem.webkitEnterFullscreen();
         } else {
-            // no fullscreen (?)
+            elem = div.find('video')[0];
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.webkitEnterFullscreen) {
+                elem.webkitEnterFullscreen();
+            } else {
+                alert('No Fullscreen Support.')
+                return;
+            }
             return;
         }
         div.addClass("full");
