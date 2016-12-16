@@ -65,6 +65,20 @@ function init() {
     // Keine Tastaturnavigation
     keyAllowed = false;
 
+    // Add qtypes if none defined
+    $('div.question').each(function() {
+        var div = $(this);
+        if(div.attr('qtype') == undefined) {
+            if(div.find('input[type="text"]').length > 0) {
+                div.attr('qtype', quizTypes.SHORT_TEXT);
+            }
+            else if(div.find('input[type="checkbox"]').length > 0
+                    || div.find('input[type="radio"]').length > 0) {
+                div.attr('qtype', quizTypes.CHOICE);
+            }
+        }
+    });
+
     // Buttons hinzufügen
     $('div.question').after('<button class="quizButton">Lösen</button><button class="quizButton weiter">Zurücksetzen</button>');
 
@@ -918,8 +932,10 @@ function initiateChoice() {
 
         ans.find('input').each(function(ii,ee) {
             var input = $(ee);
-            input.val(input.attr('val'));
-            input.attr('val', "");
+            if(input.attr('val') != undefined) {
+                input.val(input.attr('val'));
+                input.attr('val', "");
+            }
         });
     });
 }
