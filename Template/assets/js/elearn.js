@@ -444,19 +444,9 @@ function addVideoPlayerListener(div) {
             }
             // no touch
             else {
-                videoTogglePlay(div);
+                videoOnClick(div);
             }
         }
-    });
-    div.on('dblclick', function(event) {
-        if($(event.target).is('.controls') || $(event.target).is('.controls *')
-            || $(event.target).is('.play-overlay') || $(event.target).is('.play-overlay *')
-            || $(event.target).is('.mobile-overlay .playpause')) {
-            return true;
-        }
-        event.preventDefault();
-        event.stopPropagation();
-        videoToggleFullscreen(div);
     });
     div.find('video').on('ended', function(event) {
         videoHover(div);
@@ -536,6 +526,31 @@ function checkVideoFullscreen() {
 };
 
 // BUTTONS --------------------------------------------------
+
+var videoFullscreenPending = {};
+
+function videoOnClick(div) {
+    const dblclick_time = 250;
+    var idx = $('.elearnjs-video').index(div);
+
+    if(videoFullscreenPending[idx] == undefined
+        || videoFullscreenPending[idx] === false) {
+        videoFullscreenPending[idx] = true;
+        // reset double click wait
+        setTimeout(function() {
+            // if still pending
+            if(videoFullscreenPending[idx] === true) {
+                videoTogglePlay(div);
+                videoFullscreenPending[idx] = false;
+            }
+        }, dblclick_time);
+    }
+    else if(videoFullscreenPending[idx] === true){
+        // reset
+        videoFullscreenPending[idx] = false;
+        videoToggleFullscreen(div);
+    }
+}
 
 function videoTogglePlay(div) {
     var vid = div.find('video')[0];
@@ -753,7 +768,7 @@ function updateVideoTime(div) {
 
     // time fields
     time_field.html(timeToString(time));
-    if(video_timestyle === video_timetypes.TIMELEFT) timeleft_field.html("- " + timeToString(timeleft));
+    if(video_timestyle === video_timetypes.TIMELEFT) timeleft_field.html("-" + timeToString(timeleft));
     else if(video_timestyle === video_timetypes.DURATION) timeleft_field.html(timeToString(vid.duration));
 
 
