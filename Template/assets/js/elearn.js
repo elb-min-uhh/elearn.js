@@ -630,11 +630,8 @@ function createContentOverview() {
             level--;
         }
 
-        console.log(text);
-
         $('#content-overview').html(text);
         $('#content-overview').find('li').each(function(i,e) {
-            console.log(i);
             if($(this).children('ul').length != 0) {
                 $(this).addClass("wide");
             }
@@ -1481,7 +1478,6 @@ function initiateHoverInfos() {
         info.addClass("hover-info-block");
 
         div.on('mouseenter', function(event) {
-            console.log(div);
             if(!isTouchSupported())
                 hoverInfoShow(div);
         });
