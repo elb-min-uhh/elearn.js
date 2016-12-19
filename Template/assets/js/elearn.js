@@ -34,6 +34,8 @@ var progressbarEnabled = true;
 // Funktionen die aufgerufen werden, wenn eine neue section angezeigt wird
 // diese sind registrierbar mit registerAfterShow(KEY, FNC)
 var afterShow = {};
+// für tabbed boxes / multiboxes
+var afterTabChange = {};
 
 // Nur damit Scriptaufrufe übersichtlicher sind.
 var eLearnJS = this;
@@ -385,6 +387,14 @@ function registerAfterShow(key, fnc) {
 }
 
 /**
+* Registriert eine Funktion, die ausgeführt wird, nachdem eine neue Section
+* angezeigt wurde.
+*/
+function registerAfterTabChange(key, fnc) {
+    afterTabChange[key] = fnc;
+}
+
+/**
 * Aktualisiert den Fortschritt der progressbar
 */
 function calcProgress(i) {
@@ -412,7 +422,7 @@ function toggleAllSections() {
         // Ausführen registrierten funktionen
         $.each(afterShow, function(key, fnc) {
             fnc();
-        })
+        });
     }
 };
 
@@ -1426,6 +1436,8 @@ function initiateTabbedBoxes() {
         div.find('.tab').hide();
         div.find('.tab').first().show();
         tabs.find('.tab-select').first().addClass('act');
+
+        registerAfterTabChange("slider-resize", resizeAllSliders);
     });
 }
 
@@ -1438,6 +1450,11 @@ function selectTab(element) {
     div.find('.tab').filter('[name="' + e.html() + '"]').show();
     e.parent().find('.tab-select').removeClass("act");
     e.addClass("act");
+
+    // Ausführen registrierten funktionen
+    $.each(afterTabChange, function(key, fnc) {
+        fnc();
+    });
 }
 
 
@@ -1447,7 +1464,7 @@ function selectTab(element) {
 
 function initiateHoverInfos() {
     $('.hover-info').each(function() {
-        div = $(this);
+        var div = $(this);
 
         var title = div.clone().children().remove().end().html();
         var children = div.clone().children();
@@ -1459,11 +1476,12 @@ function initiateHoverInfos() {
         title = div.children('.title');
         title.append('<span class="icon-info">');
 
-        info = div.children('div').last();
+        var info = div.children('div').last();
         info.addClass("hide");
         info.addClass("hover-info-block");
 
         div.on('mouseenter', function(event) {
+            console.log(div);
             if(!isTouchSupported())
                 hoverInfoShow(div);
         });
@@ -1512,6 +1530,8 @@ function hoverInfoSetPosition(div) {
 
     var parent = div.closest('section');
 
+    var info = div.children('div.hover-info-block');
+
     info.css({
         "top": div.offset().top + div.outerHeight(true),
         "left": left,
@@ -1522,19 +1542,19 @@ function hoverInfoSetPosition(div) {
 }
 
 function hoverInfoShow(div) {
-    info = div.children('div.hover-info-block');
+    var info = div.children('div.hover-info-block');
     info.removeClass("hide");
 
     hoverInfoSetPosition(div);
 }
 
 function hoverInfoHide(div) {
-    info = div.children('div.hover-info-block');
+    var info = div.children('div.hover-info-block');
     info.addClass("hide");
 }
 
 function hoverInfoTrigger(div) {
-    info = div.children('div.hover-info-block');
+    var info = div.children('div.hover-info-block');
     if(info.is('.hide')) {
         hoverInfoShow(div);
     }
