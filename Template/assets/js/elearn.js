@@ -34,9 +34,19 @@ var progressbarEnabled = true;
 // Funktionen die aufgerufen werden, wenn eine neue section angezeigt wird
 // diese sind registrierbar mit registerAfterShow(KEY, FNC)
 var afterShow = {};
+var afterPageInteraction = {};
+// für tabbed boxes / multiboxes
+var afterTabChange = {};
 
 // Nur damit Scriptaufrufe übersichtlicher sind.
 var eLearnJS = this;
+
+/**
+* Going back in History without reloading the page.
+*/
+window.onpopstate = function(e){
+    window.location.reload();
+};
 
 // --------------------------------------------------------------------------------------
 // Initialisierungsfunktion
@@ -53,6 +63,9 @@ $(document).ready(function() {
     initiateTabbedBoxes();
     initiateHoverInfos();
     updateNavBarWidth();
+
+    registerAfterShow("slider-resize", resizeAllSliders);
+    registerAfterPageInteraction("history-push", pushHistoryState);
 
     checkParameters();
 
@@ -268,10 +281,10 @@ function setBackButtonText(text) {
 function backButtonPressed() {
     if(backpagetype === "name") {
         var idx = $('section').index($('section[name="' + backpage + '"]').get(0));
-        showSection(idx);
+        overviewShowSection(idx);
     }
     else if(backpagetype === "index") {
-        showSection(backpage);
+        overviewShowSection(backpage);
     }
     else if(backpagetype === "link") {
         window.open(backpage, "_self")
@@ -860,7 +873,13 @@ function resizeVideoPlayer(div) {
 * Funktioniert nur, wenn nicht alle Sections angezeigt werden.
 */
 function showPrev() {
-    showSection(visSection-1);
+    var ret = showSection(visSection-1);
+    // Ausführen registrierten funktionen
+    if(ret) {
+        $.each(afterPageInteraction, function(key, fnc) {
+            fnc();
+        });
+    }
 };
 
 /**
@@ -872,9 +891,26 @@ function showNext() {
     // nur wenn entweder nicht blockiert bei unbeantworteter Frage
     // oder alle (sichtbaren) Fragen beantwortet
     if(!checkBlockProgress()) {
-        showSection(visSection+1);
+        var ret = showSection(visSection+1);
+        // Ausführen registrierten funktionen
+        if(ret) {
+            $.each(afterPageInteraction, function(key, fnc) {
+                fnc();
+            });
+        }
     }
 };
+
+function overviewShowSection(i) {
+    var ret = showSection(i);
+
+    // Ausführen registrierten funktionen
+    if(ret) {
+        $.each(afterPageInteraction, function(key, fnc) {
+            fnc();
+        });
+    }
+}
 
 /**
 * Zeigt eine bestimmte Section (nach Index)
@@ -903,15 +939,14 @@ function showSection(i) {
         $('#nav-title').text($($('section')[i]).attr('name'));
         allShown = false;
         calcProgress(i);
-
-        resizeAllSliders();
     }
     // scroll to that section
     else if(allShown) {
         var topPos = $($('section')[i]).position().top - $('#navigation').height();
         $(document).scrollTop(topPos);
-
-        resizeAllSliders();
+    }
+    else {
+        return false;
     }
 
     // section was updated
@@ -928,7 +963,9 @@ function showSection(i) {
     // Ausführen registrierten funktionen
     $.each(afterShow, function(key, fnc) {
         fnc();
-    })
+    });
+
+    return true;
 };
 
 /**
@@ -937,6 +974,30 @@ function showSection(i) {
 */
 function registerAfterShow(key, fnc) {
     afterShow[key] = fnc;
+}
+
+/**
+* Registriert eine Funktion, die ausgeführt wird, nachdem eine neue Section
+* angezeigt wurde.
+*/
+function registerAfterPageInteraction(key, fnc) {
+    afterPageInteraction[key] = fnc;
+}
+
+/**
+* Registriert eine Funktion, die ausgeführt wird, nachdem eine neue Section
+* angezeigt wurde.
+*/
+function registerAfterTabChange(key, fnc) {
+    afterTabChange[key] = fnc;
+}
+
+function pushHistoryState() {
+    try {
+        window.history.pushState({p: visSection}, "State", "?p="+visSection);
+    } catch (e) {
+        window.location = "?p="+visSection;
+    }
 }
 
 /**
@@ -967,7 +1028,7 @@ function toggleAllSections() {
         // Ausführen registrierten funktionen
         $.each(afterShow, function(key, fnc) {
             fnc();
-        })
+        });
     }
 };
 
@@ -1156,7 +1217,7 @@ function createContentOverview() {
                 }
             }
 
-            text += "<li onclick='showSection("+i+"); event.stopPropagation();'>";
+            text += "<li onclick='overviewShowSection("+i+"); event.stopPropagation();'>";
 
             text += "<div class='sectionRead'><div class='img'></div></div>";
             text += "<span class='title'>" + sec.attr('name') + "</span>";
@@ -1222,7 +1283,7 @@ function createSectionOverview() {
         if(sec.is('.sub')) cls=" sub";
         if(sec.is('.subsub')) cls=" subsub";
 
-        text += "<label><div class='section-overview-element btn"+cls+"' onclick='showSection("+i+");'>"
+        text += "<label><div class='section-overview-element btn"+cls+"' onclick='overviewShowSection("+i+");'>"
                     + sec.attr('name')
                 +"</div></label>";
     }
@@ -1637,15 +1698,21 @@ function closeZoom(button) {
     lb.find('img').remove();
 }
 
+var resizeTimer = null;
+
 /**
 * Passt alle Slider und auch das Zoom Fenster an die Fenstergröße des Browsers
 * an.
 */
 function resizeAllSliders() {
-    $('ul.img-gallery').css("transition-duration", "0s");
-    resizeSliders();
-    resizeNavigationSliders();
-    resizeZoomContainer();
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+        $('ul.img-gallery').css("transition-duration", "0s");
+        resizeSliders();
+        resizeNavigationSliders();
+        resizeZoomContainer();
+    }, 150);
+
 }
 
 /**
@@ -1978,6 +2045,8 @@ function initiateTabbedBoxes() {
         div.find('.tab').hide();
         div.find('.tab').first().show();
         tabs.find('.tab-select').first().addClass('act');
+
+        registerAfterTabChange("slider-resize", resizeAllSliders);
     });
 }
 
@@ -1990,6 +2059,11 @@ function selectTab(element) {
     div.find('.tab').filter('[name="' + e.html() + '"]').show();
     e.parent().find('.tab-select').removeClass("act");
     e.addClass("act");
+
+    // Ausführen registrierten funktionen
+    $.each(afterTabChange, function(key, fnc) {
+        fnc();
+    });
 }
 
 
@@ -1999,7 +2073,7 @@ function selectTab(element) {
 
 function initiateHoverInfos() {
     $('.hover-info').each(function() {
-        div = $(this);
+        var div = $(this);
 
         var title = div.clone().children().remove().end().html();
         var children = div.clone().children();
@@ -2011,7 +2085,7 @@ function initiateHoverInfos() {
         title = div.children('.title');
         title.append('<span class="icon-info">');
 
-        info = div.children('div').last();
+        var info = div.children('div').last();
         info.addClass("hide");
         info.addClass("hover-info-block");
 
@@ -2064,6 +2138,8 @@ function hoverInfoSetPosition(div) {
 
     var parent = div.closest('section');
 
+    var info = div.children('div.hover-info-block');
+
     info.css({
         "top": div.offset().top + div.outerHeight(true),
         "left": left,
@@ -2074,19 +2150,19 @@ function hoverInfoSetPosition(div) {
 }
 
 function hoverInfoShow(div) {
-    info = div.children('div.hover-info-block');
+    var info = div.children('div.hover-info-block');
     info.removeClass("hide");
 
     hoverInfoSetPosition(div);
 }
 
 function hoverInfoHide(div) {
-    info = div.children('div.hover-info-block');
+    var info = div.children('div.hover-info-block');
     info.addClass("hide");
 }
 
 function hoverInfoTrigger(div) {
-    info = div.children('div.hover-info-block');
+    var info = div.children('div.hover-info-block');
     if(info.is('.hide')) {
         hoverInfoShow(div);
     }

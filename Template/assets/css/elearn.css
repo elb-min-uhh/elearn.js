@@ -870,14 +870,16 @@ a:active {
 }
 
 .hover-info .title {
-    background: #dcdcdc;
+    background: #888;
+    color: #fff;
     padding: 0 3px;
     cursor: pointer;
 }
 
 .hover-info .hover-info-block {
     position: absolute;
-    background: #dcdcdc;
+    background: #888;
+    color: #fff;
     padding: 5px;
 }
 
