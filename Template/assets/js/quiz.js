@@ -1087,9 +1087,9 @@ function addDragAndDropToOrderObjects() {
 function addDragAndDropToOrderDestinations(root) {
     root.find('.object').after(
         "<div class='object destination'></div>");
-
     root.find('.object').first().before(
         "<div class='object destination'></div>");
+
     root.find('.destination').on("dragover", function(event) {
         allowObjectDrop(event.originalEvent);
     });
@@ -1169,6 +1169,12 @@ function dragObject(e) {
                 $(target).closest(".answers").find(".destination").addClass("vis");
                 $(target).prev().removeClass("vis");
                 $(target).next().removeClass("vis");
+
+                // change height of destinations
+                $(target).closest('.answers').find('.object.destination').css({
+                    "min-height" : $(target).closest('.answers').find('.object').not('.destination').first().height() + "px",
+                    "min-width": "5px"
+                });
             }, 0);
         }
         else {
