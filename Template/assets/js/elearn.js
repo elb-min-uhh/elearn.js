@@ -45,7 +45,14 @@ var eLearnJS = this;
 * Going back in History without reloading the page.
 */
 window.onpopstate = function(e){
-    window.location.reload();
+    e.stopPropagation();
+    e.preventDefault();
+    if(e.state == undefined || e.state.p == null || e.state.p == undefined) {
+        setTimeout(function() {showSection(parseInt(0));}, 100);
+    }
+    else {
+        setTimeout(function() {showSection(parseInt(e.state.p));}, 100);
+    }
 };
 
 // --------------------------------------------------------------------------------------
@@ -839,11 +846,11 @@ function resizeVideoPlayer(div) {
     var time_field = div.find('.playtime');
     var timeleft_field = div.find('.timeleft');
 
-    if(time_field.width() > parseInt(time_field.css("min-width").replace("px", ""))) {
+    if(time_field.width() > parseFloat(time_field.css("min-width").replace("px", ""))) {
         var min_width = time_field.width() + 10;
         time_field.css("min-width", min_width + "px");
     }
-    if(timeleft_field.width() > parseInt(timeleft_field.css("min-width").replace("px", ""))) {
+    if(timeleft_field.width() > parseFloat(timeleft_field.css("min-width").replace("px", ""))) {
         var min_width = timeleft_field.width() + 10;
         timeleft_field.css("min-width", min_width + "px");
     }
@@ -949,6 +956,7 @@ function showSection(i) {
         return false;
     }
 
+
     // section was updated
     if(i >= 0 && i < $('section').length) {
         visSection = i;
@@ -993,10 +1001,18 @@ function registerAfterTabChange(key, fnc) {
 }
 
 function pushHistoryState() {
-    try {
-        window.history.pushState({p: visSection}, "State", "?p="+visSection);
-    } catch (e) {
-        window.location = "?p="+visSection;
+    if(!allShown) {
+        try {
+            if(window.history.state == undefined
+                || (window.history.state.p != undefined
+                    && window.history.state.p != null
+                    && window.history.state.p != visSection)) {
+                window.history.pushState({p: visSection}, "State", "?p="+visSection);
+            }
+        } catch (e) {
+
+            //window.location = "?p="+visSection;
+        }
     }
 }
 
@@ -2183,18 +2199,7 @@ function stopVideos() {
     $('video').each(function() {this.pause()});
     $('audio').each(function() {this.pause()});
 
-    // reload sources for every lecture2go video
-    // set source from hsrc (hidden source, set below)
-    $('.strobemediaplayback-video-player:visible').each(function() {
-        if($(this).attr("hsrc") != undefined
-            && $(this).attr("hsrc") != null
-            && $(this).attr("hsrc").length > 0)
-        {
-            this.src = $(this).attr("hsrc");
-            $(this).attr("hsrc", "");
-        }
-    });
-
+    /*
     // set hsrc from src and set src to "" so the video stops
     // cannot be reset directly because it only loads if visible.
     $('.strobemediaplayback-video-player').not(':visible').each(function() {
@@ -2208,6 +2213,19 @@ function stopVideos() {
             this.src = "";
         }
     });
+
+    // reload sources for every lecture2go video
+    // set source from hsrc (hidden source, set below)
+    $('.strobemediaplayback-video-player:visible').each(function() {
+        if($(this).attr("hsrc") != undefined
+            && $(this).attr("hsrc") != null
+            && $(this).attr("hsrc").length > 0)
+        {
+            this.src = $(this).attr("hsrc");
+            $(this).attr("hsrc", "");
+        }
+    });
+    */
 }
 
 // --------------------------------------------------------------------------------------
