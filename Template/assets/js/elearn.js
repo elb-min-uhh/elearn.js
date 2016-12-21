@@ -851,11 +851,11 @@ function resizeVideoPlayer(div) {
     var time_field = div.find('.playtime');
     var timeleft_field = div.find('.timeleft');
 
-    if(time_field.width() > parseFloat(time_field.css("min-width").replace("px", ""))) {
+    if(time_field.width() > parseFloat(time_field.css("min-width").replace("px", ""))+1) {
         var min_width = time_field.width() + 10;
         time_field.css("min-width", min_width + "px");
     }
-    if(timeleft_field.width() > parseFloat(timeleft_field.css("min-width").replace("px", ""))) {
+    if(timeleft_field.width() > parseFloat(timeleft_field.css("min-width").replace("px", ""))+1) {
         var min_width = timeleft_field.width() + 10;
         timeleft_field.css("min-width", min_width + "px");
     }
@@ -1743,13 +1743,13 @@ function resizeSliders() {
     $('.slider:visible').each(function() {
         var slider = $(this);
         var ul = slider.children('ul.img-gallery');
-        ul.find('img').css('max-height', 'auto');
+        ul.find('img').css({'max-height': ''});
         var slide = visibleImage[$('.img-gallery').index(ul)];
         var heights = 0;
         var testedImages = 0;
         slider.children('ul.img-gallery').children('li').each(function(i, e) {
             var li = $(this);
-            li.css("width", slider.width()+1 + "px");
+            li.css("width", slider.width() + "px");
             getImageSize(li.children("img"), function(width, height){
                 if(li.children('p').length > 0) {
                     li.children('p').height();
@@ -2423,7 +2423,7 @@ function setSwipeType() {
     }
     else if(!allShown
         && !swipeTarget.is("code") // Kein Code Element
-        && (swipeTarget.prop("scrollWidth") == swipeTarget.innerWidth()
+        && (parseInt(swipeTarget.prop("scrollWidth")) == parseInt(swipeTarget.innerWidth())
             || swipeTarget.css("overflow-x") == 'hidden')) // Element nicht horizontal scrollbar
     {
         swipeType = "section";
