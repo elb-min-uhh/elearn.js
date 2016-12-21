@@ -61,6 +61,7 @@ window.onpopstate = function(e){
 
 $(document).ready(function() {
     initiateELearnJS();
+    initiateTouchDetection();
     initiateInfo();
     initiateSections();
     initiateGalleries();
@@ -365,6 +366,8 @@ function initiateVideoPlayers() {
 }
 
 function addVideoPlayerListener(div) {
+    addTouchMouseChangeListener("video-mobile", resizeAllVideoPlayers);
+
     div.on('touchstart touchend touchcancel', function(event) {
         videoRefreshHover(div, event);
     });
@@ -391,7 +394,7 @@ function addVideoPlayerListener(div) {
     });
 
     // overlay
-    div.find('.play-overlay').on('mouseup touchend', function(event) {
+    div.find('.play-overlay').on('click', function(event) {
         event.preventDefault();
         event.stopPropagation();
         touchCancel(event);
@@ -845,7 +848,12 @@ function resizeAllVideoPlayers() {
 
 
 function resizeVideoPlayer(div) {
-    if(isTouchSupported()) div.addClass("mobile");
+    if(isTouchSupported()) {
+        div.addClass("mobile");
+    }
+    else {
+        div.removeClass("mobile");
+    }
 
     // check text field sizes
     var time_field = div.find('.playtime');
@@ -2340,8 +2348,38 @@ function getOuterWidth(e, outer) {
 var maxDiff = 0;
 var clickedAlready = false;
 
+var touchMouseFunctions = {};
+
 function isTouchSupported() {
     return touchSupported;
+}
+
+
+function initiateTouchDetection() {
+    $(document).bind('touchstart', function(event) {
+        if(!touchSupported) {
+            touchSupported = true;
+            touchSupportedChanged();
+        }
+    });
+    /*
+    $(document).bind('mousemove', function(event) {
+        if(touchSupported) {
+            touchSupported = false;
+            touchSupportedChanged();
+        }
+    });
+    */
+}
+
+function touchSupportedChanged() {
+    $.each(touchMouseFunctions, function(key, fnc) {
+        fnc();
+    });
+}
+
+function addTouchMouseChangeListener(key, fnc) {
+    touchMouseFunctions[key] = fnc;
 }
 
 /**
@@ -2349,7 +2387,6 @@ function isTouchSupported() {
 */
 function addTouchToSections() {
     $(document).bind('touchstart', function() {
-        touchSupported = true;
         touchStart(event, this);
     });
     $(document).bind('touchend', function() {
