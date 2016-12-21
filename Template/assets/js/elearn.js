@@ -2423,7 +2423,7 @@ function setSwipeType() {
     }
     else if(!allShown
         && !swipeTarget.is("code") // Kein Code Element
-        && (parseInt(swipeTarget.prop("scrollWidth")) == parseInt(swipeTarget.innerWidth())
+        && (parseInt(swipeTarget.prop("scrollWidth")) <= Math.ceil(swipeTarget.innerWidth())
             || swipeTarget.css("overflow-x") == 'hidden')) // Element nicht horizontal scrollbar
     {
         swipeType = "section";
