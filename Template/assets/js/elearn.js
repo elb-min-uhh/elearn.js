@@ -428,10 +428,12 @@ function addVideoPlayerListener(div) {
     });
     $(document).on('mouseup touchend', function(event) {
         if((event.type === "touchend" || event.button == 0) && videoMouseDown) {
-            event.preventDefault();
-            event.stopPropagation();
-            setVideoMouseDown(div, false);
-            if(event.type === "touchend") div.find('.progress-hover-time').remove();
+            if(videoMouseDownTarget != null) {
+                event.preventDefault();
+                event.stopPropagation();
+                setVideoMouseDown(videoMouseDownTarget, false);
+                if(event.type === "touchend") div.find('.progress-hover-time').remove();
+            }
             return false;
         }
         else {
@@ -719,17 +721,20 @@ function videoToggleFullscreen(div) {
 
 // PROGRESSBAR ----------------------------------------------
 
+var videoMouseDownTarget = null;
 var videoMouseDown = false;
 var videoPausedBefore = false;
 
 function setVideoMouseDown(div, b) {
     var vid = div.find('video')[0];
     if(b) {
+        videoMouseDownTarget = div;
         videoPausedBefore = vid.paused || vid.ended;
         vid.pause();
     }
     else {
         if(!videoPausedBefore) {
+            videoMouseDownTarget = null;
             vid.play();
         }
     }
