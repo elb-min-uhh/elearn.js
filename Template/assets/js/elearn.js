@@ -2348,28 +2348,33 @@ function getOuterWidth(e, outer) {
 var maxDiff = 0;
 var clickedAlready = false;
 
+var touchMouseChangeTimer = null;
+var lastTouch = undefined;
 var touchMouseFunctions = {};
 
 function isTouchSupported() {
     return touchSupported;
 }
 
-
 function initiateTouchDetection() {
     $(document).bind('touchstart', function(event) {
+        lastTouch = event.timeStamp;
+        clearTimeout(touchMouseChangeTimer);
         if(!touchSupported) {
             touchSupported = true;
             touchSupportedChanged();
         }
     });
-    /*
     $(document).bind('mousemove', function(event) {
-        if(touchSupported) {
-            touchSupported = false;
-            touchSupportedChanged();
-        }
+        // asynchronous for touch events fired afterwards
+        touchMouseChangeTimer = setTimeout(function() {
+            // more than 1s ago
+            if(touchSupported && lastTouch < event.timeStamp - 1000) {
+                touchSupported = false;
+                touchSupportedChanged();
+            }
+        }, 100);
     });
-    */
 }
 
 function touchSupportedChanged() {
