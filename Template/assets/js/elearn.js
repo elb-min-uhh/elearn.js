@@ -69,7 +69,7 @@ $(document).ready(function() {
     initiateHideables();
     initiateTabbedBoxes();
     initiateHoverInfos();
-    //initiateVideoPlayers();
+    initiateVideoPlayers();
     updateNavBarWidth();
 
     registerAfterShow("slider-resize", resizeAllSliders);
