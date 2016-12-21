@@ -69,6 +69,7 @@ $(document).ready(function() {
     initiateHideables();
     initiateTabbedBoxes();
     initiateHoverInfos();
+    initiateVideoPlayers();
     updateNavBarWidth();
 
     registerAfterShow("slider-resize", resizeAllSliders);
@@ -82,7 +83,6 @@ $(document).ready(function() {
         "text": window.location.href
     });
     $('#qr_overlay').click(function() {$('#qr_overlay').hide();});
-    initiateVideoPlayers();
 });
 
 /**

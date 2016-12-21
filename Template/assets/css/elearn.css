@@ -53,7 +53,7 @@ body {
     margin:auto;
 }
 
-iframe {
+iframe, video {
     max-width: 100%;
 }
 

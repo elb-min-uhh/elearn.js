@@ -17,6 +17,13 @@
 }
 
 @font-face {
+    font-family: 'eLearn-Video';
+    font-style: normal;
+    font-weight: normal;
+    src: url('../font/eLearn-Video.woff') format('woff');
+}
+
+@font-face {
     font-family: 'Open Sans';
     font-style: normal;
     font-weight: 400;
@@ -46,7 +53,7 @@ body {
     margin:auto;
 }
 
-iframe {
+iframe, video {
     max-width: 100%;
 }
 
@@ -243,7 +250,7 @@ h5 {
     font-weight:600;
 }
 
-img, video, audio{
+img, .elearnjs-video, audio{
     max-width:100%;
     margin:3em 0px 3em 0px;
 }
@@ -312,6 +319,308 @@ a:active {
     text-decoration: underline;
 }
 
+
+/* --------------------------------------- VIDEOS ------------------------------------- */
+
+/* Apple player hide */
+
+.elearnjs-video video::-webkit-media-controls-panel {
+  display: none!important;
+  -webkit-appearance: none;
+}
+
+/* Old shadow dom for play button */
+
+.elearnjs-video video::--webkit-media-controls-play-button {
+  display: none!important;
+  -webkit-appearance: none;
+}
+
+/* New shadow dom for play button */
+
+.elearnjs-video video::-webkit-media-controls-start-playback-button {
+  display: none!important;
+  -webkit-appearance: none;
+}
+
+.elearnjs-video {
+    position: relative;
+    cursor: none;
+    line-height: 0;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.elearnjs-video.full {
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    width:100%;
+    height:100%;
+    margin:0;
+    padding: 0;
+    background: #000;
+}
+.elearnjs-video.full video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    background: #000;
+}
+
+.elearnjs-video > * {
+    max-width: 100%;
+}
+
+.elearnjs-video.hovered {
+    cursor: pointer;
+}
+
+.elearnjs-video .controls {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 8px;
+    transition: opacity 0.2s ease-out;
+
+    background: #222222; /* For browsers that do not support gradients */
+    background: rgba(0,0,0, 0.7); /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(transparent, black); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(transparent, black); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(transparent, black); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(transparent, black); /* Standard syntax */
+}
+
+.elearnjs-video.hovered .controls {
+    pointer-events: auto;
+    opacity: 1;
+}
+
+.elearnjs-video .controls > * {
+    display: inline-block;
+    height: 24px;
+    line-height: 24px;
+}
+
+/* PROGRESSBAR */
+
+.elearnjs-video .controls .video-progress-con {
+    position: relative;
+    vertical-align: bottom;
+    margin: 5px 5px;
+    max-width:100%;
+}
+
+
+.elearnjs-video .controls .video-progress {
+    position: absolute;
+    cursor: pointer;
+    top: 10px; /* (24Height - 4Height) / 2 */
+    width: 100%;
+    height: 4px;
+    transition: 0.1s ease-out;
+    background: #888;
+    background: rgba(200, 200, 200, 0.5);
+}
+
+.elearnjs-video .controls .video-progress-con:hover .video-progress {
+    height: 8px;
+    top: 8px; /* (24Height - 8Height) / 2 */
+}
+
+
+.elearnjs-video .controls .video-progress-con .video-progress-bar,
+.elearnjs-video .controls .video-progress-con .video-progress-loaded,
+.elearnjs-video .controls .video-progress-con .video-progress-hover {
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+}
+
+.elearnjs-video .controls .video-progress-con .video-progress-bar
+{
+    background: #e2001a;
+    background: rgba(226, 0, 26, 0.95);
+    transition: 0.2s ease-out;
+}
+
+.elearnjs-video .controls .video-progress-con .video-progress-loaded {
+    background: #b4b4b4;
+    background: rgba(200, 200, 200, 0.3);
+}
+
+.elearnjs-video .controls .video-progress-con .video-progress-hover {
+    background: #888;
+    background: rgba(200, 200, 200, 0.2);
+}
+
+
+.elearnjs-video .progress-hover-time {
+    position: absolute;
+    bottom: 40px;
+    font-size: 12px;
+    line-height: 12px;
+    padding: 3px 5px;
+    background: #222222;
+    color: white;
+    border-radius: 3px;
+}
+
+
+/* TEXT AND ICONS IN CONTROLS */
+
+.elearnjs-video .controls .icon, .elearnjs-video .controls .text {
+    margin: 5px;
+    color: white;
+    line-height: 24px;
+}
+
+.elearnjs-video .icon {
+    font-family: eLearn-video;
+    text-align: center;
+    color: white;
+    font-size: 13pt;
+    line-height: 100%;
+}
+
+.elearnjs-video .icon:before {
+    width: 100%;
+    line-height: 24px;
+}
+
+.elearnjs-video .icon:hover {
+    color: #e2001a;
+}
+
+.elearnjs-video .controls .icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    vertical-align: bottom;
+}
+
+.elearnjs-video .controls .text {
+    cursor: default;
+    text-align: center;
+}
+
+/* PLAY PAUSE */
+.elearnjs-video .controls .icon.playpause.playing:before {
+    content: '\e903';
+}
+.elearnjs-video .controls .icon.playpause.paused:before {
+    content: '\e905';
+}
+
+/* FULLSCREEN */
+.elearnjs-video .controls .icon.fullscreen:before {
+    content: '\e902';
+}
+.elearnjs-video.full .controls .icon.fullscreen:before {
+    content: '\e901';
+}
+
+/* SOUND */
+.elearnjs-video .controls .icon.volume.mute:before {
+    content: '\e906';
+}
+.elearnjs-video .controls .icon.volume.low:before {
+    content: '\e907';
+}
+.elearnjs-video .controls .icon.volume.medium:before {
+    content: '\e908';
+}
+.elearnjs-video .controls .icon.volume.high:before {
+    content: '\e909';
+}
+
+
+
+
+/* PLAY OVERLAY (before starting) + MOBILE*/
+
+.elearnjs-video .play-overlay,
+.elearnjs-video .mobile-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: none;
+    background: rgba(0,0,0,0.2);
+}
+
+.elearnjs-video .play-overlay + .controls {
+    display: none;
+}
+
+.elearnjs-video .play-overlay .play,
+.elearnjs-video .mobile-overlay .playpause {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80px;
+    height: 80px;
+    margin-top: -40px;
+    margin-left: -40px;
+}
+
+.elearnjs-video .mobile-overlay {
+    display: none;
+}
+
+.elearnjs-video.mobile .mobile-overlay {
+    display: block;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-out;
+}
+
+.elearnjs-video.mobile.hovered .mobile-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.elearnjs-video.mobile .controls .playpause {
+    display: none;
+}
+
+.elearnjs-video.mobile .mobile-overlay .icon,
+.elearnjs-video .play-overlay .play {
+    font-size: 48pt;
+    color: white;
+    line-height: 80px;
+    text-shadow: 0px 0px 15px rgba(0, 0, 0, 1);
+}
+
+.elearnjs-video.mobile .mobile-overlay .icon:hover,
+.elearnjs-video .play-overlay .play:hover {
+    font-size: 50pt;
+}
+
+.elearnjs-video .mobile-overlay .icon.playpause.playing:before {
+    content: '\e904';
+}
+.elearnjs-video .mobile-overlay .icon.playpause.paused:before,
+.elearnjs-video .play-overlay .play:before {
+    content: '\e900';
+}
 
 /* --------------------------------------- CONTENT OVERVIEW ------------------------------------- */
 
@@ -1144,7 +1453,7 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
 }
 
 .slider-zoom-area {
-    right: 0;
+    right: 5px;
     width: 40px;
     height: 40px;
 }
@@ -1348,6 +1657,11 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     .section-overview-element.active.subsub {
         padding: 5px 0 5px 162px;
     }
+
+    /* VIDEOS */
+    .elearnjs-video .controls {
+        padding: 5px;
+    }
 }
 
 @media screen and (max-width:440px) {
@@ -1433,6 +1747,19 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     }
     #btnHelp {
         margin-right: 0;
+    }
+
+    /* VIDEOS */
+    .elearnjs-video .controls {
+        padding: 3px;
+    }
+    .elearnjs-video.mobile .mobile-overlay .icon,
+    .elearnjs-video .play-overlay .play {
+        font-size: 36pt;
+    }
+    .elearnjs-video.mobile .mobile-overlay .icon:hover,
+    .elearnjs-video .play-overlay .play:hover {
+        font-size: 38pt;
     }
 }
 
