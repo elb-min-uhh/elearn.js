@@ -347,6 +347,7 @@ a:active {
     position: relative;
     cursor: none;
     line-height: 0;
+    outline: none;
 
     -webkit-touch-callout: none;
     -webkit-user-select: none;
