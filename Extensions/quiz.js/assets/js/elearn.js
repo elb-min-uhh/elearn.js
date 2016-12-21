@@ -336,7 +336,7 @@ var video_timestyle = 0;
 function initiateVideoPlayers() {
     $('video').each(function(i,e) {
         this.controls = false;
-        $(this).wrap("<div class='elearnjs-video hovered'>");
+        $(this).wrap("<div class='elearnjs-video hovered' tabindex='-1'>");
 
         var div = $(this).parent();
 
@@ -473,6 +473,13 @@ function addVideoPlayerListener(div) {
             }
         }
     });
+
+    div.bind('keypress', function(event) {
+        videoKeyPress(div, event);
+    });
+
+
+    // listener to video progress
     div.find('video').on('ended', function(event) {
         videoHover(div);
     });
@@ -485,7 +492,6 @@ function addVideoPlayerListener(div) {
     div.find('video').on('pause', function(event) {
         videoUpdatePlayPauseButton(div);
     });
-
 
     $(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange', function() {
         checkVideoFullscreen();
@@ -719,6 +725,15 @@ function videoToggleFullscreen(div) {
             document.webkitExitFullscreen();
         }
         div.removeClass("full");
+    }
+}
+
+// VIDEO KEYBOARD EVENTS ------------------------------------
+
+function videoKeyPress(div, event) {
+    if(event.which === 32) {
+        event.preventDefault();
+        videoTogglePlay(div);
     }
 }
 
