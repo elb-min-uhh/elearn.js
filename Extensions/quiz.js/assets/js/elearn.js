@@ -4,8 +4,8 @@
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 */
 
-var VERSION_NR = "0.9.6";
-var VERSION_DATE = "11/2016";
+var VERSION_NR = "0.9.7";
+var VERSION_DATE = "12/2016";
 
 // Will be set on first Touch event. See Help Functions at bottom
 var touchSupported = false;
