@@ -1350,6 +1350,7 @@ ul.img-gallery li {
     float: left;
     text-align: center;
     white-space: nowrap;
+    margin-right: 2px;
 }
 
 ul.img-gallery li>*{
