@@ -3,7 +3,7 @@
 * Created by Michael Heinecke
 * Improved by Arne Westphal
 * eLearning-office MIN, Universität Hamburg
-* v0.9.6 16/11/10 cc-by-sa
+* v0.9.7 16/12/21 cc-by-sa
 */
 
 
@@ -997,7 +997,7 @@ a:active {
 
 .touchScroll div p{
     position: relative;
-    top:15px;
+    top:11px;
     margin: 0;
     width: 50px;
     font-family: eLearn-icons;
