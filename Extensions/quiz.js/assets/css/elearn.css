@@ -851,6 +851,11 @@ a:active {
     color: #888;
     cursor: pointer;
     background-color: #eee;
+    border-right: 1px solid #dcdcdc;
+}
+
+.tabs .tab-select:last-child {
+    border-right: none;
 }
 
 .tabs .tab-select.act {
