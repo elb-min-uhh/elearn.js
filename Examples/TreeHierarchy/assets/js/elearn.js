@@ -397,13 +397,9 @@ function addVideoPlayerListener(div) {
     div.find('.play-overlay').on('click', function(event) {
         event.preventDefault();
         event.stopPropagation();
-        touchCancel(event);
-        if(event.type === "touchend"
-            || event.button == 0) {
-                videoTogglePlay(div);
-                videoHover(div);
-                div.find('.play-overlay').remove();
-        }
+        videoTogglePlay(div);
+        videoHover(div);
+        div.find('.play-overlay').remove();
     });
 
     // progressbar
@@ -2373,7 +2369,7 @@ function isTouchSupported() {
 
 function initiateTouchDetection() {
     $(document).bind('touchstart', function(event) {
-        lastTouch = event.timeStamp;
+        lastTouch = new Date().getTime();
         clearTimeout(touchMouseChangeTimer);
         if(!touchSupported) {
             touchSupported = true;
@@ -2383,12 +2379,12 @@ function initiateTouchDetection() {
     $(document).bind('mousemove', function(event) {
         // asynchronous for touch events fired afterwards
         touchMouseChangeTimer = setTimeout(function() {
-            // more than 1s ago
-            if(touchSupported && lastTouch < event.timeStamp - 1000) {
+            // more than 2s ago
+            if(touchSupported && lastTouch < new Date().getTime() - 2000) {
                 touchSupported = false;
                 touchSupportedChanged();
             }
-        }, 100);
+        }, 200);
     });
 }
 

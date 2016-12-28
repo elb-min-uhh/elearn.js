@@ -12,6 +12,10 @@ Eine umfassende Dokumentation des Projekts befindet sich unter http://www.sumo.u
 
 ### eLearn.js
 
+* __0.9.8__ (WIP):
+  * Fehlerbehebungen:
+    * Darstellungsfehler bei einzelnen Icons behoben
+    * Fehler in Touch- und Maussteuerungserkennung bei iOS behoben
 * __0.9.7__:
   * Neuerungen:
     * Einzelne Sections werden automatisch in den Browserverlauf aufgenommen

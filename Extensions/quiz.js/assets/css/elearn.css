@@ -324,24 +324,35 @@ a:active {
 
 /* Apple player hide */
 
-.elearnjs-video video::-webkit-media-controls-panel {
-  display: none!important;
-  -webkit-appearance: none;
+.elearnjs-video *::-webkit-media-controls {
+    display: none !important;
+    -webkit-appearance: none;
+}
+
+.elearnjs-video *::-webkit-media-controls-enclosure {
+    display: none !important;
+    -webkit-appearance: none;
+}
+
+.elearnjs-video *::-webkit-media-controls-panel {
+    display: none !important;
+    -webkit-appearance: none;
 }
 
 /* Old shadow dom for play button */
 
-.elearnjs-video video::--webkit-media-controls-play-button {
-  display: none!important;
-  -webkit-appearance: none;
+.elearnjs-video *::--webkit-media-controls-play-button {
+    display: none !important;
+    -webkit-appearance: none;
 }
 
 /* New shadow dom for play button */
 
-.elearnjs-video video::-webkit-media-controls-start-playback-button {
-  display: none!important;
-  -webkit-appearance: none;
+.elearnjs-video *::-webkit-media-controls-start-playback-button {
+    display: none !important;
+    -webkit-appearance: none;
 }
+
 
 .elearnjs-video {
     position: relative;
@@ -997,7 +1008,7 @@ a:active {
 
 .touchScroll div p{
     position: relative;
-    top:15px;
+    top:11px;
     margin: 0;
     width: 50px;
     font-family: eLearn-icons;
