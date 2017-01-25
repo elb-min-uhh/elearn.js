@@ -361,6 +361,7 @@ function initiateVideoPlayers() {
 
         addVideoPlayerListener(div);
     });
+    initiateVideoNotes();
     registerAfterShow("resizeVideos", resizeAllVideoPlayers);
     resizeAllVideoPlayers();
 }
@@ -892,6 +893,118 @@ function resizeVideoPlayer(div) {
                         - parseInt(div.find('.video-progress-con').css("margin-left").replace("px", ""))
                         - parseInt(div.find('.video-progress-con').css("margin-right").replace("px", ""));
     div.find('.video-progress-con').css("width", progress_width + "px");
+}
+
+// ------------------------- VIDEO NOTES ------------------------------------
+
+var videoNoteTimes = [];
+
+/**
+* Initialisiert die Time Notes
+*/
+function initiateVideoNotes() {
+    $('.video_note').addClass('backup');
+
+    // create list with sorted times for faster checking if something needs to be shown
+    $('.elearnjs-video').each(function(i,e) {
+        // TODO ADD VISUAL POINTS ON PROGRESSBAR
+        var videoNotes = $(this).next('.video_notes');
+        videoNoteTimes[i] = getVideoNoteTimeArray(videoNotes);
+
+        $(this).find('video').on('timeupdate', function(event) {
+            noteTimeUpdate(event, $(e), videoNotes, i);
+        });
+    });
+}
+
+/**
+* Wird beim timeupdate event eines videos ausgeführt. Blendet notes ein oder aus
+*/
+function noteTimeUpdate(event, div, notes, index) {
+    var vid = div.find('video')[0];
+    var time = vid.currentTime;
+
+    var video_containers = $('.elearnjs-video');
+    for(var i=0; i<videoNoteTimes[index].length; i++) {
+        var info = videoNoteTimes[index][i];
+        if(info["time"] > time) {
+            break;
+        }
+        else if(info["time"] < time) {
+            if(info["time_to"] != undefined && info["time_to"] <= time) {
+                // remove
+                notes.find('.video_note').filter('#'+info["index"]).remove();
+            }
+            else {
+                // TODO ADD TIMESTAMP
+                // skip if already shown
+                if(notes.find('.video_note#'+info["index"]).length > 0) continue;
+                // create new node
+                var new_note = notes.find('.video_note.backup').eq(info["index"]).clone();
+                new_note.removeClass('backup');
+                new_note.attr('id', info["index"]);
+                notes.prepend(new_note);
+            }
+        }
+    }
+}
+
+/**
+* Erstellt ein sortiertes Array mit Objekten die einen Index haben, der auf ein
+* .video_note objekt hinweist, eine anfangszeit time und ggf. eine time_to.
+* Sortiert ist das Array nach dem key "time"
+*/
+function getVideoNoteTimeArray(div) {
+    var times = [];
+    div.find('.video_note').each(function(i,e) {
+        var timeFrom = $(this).attr('timefrom');
+        var timeTo = $(this).attr('timeto');
+        times.push({"time" : timeStringToSeconds(timeFrom),
+                    "time_to" : timeStringToSeconds(timeTo),
+                    "index" : i});
+    });
+    times.sort(function(a,b) {
+        return a["time"]-b["time"];
+    });
+    return times;
+}
+
+/**
+* Übersetzt einen String in einen Integerwert in Sekunden.
+* Dabei können Strings erkannt werden die aus Zahlen bestehen und den
+* zugehörigen Einheiten h,m,s.
+*
+* Bsp: timeStringToSeconds("01m15s") : 75
+*/
+function timeStringToSeconds(str) {
+    var factors = {
+        "h":60*60,
+        "m":60,
+        "s":1
+    };
+
+    str = str.toLowerCase();
+
+    var seconds = 0;
+    var partTime = "";
+
+    for(var i=0; i<str.length; i++) {
+        var char = str.charAt(i);
+        if(char.match(/\d/g)) {
+            partTime += char;
+        }
+        else if(char.match(/[hms]/g)){
+            seconds += parseInt(partTime, 10) * factors[char];
+            partTime = "";
+        }
+        else if(char.match(/\S/g)){
+            return -1;
+        }
+    }
+    if(partTime.length > 0) {
+        seconds += parseInt(partTime, 10);
+    }
+    return seconds;
 }
 
 

@@ -634,6 +634,11 @@ a:active {
     content: '\e900';
 }
 
+
+.video_notes .video_note.backup {
+    display: none;
+}
+
 /* --------------------------------------- CONTENT OVERVIEW ------------------------------------- */
 
 #content-overview p {
