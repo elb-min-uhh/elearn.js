@@ -951,10 +951,13 @@ function noteTimeUpdate(event, div, notes_con, index) {
     for(var i=0; i<videoNoteTimes[index].length; i++) {
         var info = videoNoteTimes[index][i];
         if(info["time"] > time) {
-            break;
+            // remove
+            notes_con.find('.video_note').filter('#'+info["index"]).remove();
         }
         else if(info["time"] < time) {
-            if(info["time_to"] != undefined && info["time_to"] <= time) {
+            if(info["time_to"] != undefined
+                && info["time_to"] != -1
+                && info["time_to"] <= time) {
                 // remove
                 notes_con.find('.video_note').filter('#'+info["index"]).remove();
             }
@@ -962,18 +965,20 @@ function noteTimeUpdate(event, div, notes_con, index) {
                 // skip if already shown
                 if(notes_con.find('.video_note#'+info["index"]).length > 0) continue;
                 // create new node
-                var new_note = notes_con.find('.video_note.backup').eq(info["index"]).clone();
+                var original_note = notes_con.find('.video_note.backup').eq(info["index"]);
+                var new_note = original_note.clone();
                 new_note.removeClass('backup');
                 new_note.attr('id', info["index"]);
 
                 // timestamp if activated
                 if(notes_con.is('.timestamps')) {
-                    new_note.prepend('<span class="video_note_timestamp">'+timeToString(info["time"])+'</span>');
+                    new_note.prepend('<span class="video_note_timestamp">'
+                                        +timeToString(info["time"])+'</span>');
                 }
-                notes_con.prepend(new_note);
+                original_note.after(new_note);
             }
-            checkVisibleNotes(div, notes_con);
         }
+        checkVisibleNotes(div, notes_con);
     }
 }
 
@@ -996,6 +1001,7 @@ function getVideoNoteTimeArray(div) {
     div.find('.video_note').each(function(i,e) {
         var timeFrom = $(this).attr('timefrom');
         var timeTo = $(this).attr('timeto');
+        if(timeTo == undefined) timeTo = -1;
         times.push({"time" : timeStringToSeconds(timeFrom),
                     "time_to" : timeStringToSeconds(timeTo),
                     "index" : i});
@@ -1014,6 +1020,8 @@ function getVideoNoteTimeArray(div) {
 * Bsp: timeStringToSeconds("01m15s") : 75
 */
 function timeStringToSeconds(str) {
+    if(typeof str != typeof "string") return undefined;
+
     var factors = {
         "h":60*60,
         "m":60,
@@ -1035,7 +1043,7 @@ function timeStringToSeconds(str) {
             partTime = "";
         }
         else if(char.match(/\S/g)){
-            return -1;
+            return undefined;
         }
     }
     if(partTime.length > 0) {
