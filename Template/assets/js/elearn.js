@@ -907,7 +907,6 @@ function initiateVideoNotes() {
 
     // create list with sorted times for faster checking if something needs to be shown
     $('.elearnjs-video').each(function(i,e) {
-        // TODO ADD VISUAL POINTS ON PROGRESSBAR
         var videoNotes = $(this).next('.video_notes');
 
         $(this).wrap('<div class="video_container">');
@@ -918,7 +917,28 @@ function initiateVideoNotes() {
         $(this).find('video').on('timeupdate', function(event) {
             noteTimeUpdate(event, $(e), videoNotes, i);
         });
+        addNotesToProgressbar($(e), i);
     });
+}
+
+function addNotesToProgressbar(div, index) {
+    var vid = div.find('video')[0];
+    var length = vid.duration;
+
+    if(vid.readyState == 0) {
+        setTimeout(function() {addNotesToProgressbar(div, index);}, 100);
+    }
+    else {
+        for(var i=0; i<videoNoteTimes[index].length; i++) {
+            var info = videoNoteTimes[index][i];
+            var start = info['time'];
+
+            var progress_note = $('<div class="video-progress-note">');
+            progress_note.css('left', (start*100)/length + "%");
+            div.find('.video-progress-con').append(progress_note);
+        }
+    }
+
 }
 
 /**
@@ -928,7 +948,6 @@ function noteTimeUpdate(event, div, notes_con, index) {
     var vid = div.find('video')[0];
     var time = vid.currentTime;
 
-    var video_containers = $('.elearnjs-video');
     for(var i=0; i<videoNoteTimes[index].length; i++) {
         var info = videoNoteTimes[index][i];
         if(info["time"] > time) {

@@ -662,6 +662,19 @@ a:active {
     display: none;
 }
 
+.elearnjs-video .controls .video-progress-con .video-progress-note {
+    position: absolute;
+    top:7px; /* centered to .video-progress which is top:10px and height 4px */
+    bottom: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #F7EF00;
+    background: rgba(247, 239, 0, 0.9);
+    pointer-events: none;
+}
+
 /* --------------------------------------- CONTENT OVERVIEW ------------------------------------- */
 
 #content-overview p {
