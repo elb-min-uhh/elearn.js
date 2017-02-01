@@ -909,6 +909,10 @@ function initiateVideoNotes() {
     $('.elearnjs-video').each(function(i,e) {
         // TODO ADD VISUAL POINTS ON PROGRESSBAR
         var videoNotes = $(this).next('.video_notes');
+
+        $(this).wrap('<div class="video_container">');
+        $(this).parent().append(videoNotes);
+
         videoNoteTimes[i] = getVideoNoteTimeArray(videoNotes);
 
         $(this).find('video').on('timeupdate', function(event) {
@@ -920,7 +924,7 @@ function initiateVideoNotes() {
 /**
 * Wird beim timeupdate event eines videos ausgeführt. Blendet notes ein oder aus
 */
-function noteTimeUpdate(event, div, notes, index) {
+function noteTimeUpdate(event, div, notes_con, index) {
     var vid = div.find('video')[0];
     var time = vid.currentTime;
 
@@ -933,19 +937,33 @@ function noteTimeUpdate(event, div, notes, index) {
         else if(info["time"] < time) {
             if(info["time_to"] != undefined && info["time_to"] <= time) {
                 // remove
-                notes.find('.video_note').filter('#'+info["index"]).remove();
+                notes_con.find('.video_note').filter('#'+info["index"]).remove();
             }
             else {
-                // TODO ADD TIMESTAMP
                 // skip if already shown
-                if(notes.find('.video_note#'+info["index"]).length > 0) continue;
+                if(notes_con.find('.video_note#'+info["index"]).length > 0) continue;
                 // create new node
-                var new_note = notes.find('.video_note.backup').eq(info["index"]).clone();
+                var new_note = notes_con.find('.video_note.backup').eq(info["index"]).clone();
                 new_note.removeClass('backup');
                 new_note.attr('id', info["index"]);
-                notes.prepend(new_note);
+
+                // timestamp if activated
+                if(notes_con.is('.timestamps')) {
+                    new_note.prepend('<span class="video_note_timestamp">'+timeToString(info["time"])+'</span>');
+                }
+                notes_con.prepend(new_note);
             }
+            checkVisibleNotes(div, notes_con);
         }
+    }
+}
+
+function checkVisibleNotes(div, notes_con) {
+    if(notes_con.find('.video_note').not('.backup').length > 0) {
+        div.parent().addClass('noted_video');
+    }
+    else {
+        div.parent().removeClass('noted_video');
     }
 }
 
