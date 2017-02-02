@@ -217,12 +217,12 @@ function initiateSideMenu() {
 
 
 function updateNavBarWidth() {
-    var headerSpace = 15; // standard wert
+    var headerSpace = 15.0; // standard wert
     $('#nav-bar').children(':visible').not('#btnExp').each(function(i,e){
-        if($(this).attr("id") != undefined && $(this).attr("id").length)
+        if($(this).attr("id") != undefined)
             headerSpace += $(this).outerWidth(true);
     });
-    $('#btnExp').css("width", "calc(100% - " + headerSpace + "px)");
+    $('#btnExp').css("width", "calc(100% - " + (headerSpace+5) + "px)");
 }
 
 
@@ -812,7 +812,7 @@ function videoSetVolumeControlOpen(div, bool) {
             volume.removeClass('controlopen');
             videoVolumePending[idx] = setTimeout(function() {
                 volume.removeClass('hovered');
-            }, 200);
+            }, 115); /* based on transition time, calculated by sizes */
         }
     }
 }
