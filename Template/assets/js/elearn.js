@@ -434,9 +434,7 @@ function addVideoPlayerListener(div) {
         event.stopPropagation();
         videoProgressMouseLeave(div, event);
     });
-    div.find('.video-progress-con').on('mousemove touchmove', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
+    div.on('mousemove touchmove', function(event) {
         videoProgressMouseMove(div, event);
     });
     div.find('.video-progress-con').on('mousedown touchstart', function(event) {
@@ -825,6 +823,9 @@ function videoSetVolumeControlOpen(div, bool) {
 */
 function videoProgressVolumeMouseMove(div, e) {
     if(videoVolumeMouseDown) {
+        e.preventDefault();
+        e.stopPropagation();
+
         var vid = div.find('video')[0];
         var volume = div.find('.volume');
         var pos = 0;
@@ -918,14 +919,14 @@ function setVideoMouseDown(div, b) {
     if(b) {
         videoMouseDownTarget = div;
         videoPausedBefore = vid.paused || vid.ended;
-        vid.pause();
+        setTimeout(function() {vid.pause()}, 0); // not on touch events
         div.find('.video-progress-bar').addClass('notransition');
         div.find('.video-progress-pointer').addClass('notransition');
     }
     else {
         if(!videoPausedBefore) {
             videoMouseDownTarget = null;
-            vid.play();
+            setTimeout(function() {vid.play()}, 0); // not on touch events
         }
         div.find('.video-progress-bar')[0].offsetHeight;
         div.find('.video-progress-pointer')[0].offsetHeight;
@@ -951,13 +952,16 @@ function videoProgressMouseLeave(div, e) {
 function videoProgressMouseMove(div, e) {
     var vid = div.find('video')[0];
     var pos = 0;
+
+    e.preventDefault();
+    e.stopPropagation();
     if(e.type.toLowerCase() === "mousemove"
         || e.type.toLowerCase() === "mousedown") {
-        pos = e.offsetX;
+        pos = e.originalEvent.pageX - div.find('.video-progress').offset().left;
     }
     else if(e.type.toLowerCase() === "touchmove"
             || e.type.toLowerCase() === "touchstart"){
-        pos = e.originalEvent.touches[0].pageX - $(e.target).offset().left;
+        pos = e.originalEvent.touches[0].pageX - div.find('.video-progress').offset().left;
     }
 
     if(pos < 0) pos = 0;
@@ -2992,6 +2996,7 @@ var x = 0;
 */
 function checkClicked() {
     return;
+    /*
     if(startX >= 0 && startY >= 0 && curX == -1 && curY == -1) {
         x++;
         var clicked = $(document.elementFromPoint((startX - $(document).scrollLeft()), (startY - $(document).scrollTop())));
@@ -3002,6 +3007,7 @@ function checkClicked() {
         }
         clickedAlready = false;
     }
+    */
 }
 
 // ---------------------------------------------------------------------------------------
