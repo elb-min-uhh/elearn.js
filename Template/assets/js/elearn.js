@@ -800,8 +800,8 @@ function videoSetVolumeControlOpen(div, bool) {
         var volume = controls.find('.volume');
         if(!volume.is('.controlopen')) {
             clearTimeout(videoVolumePending[idx]);
-            volume.find('.volume-con').show();
-            volume[0].offsetHeight;
+            volume.addClass('hovered');
+            volume[0].offsetHeight; // to force css change
             volume.addClass('controlopen');
         }
     }
@@ -811,7 +811,7 @@ function videoSetVolumeControlOpen(div, bool) {
         if(volume.is('.controlopen')) {
             volume.removeClass('controlopen');
             videoVolumePending[idx] = setTimeout(function() {
-                volume.find('.volume-con').hide();
+                volume.removeClass('hovered');
             }, 200);
         }
     }

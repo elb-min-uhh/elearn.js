@@ -596,6 +596,7 @@ a:active {
     height: 34px;
     cursor: pointer;
     vertical-align: bottom;
+    background: rgba(68, 68, 68, 0);
 }
 
 .elearnjs-video .controls .volume .icon.mute:before {
@@ -613,7 +614,7 @@ a:active {
 
 
 .elearnjs-video .controls .volume.controlopen {
-    background: #444;
+    background: rgba(68, 68, 68, 1);
 }
 
 .elearnjs-video .controls .volume .volume-con {
@@ -623,6 +624,15 @@ a:active {
     bottom: 34px;
     padding: 10px;
     background: #444;
+    opacity: 0;
+}
+
+.elearnjs-video .controls .volume.hovered .volume-con {
+    display: block;
+}
+
+.elearnjs-video .controls .volume.controlopen .volume-con {
+    opacity: 1;
 }
 
 .elearnjs-video .controls .volume .volume-con .volume-wrap {
@@ -638,9 +648,15 @@ a:active {
     background: rgba(200, 200, 200, 0.5);
 }
 
+.elearnjs-video .controls .volume,
+.elearnjs-video .controls .volume .volume-con,
 .elearnjs-video .controls .volume .volume-con .volume-wrap,
 .elearnjs-video .controls .volume .volume-con .volume-bar {
-    transition: 0.2s ease-out;
+    transition: 0.15s ease-out;
+}
+
+.elearnjs-video .controls .volume .volume-con .volume-wrap,
+.elearnjs-video .controls .volume .volume-con .volume-bar {
     height: 0;
 }
 
