@@ -585,7 +585,12 @@ function videoHover(div) {
     var idx = $('.elearnjs-video').index(div);
     if(video_hover_timers[idx] != undefined) clearTimeout(video_hover_timers[idx]);
     video_hover_timers[idx] = setTimeout(function(){
-        videoHoverEnd(div);
+        if(videoMouseDown || videoVolumeMouseDown) {
+            videoHover(div);
+        }
+        else {
+            videoHoverEnd(div);
+        }
     }, 2500);
 }
 
@@ -826,6 +831,8 @@ function videoProgressVolumeMouseMove(div, e) {
         e.preventDefault();
         e.stopPropagation();
 
+        videoHover(div);
+
         var vid = div.find('video')[0];
         var volume = div.find('.volume');
         var pos = 0;
@@ -952,6 +959,8 @@ function videoProgressMouseLeave(div, e) {
 function videoProgressMouseMove(div, e) {
     var vid = div.find('video')[0];
     var pos = 0;
+
+    videoHover(div);
 
     e.preventDefault();
     e.stopPropagation();
