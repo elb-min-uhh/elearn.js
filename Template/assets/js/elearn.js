@@ -350,7 +350,15 @@ function initiateVideoPlayers() {
         div.append("<div class='controls'>"
                       + "<div class='bottom-row'>"
                         + "<div class='icon playpause playing' title='Play'></div>"
-                        + "<div class='icon volume high' title='Mute'></div>"
+                        + "<div class='volume'>"
+                            + "<div class='icon high' title='Mute'></div>"
+                            + "<div class='volume-con'>"
+                                + "<div class='volume-wrap'>"
+                                    + "<div class='volume-bar'></div>"
+                                    + "<div class='volume-control'></div>"
+                                + "</div>"
+                            + "</div>"
+                        + "</div>"
                         + "<div class='text playtime' title='Time'></div>"
                         + "<div class='video-progress-con'>"
                             + "<div class='video-progress'><div class='video-progress-loaded'></div><div class='video-progress-bar'></div></div>"
@@ -361,8 +369,8 @@ function initiateVideoPlayers() {
                       + "</div>"
                     + "</div>");
 
-
         addVideoPlayerListener(div);
+        updateVideoVolume(div);
     });
     initiateVideoNotes();
     registerAfterShow("resizeVideos", resizeAllVideoPlayers);
@@ -381,10 +389,18 @@ function addVideoPlayerListener(div) {
         event.stopPropagation();
         videoTogglePlay(div);
     });
-    div.find('.volume').on('mouseup touchend', function(event) {
+    div.find('.volume').find('.icon').on('mouseup touchend', function(event) {
+        videoVolumeClick(div, event);
+    });
+    div.find('.volume').on('mouseenter', function(event) {
         event.preventDefault();
         event.stopPropagation();
-        videoVolumeClick(div, event);
+        videoVolumeHover(div, event);
+    });
+    div.find('.volume').on('mouseleave', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        videoVolumeHover(div, event);
     });
     div.find('.timeleft').click(function(event) {
         event.preventDefault();
@@ -453,8 +469,8 @@ function addVideoPlayerListener(div) {
     div.on('mouseup touchend', function(event) {
         if(event.type === "touchend" || event.button == 0) {
             // other listeneres take care of these
-            if(videoMouseDown
-                || $(event.target).is('.controls') || $(event.target).is('.controls *')
+            if(videoMouseDown || videoVolumeMouseDown
+                || $(event.target).is('.bottom-row') || $(event.target).is('.bottom-row *')
                 || $(event.target).is('.play-overlay') || $(event.target).is('.play-overlay *')
                 || $(event.target).is('.mobile-overlay .playpause')) {
                 return true;
@@ -492,7 +508,30 @@ function addVideoPlayerListener(div) {
     div.find('video').on('pause', function(event) {
         videoUpdatePlayPauseButton(div);
     });
+    div.find('video').on('volumechange', function(event) {
+        updateVideoVolume(div);
+    });
 
+    // listener for video volume control
+    div.on('mousemove touchmove', function(event) {
+        if(videoVolumeMouseDown && videoVolumeMouseDownTarget != null) {
+            event.preventDefault();
+            event.stopPropagation();
+            videoProgressVolumeMouseMove(div, event);
+        }
+    });
+    div.find('.volume-con').on('mousedown touchstart', function(event) {
+        setVideoVolumeMouseDown(div, true, event);
+    });
+    $(document).on('mouseup touchend', function(event) {
+        if(videoVolumeMouseDownTarget != null) {
+            event.preventDefault();
+            event.stopPropagation();
+            setVideoVolumeMouseDown(videoVolumeMouseDownTarget, false, event);
+        }
+    });
+
+    // fullscreen listeners
     $(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange', function() {
         checkVideoFullscreen();
     });
@@ -617,53 +656,6 @@ function videoUpdatePlayPauseButton(div) {
     }
 }
 
-function videoVolumeClick(div, e) {
-    var vid = div.find('video')[0];
-    var idx = $('.elearnjs-video').index(div);
-
-    if(e.type === "touchend") {
-
-    }
-    else {
-        if(vid.volume > 0) {
-            video_volumes[idx] = vid.volume;
-            vid.volume = 0;
-        }
-        else {
-            vid.volume = video_volumes[idx];
-        }
-    }
-
-    updateVideoVolume(div);
-}
-
-function updateVideoVolume(div) {
-    var vid = div.find('video')[0];
-    var btn = div.find('.volume');
-
-    btn.removeClass("mute");
-    btn.removeClass("low");
-    btn.removeClass("medium");
-    btn.removeClass("high");
-
-    if(vid.volume == 0) {
-        btn.addClass("mute");
-    }
-    else if(vid.volume < 0.33){
-        btn.addClass("low");
-    }
-    else if(vid.volume < 0.66) {
-        btn.addClass("medium");
-    }
-    else {
-        btn.addClass("high");
-    }
-}
-
-function videoVolumeHover(div) {
-    // TODO
-}
-
 
 function videoToggleTimeleftDuration(div) {
     video_timestyle = (video_timestyle + 1) % 2;
@@ -728,6 +720,169 @@ function videoToggleFullscreen(div) {
     }
 }
 
+// VOLUME --------------------------------------------------
+
+var withinVolumeControl = false;
+var videoVolumePending = {};
+var videoVolumeMouseDown = false;
+var videoVolumeMouseDownTarget = null;
+
+/**
+* Called when clicked on the volume icon
+* should open volume control on touch devices and mute/unmute otherwise
+*/
+function videoVolumeClick(div, e) {
+    var vid = div.find('video')[0];
+    var idx = $('.elearnjs-video').index(div);
+
+    if(isTouchSupported()) {
+        event.preventDefault();
+        event.stopPropagation();
+        videoSetVolumeControlOpen(div, !div.find('.volume').is('.controlopen'));
+    }
+    else if($(e.target).is('.icon') && !videoVolumeMouseDown) {
+        event.preventDefault();
+        event.stopPropagation();
+        if(vid.volume > 0) {
+            video_volumes[idx] = vid.volume;
+            vid.volume = 0;
+        }
+        else if(video_volumes[idx] != undefined && video_volumes[idx] > 0){
+            vid.volume = video_volumes[idx];
+        }
+        // should never happen
+        else {
+            vid.volume = 0.5;
+        }
+    }
+}
+
+/**
+* Called when hovering over the volume icon
+* shouldn't do anything on touch devices, because they have no hover
+*/
+function videoVolumeHover(div, event) {
+    if(!isTouchSupported()) {
+        if(event.type === "mouseenter") {
+            withinVolumeControl = true;
+            videoSetVolumeControlOpen(div, true);
+        }
+        else if(event.type === "mouseleave") {
+            withinVolumeControl = false;
+            if(!videoVolumeMouseDown) {
+                videoSetVolumeControlOpen(div, false);
+            }
+        }
+    }
+}
+
+/**
+* Opens or closes the Volume Control
+* is called by videoVolumeHover, videoVolumeClick and setVideoVolumeMouseDown
+*/
+function videoSetVolumeControlOpen(div, bool) {
+    var idx = $('.elearnjs-video').index(div);
+    if(bool) {
+        var controls = div.find('.controls');
+        var volume = controls.find('.volume');
+        if(!volume.is('.controlopen')) {
+            clearTimeout(videoVolumePending[idx]);
+            volume.find('.volume-con').show();
+            volume[0].offsetHeight;
+            volume.addClass('controlopen');
+        }
+    }
+    else {
+        var controls = div.find('.controls');
+        var volume = controls.find('.volume');
+        if(volume.is('.controlopen')) {
+            volume.removeClass('controlopen');
+            videoVolumePending[idx] = setTimeout(function() {
+                volume.find('.volume-con').hide();
+            }, 200);
+        }
+    }
+}
+
+/**
+* Called when moving the mouse over any .elearnjs-video (@param: div)
+* Used to apply volume changes
+*/
+function videoProgressVolumeMouseMove(div, e) {
+    if(videoVolumeMouseDown) {
+        var vid = div.find('video')[0];
+        var volume = div.find('.volume');
+        var pos = 0;
+        if(e.type.toLowerCase() === "mousemove"
+            || e.type.toLowerCase() === "mousedown") {
+            pos = e.originalEvent.pageY - volume.find('.volume-wrap').offset().top;
+        }
+        else if(e.type.toLowerCase() === "touchmove"
+                || e.type.toLowerCase() === "touchstart"){
+            pos = e.originalEvent.touches[0].pageY - volume.find('.volume-wrap').offset().top;
+        }
+
+        var perc = pos/volume.find('.volume-wrap').height();
+        if(perc < 0) perc = 0;
+        if(perc > 1) perc = 1;
+
+        vid.volume = 1-perc;
+    }
+}
+
+/**
+* Used to set volume change active or not.
+*/
+function setVideoVolumeMouseDown(div, bool, e) {
+    videoVolumeMouseDown = bool;
+    if(bool) {
+        videoVolumeMouseDownTarget = div;
+        // instant position calculation
+        videoProgressVolumeMouseMove(div, e);
+    }
+    else {
+        if(!withinVolumeControl && !isTouchSupported()) {
+            videoSetVolumeControlOpen(div, false);
+        }
+        // add volume to last volume
+        var vid = div.find('video')[0];
+        if(vid.volume > 0) {
+            var idx = $('.elearnjs-video').index(div);
+            video_volumes[idx] = vid.volume;
+        }
+        videoVolumeMouseDownTarget = null;
+    }
+}
+
+
+/**
+* Called when the video within the div has a volume change
+*/
+function updateVideoVolume(div) {
+    var vid = div.find('video')[0];
+    var btn = div.find('.volume').find('.icon');
+    var volume = div.find('.volume');
+    volume.find('.volume-control').css('top', (1-vid.volume)*100 + "%");
+
+    btn.removeClass("mute");
+    btn.removeClass("low");
+    btn.removeClass("medium");
+    btn.removeClass("high");
+
+    if(vid.volume == 0) {
+        btn.addClass("mute");
+    }
+    else if(vid.volume < 0.33){
+        btn.addClass("low");
+    }
+    else if(vid.volume < 0.66) {
+        btn.addClass("medium");
+    }
+    else {
+        btn.addClass("high");
+    }
+}
+
 // VIDEO KEYBOARD EVENTS ------------------------------------
 
 function videoKeyPress(div, event) {
@@ -787,7 +942,7 @@ function videoProgressMouseMove(div, e) {
     }
     else if(e.type.toLowerCase() === "touchmove"
             || e.type.toLowerCase() === "touchstart"){
-        pos = e.originalEvent.touches[0].clientX - $(e.target).offset().left;
+        pos = e.originalEvent.touches[0].pageX - $(e.target).offset().left;
     }
 
     if(pos < 0) pos = 0;

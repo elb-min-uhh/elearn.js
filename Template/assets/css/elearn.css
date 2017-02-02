@@ -367,6 +367,8 @@ a:active {
     line-height: 0;
     outline: none;
     overflow: hidden;
+    min-height: 125px;
+    min-width: 220px;
 
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -444,12 +446,14 @@ a:active {
     right: 0;
     padding: 8px;
     max-width: 100%;
+    cursor: default;
 }
 
 /* PROGRESSBAR */
 
 .elearnjs-video .controls .video-progress-con {
     position: relative;
+    cursor: pointer;
     vertical-align: bottom;
     margin: 5px 5px;
     max-width:100%;
@@ -458,7 +462,6 @@ a:active {
 
 .elearnjs-video .controls .video-progress {
     position: absolute;
-    cursor: pointer;
     top: 10px; /* (24Height - 4Height) / 2 */
     width: 100%;
     height: 4px;
@@ -587,17 +590,72 @@ a:active {
 }
 
 /* SOUND */
-.elearnjs-video .controls .icon.volume.mute:before {
+.elearnjs-video .controls .volume {
+    position: relative;
+    width: 34px;
+    height: 34px;
+    cursor: pointer;
+    vertical-align: bottom;
+}
+
+.elearnjs-video .controls .volume .icon.mute:before {
     content: '\e906';
 }
-.elearnjs-video .controls .icon.volume.low:before {
+.elearnjs-video .controls .volume .icon.low:before {
     content: '\e907';
 }
-.elearnjs-video .controls .icon.volume.medium:before {
+.elearnjs-video .controls .volume .icon.medium:before {
     content: '\e908';
 }
-.elearnjs-video .controls .icon.volume.high:before {
+.elearnjs-video .controls .volume .icon.high:before {
     content: '\e909';
+}
+
+
+.elearnjs-video .controls .volume.controlopen {
+    background: #444;
+}
+
+.elearnjs-video .controls .volume .volume-con {
+    display: none;
+    position: absolute;
+    box-sizing: border-box;
+    bottom: 34px;
+    padding: 10px;
+    background: #444;
+}
+
+.elearnjs-video .controls .volume .volume-con .volume-wrap {
+    position: relative;
+    width: 14px;
+}
+
+.elearnjs-video .controls .volume .volume-con .volume-bar {
+    position: absolute;
+    left: 5px;
+    width: 4px;
+    background: #888;
+    background: rgba(200, 200, 200, 0.5);
+}
+
+.elearnjs-video .controls .volume .volume-con .volume-wrap,
+.elearnjs-video .controls .volume .volume-con .volume-bar {
+    transition: 0.2s ease-out;
+    height: 0;
+}
+
+.elearnjs-video .controls .volume.controlopen .volume-con .volume-wrap,
+.elearnjs-video .controls .volume.controlopen .volume-con .volume-bar {
+    height: 60px;
+}
+
+.elearnjs-video .controls .volume .volume-con .volume-control {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 3px;
+    margin-top: -1.5px;
+    background: #e2001a;
 }
 
 
