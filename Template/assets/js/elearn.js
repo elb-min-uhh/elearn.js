@@ -370,6 +370,7 @@ function initiateVideoPlayers() {
                     + "</div>");
 
         addVideoPlayerListener(div);
+        videoCheckForBrowserSpecifics(div);
         updateVideoVolume(div);
     });
     initiateVideoNotes();
@@ -541,6 +542,20 @@ function addVideoPlayerListener(div) {
     div.find('video').on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(event) {
         checkVideoFullscreen();
     });
+}
+
+
+function videoCheckForBrowserSpecifics(div) {
+    var device = "";
+    var ua = navigator.userAgent.toLowerCase();
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+        device = "ios";
+    }
+
+    if(device === "ios") {
+        // hide volume, because it doesn't work on iOs
+        div.find('.volume').hide()
+    }
 }
 
 
