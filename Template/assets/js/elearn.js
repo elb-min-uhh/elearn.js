@@ -348,6 +348,7 @@ function initiateVideoPlayers() {
             div.append("<div class='play-overlay'><div class='icon play'></div></div>");
         }
         div.append("<div class='controls'>"
+                      + "<div class='bottom-row'>"
                         + "<div class='icon playpause playing' title='Play'></div>"
                         + "<div class='icon volume high' title='Mute'></div>"
                         + "<div class='text playtime' title='Time'></div>"
@@ -357,6 +358,7 @@ function initiateVideoPlayers() {
                         + "</div>"
                         + "<div class='text timeleft' title='Time left'></div>"
                         + "<div class='icon fullscreen' title='Fullscreen'></div>"
+                      + "</div>"
                     + "</div>");
 
 
@@ -894,13 +896,13 @@ function resizeVideoPlayer(div) {
     // calculate progress bar width
     var icon_width = 0.0;
 
-    div.find('.controls').children(':visible').each(function(i,e) {
+    div.find('.controls').find('.bottom-row').children(':visible').each(function(i,e) {
         if(!$(this).is('.video-progress-con')) {
             icon_width += $(this).outerWidth(true);
         }
     });
 
-    var progress_width = div.find('.controls').width() - icon_width - 5
+    var progress_width = div.find('.bottom-row').width() - icon_width - 5
                         - parseInt(div.find('.video-progress-con').css("margin-left").replace("px", ""))
                         - parseInt(div.find('.video-progress-con').css("margin-right").replace("px", ""));
     div.find('.video-progress-con').css("width", progress_width + "px");

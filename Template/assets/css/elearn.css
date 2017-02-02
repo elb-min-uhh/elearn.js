@@ -366,6 +366,7 @@ a:active {
     cursor: none;
     line-height: 0;
     outline: none;
+    overflow: hidden;
 
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -414,7 +415,7 @@ a:active {
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 8px;
+    height:80px;
     transition: opacity 0.2s ease-out;
 
     background: #222222; /* For browsers that do not support gradients */
@@ -430,10 +431,19 @@ a:active {
     opacity: 1;
 }
 
-.elearnjs-video .controls > * {
+.elearnjs-video .controls .bottom-row > * {
     display: inline-block;
     height: 24px;
     line-height: 24px;
+}
+
+.elearnjs-video .controls .bottom-row {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 8px;
+    max-width: 100%;
 }
 
 /* PROGRESSBAR */
