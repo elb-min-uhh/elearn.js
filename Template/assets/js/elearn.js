@@ -353,6 +353,7 @@ function initiateVideoPlayers() {
                         + "<div class='text playtime' title='Time'></div>"
                         + "<div class='video-progress-con'>"
                             + "<div class='video-progress'><div class='video-progress-loaded'></div><div class='video-progress-bar'></div></div>"
+                            + "<div class='video-progress-pointer'></div>"
                         + "</div>"
                         + "<div class='text timeleft' title='Time left'></div>"
                         + "<div class='icon fullscreen' title='Fullscreen'></div>"
@@ -746,12 +747,18 @@ function setVideoMouseDown(div, b) {
         videoMouseDownTarget = div;
         videoPausedBefore = vid.paused || vid.ended;
         vid.pause();
+        div.find('.video-progress-bar').addClass('notransition');
+        div.find('.video-progress-pointer').addClass('notransition');
     }
     else {
         if(!videoPausedBefore) {
             videoMouseDownTarget = null;
             vid.play();
         }
+        div.find('.video-progress-bar')[0].offsetHeight;
+        div.find('.video-progress-pointer')[0].offsetHeight;
+        div.find('.video-progress-bar').removeClass('notransition');
+        div.find('.video-progress-pointer').removeClass('notransition');
     }
     videoMouseDown = b;
 }
@@ -788,7 +795,9 @@ function videoProgressMouseMove(div, e) {
     div.find('.video-progress-hover').css("width", pos_perc*100 + "%");
 
     if(videoMouseDown) {
+        // change position without transition effect
         div.find('.video-progress-bar').css("width", pos_perc*100 + "%");
+        div.find('.video-progress-pointer').css("left", pos_perc*100 + "%");
         vid.currentTime = vid.duration * pos_perc;
     }
     div.find('.progress-hover-time').html(timeToString(pos_perc * vid.duration));
@@ -815,6 +824,8 @@ function updateVideoTime(div) {
     // progress bar
     var progress_bar = div.find('.video-progress-bar');
     progress_bar.css("width", (vid.currentTime*100)/vid.duration + "%");
+    div.find('.video-progress-pointer').css("left",
+                                    (vid.currentTime*100)/vid.duration + "%");
 
     // buffered bar
     var latest_end = 0;
@@ -935,7 +946,7 @@ function addNotesToProgressbar(div, index) {
 
             var progress_note = $('<div class="video-progress-note">');
             progress_note.css('left', (start*100)/length + "%");
-            div.find('.video-progress-con').append(progress_note);
+            div.find('.video-progress').after(progress_note);
         }
     }
 

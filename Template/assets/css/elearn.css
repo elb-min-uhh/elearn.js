@@ -57,6 +57,13 @@ iframe, video {
     max-width: 100%;
 }
 
+.notransition {
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+    transition: none !important;
+}
+
 #wrap {
     min-height:100%;
     vertical-align:center;
@@ -451,8 +458,8 @@ a:active {
 }
 
 .elearnjs-video .controls .video-progress-con:hover .video-progress {
-    height: 8px;
-    top: 8px; /* (24Height - 8Height) / 2 */
+    height: 6px;
+    top: 9px; /* (24Height - 8Height) / 2 */
 }
 
 
@@ -469,7 +476,28 @@ a:active {
 {
     background: #e2001a;
     background: rgba(226, 0, 26, 0.95);
-    transition: 0.2s ease-out;
+    -webkit-transition: 0.25s linear;
+    -moz-transition: 0.25s linear;
+    -o-transition: 0.25s linear;
+    transition: 0.25s linear;
+}
+
+.elearnjs-video .controls .video-progress-pointer {
+    position: absolute;
+    cursor: pointer;
+    pointer-events: none;
+    top: 7px;
+    left: 0;
+    height: 10px;
+    width: 10px;
+    margin-left: -5px;
+    border-radius: 50%;
+    background: #e2001a;
+    background: rgba(226, 0, 26, 0.95);
+    -webkit-transition: 0.25s linear;
+    -moz-transition: 0.25s linear;
+    -o-transition: 0.25s linear;
+    transition: 0.25s linear;
 }
 
 .elearnjs-video .controls .video-progress-con .video-progress-loaded {
@@ -664,12 +692,11 @@ a:active {
 
 .elearnjs-video .controls .video-progress-con .video-progress-note {
     position: absolute;
-    top:7px; /* centered to .video-progress which is top:10px and height 4px */
+    top:8px; /* centered to .video-progress which is top:10px and height 4px */
     bottom: 0;
     left: 0;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
+    width: 4px;
+    height: 8px;
     background: #F7EF00;
     background: rgba(247, 239, 0, 0.9);
     pointer-events: none;
