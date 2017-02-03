@@ -127,7 +127,9 @@ function addVideoPlayerListener(div) {
         videoProgressMouseLeave(div, event);
     });
     div.on('mousemove touchmove', function(event) {
-        videoProgressMouseMove(div, event);
+        if(videoMouseDown && videoMouseDownTarget != null) {
+            videoProgressMouseMove(div, event);
+        }
     });
     div.find('.video-progress-con').on('mousedown touchstart', function(event) {
         event.preventDefault();
@@ -166,9 +168,6 @@ function addVideoPlayerListener(div) {
                 || $(event.target).is('.mobile-overlay .playpause')) {
                 return true;
             }
-
-            event.preventDefault();
-            event.stopPropagation();
 
             // touch
             if(event.type === "touchend") {
