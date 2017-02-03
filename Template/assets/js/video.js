@@ -169,9 +169,6 @@ function addVideoPlayerListener(div) {
                 return true;
             }
 
-            event.preventDefault();
-            event.stopPropagation();
-
             // touch
             if(event.type === "touchend") {
                 videoToggleHover(div);
