@@ -1,11 +1,11 @@
 /*
-* v0.9.7 16/12/21 JavaScript eLearn.js - by Arne Westphal
+* v0.9.8 17/02/03 JavaScript eLearn.js - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 */
 
-var VERSION_NR = "0.9.7";
-var VERSION_DATE = "12/2016";
+var VERSION_NR = "0.9.8";
+var VERSION_DATE = "02/2017";
 
 // Will be set on first Touch event. See Help Functions at bottom
 var touchSupported = false;
@@ -37,6 +37,7 @@ var afterShow = {};
 var afterPageInteraction = {};
 // für tabbed boxes / multiboxes
 var afterTabChange = {};
+var afterWindowResize = {};
 
 // Nur damit Scriptaufrufe übersichtlicher sind.
 var eLearnJS = this;
@@ -70,7 +71,6 @@ $(document).ready(function() {
     initiateHideables();
     initiateTabbedBoxes();
     initiateHoverInfos();
-    initiateVideoPlayers();
     updateNavBarWidth();
 
     registerAfterShow("slider-resize", resizeAllSliders);
@@ -217,12 +217,12 @@ function initiateSideMenu() {
 
 
 function updateNavBarWidth() {
-    var headerSpace = 15; // standard wert
+    var headerSpace = 15.0; // standard wert
     $('#nav-bar').children(':visible').not('#btnExp').each(function(i,e){
-        if($(this).attr("id") != undefined && $(this).attr("id").length)
+        if($(this).attr("id") != undefined)
             headerSpace += $(this).outerWidth(true);
     });
-    $('#btnExp').css("width", "calc(100% - " + headerSpace + "px)");
+    $('#btnExp').css("width", "calc(100% - " + (headerSpace+5) + "px)");
 }
 
 
@@ -319,737 +319,6 @@ function backButtonPressed() {
 function setBackPage(val, type) {
     backpagetype = type;
     backpage = val;
-}
-
-// ----------------------------------------------------------------------------
-// ------------------------- VIDEO PLAYER -------------------------------------
-// ----------------------------------------------------------------------------
-
-var video_hover_timers = {};
-var video_volumes = {};
-const video_timetypes = {
-    TIMELEFT : 0,
-    DURATION : 1
-};
-var video_timestyle = 0;
-
-function initiateVideoPlayers() {
-    $('video').each(function(i,e) {
-        this.controls = false;
-        $(this).wrap("<div class='elearnjs-video hovered' tabindex='-1'>");
-
-        var div = $(this).parent();
-
-        div.append("<div class='mobile-overlay'><div class='icon playpause paused'></div></div>");
-        if(this.autoplay) {
-            this.play();
-        }
-        else {
-            div.append("<div class='play-overlay'><div class='icon play'></div></div>");
-        }
-        div.append("<div class='controls'>"
-                        + "<div class='icon playpause playing' title='Play'></div>"
-                        + "<div class='icon volume high' title='Mute'></div>"
-                        + "<div class='text playtime' title='Time'></div>"
-                        + "<div class='video-progress-con'>"
-                            + "<div class='video-progress'><div class='video-progress-loaded'></div><div class='video-progress-bar'></div></div>"
-                        + "</div>"
-                        + "<div class='text timeleft' title='Time left'></div>"
-                        + "<div class='icon fullscreen' title='Fullscreen'></div>"
-                    + "</div>");
-
-
-        addVideoPlayerListener(div);
-    });
-    initiateVideoNotes();
-    registerAfterShow("resizeVideos", resizeAllVideoPlayers);
-    resizeAllVideoPlayers();
-}
-
-function addVideoPlayerListener(div) {
-    addTouchMouseChangeListener("video-mobile", resizeAllVideoPlayers);
-
-    div.on('touchstart touchend touchcancel', function(event) {
-        videoRefreshHover(div, event);
-    });
-    // buttons
-    div.find('.playpause').click(function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        videoTogglePlay(div);
-    });
-    div.find('.volume').on('mouseup touchend', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        videoVolumeClick(div, event);
-    });
-    div.find('.timeleft').click(function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        videoToggleTimeleftDuration(div);
-    });
-    div.find('.fullscreen').click(function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        videoToggleFullscreen(div);
-    });
-
-    // overlay
-    div.find('.play-overlay').on('click', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        videoTogglePlay(div);
-        videoHover(div);
-        div.find('.play-overlay').remove();
-    });
-
-    // progressbar
-    div.find('.video-progress-con').on('mouseenter', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        videoProgressMouseEnter(div, event);
-    });
-    div.find('.video-progress-con').on('mouseleave', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        videoProgressMouseLeave(div, event);
-    });
-    div.find('.video-progress-con').on('mousemove touchmove', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        videoProgressMouseMove(div, event);
-    });
-    div.find('.video-progress-con').on('mousedown touchstart', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        setVideoMouseDown(div, true);
-        videoProgressMouseMove(div, event);
-        if(event.type === "touchstart") div.append('<div class="progress-hover-time"></div>');
-    });
-    $(document).on('mouseup touchend', function(event) {
-        if((event.type === "touchend" || event.button == 0) && videoMouseDown) {
-            if(videoMouseDownTarget != null) {
-                event.preventDefault();
-                event.stopPropagation();
-                setVideoMouseDown(videoMouseDownTarget, false);
-                if(event.type === "touchend") div.find('.progress-hover-time').remove();
-            }
-            return false;
-        }
-        else {
-            return true;
-        }
-    });
-
-    // general player
-    div.on('mousemove', function(event) {
-        if(!isTouchSupported()) {
-            videoHover(div);
-        }
-    });
-    div.on('mouseup touchend', function(event) {
-        if(event.type === "touchend" || event.button == 0) {
-            // other listeneres take care of these
-            if(videoMouseDown
-                || $(event.target).is('.controls') || $(event.target).is('.controls *')
-                || $(event.target).is('.play-overlay') || $(event.target).is('.play-overlay *')
-                || $(event.target).is('.mobile-overlay .playpause')) {
-                return true;
-            }
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            // touch
-            if(event.type === "touchend") {
-                videoToggleHover(div);
-            }
-            // no touch
-            else {
-                videoOnClick(div);
-            }
-        }
-    });
-
-    div.bind('keypress', function(event) {
-        videoKeyPress(div, event);
-    });
-
-
-    // listener to video progress
-    div.find('video').on('ended', function(event) {
-        videoHover(div);
-    });
-    div.find('video').on('timeupdate', function(event) {
-        updateVideoTime(div);
-    });
-    div.find('video').on('play', function(event) {
-        videoUpdatePlayPauseButton(div);
-    });
-    div.find('video').on('pause', function(event) {
-        videoUpdatePlayPauseButton(div);
-    });
-
-    $(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange', function() {
-        checkVideoFullscreen();
-    });
-    div.on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(event) {
-        checkVideoFullscreen();
-    });
-    div.find('video').on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(event) {
-        checkVideoFullscreen();
-    });
-}
-
-
-// HOVER ---------------------------------------------------
-
-function videoToggleHover(div) {
-    if(div.is('.hovered')) {
-        videoHoverEnd(div);
-    }
-    else {
-        videoHover(div);
-    }
-}
-
-function videoRefreshHover(div, event) {
-    var trgt = $(event.target);
-    if(trgt.is('.controls') || trgt.is('.controls *')
-        || trgt.is('.mobile-overlay *')) {
-
-        videoHover(div);
-    }
-}
-
-function videoHover(div) {
-    if(!div.is(".hovered")) {
-        div.addClass("hovered");
-        resizeVideoPlayer(div);
-    }
-    var idx = $('.elearnjs-video').index(div);
-    if(video_hover_timers[idx] != undefined) clearTimeout(video_hover_timers[idx]);
-    video_hover_timers[idx] = setTimeout(function(){
-        videoHoverEnd(div);
-    }, 2500);
-}
-
-function videoHoverEnd(div) {
-    var vid = div.find('video')[0];
-    if(!vid.paused && !vid.ended) {
-        div.removeClass("hovered");
-    }
-}
-
-// FULLSCREEN -----------------------------------------------
-
-function checkVideoFullscreen() {
-    var isFullScreen = document.fullScreen ||
-                   document.mozFullScreen ||
-                   document.webkitIsFullScreen;
-
-    if(!isFullScreen) {
-        $('.elearnjs-video').removeClass("full");
-    }
-};
-
-// BUTTONS --------------------------------------------------
-
-var videoFullscreenPending = {};
-
-function videoOnClick(div) {
-    const dblclick_time = 250;
-    var idx = $('.elearnjs-video').index(div);
-
-    if(videoFullscreenPending[idx] == undefined
-        || videoFullscreenPending[idx] === false) {
-        videoFullscreenPending[idx] = true;
-        // reset double click wait
-        setTimeout(function() {
-            // if still pending
-            if(videoFullscreenPending[idx] === true) {
-                videoTogglePlay(div);
-                videoFullscreenPending[idx] = false;
-            }
-        }, dblclick_time);
-    }
-    else if(videoFullscreenPending[idx] === true){
-        // reset
-        videoFullscreenPending[idx] = false;
-        videoToggleFullscreen(div);
-    }
-}
-
-function videoTogglePlay(div) {
-    var vid = div.find('video')[0];
-    var btn = div.find('.playpause')[0];
-
-    // paused now -> play
-    if(vid.paused || vid.ended) {
-        vid.play();
-    }
-    // pause
-    else {
-        vid.pause();
-    }
-
-    videoUpdatePlayPauseButton(div);
-}
-
-function videoUpdatePlayPauseButton(div) {
-    var vid = div.find('video')[0];
-
-    // paused now -> play
-    if(vid.paused || vid.ended) {
-        div.find('.playpause').attr("title", 'Play');
-        div.find('.playpause').removeClass("playing");
-        div.find('.playpause').addClass("paused");
-        div.addClass("hovered");
-    }
-    // pause
-    else {
-        div.find('.playpause').attr("title", 'Pause');
-        div.find('.playpause').addClass("playing");
-        div.find('.playpause').removeClass("paused");
-    }
-}
-
-function videoVolumeClick(div, e) {
-    var vid = div.find('video')[0];
-    var idx = $('.elearnjs-video').index(div);
-
-    if(e.type === "touchend") {
-
-    }
-    else {
-        if(vid.volume > 0) {
-            video_volumes[idx] = vid.volume;
-            vid.volume = 0;
-        }
-        else {
-            vid.volume = video_volumes[idx];
-        }
-    }
-
-    updateVideoVolume(div);
-}
-
-function updateVideoVolume(div) {
-    var vid = div.find('video')[0];
-    var btn = div.find('.volume');
-
-    btn.removeClass("mute");
-    btn.removeClass("low");
-    btn.removeClass("medium");
-    btn.removeClass("high");
-
-    if(vid.volume == 0) {
-        btn.addClass("mute");
-    }
-    else if(vid.volume < 0.33){
-        btn.addClass("low");
-    }
-    else if(vid.volume < 0.66) {
-        btn.addClass("medium");
-    }
-    else {
-        btn.addClass("high");
-    }
-}
-
-function videoVolumeHover(div) {
-    // TODO
-}
-
-
-function videoToggleTimeleftDuration(div) {
-    video_timestyle = (video_timestyle + 1) % 2;
-
-    var timeleft_field = div.find('.timeleft');
-
-    var title = "";
-    switch(video_timestyle) {
-        case video_timetypes.DURATION: title = "Duration"; break;
-        case video_timetypes.TIMELEFT: title = "Time left"; break;
-    }
-    timeleft_field.attr("title", title);
-
-    updateVideoTime(div);
-}
-
-function videoToggleFullscreen(div) {
-    // to fullscreen
-    if(!div.is(".full")) {
-        var elem = div[0];
-        if (elem.requestFullscreen) {
-            elem.requestFullscreen();
-        } else if (elem.msRequestFullscreen) {
-            elem.msRequestFullscreen();
-        } else if (elem.mozRequestFullScreen) {
-            elem.mozRequestFullScreen();
-        } else if (elem.webkitRequestFullscreen) {
-            elem.webkitRequestFullscreen();
-        } else if (elem.webkitEnterFullscreen) {
-            elem.webkitEnterFullscreen();
-        } else {
-            elem = div.find('video')[0];
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.msRequestFullscreen) {
-                elem.msRequestFullscreen();
-            } else if (elem.mozRequestFullScreen) {
-                elem.mozRequestFullScreen();
-            } else if (elem.webkitRequestFullscreen) {
-                elem.webkitRequestFullscreen();
-            } else if (elem.webkitEnterFullscreen) {
-                elem.webkitEnterFullscreen();
-            } else {
-                alert('No Fullscreen Support.')
-                return;
-            }
-            return;
-        }
-        div.addClass("full");
-    }
-    else {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        }
-        div.removeClass("full");
-    }
-}
-
-// VIDEO KEYBOARD EVENTS ------------------------------------
-
-function videoKeyPress(div, event) {
-    if(event.which === 32) {
-        event.preventDefault();
-        videoTogglePlay(div);
-    }
-}
-
-// PROGRESSBAR ----------------------------------------------
-
-var videoMouseDownTarget = null;
-var videoMouseDown = false;
-var videoPausedBefore = false;
-
-function setVideoMouseDown(div, b) {
-    var vid = div.find('video')[0];
-    if(b) {
-        videoMouseDownTarget = div;
-        videoPausedBefore = vid.paused || vid.ended;
-        vid.pause();
-    }
-    else {
-        if(!videoPausedBefore) {
-            videoMouseDownTarget = null;
-            vid.play();
-        }
-    }
-    videoMouseDown = b;
-}
-
-function videoProgressMouseEnter(div, e) {
-    var con = div.find('.video-progress-con');
-    var back = con.find('.video-progress');
-    back.append('<div class="video-progress-hover">');
-    div.append('<div class="progress-hover-time"></div>');
-}
-
-function videoProgressMouseLeave(div, e) {
-    var con = div.find('.video-progress-con');
-    con.find('.video-progress-hover').remove();
-    div.find('.progress-hover-time').remove();
-}
-
-function videoProgressMouseMove(div, e) {
-    var vid = div.find('video')[0];
-    var pos = 0;
-    if(e.type.toLowerCase() === "mousemove"
-        || e.type.toLowerCase() === "mousedown") {
-        pos = e.offsetX;
-    }
-    else if(e.type.toLowerCase() === "touchmove"
-            || e.type.toLowerCase() === "touchstart"){
-        pos = e.originalEvent.touches[0].clientX - $(e.target).offset().left;
-    }
-
-    if(pos < 0) pos = 0;
-    if(pos > div.find('.video-progress').width()) pos = div.find('.video-progress').width();
-
-    var pos_perc = pos / div.find('.video-progress').width();
-    div.find('.video-progress-hover').css("width", pos_perc*100 + "%");
-
-    if(videoMouseDown) {
-        div.find('.video-progress-bar').css("width", pos_perc*100 + "%");
-        vid.currentTime = vid.duration * pos_perc;
-    }
-    div.find('.progress-hover-time').html(timeToString(pos_perc * vid.duration));
-    div.find('.progress-hover-time').css('left', pos + div.find('.video-progress-con')[0].offsetLeft);
-    div.find('.progress-hover-time').css('margin-left', "-" + (div.find('.progress-hover-time').outerWidth() / 2) + "px");
-}
-
-// GENERAL VIDEO PLAYER -------------------------------------
-
-function updateVideoTime(div) {
-    var vid = div.find('video')[0];
-    var time_field = div.find('.playtime');
-    var timeleft_field = div.find('.timeleft');
-
-    var time = vid.currentTime;
-    var timeleft = Math.floor(vid.duration) - Math.floor(vid.currentTime);
-
-    // time fields
-    time_field.html(timeToString(time));
-    if(video_timestyle === video_timetypes.TIMELEFT) timeleft_field.html("-" + timeToString(timeleft));
-    else if(video_timestyle === video_timetypes.DURATION) timeleft_field.html(timeToString(vid.duration));
-
-
-    // progress bar
-    var progress_bar = div.find('.video-progress-bar');
-    progress_bar.css("width", (vid.currentTime*100)/vid.duration + "%");
-
-    // buffered bar
-    var latest_end = 0;
-    for(var i=0; i<vid.buffered.length; i++) {
-        if(vid.buffered.end(i) > latest_end) {
-            latest_end = vid.buffered.end(i);
-        }
-    }
-    var buffered_perc = latest_end / vid.duration;
-    div.find('.video-progress-loaded').css("width", buffered_perc*100 + "%");
-
-    resizeVideoPlayer(div);
-}
-
-
-function timeToString(seconds) {
-    seconds = Math.floor(seconds);
-    var hours = Math.floor(seconds / (60*60));
-    seconds -= hours*60*60;
-    var minutes = Math.floor(seconds / 60);
-    seconds -= minutes*60;
-
-    var time_str = seconds;
-    if(seconds < 10) {
-        time_str = "0" + time_str;
-    }
-    time_str = minutes + ":" + time_str;
-    if(hours > 0) {
-        if(minutes < 10) {
-                time_str = "0" + time_str;
-        }
-        time_str = hours + ":" + time_str;
-    }
-
-    return time_str;
-}
-
-function resizeAllVideoPlayers() {
-    $('.elearnjs-video:visible').each(function(i,e) {
-        resizeVideoPlayer($(this));
-    });
-}
-
-
-function resizeVideoPlayer(div) {
-    if(isTouchSupported()) {
-        div.addClass("mobile");
-    }
-    else {
-        div.removeClass("mobile");
-    }
-
-    // check text field sizes
-    var time_field = div.find('.playtime');
-    var timeleft_field = div.find('.timeleft');
-
-    if(time_field.width() > parseFloat(time_field.css("min-width").replace("px", ""))+1) {
-        var min_width = time_field.width() + 10;
-        time_field.css("min-width", min_width + "px");
-    }
-    if(timeleft_field.width() > parseFloat(timeleft_field.css("min-width").replace("px", ""))+1) {
-        var min_width = timeleft_field.width() + 10;
-        timeleft_field.css("min-width", min_width + "px");
-    }
-
-    // calculate progress bar width
-    var icon_width = 0.0;
-
-    div.find('.controls').children(':visible').each(function(i,e) {
-        if(!$(this).is('.video-progress-con')) {
-            icon_width += $(this).outerWidth(true);
-        }
-    });
-
-    var progress_width = div.find('.controls').width() - icon_width - 5
-                        - parseInt(div.find('.video-progress-con').css("margin-left").replace("px", ""))
-                        - parseInt(div.find('.video-progress-con').css("margin-right").replace("px", ""));
-    div.find('.video-progress-con').css("width", progress_width + "px");
-}
-
-// ------------------------- VIDEO NOTES ------------------------------------
-
-var videoNoteTimes = [];
-
-/**
-* Initialisiert die Time Notes
-*/
-function initiateVideoNotes() {
-    $('.video_note').addClass('backup');
-
-    // create list with sorted times for faster checking if something needs to be shown
-    $('.elearnjs-video').each(function(i,e) {
-        var videoNotes = $(this).next('.video_notes');
-
-        $(this).wrap('<div class="video_container">');
-        $(this).parent().append(videoNotes);
-
-        videoNoteTimes[i] = getVideoNoteTimeArray(videoNotes);
-
-        $(this).find('video').on('timeupdate', function(event) {
-            noteTimeUpdate(event, $(e), videoNotes, i);
-        });
-        addNotesToProgressbar($(e), i);
-    });
-}
-
-function addNotesToProgressbar(div, index) {
-    var vid = div.find('video')[0];
-    var length = vid.duration;
-
-    if(vid.readyState == 0) {
-        setTimeout(function() {addNotesToProgressbar(div, index);}, 100);
-    }
-    else {
-        for(var i=0; i<videoNoteTimes[index].length; i++) {
-            var info = videoNoteTimes[index][i];
-            var start = info['time'];
-
-            var progress_note = $('<div class="video-progress-note">');
-            progress_note.css('left', (start*100)/length + "%");
-            div.find('.video-progress-con').append(progress_note);
-        }
-    }
-
-}
-
-/**
-* Wird beim timeupdate event eines videos ausgeführt. Blendet notes ein oder aus
-*/
-function noteTimeUpdate(event, div, notes_con, index) {
-    var vid = div.find('video')[0];
-    var time = vid.currentTime;
-
-    for(var i=0; i<videoNoteTimes[index].length; i++) {
-        var info = videoNoteTimes[index][i];
-        if(info["time"] > time) {
-            // remove
-            notes_con.find('.video_note').filter('#'+info["index"]).remove();
-        }
-        else if(info["time"] < time) {
-            if(info["time_to"] != undefined
-                && info["time_to"] != -1
-                && info["time_to"] <= time) {
-                // remove
-                notes_con.find('.video_note').filter('#'+info["index"]).remove();
-            }
-            else {
-                // skip if already shown
-                if(notes_con.find('.video_note#'+info["index"]).length > 0) continue;
-                // create new node
-                var original_note = notes_con.find('.video_note.backup').eq(info["index"]);
-                var new_note = original_note.clone();
-                new_note.removeClass('backup');
-                new_note.attr('id', info["index"]);
-
-                // timestamp if activated
-                if(notes_con.is('.timestamps')) {
-                    new_note.prepend('<span class="video_note_timestamp">'
-                                        +timeToString(info["time"])+'</span>');
-                }
-                original_note.after(new_note);
-            }
-        }
-        checkVisibleNotes(div, notes_con);
-    }
-}
-
-function checkVisibleNotes(div, notes_con) {
-    if(notes_con.find('.video_note').not('.backup').length > 0) {
-        div.parent().addClass('noted_video');
-    }
-    else {
-        div.parent().removeClass('noted_video');
-    }
-}
-
-/**
-* Erstellt ein sortiertes Array mit Objekten die einen Index haben, der auf ein
-* .video_note objekt hinweist, eine anfangszeit time und ggf. eine time_to.
-* Sortiert ist das Array nach dem key "time"
-*/
-function getVideoNoteTimeArray(div) {
-    var times = [];
-    div.find('.video_note').each(function(i,e) {
-        var timeFrom = $(this).attr('timefrom');
-        var timeTo = $(this).attr('timeto');
-        if(timeTo == undefined) timeTo = -1;
-        times.push({"time" : timeStringToSeconds(timeFrom),
-                    "time_to" : timeStringToSeconds(timeTo),
-                    "index" : i});
-    });
-    times.sort(function(a,b) {
-        return a["time"]-b["time"];
-    });
-    return times;
-}
-
-/**
-* Übersetzt einen String in einen Integerwert in Sekunden.
-* Dabei können Strings erkannt werden die aus Zahlen bestehen und den
-* zugehörigen Einheiten h,m,s.
-*
-* Bsp: timeStringToSeconds("01m15s") : 75
-*/
-function timeStringToSeconds(str) {
-    if(typeof str != typeof "string") return undefined;
-
-    var factors = {
-        "h":60*60,
-        "m":60,
-        "s":1
-    };
-
-    str = str.toLowerCase();
-
-    var seconds = 0;
-    var partTime = "";
-
-    for(var i=0; i<str.length; i++) {
-        var char = str.charAt(i);
-        if(char.match(/\d/g)) {
-            partTime += char;
-        }
-        else if(char.match(/[hms]/g)){
-            seconds += parseInt(partTime, 10) * factors[char];
-            partTime = "";
-        }
-        else if(char.match(/\S/g)){
-            return undefined;
-        }
-    }
-    if(partTime.length > 0) {
-        seconds += parseInt(partTime, 10);
-    }
-    return seconds;
 }
 
 
@@ -1167,19 +436,28 @@ function registerAfterShow(key, fnc) {
 }
 
 /**
-* Registriert eine Funktion, die ausgeführt wird, nachdem eine neue Section
-* angezeigt wurde.
+* Registriert eine Funktion, die ausgeführt wird, nachdem ein sectionwechsel
+* durchgeführt wurde. Im gegensatz zu "afterShow" nur, wenn die section
+* tatsächlich verändert wurde.
 */
 function registerAfterPageInteraction(key, fnc) {
     afterPageInteraction[key] = fnc;
 }
 
 /**
-* Registriert eine Funktion, die ausgeführt wird, nachdem eine neue Section
-* angezeigt wurde.
+* Registriert eine Funktion, die ausgeführt wird, nachdem ein neuer Tab
+* in einer tabbed-box angezeigt wurde.
 */
 function registerAfterTabChange(key, fnc) {
     afterTabChange[key] = fnc;
+}
+
+/**
+* Registriert eine Funktion, die ausgeführt wird, nachdem ein neuer Tab
+* in einer tabbed-box angezeigt wurde.
+*/
+function registerAfterWindowResize(key, fnc) {
+    afterWindowResize[key] = fnc;
 }
 
 function pushHistoryState() {
@@ -2422,8 +1700,11 @@ $(window).resize(function() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function(){
         resizeAllSliders();
-        resizeAllVideoPlayers();
         $('#sideMenu').css('right', "-"+($('#sideMenu').width()+10)+"px");
+        // Ausführen registrierter funktionen
+        $.each(afterWindowResize, function(key, fnc) {
+            fnc();
+        });
     }, 250);
     updateNavBarWidth();
     hoverInfoSetPositions();
@@ -2809,6 +2090,7 @@ var x = 0;
 */
 function checkClicked() {
     return;
+    /*
     if(startX >= 0 && startY >= 0 && curX == -1 && curY == -1) {
         x++;
         var clicked = $(document.elementFromPoint((startX - $(document).scrollLeft()), (startY - $(document).scrollTop())));
@@ -2819,6 +2101,7 @@ function checkClicked() {
         }
         clickedAlready = false;
     }
+    */
 }
 
 // ---------------------------------------------------------------------------------------

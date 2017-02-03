@@ -63,13 +63,25 @@ Hier sollen vor allem Video und Audio-Einbindung demonstriert werden. At vero eo
 #### Videos als Asset
 
 Hier wird ein Video eingebunden, welches sich direkt im Asset-Ordner des Skrips befindet. Diese Lösung ist nur für relativ kurze Videos empfehlenswert (max. fünf Minuten).
+Zusätzlich enthält das Video Anmerkungen, die unter dem Video angezeigt werden. Diese sind durch die Erweiterung video.js möglich.
 
 <video preload="auto" controls="controls" style="max-width:100%">
-    <source src="assets/img/beispiel-video.mp4" type="video/mpeg">
+    <source src="assets/img/beispiel-video.mp4" type="video/mp4">
     <source src="assets/img/beispiel-video.webm" type="video/webm">
            Dein Browser unterstützt kein HTML5-Video. Um dir das Video dennoch ansehen zu können,
            folge einfach diesem <a href="assets/img/beispiel-video.mp4">Link</a>.
 </video>
+<div class="video_notes timestamps">
+    <h5>Untertitel:</h5>
+    <div class="video_note" timefrom="0m14s">
+        Das war 's eigentlich auch schon damit.
+    </div>
+    <div class="video_note" timefrom="0m3s" timeto="0m14s">
+        Hallo! Hier nur ein kurzes Beispielvideo, um zu zeigen,
+        wie man mit einem HTML-Video-Tag ein Video in ein Markdown
+        Dokument einbinden kann.
+    </div>
+</div>
 
 #### Videos von einem Streaming Server
 

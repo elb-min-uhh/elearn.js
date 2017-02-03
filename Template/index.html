@@ -9,10 +9,12 @@
 
 		<link rel="stylesheet" type="text/css" href="assets/css/elearn.css">
 		<link rel="stylesheet" type="text/css" href="assets/css/quiz.css">
+		<link rel="stylesheet" type="text/css" href="assets/css/video.css">
 
 		<script type="text/javascript" src="assets/js/min.js"></script> <!-- von UHH verwendetes JQuery -->
 		<script type="text/javascript" src="assets/js/elearn.js"></script> <!-- eLearn.js -->
 		<script type="text/javascript" src="assets/js/quiz.js"></script> <!-- Quiz Script -->
+		<script type="text/javascript" src="assets/js/video.js"></script> <!-- Video Script -->
 
 		<script>
 		    window.onload = function() {
@@ -145,7 +147,10 @@
 					<h3>Medieneinbindung</h3>
 					<p>Hier sollen vor allem Video und Audio-Einbindung demonstriert werden. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
 					<h4>Videos als Asset</h4>
-					<p>Hier wird ein Video eingebunden, welches sich direkt im Asset-Ordner des Skrips befindet. Diese Lösung ist nur für relativ kurze Videos empfehlenswert (max. fünf Minuten).</p>
+					<p>Hier wird ein Video eingebunden, welches sich direkt im Asset-Ordner des Skrips befindet. Diese Lösung ist nur für relativ kurze Videos empfehlenswert (max. fünf Minuten).
+					Zusätzlich enthält das Video Anmerkungen, die unter dem Video angezeigt werden. Diese sind durch die Erweiterung video.js möglich.</p>
+
+					<!-- Nachfolgendes Video mit Kommentaren nur mit dem video.js und zugehörigem video.css möglich -->
 					<video preload="auto" controls="controls">
 							<source src="assets/img/beispiel-video.mp4" type="video/mp4"></source>
 							<source src="assets/img/beispiel-video.webm" type="video/webm"></source>
@@ -254,6 +259,7 @@
 					</p>
 
 				</section><section name="Quiz">
+					<!-- Nachfolgende Quiz-Elemente sind nur mit dem quiz.js und zugehörigem quiz.css möglich -->
 					<h3>Quizfragen</h3>
 					<p>Auf dieser Seite sind einige Quiz-Fragen Beispielhaft dargestellt.</p>
 					<div class="question">
