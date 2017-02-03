@@ -158,11 +158,15 @@
 							folge einfach diesem <a href="assets/img/beispiel-video.mp4">Link</a>.
 					</video>
 					<div class="video_notes timestamps">
-						<h5>Untertitel:</h5>
+						<h4>Videoannotationen</h4>
+						<div class="video_note" timefrom="0m01s" timeto="0m5s">
+							Hier werden zusätzliche Informationen zu dem Videoabschnitt eingeblendet. Es scheint, als nehmen wir den nächsten Schritt.
+							<img src="assets/img/md-illu_3.png" alt="future of md">
+						</div>
 						<div class="video_note" timefrom="0m14s">
 							Das war 's eigentlich auch schon damit.
 						</div>
-						<div class="video_note" timefrom="0m3s" timeto="0m14s">
+						<div class="video_note" timefrom="0m5s" timeto="0m14s">
 							Hallo! Hier nur ein kurzes Beispielvideo, um zu zeigen,
 							wie man mit einem HTML-Video-Tag ein Video in ein Markdown
 							Dokument einbinden kann.
@@ -171,7 +175,7 @@
 					<h4>Videos von einem Streaming Server</h4>
 					<p>Hier ist ein Video von eineme Streamin-Server als iFrame eingebunden.</p>
 					<p>
-						<iframe src="https://lecture2go.uni-hamburg.de/liferay-jedi-theme/javascript/strobe/embed.html?src=https://fms.rrz.uni-hamburg.de/vod/_definst_/mp4:8l2gbal1768/64.280_werz_2013-06-26_16-15.mp4/manifest.f4m&amp;poster=https://lecture2go.uni-hamburg.de/images/64.280_werz_2013-06-26_16-15.jpg" class="strobemediaplayback-video-player" type="text/html" width="500" height="250"> </iframe>
+						<video controls><source src='https://fms1.rrz.uni-hamburg.de/abo/00.000_MichaelHeinecke_2016-09-06_17-56.mp4' type='video/mp4'>Your browser does not support the video tag.</video>
 					</p>
 					<h4>Audio-Files</h4>
 					<p>Da Audio-Dateien als mp3s in der Regel nicht so groß sind, dass ein Streaming-Server benötigt wird, können diese aus dem Assets-Ordner progressiv als Download eingebunden wrden. Hier ein Beispiel:</p>
@@ -319,15 +323,20 @@
             	<!--Ende des Einfüge-Bereichs-->
 
             	<!--MathJax-Einbindung für die Formeldarstellung-->
-	            <script type="text/x-mathjax-config">
-	            	if (typeof MathJaxListener !== 'undefined') {
-	                      MathJax.Hub.Register.StartupHook('End', function () {
-	                        MathJaxListener.invokeCallbackForKey_('End');
-	                      });
-	                    }
-	                    </script>
-	            <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+							<script type="text/x-mathjax-config">
+		  					MathJax.Hub.Config({
+		    				extensions: ["tex2jax.js"],
+		    				jax: ["input/TeX", "output/HTML-CSS"],
+		    				tex2jax: {
+		      				inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+		      				displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+		      				processEscapes: true
+		    				},
+		    				"HTML-CSS": { availableFonts: ["TeX"] }
+		  				});
+							</script>
 
+	            <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
             </div>
 		</div>
 	</body>
