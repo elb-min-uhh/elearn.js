@@ -127,7 +127,9 @@ function addVideoPlayerListener(div) {
         videoProgressMouseLeave(div, event);
     });
     div.on('mousemove touchmove', function(event) {
-        videoProgressMouseMove(div, event);
+        if(videoMouseDown && videoMouseDownTarget != null) {
+            videoProgressMouseMove(div, event);
+        }
     });
     div.find('.video-progress-con').on('mousedown touchstart', function(event) {
         event.preventDefault();
