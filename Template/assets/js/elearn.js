@@ -27,6 +27,7 @@ var blockProgressShowElementActivated = false;
 var blockProgressShowElementText = "";
 
 // Zum generellen Aktivieren oder Deaktivieren der Knöpfe
+var secSwipeEnabled = true;
 var dirButtonsEnabled = true;
 var keyNavigationEnabled = true;
 var progressbarEnabled = true;
@@ -1837,21 +1838,45 @@ function addTouchMouseChangeListener(key, fnc) {
     touchMouseFunctions[key] = fnc;
 }
 
+
+
+/**
+* Aktiviert oder deaktiviert generell den Sectionwechsel per touch
+*/
+function generalSectionSwipeEnabled(b) {
+    secSwipeEnabled = b;
+}
+
+/**
+* Gibt zurück, ob der Sectionwechsel per touch aktiviert ist.
+*/
+function isSectionSwipeEnabled() {
+    return secSwipeEnabled;
+}
+
 /**
 * Fügt allen Sections eine Touchabfrage hinzu.
 */
 function addTouchToSections() {
     $(document).bind('touchstart', function() {
-        touchStart(event, this);
+        if(secSwipeEnabled) {
+            touchStart(event, this);
+        }
     });
     $(document).bind('touchend', function() {
-        touchEnd(event);
+        if(secSwipeEnabled) {
+            touchEnd(event);
+        }
     });
     $(document).bind('touchmove', function() {
-        touchMove(event);
+        if(secSwipeEnabled) {
+            touchMove(event);
+        }
     });
     $(document).bind('touchcancel', function() {
-        touchCancel(event);
+        if(secSwipeEnabled) {
+            touchCancel(event);
+        }
     });
 
 
