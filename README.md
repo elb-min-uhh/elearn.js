@@ -14,9 +14,6 @@ Eine umfassende Dokumentation des Projekts befindet sich unter http://www.sumo.u
 
 * __0.9.8__:
   * Neuerungen:
-    * Erweiterung video.js wurde eingeführt
-      * Video können zusätzliche Informationen in Form von Anmerkungen erhalten
-      * Eigener HTML5 Videoplayer
     * Automatischer Übergang zwischen Touch- und Maussteuerung auch während 
     der Nutzung
   * Fehlerbehebungen:
@@ -105,7 +102,6 @@ Eine umfassende Dokumentation des Projekts befindet sich unter http://www.sumo.u
   * _Zu früheren Versionen sind keine Informationen mehr verfügbar_
 
 
-
 ### quiz.js
 
 * __0.3.3__:
@@ -147,6 +143,14 @@ Eine umfassende Dokumentation des Projekts befindet sich unter http://www.sumo.u
   * _Grundversion für das eLearn.js_
 
 
+### video.js
+
+* __0.1__:
+  * Grundversion:
+    * Eigener HTML5 Videoplayer (Mobile + Desktop)
+    * Anmerkungen unter dem Video möglich (Durch Ersteller des Skripts)
+    
+    
 ## Lizensierung
 
 elearn.js ist eine Entwicklung des [eLearning-Büro MIN](https://www.min.uni-hamburg.de/studium/elearning.html) der Universität Hamburg.
