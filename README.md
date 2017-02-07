@@ -12,10 +12,17 @@ Eine umfassende Dokumentation des Projekts befindet sich unter http://www.sumo.u
 
 ### eLearn.js
 
-* __0.9.8__ (WIP):
+* __0.9.8__:
+  * Neuerungen:
+    * Erweiterung video.js wurde eingeführt
+      * Video können zusätzliche Informationen in Form von Anmerkungen erhalten
+      * Eigener HTML5 Videoplayer
+    * Automatischer Übergang zwischen Touch- und Maussteuerung auch während 
+    der Nutzung
   * Fehlerbehebungen:
     * Darstellungsfehler bei einzelnen Icons behoben
     * Fehler in Touch- und Maussteuerungserkennung bei iOS behoben
+    * Fehlerbehungen im Template 
 * __0.9.7__:
   * Neuerungen:
     * Einzelne Sections werden automatisch in den Browserverlauf aufgenommen
