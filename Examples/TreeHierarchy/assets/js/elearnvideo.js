@@ -265,9 +265,7 @@ function videoToggleHover(div) {
 
 function videoRefreshHover(div, event) {
     var trgt = $(event.target);
-    if(trgt.is('.controls') || trgt.is('.controls *')
-        || trgt.is('.mobile-overlay *')) {
-
+    if(trgt.is('.mobile-overlay *')) {
         videoHover(div);
     }
 }
@@ -385,6 +383,9 @@ function videoToggleTimeleftDuration(div) {
     updateVideoTime(div);
 }
 
+
+var secSwipeBefore;
+
 function videoToggleFullscreen(div) {
     // to fullscreen
     if(!div.is(".full")) {
@@ -418,6 +419,8 @@ function videoToggleFullscreen(div) {
             return;
         }
         div.addClass("full");
+        secSwipeBefore = eLearnJS.isSectionSwipeEnabled();
+        eLearnJS.generalSectionSwipeEnabled(false);
     }
     else {
         if (document.exitFullscreen) {
@@ -430,7 +433,11 @@ function videoToggleFullscreen(div) {
             document.webkitExitFullscreen();
         }
         div.removeClass("full");
+        if(secSwipeBefore != undefined) {
+            eLearnJS.generalSectionSwipeEnabled(secSwipeBefore);
+        }
     }
+    setTimeout(function() {resizeVideoPlayer(div)}, 100);
 }
 
 // VOLUME --------------------------------------------------

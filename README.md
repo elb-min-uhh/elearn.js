@@ -143,7 +143,7 @@ Eine umfassende Dokumentation des Projekts befindet sich unter http://www.sumo.u
   * _Grundversion für das eLearn.js_
 
 
-### video.js
+### elearnvideo.js
 
 * __0.1__:
   * Grundversion:
