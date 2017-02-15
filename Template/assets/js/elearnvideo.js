@@ -756,7 +756,7 @@ function updateVideoTime(div) {
 function videoOnError(div, event) {
     div.append('<div class="error-con">');
     div.find('.error-con').append('<span>Ein Fehler ist aufgetreten.<br>Das Video kann nicht abgespielt werden.<br>Klicken zum neu laden!</span>');
-    div.find('.error-con').on('click touchstart touchend mousedown mouseup', function(event) {
+    div.find('.error-con').on('click', function(event) {
         event.preventDefault();
         event.stopPropagation();
         div.find('video')[0].load();
@@ -772,7 +772,7 @@ function videoRemoveError(div, event) {
 function videoCheckDelayedError(div) {
     setTimeout(function() {
         var vid = div.find('video')[0];
-        if(vid.readyState === 0 || vid.networkState === 3) {
+        if(vid.networkState === 3) {
             videoOnError(div);
         }
         else {
