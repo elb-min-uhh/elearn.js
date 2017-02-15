@@ -150,7 +150,8 @@ function videoAddUserInteractionListeners(div) {
             if(videoMouseDown || videoVolumeMouseDown
                 || $(event.target).is('.bottom-row') || $(event.target).is('.bottom-row *')
                 || $(event.target).is('.play-overlay') || $(event.target).is('.play-overlay *')
-                || $(event.target).is('.mobile-overlay .playpause')) {
+                || $(event.target).is('.mobile-overlay .playpause')
+                || $(event.target).is('.error-con') || $(event.target).is('.error-con *')) {
                 return true;
             }
 
