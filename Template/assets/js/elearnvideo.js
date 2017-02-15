@@ -73,9 +73,26 @@ function initiateVideoPlayers() {
 function addVideoPlayerListener(div) {
     eLearnJS.addTouchMouseChangeListener("video-mobile", resizeAllVideoPlayers);
 
-    div.on('touchstart touchend touchcancel', function(event) {
-        videoRefreshHover(div, event);
+    videoAddButtonListeners(div);
+    videoAddUserInteractionListeners(div);
+    videoAddProgressBarListeners(div);
+    videoAddVolumeListeners(div);
+    videoAddEventListeners(div);
+
+    // fullscreen listeners
+    $(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange', function() {
+        checkVideoFullscreen();
     });
+    div.on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(event) {
+        checkVideoFullscreen();
+    });
+    div.find('video').on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(event) {
+        checkVideoFullscreen();
+    });
+}
+
+
+function videoAddButtonListeners(div) {
     // buttons
     div.find('.playpause').click(function(event) {
         event.preventDefault();
@@ -105,6 +122,12 @@ function addVideoPlayerListener(div) {
         event.stopPropagation();
         videoToggleFullscreen(div);
     });
+}
+
+function videoAddUserInteractionListeners(div) {
+    div.on('touchstart touchend touchcancel', function(event) {
+        videoRefreshHover(div, event);
+    });
 
     // overlay
     div.find('.play-overlay').on('click', function(event) {
@@ -115,6 +138,43 @@ function addVideoPlayerListener(div) {
         div.find('.play-overlay').remove();
     });
 
+    // general player
+    div.on('mousemove', function(event) {
+        if(!isTouchSupported()) {
+            videoHover(div);
+        }
+    });
+    div.on('mouseup touchend', function(event) {
+        if(event.type === "touchend" || event.button == 0) {
+            // other listeneres take care of these
+            if(videoMouseDown || videoVolumeMouseDown
+                || $(event.target).is('.bottom-row') || $(event.target).is('.bottom-row *')
+                || $(event.target).is('.play-overlay') || $(event.target).is('.play-overlay *')
+                || $(event.target).is('.mobile-overlay .playpause')) {
+                return true;
+            }
+
+            // necessary for the video to not stop on touch
+            event.preventDefault();
+            event.stopPropagation();
+
+            // touch
+            if(event.type === "touchend") {
+                videoToggleHover(div);
+            }
+            // no touch
+            else {
+                videoOnClick(div);
+            }
+        }
+    });
+
+    div.bind('keypress', function(event) {
+        videoKeyPress(div, event);
+    });
+}
+
+function videoAddProgressBarListeners(div) {
     // progressbar
     div.find('.video-progress-con').on('mouseenter', function(event) {
         event.preventDefault();
@@ -152,60 +212,9 @@ function addVideoPlayerListener(div) {
             return true;
         }
     });
+}
 
-    // general player
-    div.on('mousemove', function(event) {
-        if(!isTouchSupported()) {
-            videoHover(div);
-        }
-    });
-    div.on('mouseup touchend', function(event) {
-        if(event.type === "touchend" || event.button == 0) {
-            // other listeneres take care of these
-            if(videoMouseDown || videoVolumeMouseDown
-                || $(event.target).is('.bottom-row') || $(event.target).is('.bottom-row *')
-                || $(event.target).is('.play-overlay') || $(event.target).is('.play-overlay *')
-                || $(event.target).is('.mobile-overlay .playpause')) {
-                return true;
-            }
-
-            // necessary for the video to not stop on touch
-            event.preventDefault();
-            event.stopPropagation();
-
-            // touch
-            if(event.type === "touchend") {
-                videoToggleHover(div);
-            }
-            // no touch
-            else {
-                videoOnClick(div);
-            }
-        }
-    });
-
-    div.bind('keypress', function(event) {
-        videoKeyPress(div, event);
-    });
-
-
-    // listener to video progress
-    div.find('video').on('ended', function(event) {
-        videoHover(div);
-    });
-    div.find('video').on('timeupdate', function(event) {
-        updateVideoTime(div);
-    });
-    div.find('video').on('play', function(event) {
-        videoUpdatePlayPauseButton(div);
-    });
-    div.find('video').on('pause', function(event) {
-        videoUpdatePlayPauseButton(div);
-    });
-    div.find('video').on('volumechange', function(event) {
-        updateVideoVolume(div);
-    });
-
+function videoAddVolumeListeners(div) {
     // listener for video volume control
     div.on('mousemove touchmove', function(event) {
         if(videoVolumeMouseDown && videoVolumeMouseDownTarget != null) {
@@ -224,18 +233,28 @@ function addVideoPlayerListener(div) {
             setVideoVolumeMouseDown(videoVolumeMouseDownTarget, false, event);
         }
     });
+}
 
-    // fullscreen listeners
-    $(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange', function() {
-        checkVideoFullscreen();
+function videoAddEventListeners(div) {
+    // listener to video progress
+    div.find('video').on('ended', function(event) {
+        videoHover(div);
     });
-    div.on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(event) {
-        checkVideoFullscreen();
+    div.find('video').on('timeupdate', function(event) {
+        updateVideoTime(div);
     });
-    div.find('video').on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(event) {
-        checkVideoFullscreen();
+    div.find('video').on('play', function(event) {
+        videoUpdatePlayPauseButton(div);
+    });
+    div.find('video').on('pause', function(event) {
+        videoUpdatePlayPauseButton(div);
+    });
+    div.find('video').on('volumechange', function(event) {
+        updateVideoVolume(div);
     });
 }
+
+
 
 
 function videoCheckForBrowserSpecifics(div) {
