@@ -68,7 +68,7 @@ function initiateVideoPlayers() {
 }
 
 function addVideoPlayerListener(div) {
-    eLearnJS.addTouchMouseChangeListener("video-mobile", switchTouchMouse(div));
+    eLearnJS.addTouchMouseChangeListener("video-mobile", switchTouchMouse);
 
     videoAddButtonListeners(div);
     videoAddUserInteractionListeners(div);
@@ -138,7 +138,7 @@ function videoAddUserInteractionListeners(div) {
 
     // general player
     div.on('mousemove', function(event) {
-        if(!isTouchSupported()) {
+        if(!eLearnJS.isTouchSupported()) {
             videoHover(div);
         }
     });
@@ -168,7 +168,7 @@ function videoAddUserInteractionListeners(div) {
         }
     });
     div.on('mouseout', function(event) {
-        if(!isTouchSupported()) {
+        if(!eLearnJS.isTouchSupported()) {
             videoHoverEnd(div);
         }
     });
@@ -305,7 +305,7 @@ function videoHover(div) {
     var vid = div.find('video')[0];
     var idx = $('.elearnjs-video').index(div);
     if(video_hover_timers[idx] != undefined) clearTimeout(video_hover_timers[idx]);
-    if(!(vid.paused && isTouchSupported())) {
+    if(!(vid.paused && eLearnJS.isTouchSupported())) {
         video_hover_timers[idx] = setTimeout(function(){
             if(videoMouseDown || videoVolumeMouseDown) {
                 videoHover(div);
@@ -488,7 +488,7 @@ function videoVolumeClick(div, e) {
     var vid = div.find('video')[0];
     var idx = $('.elearnjs-video').index(div);
 
-    if(isTouchSupported()) {
+    if(eLearnJS.isTouchSupported()) {
         event.preventDefault();
         event.stopPropagation();
         videoSetVolumeControlOpen(div, !div.find('.volume').is('.controlopen'));
@@ -515,7 +515,7 @@ function videoVolumeClick(div, e) {
 * shouldn't do anything on touch devices, because they have no hover
 */
 function videoVolumeHover(div, event) {
-    if(!isTouchSupported()) {
+    if(!eLearnJS.isTouchSupported()) {
         if(event.type === "mouseenter") {
             withinVolumeControl = true;
             videoSetVolumeControlOpen(div, true);
@@ -599,7 +599,7 @@ function setVideoVolumeMouseDown(div, bool, e) {
         videoProgressVolumeMouseMove(div, e);
     }
     else {
-        if(!withinVolumeControl && !isTouchSupported()) {
+        if(!withinVolumeControl && !eLearnJS.isTouchSupported()) {
             videoSetVolumeControlOpen(div, false);
         }
         // add volume to last volume
@@ -853,12 +853,12 @@ function resizeVideoPlayer(div) {
     div.find('.video-progress-con').css("width", progress_width + "px");
 }
 
-function switchTouchMouse(div) {
+function switchTouchMouse() {
     if(eLearnJS.isTouchSupported()) {
-        div.addClass("mobile");
+        $('.elearnjs-video').addClass("mobile");
     }
     else {
-        div.removeClass("mobile");
+        $('.elearnjs-video').removeClass("mobile");
     }
 }
 
