@@ -73,9 +73,26 @@ function initiateVideoPlayers() {
 function addVideoPlayerListener(div) {
     eLearnJS.addTouchMouseChangeListener("video-mobile", resizeAllVideoPlayers);
 
-    div.on('touchstart touchend touchcancel', function(event) {
-        videoRefreshHover(div, event);
+    videoAddButtonListeners(div);
+    videoAddUserInteractionListeners(div);
+    videoAddProgressBarListeners(div);
+    videoAddVolumeListeners(div);
+    videoAddEventListeners(div);
+
+    // fullscreen listeners
+    $(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange', function() {
+        checkVideoFullscreen();
     });
+    div.on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(event) {
+        checkVideoFullscreen();
+    });
+    div.find('video').on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(event) {
+        checkVideoFullscreen();
+    });
+}
+
+
+function videoAddButtonListeners(div) {
     // buttons
     div.find('.playpause').click(function(event) {
         event.preventDefault();
@@ -105,6 +122,12 @@ function addVideoPlayerListener(div) {
         event.stopPropagation();
         videoToggleFullscreen(div);
     });
+}
+
+function videoAddUserInteractionListeners(div) {
+    div.on('touchstart touchend touchcancel', function(event) {
+        videoRefreshHover(div, event);
+    });
 
     // overlay
     div.find('.play-overlay').on('click', function(event) {
@@ -115,6 +138,43 @@ function addVideoPlayerListener(div) {
         div.find('.play-overlay').remove();
     });
 
+    // general player
+    div.on('mousemove', function(event) {
+        if(!isTouchSupported()) {
+            videoHover(div);
+        }
+    });
+    div.on('mouseup touchend', function(event) {
+        if(event.type === "touchend" || event.button == 0) {
+            // other listeneres take care of these
+            if(videoMouseDown || videoVolumeMouseDown
+                || $(event.target).is('.bottom-row') || $(event.target).is('.bottom-row *')
+                || $(event.target).is('.play-overlay') || $(event.target).is('.play-overlay *')
+                || $(event.target).is('.mobile-overlay .playpause')) {
+                return true;
+            }
+
+            // necessary for the video to not stop on touch
+            event.preventDefault();
+            event.stopPropagation();
+
+            // touch
+            if(event.type === "touchend") {
+                videoToggleHover(div);
+            }
+            // no touch
+            else {
+                videoOnClick(div);
+            }
+        }
+    });
+
+    div.bind('keypress', function(event) {
+        videoKeyPress(div, event);
+    });
+}
+
+function videoAddProgressBarListeners(div) {
     // progressbar
     div.find('.video-progress-con').on('mouseenter', function(event) {
         event.preventDefault();
@@ -152,60 +212,9 @@ function addVideoPlayerListener(div) {
             return true;
         }
     });
+}
 
-    // general player
-    div.on('mousemove', function(event) {
-        if(!isTouchSupported()) {
-            videoHover(div);
-        }
-    });
-    div.on('mouseup touchend', function(event) {
-        if(event.type === "touchend" || event.button == 0) {
-            // other listeneres take care of these
-            if(videoMouseDown || videoVolumeMouseDown
-                || $(event.target).is('.bottom-row') || $(event.target).is('.bottom-row *')
-                || $(event.target).is('.play-overlay') || $(event.target).is('.play-overlay *')
-                || $(event.target).is('.mobile-overlay .playpause')) {
-                return true;
-            }
-
-            // necessary for the video to not stop on touch
-            event.preventDefault();
-            event.stopPropagation();
-
-            // touch
-            if(event.type === "touchend") {
-                videoToggleHover(div);
-            }
-            // no touch
-            else {
-                videoOnClick(div);
-            }
-        }
-    });
-
-    div.bind('keypress', function(event) {
-        videoKeyPress(div, event);
-    });
-
-
-    // listener to video progress
-    div.find('video').on('ended', function(event) {
-        videoHover(div);
-    });
-    div.find('video').on('timeupdate', function(event) {
-        updateVideoTime(div);
-    });
-    div.find('video').on('play', function(event) {
-        videoUpdatePlayPauseButton(div);
-    });
-    div.find('video').on('pause', function(event) {
-        videoUpdatePlayPauseButton(div);
-    });
-    div.find('video').on('volumechange', function(event) {
-        updateVideoVolume(div);
-    });
-
+function videoAddVolumeListeners(div) {
     // listener for video volume control
     div.on('mousemove touchmove', function(event) {
         if(videoVolumeMouseDown && videoVolumeMouseDownTarget != null) {
@@ -224,18 +233,35 @@ function addVideoPlayerListener(div) {
             setVideoVolumeMouseDown(videoVolumeMouseDownTarget, false, event);
         }
     });
-
-    // fullscreen listeners
-    $(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange', function() {
-        checkVideoFullscreen();
-    });
-    div.on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(event) {
-        checkVideoFullscreen();
-    });
-    div.find('video').on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(event) {
-        checkVideoFullscreen();
-    });
 }
+
+function videoAddEventListeners(div) {
+    // listener to video progress
+    div.find('video').on('ended', function(event) {
+        videoHover(div);
+    });
+    div.find('video').on('timeupdate progress', function(event) {
+        updateVideoTime(div);
+    });
+    div.find('video').on('play', function(event) {
+        videoUpdatePlayPauseButton(div);
+    });
+    div.find('video').on('pause', function(event) {
+        videoUpdatePlayPauseButton(div);
+    });
+    div.find('video').on('volumechange', function(event) {
+        updateVideoVolume(div);
+    });
+    div.find('video').on('error abort', function(event) {
+        videoOnError(div, event);
+    });
+    div.find('video').on('canplay', function(event) {
+        videoRemoveError(div, event);
+    });
+    videoCheckDelayedError(div);
+}
+
+
 
 
 function videoCheckForBrowserSpecifics(div) {
@@ -621,21 +647,21 @@ function videoKeyPress(div, event) {
 
 var videoMouseDownTarget = null;
 var videoMouseDown = false;
-var videoPausedBefore = false;
+var videoSpeedBefore = 1;
 
 function setVideoMouseDown(div, b) {
     var vid = div.find('video')[0];
     if(b) {
         videoMouseDownTarget = div;
-        videoPausedBefore = vid.paused || vid.ended;
-        setTimeout(function() {vid.pause()}, 0); // not on touch events
+        videoSpeedBefore = vid.playbackRate;
+        vid.playbackRate = 0;
         div.find('.video-progress-bar').addClass('notransition');
         div.find('.video-progress-pointer').addClass('notransition');
     }
     else {
-        if(!videoPausedBefore) {
+        if(videoSpeedBefore != vid.playbackRate) {
             videoMouseDownTarget = null;
-            setTimeout(function() {vid.play()}, 0); // not on touch events
+            vid.playbackRate = videoSpeedBefore;
         }
         div.find('.video-progress-bar')[0].offsetHeight;
         div.find('.video-progress-pointer')[0].offsetHeight;
@@ -726,6 +752,35 @@ function updateVideoTime(div) {
 
     resizeVideoPlayer(div);
 }
+
+function videoOnError(div, event) {
+    div.append('<div class="error-con">');
+    div.find('.error-con').append('<span>Ein Fehler ist aufgetreten.<br>Das Video kann nicht abgespielt werden.<br>Klicken zum neu laden!</span>');
+    div.find('.error-con').on('click touchstart touchend mousedown mouseup', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        div.find('video')[0].load();
+        videoRemoveError(div);
+        videoCheckDelayedError(div);
+    });
+}
+
+function videoRemoveError(div, event) {
+    div.find('.error-con').remove();
+}
+
+function videoCheckDelayedError(div) {
+    setTimeout(function() {
+        var vid = div.find('video')[0];
+        if(vid.readyState === 0 || vid.networkState === 3) {
+            videoOnError(div);
+        }
+        else {
+            videoRemoveError(div);
+        }
+    }, 1000);
+}
+
 
 
 function timeToString(seconds) {

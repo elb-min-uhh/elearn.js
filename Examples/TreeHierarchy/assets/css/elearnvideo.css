@@ -361,8 +361,30 @@
     background: #e2001a;
 }
 
+/* Error*/
 
+.elearnjs-video .error-con {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index:4;
+    background: #444;
+    color: white;
+    cursor: default;
+}
 
+.elearnjs-video .error-con>span {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 60px;
+    top: 50%;
+    margin-top: -30px;
+    text-align: center;
+    line-height: 20px;
+}
 
 /* PLAY OVERLAY (before starting) + MOBILE*/
 
@@ -390,7 +412,7 @@
     height: 80px;
     margin-top: -40px;
     margin-left: -40px;
-    z-index: 10;
+    z-index: 3;
 }
 
 .elearnjs-video .mobile-overlay {
