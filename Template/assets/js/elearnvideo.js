@@ -98,6 +98,7 @@ function videoAddButtonListeners(div) {
         event.preventDefault();
         event.stopPropagation();
         videoTogglePlay(div);
+        videoHover(div);
     });
     div.find('.volume').find('.icon').on('mouseup touchend', function(event) {
         videoVolumeClick(div, event);
@@ -307,16 +308,19 @@ function videoHover(div) {
         div.addClass("hovered");
         resizeVideoPlayer(div);
     }
+    var vid = div.find('video')[0];
     var idx = $('.elearnjs-video').index(div);
     if(video_hover_timers[idx] != undefined) clearTimeout(video_hover_timers[idx]);
-    video_hover_timers[idx] = setTimeout(function(){
-        if(videoMouseDown || videoVolumeMouseDown) {
-            videoHover(div);
-        }
-        else {
-            videoHoverEnd(div);
-        }
-    }, 2500);
+    if(!(vid.paused && isTouchSupported())) {
+        video_hover_timers[idx] = setTimeout(function(){
+            if(videoMouseDown || videoVolumeMouseDown) {
+                videoHover(div);
+            }
+            else {
+                videoHoverEnd(div);
+            }
+        }, 2500);
+    }
 }
 
 function videoHoverEnd(div) {
