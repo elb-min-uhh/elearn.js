@@ -10,7 +10,6 @@
 */
 $(document).ready(function() {
     initiateVideoPlayers();
-    registerAfterWindowResize("video-resize", resizeAllVideoPlayers);
 });
 
 // ----------------------------------------------------------------------------
@@ -66,12 +65,10 @@ function initiateVideoPlayers() {
         updateVideoVolume(div);
     });
     initiateVideoNotes();
-    eLearnJS.registerAfterShow("resizeVideos", resizeAllVideoPlayers);
-    resizeAllVideoPlayers();
 }
 
 function addVideoPlayerListener(div) {
-    eLearnJS.addTouchMouseChangeListener("video-mobile", resizeAllVideoPlayers);
+    eLearnJS.addTouchMouseChangeListener("video-mobile", switchTouchMouse(div));
 
     videoAddButtonListeners(div);
     videoAddUserInteractionListeners(div);
@@ -194,9 +191,7 @@ function videoAddProgressBarListeners(div) {
         videoProgressMouseLeave(div, event);
     });
     div.on('mousemove touchmove', function(event) {
-        if(videoMouseDown && videoMouseDownTarget != null) {
-            videoProgressMouseMove(div, event);
-        }
+        videoProgressMouseMove(div, event);
     });
     div.find('.video-progress-con').on('mousedown touchstart', function(event) {
         event.preventDefault();
@@ -306,7 +301,6 @@ function videoRefreshHover(div, event) {
 function videoHover(div) {
     if(!div.is(".hovered")) {
         div.addClass("hovered");
-        resizeVideoPlayer(div);
     }
     var vid = div.find('video')[0];
     var idx = $('.elearnjs-video').index(div);
@@ -477,7 +471,6 @@ function videoToggleFullscreen(div) {
             eLearnJS.generalSectionSwipeEnabled(secSwipeBefore);
         }
     }
-    setTimeout(function() {resizeVideoPlayer(div)}, 100);
 }
 
 // VOLUME --------------------------------------------------
@@ -681,6 +674,7 @@ function setVideoMouseDown(div, b) {
         div.find('.video-progress-pointer')[0].offsetHeight;
         div.find('.video-progress-bar').removeClass('notransition');
         div.find('.video-progress-pointer').removeClass('notransition');
+        updateVideoTime(div);
     }
     videoMouseDown = b;
 }
@@ -704,8 +698,6 @@ function videoProgressMouseMove(div, e) {
 
     videoHover(div);
 
-    e.preventDefault();
-    e.stopPropagation();
     if(e.type.toLowerCase() === "mousemove"
         || e.type.toLowerCase() === "mousedown") {
         pos = e.originalEvent.pageX - div.find('.video-progress').offset().left;
@@ -743,10 +735,13 @@ function updateVideoTime(div) {
     var timeleft = Math.floor(vid.duration) - Math.floor(vid.currentTime);
 
     // time fields
-    time_field.html(timeToString(time));
-    if(video_timestyle === video_timetypes.TIMELEFT) timeleft_field.html("-" + timeToString(timeleft));
-    else if(video_timestyle === video_timetypes.DURATION) timeleft_field.html(timeToString(vid.duration));
-
+    if(!videoMouseDown) {
+        time_field.html(timeToString(time));
+        if(video_timestyle === video_timetypes.TIMELEFT) {
+            if(!isNaN(timeleft)) timeleft_field.html("-" + timeToString(timeleft));
+        }
+        else if(video_timestyle === video_timetypes.DURATION) timeleft_field.html(timeToString(vid.duration));
+    }
 
     // progress bar
     var progress_bar = div.find('.video-progress-bar');
@@ -763,8 +758,6 @@ function updateVideoTime(div) {
     }
     var buffered_perc = latest_end / vid.duration;
     div.find('.video-progress-loaded').css("width", buffered_perc*100 + "%");
-
-    resizeVideoPlayer(div);
 }
 
 function videoOnError(div, event) {
@@ -798,7 +791,7 @@ function videoCheckDelayedError(div) {
 
 
 function timeToString(seconds) {
-    seconds = Math.floor(seconds);
+    seconds = Math.floor(Math.abs(seconds));
     var hours = Math.floor(seconds / (60*60));
     seconds -= hours*60*60;
     var minutes = Math.floor(seconds / 60);
@@ -816,6 +809,10 @@ function timeToString(seconds) {
         time_str = hours + ":" + time_str;
     }
 
+    if(time_str.toLowerCase().match(/nan/g)) {
+        time_str = "";
+    }
+
     return time_str;
 }
 
@@ -827,12 +824,6 @@ function resizeAllVideoPlayers() {
 
 
 function resizeVideoPlayer(div) {
-    if(isTouchSupported()) {
-        div.addClass("mobile");
-    }
-    else {
-        div.removeClass("mobile");
-    }
 
     // check text field sizes
     var time_field = div.find('.playtime');
@@ -860,6 +851,15 @@ function resizeVideoPlayer(div) {
                         - parseInt(div.find('.video-progress-con').css("margin-left").replace("px", ""))
                         - parseInt(div.find('.video-progress-con').css("margin-right").replace("px", ""));
     div.find('.video-progress-con').css("width", progress_width + "px");
+}
+
+function switchTouchMouse(div) {
+    if(eLearnJS.isTouchSupported()) {
+        div.addClass("mobile");
+    }
+    else {
+        div.removeClass("mobile");
+    }
 }
 
 // ------------------------- VIDEO NOTES ------------------------------------

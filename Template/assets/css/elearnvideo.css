@@ -124,12 +124,14 @@
 }
 
 .elearnjs-video .controls .bottom-row > * {
-    display: inline-block;
+    display: flex;
+    flex: none;
     height: 24px;
     line-height: 24px;
 }
 
 .elearnjs-video .controls .bottom-row {
+    display: flex;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -142,6 +144,8 @@
 /* PROGRESSBAR */
 
 .elearnjs-video .controls .video-progress-con {
+    display: flex;
+    flex-grow: 1;
     position: relative;
     cursor: pointer;
     vertical-align: bottom;
@@ -232,6 +236,7 @@
     margin: 5px;
     color: white;
     line-height: 24px;
+    padding: 0 3px;
 }
 
 .elearnjs-video .icon {
