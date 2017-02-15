@@ -168,6 +168,11 @@ function videoAddUserInteractionListeners(div) {
             }
         }
     });
+    div.on('mouseout', function(event) {
+        if(!isTouchSupported()) {
+            videoHoverEnd(div);
+        }
+    });
 
     div.bind('keypress', function(event) {
         videoKeyPress(div, event);
@@ -315,7 +320,7 @@ function videoHover(div) {
 
 function videoHoverEnd(div) {
     var vid = div.find('video')[0];
-    if(!vid.paused && !vid.ended) {
+    if(!vid.ended) {
         div.removeClass("hovered");
     }
 }
