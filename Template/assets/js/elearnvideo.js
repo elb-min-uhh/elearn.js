@@ -368,6 +368,10 @@ function videoTogglePlay(div) {
     var vid = div.find('video')[0];
     var btn = div.find('.playpause')[0];
 
+    if(vid.playbackRate === 0) {
+        vid.playbackRate = 1;
+    }
+
     // paused now -> play
     if(vid.paused || vid.ended) {
         vid.play();
@@ -656,14 +660,14 @@ var videoSpeedBefore = 1;
 
 function setVideoMouseDown(div, b) {
     var vid = div.find('video')[0];
-    if(b) {
+    if(b && !videoMouseDown) {
         videoMouseDownTarget = div;
         videoSpeedBefore = vid.playbackRate;
         vid.playbackRate = 0;
         div.find('.video-progress-bar').addClass('notransition');
         div.find('.video-progress-pointer').addClass('notransition');
     }
-    else {
+    else if(!b && videoMouseDown) {
         if(videoSpeedBefore != vid.playbackRate) {
             videoMouseDownTarget = null;
             vid.playbackRate = videoSpeedBefore;
