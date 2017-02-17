@@ -32,6 +32,13 @@ function initiateVideoPlayers() {
         var div = $(this).parent();
 
         div.append("<div class='mobile-overlay'><div class='icon playpause paused'></div></div>");
+        div.append("<div class='loading-overlay'><div class='loading-con'>"
+                      + "<div class='loading-animation'>"
+                        + "<div class='background'></div>"
+                        + "<div class='inner'><div class='light'></div></div>"
+                        + "<div class='inner skip'><div class='light'></div></div>"
+                      + "</div>"
+                    + "</div></div>");
         if(this.autoplay) {
             this.play();
         }
@@ -259,6 +266,10 @@ function videoAddEventListeners(div) {
     });
     div.find('video').on('canplay', function(event) {
         videoRemoveError(div, event);
+        videoRemoveBuffering(div);
+    });
+    div.find('video').on('waiting', function(event) {
+        videoOnBuffering(div, event);
     });
     videoCheckDelayedError(div);
 }
@@ -786,6 +797,21 @@ function videoCheckDelayedError(div) {
             videoRemoveError(div);
         }
     }, 1000);
+}
+
+
+function videoOnBuffering(div, event) {
+    if(div.find('.play-overlay').length == 0) {
+        if(div.is('.mobile')) div.find('.mobile-overlay').hide();
+        div.find('.loading-overlay').show();
+    }
+}
+
+function videoRemoveBuffering(div, event) {
+    if(div.find('.play-overlay').length == 0) {
+        if(div.is('.mobile')) div.find('.mobile-overlay').show();
+        div.find('.loading-overlay').hide();
+    }
 }
 
 

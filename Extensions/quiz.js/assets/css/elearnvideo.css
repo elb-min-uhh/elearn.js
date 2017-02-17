@@ -503,7 +503,79 @@
     pointer-events: none;
 }
 
+.loading-overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: none;
+    background: rgba(0,0,0,0.2);
+}
 
+.loading-overlay .loading-con {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    margin-left: -20px;
+}
+
+.loading-animation {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s infinite linear;
+}
+
+.loading-animation>.background {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border: 3px solid #888;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.50), inset 0 0 10px rgba(0, 0, 0, 0.50);
+}
+
+.loading-animation>.inner {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    clip: rect(0px, 40px, 40px, 20px);
+}
+
+.loading-animation>.inner.skip {
+    transform: rotate(180deg);
+}
+
+.loading-animation>.inner>.light {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    clip: rect(0px, 40px, 40px, 20px);
+    animation: spin 2.5s infinite linear;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 
 @media screen and (max-width:800px) {
     /* VIDEOS */
