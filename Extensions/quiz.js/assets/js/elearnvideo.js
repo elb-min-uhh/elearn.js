@@ -213,7 +213,7 @@ function videoAddProgressBarListeners(div) {
                 event.preventDefault();
                 event.stopPropagation();
                 setVideoMouseDown(videoMouseDownTarget, false);
-                if(event.type === "touchend") div.find('.progress-hover-time').remove();
+                if(!videoOverProgress) div.find('.progress-hover-time').remove();
             }
             return false;
         }
@@ -663,6 +663,7 @@ function videoKeyPress(div, event) {
 
 // PROGRESSBAR ----------------------------------------------
 
+var videoOverProgress = false;
 var videoMouseDownTarget = null;
 var videoMouseDown = false;
 var videoSpeedBefore = 1;
@@ -695,12 +696,14 @@ function videoProgressMouseEnter(div, e) {
     var back = con.find('.video-progress');
     back.append('<div class="video-progress-hover">');
     div.append('<div class="progress-hover-time"></div>');
+    videoOverProgress = true;
 }
 
 function videoProgressMouseLeave(div, e) {
     var con = div.find('.video-progress-con');
     con.find('.video-progress-hover').remove();
-    div.find('.progress-hover-time').remove();
+    if(!videoMouseDown) div.find('.progress-hover-time').remove();
+    videoOverProgress = false;
 }
 
 function videoProgressMouseMove(div, e) {
