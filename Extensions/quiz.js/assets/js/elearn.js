@@ -1737,6 +1737,10 @@ function setKeyNavigationEnabled(b) {
     keyNavigationEnabled = b;
 }
 
+function isKeyNavigationEnabled() {
+    return keyNavigationEnabled;
+}
+
 
 
 /**

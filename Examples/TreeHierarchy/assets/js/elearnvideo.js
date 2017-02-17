@@ -402,7 +402,6 @@ function videoUpdatePlayPauseButton(div) {
         div.find('.playpause').attr("title", 'Play');
         div.find('.playpause').removeClass("playing");
         div.find('.playpause').addClass("paused");
-        div.addClass("hovered");
     }
     // pause
     else {
@@ -430,6 +429,7 @@ function videoToggleTimeleftDuration(div) {
 
 
 var secSwipeBefore;
+var keyEnabledBefore;
 
 function videoToggleFullscreen(div) {
     // to fullscreen
@@ -465,7 +465,9 @@ function videoToggleFullscreen(div) {
         }
         div.addClass("full");
         secSwipeBefore = eLearnJS.isSectionSwipeEnabled();
+        keyEnabledBefore = eLearnJS.isKeyNavigationEnabled();
         eLearnJS.generalSectionSwipeEnabled(false);
+        eLearnJS.setKeyNavigationEnabled(false);
     }
     else {
         if (document.exitFullscreen) {
@@ -480,6 +482,7 @@ function videoToggleFullscreen(div) {
         div.removeClass("full");
         if(secSwipeBefore != undefined) {
             eLearnJS.generalSectionSwipeEnabled(secSwipeBefore);
+            eLearnJS.setKeyNavigationEnabled(keyEnabledBefore);
         }
     }
 }
@@ -658,6 +661,7 @@ function videoKeyPress(div, event) {
     if(event.which === 32) {
         event.preventDefault();
         videoTogglePlay(div);
+        videoHover(div);
     }
 }
 
