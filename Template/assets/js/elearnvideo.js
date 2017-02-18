@@ -344,6 +344,12 @@ function checkVideoFullscreen() {
 
     if(!isFullScreen) {
         $('.elearnjs-video').removeClass("full");
+        if(secSwipeBefore !== undefined && keyEnabledBefore !== undefined) {
+            eLearnJS.generalSectionSwipeEnabled(secSwipeBefore);
+            eLearnJS.setKeyNavigationEnabled(keyEnabledBefore);
+            secSwipeBefore = undefined;
+            keyEnabledBefore = undefined;
+        }
     }
 };
 
@@ -428,8 +434,8 @@ function videoToggleTimeleftDuration(div) {
 }
 
 
-var secSwipeBefore;
-var keyEnabledBefore;
+var secSwipeBefore = undefined;
+var keyEnabledBefore = undefined;
 
 function videoToggleFullscreen(div) {
     // to fullscreen
@@ -464,10 +470,12 @@ function videoToggleFullscreen(div) {
             return;
         }
         div.addClass("full");
-        secSwipeBefore = eLearnJS.isSectionSwipeEnabled();
-        keyEnabledBefore = eLearnJS.isKeyNavigationEnabled();
-        eLearnJS.generalSectionSwipeEnabled(false);
-        eLearnJS.setKeyNavigationEnabled(false);
+        if(secSwipeBefore === undefined && keyEnabledBefore === undefined) {
+            secSwipeBefore = eLearnJS.isSectionSwipeEnabled();
+            keyEnabledBefore = eLearnJS.isKeyNavigationEnabled();
+            eLearnJS.generalSectionSwipeEnabled(false);
+            eLearnJS.setKeyNavigationEnabled(false);
+        }
     }
     else {
         if (document.exitFullscreen) {
@@ -480,9 +488,11 @@ function videoToggleFullscreen(div) {
             document.webkitExitFullscreen();
         }
         div.removeClass("full");
-        if(secSwipeBefore != undefined) {
+        if(secSwipeBefore !== undefined && keyEnabledBefore !== undefined) {
             eLearnJS.generalSectionSwipeEnabled(secSwipeBefore);
             eLearnJS.setKeyNavigationEnabled(keyEnabledBefore);
+            secSwipeBefore = undefined;
+            keyEnabledBefore = undefined;
         }
     }
 }
