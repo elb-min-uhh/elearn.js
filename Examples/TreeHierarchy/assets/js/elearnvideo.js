@@ -71,11 +71,14 @@ function initiateVideoPlayers() {
         videoCheckForBrowserSpecifics(div);
         updateVideoVolume(div);
     });
+
+    eLearnJS.addTouchMouseChangeListener("video-mobile", switchTouchMouse);
+    eLearnJS.registerTouchDeactivatedElement("videos", $('.elearnjs-video'));
+    eLearnJS.registerTouchDeactivatedElement("videos", $('.elearnjs-video *'));
     initiateVideoNotes();
 }
 
 function addVideoPlayerListener(div) {
-    eLearnJS.addTouchMouseChangeListener("video-mobile", switchTouchMouse);
 
     videoAddButtonListeners(div);
     videoAddUserInteractionListeners(div);

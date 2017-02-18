@@ -1921,41 +1921,68 @@ var lastTime = undefined;
 var lastDif = undefined;
 var startScrollLeft = 0;
 
+var touchDeactivatedElements = {};
+
+function registerTouchDeactivatedElement(key, elem) {
+    if(touchDeactivatedElements[key] == undefined
+        || touchDeactivatedElements[key] == null) {
+        touchDeactivatedElements[key] = elem;
+    }
+    else if(!touchDeactivatedElements[key].is(elem)) {
+        Array.prototype.push.apply(touchDeactivatedElements[key], elem);
+    }
+}
+
+function removeTouchDeactivatedElement(key) {
+    delete touchDeactivatedElements[key];
+}
+
 /**
 * Überprüft, um welche Touchfunktion es sich handelt.
 * Abhängig davon, welches Element berührt wurde und in welche Richtung sich der Finger
 * bewegt.
 */
 function setSwipeType() {
-    if(swipeTarget.is('.slider') || swipeTarget.is('.slider *')
-        || swipeTarget.is('.slider-nav') || swipeTarget.is('.slider-nav *')) {
-        swipeType = "slider";
-
-        var ul = $(swipeTarget);
-        while(ul.filter('.slider').length == 0 && ul.filter('.slider-nav').length == 0) {
-            ul = ul.parent();
+    var swipeTypeSet = false;
+    $.each(touchDeactivatedElements, function(key, elem) {
+        if(swipeTarget.is(elem)) {
+            swipeType = "normal";
+            swipeTypeSet = true;
+            return false;
         }
-        ul = ul.children("ul.img-gallery");
-        swipeTarget = ul;
-        ul.css("transition-duration", "0s");
-    }
-    // else if($(window).width() - (event.touches[0].pageX - $(document).scrollLeft()) < 20 && !isSideMenuVisible()) {
-        // swipeType = "menu";
-        // $('.menu-wrap').css('top', $('#navigation').height() + "px");
-    // }
-    else if(isSideMenuVisible()) {
-        swipeType = "menu-back";
-        $('.menu-wrap').css('top', $('#navigation').height() + "px");
-    }
-    else if(!allShown
-        && !swipeTarget.is("code") // Kein Code Element
-        && (parseInt(swipeTarget.prop("scrollWidth")) <= Math.ceil(swipeTarget.innerWidth())
-            || swipeTarget.css("overflow-x") == 'hidden')) // Element nicht horizontal scrollbar
-    {
-        swipeType = "section";
-    }
-    else {
-        swipeType = "normal";
+    });
+
+    if(!swipeTypeSet) {
+        if(swipeTarget.is('.slider') || swipeTarget.is('.slider *')
+            || swipeTarget.is('.slider-nav') || swipeTarget.is('.slider-nav *')) {
+            swipeType = "slider";
+
+            var ul = $(swipeTarget);
+            while(ul.filter('.slider').length == 0 && ul.filter('.slider-nav').length == 0) {
+                ul = ul.parent();
+            }
+            ul = ul.children("ul.img-gallery");
+            swipeTarget = ul;
+            ul.css("transition-duration", "0s");
+        }
+        // else if($(window).width() - (event.touches[0].pageX - $(document).scrollLeft()) < 20 && !isSideMenuVisible()) {
+            // swipeType = "menu";
+            // $('.menu-wrap').css('top', $('#navigation').height() + "px");
+        // }
+        else if(isSideMenuVisible()) {
+            swipeType = "menu-back";
+            $('.menu-wrap').css('top', $('#navigation').height() + "px");
+        }
+        else if(!allShown
+            && !swipeTarget.is("code") // Kein Code Element
+            && (parseInt(swipeTarget.prop("scrollWidth")) <= Math.ceil(swipeTarget.innerWidth())
+                || swipeTarget.css("overflow-x") == 'hidden')) // Element nicht horizontal scrollbar
+        {
+            swipeType = "section";
+        }
+        else {
+            swipeType = "normal";
+        }
     }
 }
 
