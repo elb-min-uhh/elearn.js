@@ -1031,6 +1031,7 @@ ul.img-gallery {
     padding: 0;
     display: block;
     transition-duration: 0.25s;
+    transition-timing-function: ease-out;
 }
 
 ul.img-gallery:after {

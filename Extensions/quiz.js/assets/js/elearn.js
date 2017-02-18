@@ -1021,7 +1021,6 @@ var timeoutId = [];
 * @param slide - die Stelle / Nummer des Bildes im <ul> (startet mit 0)
 */
 function showSlide(ul, slide) {
-    $('ul.img-gallery').css("transition-duration", "0.5s");
     // Falls Loop aktiviert springt es mit -1 an die letzte Stelle und mit
     // "x.length" an Stelle 0
     if(ul.parent().filter('.loop').length > 0) {
@@ -1862,22 +1861,22 @@ function isSectionSwipeEnabled() {
 * Fügt allen Sections eine Touchabfrage hinzu.
 */
 function addTouchToSections() {
-    $(document).bind('touchstart', function() {
+    $(document).bind('touchstart', function(event) {
         if(secSwipeEnabled) {
             touchStart(event, this);
         }
     });
-    $(document).bind('touchend', function() {
+    $(document).bind('touchend', function(event) {
         if(secSwipeEnabled) {
             touchEnd(event);
         }
     });
-    $(document).bind('touchmove', function() {
+    $(document).bind('touchmove', function(event) {
         if(secSwipeEnabled) {
             touchMove(event);
         }
     });
-    $(document).bind('touchcancel', function() {
+    $(document).bind('touchcancel', function(event) {
         if(secSwipeEnabled) {
             touchCancel(event);
         }
@@ -1912,8 +1911,8 @@ var swipeDirectionSet = false;
 var swipeType = "normal";
 var swipeTarget = null;
 var lastSpeed = 0;
-var lastTime = 0;
-var lastDif = 0;
+var lastTime = undefined;
+var lastDif = undefined;
 var startScrollLeft = 0;
 
 /**
@@ -1961,17 +1960,20 @@ function touchStart(event,passedName) {
     startScrollLeft = $(document).scrollLeft();
 
     fingerCount = event.touches.length;
-    if ( fingerCount == 1 ) {
+    if (fingerCount == 1) {
         swipeStarted = true;
         startX = event.touches[0].pageX;
         startY = event.touches[0].pageY;
+        curX = event.touches[0].pageX;
+        curY = event.touches[0].pageY;
         triggerElementID = passedName;
     } else {
         touchCancel(event);
     }
 }
 function touchMove(event) {
-    if ( event.touches.length == 1 ) {
+    fingerCount = event.touches.length;
+    if (swipeStarted && fingerCount == 1) {
         curX = event.touches[0].pageX;
         curY = event.touches[0].pageY;
 
@@ -1981,7 +1983,7 @@ function touchMove(event) {
 
         if((isHorizontalSwipe && swipeType != "section" && swipeType != "normal")
             || (isHorizontalSwipe && swipeType == "section" && Math.abs(lastDif) > 12)) {
-            event.preventDefault();
+            //event.preventDefault();
         }
 
         var dif = startX - curX;
@@ -2007,7 +2009,7 @@ function touchMove(event) {
 }
 
 function touchEnd(event) {
-    if ( fingerCount == 1 && curX >= 0 ) {
+    if (swipeStarted && fingerCount == 1 && curX >= 0 ) {
         //swipeLength = Math.round(Math.sqrt(Math.pow(curX - startX,2) + Math.pow(curY - startY,2)));
         if((swipeType == "menu" || swipeType == "menu-back") && !isSideMenuVisible()) {
             touchEndMenu();
@@ -2017,25 +2019,16 @@ function touchEnd(event) {
         }
         if (swipeType == "section" && Math.abs(curX - startX) >= maxDiff) {
             touchEndSection();
-        } else {
-            touchCancel(event);
+            if(swipeDirection != -1) {
+                processingRoutine(swipeDirection, swipeType);
+            }
         }
-    } else {
-        touchCancel(event);
     }
     touchCancel(event);
 }
 
-function touchCancel(event) {
-    touchCancel(event, -1);
-}
-
 function touchCancel(event, dir) {
-    if(swipeType == "slider") {
-            $(swipeTarget).css("transition-duration", "0.6s");
-    }
     if(triggerElementID != null) {
-        checkClicked();
         fingerCount = 0;
         startX = -1;
         startY = -1;
@@ -2047,20 +2040,16 @@ function touchCancel(event, dir) {
         triggerElementID = null;
         isHorizontalSwipe = true;
         swipeDirectionSet = false;
+        swipeStarted = false;
+        swipeTarget = null;
         lastSpeed = 0;
-        lastTime = 0;
-        lastDif = 0;
+        lastTime = undefined;
+        lastDif = undefined;
         startScrollLeft = 0;
         $('#leftTouch').animate({'margin-left':'0'}, { duration: 200, queue: false });
         $('#rightTouch').animate({'margin-right':'0'}, { duration: 200, queue: false });
         $('#leftTouch').animate({'opacity':'0'}, { duration: 200, queue: false });
-        $('#rightTouch').animate({'opacity':'0'}, { duration: 200, complete: function() {
-            if(dir != -1 && swipeStarted) {
-                processingRoutine(dir, swipeType);
-            }
-            swipeStarted = false;
-            swipeTarget = null;
-        }});
+        $('#rightTouch').animate({'opacity':'0'}, { duration: 200});
     }
 }
 
@@ -2111,26 +2100,6 @@ function processingRoutine(dir, type) {
         } else if ( dir == 'down' ) {
         }
     }
-}
-
-var x = 0;
-/**
-* Aktiviert das Klicken auf alle Elemente in Sections.
-*/
-function checkClicked() {
-    return;
-    /*
-    if(startX >= 0 && startY >= 0 && curX == -1 && curY == -1) {
-        x++;
-        var clicked = $(document.elementFromPoint((startX - $(document).scrollLeft()), (startY - $(document).scrollTop())));
-
-        if(!clickedAlready) {
-            clicked.focus();
-            clicked.click();
-        }
-        clickedAlready = false;
-    }
-    */
 }
 
 // ---------------------------------------------------------------------------------------
@@ -2208,8 +2177,6 @@ function touchMoveSlider(dif, ul) {
 function touchEndSection() {
     caluculateAngle();
     determineSwipeDirection();
-    var dir = swipeDirection;
-    touchCancel(event, dir);
 }
 
 function touchEndSlider() {
@@ -2239,11 +2206,13 @@ function touchEndSlider() {
             vimg--;
         }
     }
-    var speed = (1-Math.abs(dif / $(swipeTarget).children("li").width()))*0.5;
+    // lastSpeed ist px/ms, berechne animationsdauer daraus
+    var duration = ($(swipeTarget).children("li").width()-dif) / Math.abs(lastSpeed*1000);
     if(vimg == visibleImage[$('.img-gallery').index(ul)]) {
-        speed = 0.5;
+        duration = 0.5;
     }
-    ul.css("transition-duration", speed+"s");
+    ul.css("transition-duration", duration+"s");
+    ul[0].offsetHeight;
     showSlide(ul, vimg);
     ul.css("transition-duration", "0.5s");
 }
@@ -2272,14 +2241,26 @@ function touchEndMenu() {
 
 /**
 * Berechnet die Slide-Geschwindigkeit
+* im px/ms
 */
 function calcSpeed(dif) {
     var d = new Date();
     var time = d.getTime();
 
-    lastSpeed = getSpeed(lastDif, lastTime, dif, time);
-    lastDif = dif;
-    lastTime = time;
+    if(lastDif === undefined || lastTime === undefined) {
+        lastDif = dif;
+        lastTime = time;
+    }
+    else {
+        lastSpeed = getSpeed(lastDif, lastTime, dif, time);
+        if(time - lastTime > 50) //more than 1sec
+        {
+            //calculate dif 1s before
+            var timedif = time - lastTime;
+            lastDif = dif - ((50/timedif) * (dif-lastDif));
+            lastTime = time - 50;
+        }
+    }
 }
 
 function getSpeed(lastDif, lastTime, dif, time) {
