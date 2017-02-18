@@ -1183,7 +1183,6 @@ var resizeTimer = null;
 function resizeAllSliders() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function() {
-        $('ul.img-gallery').css("transition-duration", "0s");
         resizeSliders();
         resizeNavigationSliders();
         resizeZoomContainer();
@@ -1198,7 +1197,11 @@ function resizeSliders() {
     $('.slider:visible').each(function() {
         var slider = $(this);
         var ul = slider.children('ul.img-gallery');
+
+        ul.css("transition-duration", "0s");
+        ul[0].offsetHeight; // apply css changes
         ul.find('img').css({'max-height': ''});
+
         var slide = visibleImage[$('.img-gallery').index(ul)];
         var heights = 0;
         var testedImages = 0;
@@ -1247,6 +1250,9 @@ function resizeSliders() {
             width: ul.children('li').outerWidth(true) * ul.children('li').length + "px",
             transform: "translate3d(" + x + "px, 0px, 0px)"
         });
+
+        //ul[0].offsetHeight; // apply css changes
+        ul.css("transition-duration", "0.5s");
     });
 }
 
@@ -1953,6 +1959,10 @@ function setSwipeType() {
     }
 }
 
+function checkSwipeType() {
+    if(!isHorizontalSwipe) swipeType = "normal";
+}
+
 function touchStart(event,passedName) {
     swipeTarget = $(event.target);
     setSwipeType();
@@ -1979,6 +1989,7 @@ function touchMove(event) {
 
         if(!swipeDirectionSet) {
             setSwipeDirection();
+            checkSwipeType();
         }
 
         if((isHorizontalSwipe && swipeType != "section" && swipeType != "normal")
@@ -2009,6 +2020,7 @@ function touchMove(event) {
 }
 
 function touchEnd(event) {
+    calcSpeed(startX - curX);
     if (swipeStarted && fingerCount == 1 && curX >= 0 ) {
         //swipeLength = Math.round(Math.sqrt(Math.pow(curX - startX,2) + Math.pow(curY - startY,2)));
         if((swipeType == "menu" || swipeType == "menu-back") && !isSideMenuVisible()) {
@@ -2194,25 +2206,29 @@ function touchEndSlider() {
         margin: "0 0 0 0"
     });
 
-    if(lastSpeed*6 + (dif / $(swipeTarget).children("li").width())*0.5 > 1) {
+    // lastSpeed ist px/ms, berechne animationsdauer daraus
+    var duration = (ul.parent().width()-dif) / Math.abs(lastSpeed*1000);
+
+    if(duration < 1 && lastSpeed > 0) {
         if((!ul.parent().is('.slider-nav') && vimg < ul.children('li').length-1)
             || (ul.parent().is('.slider-nav') && (vimg+1)*4 < ul.children('li').length)
             || ul.parent().filter('.loop').length > 0) {
             vimg++;
         }
+        else duration = 0.5;
     }
-    else if(lastSpeed*6 + (dif / $(swipeTarget).children("li").width())*0.5 < -1) {
+    else if(duration < 1 && lastSpeed < 0) {
         if(vimg > 0 || ul.parent().filter('.loop').length > 0) {
             vimg--;
         }
+        else duration = 0.5;
     }
-    // lastSpeed ist px/ms, berechne animationsdauer daraus
-    var duration = ($(swipeTarget).children("li").width()-dif) / Math.abs(lastSpeed*1000);
-    if(vimg == visibleImage[$('.img-gallery').index(ul)]) {
+    else {
         duration = 0.5;
     }
+
     ul.css("transition-duration", duration+"s");
-    ul[0].offsetHeight;
+    ul[0].offsetHeight; // apply css changes
     showSlide(ul, vimg);
     ul.css("transition-duration", "0.5s");
 }

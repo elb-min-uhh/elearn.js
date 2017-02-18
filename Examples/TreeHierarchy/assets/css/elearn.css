@@ -1030,7 +1030,7 @@ ul.img-gallery {
     margin: 0;
     padding: 0;
     display: block;
-    transition-duration: 0.25s;
+    transition-duration: 0.5s;
     transition-timing-function: ease-out;
 }
 
