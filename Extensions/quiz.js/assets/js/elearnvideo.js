@@ -161,7 +161,8 @@ function videoAddUserInteractionListeners(div) {
 
             // touch
             if(event.type === "touchend") {
-                videoToggleHover(div);
+                // keine clicks durch 2. mouse event auf eingeblendete Elemente
+                setTimeout(function() {videoToggleHover(div)}, 50);
                 touchend_block = true;
                 clearTimeout(touchend_timer);
                 touchend_timer = setTimeout(function() {touchend_block = false;}, 100);
