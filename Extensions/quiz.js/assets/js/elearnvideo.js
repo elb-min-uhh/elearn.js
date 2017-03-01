@@ -173,7 +173,7 @@ function videoAddUserInteractionListeners(div) {
             }
         }
     });
-    div.on('mouseout', function(event) {
+    div.on('mouseleave', function(event) {
         if(!div.is('.mobile')) {
             videoHoverEnd(div);
         }

@@ -323,6 +323,7 @@
     position: absolute;
     box-sizing: border-box;
     bottom: 34px;
+    left: 0;
     padding: 10px;
     background: #444;
 }
