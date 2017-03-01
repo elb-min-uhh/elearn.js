@@ -636,6 +636,16 @@ function setBlockProgressShowElement(enabled, text) {
 }
 
 
+// -------------------------------------------------------------------------------------
+// Navigation Title
+// -------------------------------------------------------------------------------------
+
+function setNavigationTitle(text) {
+    $('#nav-title').text(text);
+    // default navigation title (when no single section is open)
+    navigationTitle = text;
+}
+
 
 // -------------------------------------------------------------------------------------
 // Overview

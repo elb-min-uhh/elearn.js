@@ -642,6 +642,8 @@ function setBlockProgressShowElement(enabled, text) {
 
 function setNavigationTitle(text) {
     $('#nav-title').text(text);
+    // default navigation title (when no single section is open)
+    navigationTitle = text;
 }
 
 
