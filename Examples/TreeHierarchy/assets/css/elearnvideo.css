@@ -15,6 +15,10 @@
 .elearnjs-video {
     max-width:100%;
     margin:3em 0px 3em 0px;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */   
 }
 
 /* Apple player hide */

@@ -74,6 +74,10 @@ iframe, video {
     font-size:0.8em;
     color:rgb(204,204,204);
     z-index: 5;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
 }
 
 #nav-bar {
