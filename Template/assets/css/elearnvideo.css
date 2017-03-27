@@ -12,13 +12,17 @@
     src: url('../font/eLearn-Video.woff') format('woff');
 }
 
+.video-container {
+    display: inline-block;
+}
+
 .elearnjs-video {
     max-width:100%;
     margin:3em 0px 3em 0px;
     -webkit-user-select: none;  /* Chrome all / Safari all */
     -moz-user-select: none;     /* Firefox all */
     -ms-user-select: none;      /* IE 10+ */
-    user-select: none;          /* Likely future */   
+    user-select: none;          /* Likely future */
 }
 
 /* Apple player hide */
@@ -470,7 +474,8 @@
 
 /* ------------------------- VIDEO NOTES ------------------------- */
 
-.noted_video .elearnjs-video {
+.video-container.noted_video .elearnjs-video,
+.video-container.allow_user_notes .elearnjs-video {
     margin-bottom: 0;
 }
 
@@ -483,11 +488,13 @@
     margin-bottom: 3em;
 }
 
-.noted_video .video_notes {
+.video-container.noted_video .video_notes,
+.video-container.allow_user_notes .video_notes {
     display: block;
 }
 
-.noted_video .video_notes span.video_note_timestamp {
+.video-container.noted_video .video_notes span.video_note_timestamp,
+.video-container.allow_user_notes .video_notes span.video_note_timestamp {
     font-weight: bold;
     margin-right: 0.5em;
 }
@@ -507,6 +514,24 @@
     background: rgba(247, 239, 0, 0.9);
     pointer-events: none;
 }
+
+
+/* USER NOTES */
+
+.video-container .video_notes .note_add_container {
+    display: none;
+    margin-bottom: 5px;
+}
+
+.video-container .video_notes .note_add_container textarea {
+    width: 100% !important;
+    height: 80px;
+    box-sizing: border-box;
+    font-family: Open Sans, sans-serif;
+}
+
+
+/* ---------------------------------------------------------------------- */
 
 .loading-overlay {
     display: none;

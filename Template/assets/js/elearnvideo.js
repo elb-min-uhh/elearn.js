@@ -26,9 +26,15 @@ var video_timestyle = 0;
 var touchend_block = false;
 var touchend_timer = null;
 
+var user_notes = null;
+
 function initiateVideoPlayers() {
+    loadLocalVideoNotesStorage();
+
     $('video').each(function(i,e) {
         this.controls = false;
+
+        $(this).wrap('<div class="video-container">');
         $(this).wrap("<div class='elearnjs-video hovered' tabindex='-1'>");
 
         var div = $(this).parent();
@@ -936,11 +942,20 @@ function initiateVideoNotes() {
 
     // create list with sorted times for faster checking if something needs to be shown
     $('.elearnjs-video').each(function(i,e) {
-        var videoNotes = $(this).next('.video_notes');
+        var div = $(this).closest('.video-container');
+        var videoNotes = div.next('.video_notes');
 
-        $(this).wrap('<div class="video_container">');
-        $(this).parent().append(videoNotes);
+        if(videoNotes.length === 0) {
+            addVideoNotesContainer(div);
+            videoNotes = div.find('.video_notes');
+        }
 
+        div.append(videoNotes);
+
+        // initiate user video notes
+        initiateUserVideoNotes(div);
+
+        // fetch existing video notes
         videoNoteTimes[i] = getVideoNoteTimeArray(videoNotes);
 
         $(this).find('video').on('timeupdate', function(event) {
@@ -948,6 +963,26 @@ function initiateVideoNotes() {
         });
         addNotesToProgressbar($(e), i);
     });
+}
+
+function initiateUserVideoNotes(div) {
+    if(div.find('.allow_user_notes').length > 0) {
+        var videoNotes = div.find('.video_notes');
+        videoNotes.closest('.video-container').addClass('allow_user_notes');
+        videoNotes.append('<div class="note_add_container">'
+                            + '<hr>'
+                            + '<textarea placeholder="Schreibe eine Notiz... (diese sind lokal gespeichert und nicht öffentlich)"></textarea>'
+                            + '<button class="note_add">Notiz speichern</button>'
+                            + '<button class="note_cancel">Abbrechen</button>'
+                            + '</div>')
+        videoNotes.append('<button class="toggle_note_add">Notiz hinzufügen</button>');
+
+        addVideoUserNoteListeners(div);
+    }
+}
+
+function addVideoNotesContainer(div) {
+    div.append('<div class="video_notes timestamps"><h4>Notizen</h4></div>');
 }
 
 function addNotesToProgressbar(div, index) {
@@ -1079,4 +1114,62 @@ function timeStringToSeconds(str) {
         seconds += parseInt(partTime, 10);
     }
     return seconds;
+}
+
+// --------------- User Notes ----------------
+
+function addVideoUserNoteListeners(div) {
+    div.find('.toggle_note_add').on('click', function() {
+        setVideoNotesAddContainerVisible(div, true);
+    });
+
+    div.find('.note_add').on('click', function() {
+
+    });
+
+    div.find('.note_cancel').on('click', function() {
+        setVideoNotesAddContainerVisible(div, false);
+    });
+}
+
+function setVideoNotesAddContainerVisible(div, bool) {
+    if(bool) {
+        div.find('.note_add_container').show();
+        div.find('.toggle_note_add').hide();
+    }
+    else {
+        div.find('.note_add_container').hide();
+        div.find('.toggle_note_add').show();
+        div.find('.video_notes').find('textarea').val("");
+    }
+}
+
+// TODO Toggle Button for adding user notes (visibility)
+// TODO Add Note Function
+// TODO Edit Note Function(s)
+// TODO Delete Note function
+// TODO Add/Update note arrays
+
+// ------------ Local Storage ----------
+
+function loadLocalVideoNotesStorage() {
+    var user_notes_str = localStorage.getItem('elearnjs-user-notes');
+    if(user_notes === null || user_notes === undefined) {
+        localStorage.setItem('elearnjs-user-notes', '{}');
+        user_notes_str = '{}';
+    }
+    user_notes = JSON.parse(user_notes_str);
+}
+
+function updateLocalVideoNotesStorage() {
+    localStorage.setItem('elearnjs-user-notes', JSON.stringify(user_notes));
+}
+
+function getVideoNotesFor(src) {
+    return user_notes[src];
+}
+
+function setVideoNotesFor(src, val) {
+    user_notes[src] = val;
+    updateLocalVideoNotesStorage();
 }

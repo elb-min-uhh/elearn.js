@@ -151,7 +151,9 @@
 					Zusätzlich enthält das Video Anmerkungen, die unter dem Video angezeigt werden. Diese sind durch die Erweiterung video.js möglich.</p>
 
 					<!-- Nachfolgendes Video mit Kommentaren nur mit dem video.js und zugehörigem video.css möglich -->
-					<video preload="auto" controls="controls">
+					<!-- Nutzer können selbst Notizen (Text) hinterlegen. Diese werden der Video-Src zugeordnet. Ändert man diese
+						Sind die persönlichen Notizen zu dem Video weg (werden gelöscht wenn passendes Video nicht gefunden). -->
+					<video preload="auto" controls="controls" class="allow_user_notes">
 							<source src="assets/img/beispiel-video.mp4" type="video/mp4"></source>
 							<source src="assets/img/beispiel-video.webm" type="video/webm"></source>
 							Dein Browser unterstützt kein HTML5-Video. Um dir das Video dennoch ansehen zu können,
