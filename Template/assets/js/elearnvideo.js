@@ -940,20 +940,22 @@ var videoNoteTimes = [];
 function initiateVideoNotes() {
     $('.video_note').addClass('backup');
 
+    loadLocalVideoNotesStorage();
+
     // create list with sorted times for faster checking if something needs to be shown
     $('.elearnjs-video').each(function(i,e) {
-        var div = $(this).closest('.video-container');
-        var videoNotes = div.next('.video_notes');
+        var videoContainer = $(this).closest('.video-container');
+        var videoNotes = videoContainer.next('.video_notes');
 
         if(videoNotes.length === 0) {
-            addVideoNotesContainer(div);
-            videoNotes = div.find('.video_notes');
+            addVideoNotesContainer(videoContainer);
+            videoNotes = videoContainer.find('.video_notes');
         }
 
-        div.append(videoNotes);
+        videoContainer.append(videoNotes);
 
         // initiate user video notes
-        initiateUserVideoNotes(div);
+        initiateUserVideoNotes(videoContainer);
 
         // fetch existing video notes
         videoNoteTimes[i] = getVideoNoteTimeArray(videoNotes);
@@ -965,9 +967,9 @@ function initiateVideoNotes() {
     });
 }
 
-function initiateUserVideoNotes(div) {
-    if(div.find('.allow_user_notes').length > 0) {
-        var videoNotes = div.find('.video_notes');
+function initiateUserVideoNotes(videoContainer) {
+    if(videoContainer.find('.allow_user_notes').length > 0) {
+        var videoNotes = videoContainer.find('.video_notes');
         videoNotes.closest('.video-container').addClass('allow_user_notes');
         videoNotes.append('<div class="note_add_container">'
                             + '<hr>'
@@ -977,20 +979,21 @@ function initiateUserVideoNotes(div) {
                             + '</div>')
         videoNotes.append('<button class="toggle_note_add">Notiz hinzufügen</button>');
 
-        addVideoUserNoteListeners(div);
+        addVideoUserNoteListeners(videoContainer);
     }
+    // TODO LOAD FROM LOCAL STORAGE
 }
 
-function addVideoNotesContainer(div) {
-    div.append('<div class="video_notes timestamps"><h4>Notizen</h4></div>');
+function addVideoNotesContainer(videoContainer) {
+    videoContainer.append('<div class="video_notes timestamps"><h4>Notizen</h4></div>');
 }
 
-function addNotesToProgressbar(div, index) {
-    var vid = div.find('video')[0];
+function addNotesToProgressbar(videoContainer, index) {
+    var vid = videoContainer.find('video')[0];
     var length = vid.duration;
 
     if(vid.readyState == 0) {
-        setTimeout(function() {addNotesToProgressbar(div, index);}, 100);
+        setTimeout(function() {addNotesToProgressbar(videoContainer, index);}, 100);
     }
     else {
         for(var i=0; i<videoNoteTimes[index].length; i++) {
@@ -999,7 +1002,7 @@ function addNotesToProgressbar(div, index) {
 
             var progress_note = $('<div class="video-progress-note">');
             progress_note.css('left', (start*100)/length + "%");
-            div.find('.video-progress').after(progress_note);
+            videoContainer.find('.video-progress').after(progress_note);
         }
     }
 
@@ -1008,8 +1011,8 @@ function addNotesToProgressbar(div, index) {
 /**
 * Wird beim timeupdate event eines videos ausgeführt. Blendet notes ein oder aus
 */
-function noteTimeUpdate(event, div, notes_con, index) {
-    var vid = div.find('video')[0];
+function noteTimeUpdate(event, videoContainer, notes_con, index) {
+    var vid = videoContainer.find('video')[0];
     var time = vid.currentTime;
 
     for(var i=0; i<videoNoteTimes[index].length; i++) {
@@ -1042,16 +1045,16 @@ function noteTimeUpdate(event, div, notes_con, index) {
                 original_note.after(new_note);
             }
         }
-        checkVisibleNotes(div, notes_con);
+        checkVisibleNotes(videoContainer, notes_con);
     }
 }
 
-function checkVisibleNotes(div, notes_con) {
+function checkVisibleNotes(videoContainer, notes_con) {
     if(notes_con.find('.video_note').not('.backup').length > 0) {
-        div.parent().addClass('noted_video');
+        videoContainer.parent().addClass('noted_video');
     }
     else {
-        div.parent().removeClass('noted_video');
+        videoContainer.parent().removeClass('noted_video');
     }
 }
 
@@ -1060,9 +1063,9 @@ function checkVisibleNotes(div, notes_con) {
 * .video_note objekt hinweist, eine anfangszeit time und ggf. eine time_to.
 * Sortiert ist das Array nach dem key "time"
 */
-function getVideoNoteTimeArray(div) {
+function getVideoNoteTimeArray(videoContainer) {
     var times = [];
-    div.find('.video_note').each(function(i,e) {
+    videoContainer.find('.video_note').each(function(i,e) {
         var timeFrom = $(this).attr('timefrom');
         var timeTo = $(this).attr('timeto');
         if(timeTo == undefined) timeTo = -1;
@@ -1118,37 +1121,82 @@ function timeStringToSeconds(str) {
 
 // --------------- User Notes ----------------
 
-function addVideoUserNoteListeners(div) {
-    div.find('.toggle_note_add').on('click', function() {
-        setVideoNotesAddContainerVisible(div, true);
+// container div in which a note is edited (jquery object)
+var editingDiv = null;
+// the note being edited (jquery object)
+var editingNote = null;
+
+function addVideoUserNoteListeners(videoContainer) {
+    videoContainer.find('.toggle_note_add').on('click', function() {
+        setVideoNotesAddContainerVisible(videoContainer, true);
     });
 
-    div.find('.note_add').on('click', function() {
-
+    videoContainer.find('.note_add').on('click', function() {
+        saveVideoNote(videoContainer);
     });
 
-    div.find('.note_cancel').on('click', function() {
-        setVideoNotesAddContainerVisible(div, false);
+    videoContainer.find('.note_cancel').on('click', function() {
+        setVideoNotesAddContainerVisible(videoContainer, false);
     });
 }
 
-function setVideoNotesAddContainerVisible(div, bool) {
+function setVideoNotesAddContainerVisible(videoContainer, bool) {
     if(bool) {
-        div.find('.note_add_container').show();
-        div.find('.toggle_note_add').hide();
+        videoContainer.find('.note_add_container').show();
+        videoContainer.find('.toggle_note_add').hide();
     }
     else {
-        div.find('.note_add_container').hide();
-        div.find('.toggle_note_add').show();
-        div.find('.video_notes').find('textarea').val("");
+        videoContainer.find('.note_add_container').hide();
+        videoContainer.find('.toggle_note_add').show();
+        videoContainer.find('.video_notes').find('textarea').val("");
     }
 }
 
-// TODO Toggle Button for adding user notes (visibility)
-// TODO Add Note Function
-// TODO Edit Note Function(s)
+function saveVideoNote(videoContainer) {
+    // TODO read correct values
+    var element = '<div class="video_note backup user_note" timefrom="0m01s" timeto="0m5s">'
+                    +     'BSP TEXT'
+                    + '</div>';
+
+    if(videoContainer != editingDiv || editingNote == null) {
+        videoContainer.find('.video_notes').find('.video_note').last().after(element);
+    }
+    else {
+        editingNote.replaceWith(element);
+    }
+    cancelEdits();
+
+    // fetch existing video notes
+    var idx = $('.elearnjs-video').index(videoContainer.find('.elearnjs-video'));
+    videoNoteTimes[idx] = getVideoNoteTimeArray(videoContainer.find('.video_notes'));
+
+    updateUserNotesArray(videoContainer);
+}
+
+function editNote(videoContainer) {
+    // TODO load text into textarea
+    // set editing index
+}
+
+function cancelEdits() {
+    // TODO reset html forms
+    editingDiv = null;
+    editingNote = null;
+}
+
 // TODO Delete Note function
-// TODO Add/Update note arrays
+
+function updateUserNotesArray(videoContainer) {
+    var src = videoContainer.find('video').find('source').first()[0].src;
+    var user_video_notes = [];
+    videoContainer.find('.video_notes').find('.user_note').each(function(i, e) {
+        var video_note_object = {timefrom: $(this).attr('timefrom'),
+                                timeto: $(this).attr('timeto'),
+                                text: $(this).html()};
+        user_video_notes.push(video_note_object);
+    });
+    setVideoNotesFor(src, user_video_notes);
+}
 
 // ------------ Local Storage ----------
 
@@ -1162,7 +1210,8 @@ function loadLocalVideoNotesStorage() {
 }
 
 function updateLocalVideoNotesStorage() {
-    localStorage.setItem('elearnjs-user-notes', JSON.stringify(user_notes));
+    // TODO REMOVE COMMENT
+    //localStorage.setItem('elearnjs-user-notes', JSON.stringify(user_notes));
 }
 
 function getVideoNotesFor(src) {
