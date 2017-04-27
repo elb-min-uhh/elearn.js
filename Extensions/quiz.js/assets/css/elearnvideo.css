@@ -595,8 +595,8 @@
     display: none !important;
 }
 
-.mejs-video:not(.mejs-long-video) .video-progress-con *, .mejs-video:not(.mejs-long-video) .progress-hover-time {
-    display: none !important;
+.mejs-video:not(.mejs-long-video) .video-progress-con {
+    pointer-events: none !important;
 }
 
 
