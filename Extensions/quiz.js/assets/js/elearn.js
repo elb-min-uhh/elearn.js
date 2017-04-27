@@ -72,6 +72,7 @@ $(document).ready(function() {
     initiateHideables();
     initiateTabbedBoxes();
     initiateHoverInfos();
+    initiateScrollBarListener();
     updateNavBarWidth();
 
     registerAfterShow("slider-resize", resizeAllSliders);
@@ -838,13 +839,13 @@ $(document).on("click", function(e){
 * Öffnet und Schließt das Menü an der rechten Seite
 */
 function toggleSideMenu(isVisible) {
-    //if(isVisible) return;
     $('.menu-wrap').css('top', $('#navigation').height() + "px");
     if (isSideMenuVisible()) {
         $('#sideMenu').animate({
             right: "-="+($('#sideMenu').width()+10),
             }, 200,
             function() {
+                $('#sideMenu').css("right", "-" + ($('#sideMenu').width()+10));
         });
     }
     else {
@@ -852,6 +853,7 @@ function toggleSideMenu(isVisible) {
             right: "0",
             }, 200,
             function() {
+                $('#sideMenu').css("right", "0");
         });
     }
 }
@@ -1040,6 +1042,8 @@ function showSlide(ul, slide) {
     // Für alle Slider
     if((ul.parent().is('.slider') && (slide >= 0 && slide < ul.children('li').length))
        || (ul.parent().is('.slider-nav') && (slide >= 0 && slide*4 < ul.children('li').length))) {
+        var hasScroll = hasScrollbar();
+        ul.parent().addClass("switching");
         var ul_id = $('.img-gallery').index(ul);
         visibleImage[ul_id] = slide;
         // Die X-Position an die die Transformation stattfindet
@@ -1064,7 +1068,12 @@ function showSlide(ul, slide) {
                     // if($(ul.children('li')[visibleImage[ul_id]]).children('p').length > 0) {
 //                         height += $(ul.children('li')[visibleImage[ul_id]]).children('p').height();
 //                     }
-                    ul.parent().animate({height: height + "px"}, 500);
+                    ul.parent().animate({height: height + "px"}, 500, function() {
+                        ul.parent().removeClass("switching");
+                        if(hasScrollbar() != hasScroll) {
+                            resizeAllSliders();
+                        }
+                    });
                 }
             }, 500);
             timeoutId[idx] += 1;
@@ -1196,7 +1205,7 @@ function resizeAllSliders() {
         resizeSliders();
         resizeNavigationSliders();
         resizeZoomContainer();
-    }, 150);
+    }, 250);
 
 }
 
@@ -1204,7 +1213,7 @@ function resizeAllSliders() {
 * Passt alle Bildergallerien (normalen Slider) an neue Fenstergröße an.
 */
 function resizeSliders() {
-    $('.slider:visible').each(function() {
+    $('.slider:visible').not('.switching').each(function() {
         var slider = $(this);
         var ul = slider.children('ul.img-gallery');
 
@@ -1260,8 +1269,7 @@ function resizeSliders() {
             width: ul.children('li').outerWidth(true) * ul.children('li').length + "px",
             transform: "translate3d(" + x + "px, 0px, 0px)"
         });
-
-        //ul[0].offsetHeight; // apply css changes
+        ul[0].offsetHeight; // apply css changes
         ul.css("transition-duration", "0.5s");
     });
 }
@@ -1713,10 +1721,26 @@ var resizeTimer;
 * Berechnet alle notwendigen Größen neu.
 */
 $(window).resize(function() {
+    windowOnResize();
+});
+
+$(window).on('scrollbarVisible', function() {
+    windowOnResize();
+});
+$(window).on('scrollbarHidden', function() {
+    windowOnResize();
+});
+
+function windowOnResize() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function(){
         resizeAllSliders();
-        $('#sideMenu').css('right', "-"+($('#sideMenu').width()+10)+"px");
+        if(isSideMenuVisible()) {
+            $('#sideMenu').css('right', "0");
+        }
+        else {
+            $('#sideMenu').css('right', "-"+($('#sideMenu').width()+10)+"px");
+        }
         // Ausführen registrierter funktionen
         $.each(afterWindowResize, function(key, fnc) {
             fnc();
@@ -1724,7 +1748,7 @@ $(window).resize(function() {
     }, 250);
     updateNavBarWidth();
     hoverInfoSetPositions();
-});
+}
 
 // --------------------------------------------------------------------------------------
 // KeyPress Part (Arrow Left/Right)
@@ -2346,6 +2370,54 @@ var QueryString = function () {
   }
     return query_string;
 } ();
+
+
+
+var hasScrollbar = function() {
+    // The Modern solution
+  if (typeof window.innerWidth === 'number')
+    return window.innerWidth > document.documentElement.clientWidth
+
+  // rootElem for quirksmode
+  var rootElem = document.documentElement || document.body
+
+  // Check overflow style property on body for fauxscrollbars
+  var overflowStyle
+
+  if (typeof rootElem.currentStyle !== 'undefined')
+    overflowStyle = rootElem.currentStyle.overflow
+
+  overflowStyle = overflowStyle || window.getComputedStyle(rootElem, '').overflow
+
+    // Also need to check the Y axis overflow
+  var overflowYStyle
+
+  if (typeof rootElem.currentStyle !== 'undefined')
+    overflowYStyle = rootElem.currentStyle.overflowY
+
+  overflowYStyle = overflowYStyle || window.getComputedStyle(rootElem, '').overflowY
+
+  var contentOverflows = rootElem.scrollHeight > rootElem.clientHeight
+  var overflowShown    = /^(visible|auto)$/.test(overflowStyle) || /^(visible|auto)$/.test(overflowYStyle)
+  var alwaysShowScroll = overflowStyle === 'scroll' || overflowYStyle === 'scroll'
+
+  return (contentOverflows && overflowShown) || (alwaysShowScroll)
+}
+
+var scrollbarBefore = false;
+
+function initiateScrollBarListener() {
+    var hasScroll = hasScrollbar();
+    if(hasScroll &&  !scrollbarBefore) {
+        $(window).trigger('scrollbarVisible');
+    }
+    else if(!hasScroll && scrollbarBefore) {
+        $(window).trigger('scrollbarHidden');
+    }
+    scrollbarBefore = hasScroll;
+    setTimeout(initiateScrollBarListener, 500);
+}
+
 
 
 // --------------------------------------------------------------------------------------

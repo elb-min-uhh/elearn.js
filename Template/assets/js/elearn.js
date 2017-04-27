@@ -839,13 +839,13 @@ $(document).on("click", function(e){
 * Öffnet und Schließt das Menü an der rechten Seite
 */
 function toggleSideMenu(isVisible) {
-    //if(isVisible) return;
     $('.menu-wrap').css('top', $('#navigation').height() + "px");
     if (isSideMenuVisible()) {
         $('#sideMenu').animate({
             right: "-="+($('#sideMenu').width()+10),
             }, 200,
             function() {
+                $('#sideMenu').css("right", "-" + ($('#sideMenu').width()+10));
         });
     }
     else {
@@ -853,6 +853,7 @@ function toggleSideMenu(isVisible) {
             right: "0",
             }, 200,
             function() {
+                $('#sideMenu').css("right", "0");
         });
     }
 }
@@ -1734,7 +1735,12 @@ function windowOnResize() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function(){
         resizeAllSliders();
-        $('#sideMenu').css('right', "-"+($('#sideMenu').width()+10)+"px");
+        if(isSideMenuVisible()) {
+            $('#sideMenu').css('right', "0");
+        }
+        else {
+            $('#sideMenu').css('right', "-"+($('#sideMenu').width()+10)+"px");
+        }
         // Ausführen registrierter funktionen
         $.each(afterWindowResize, function(key, fnc) {
             fnc();
