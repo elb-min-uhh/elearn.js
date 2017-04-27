@@ -573,6 +573,33 @@
     animation: spin 2.5s infinite linear;
 }
 
+/* ------------------------ SUPPRESS OLAT PLAYER --------------------------- */
+.mejs-video {
+    background: none !important;
+    width: auto !important;
+    height: auto !important;
+}
+.mejs-video .mejs-mediaelement {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+}
+
+.mejs-video .mejs-mediaelement video {
+    pointer-events: none !important;
+}
+
+.mejs-video .mejs-layers, .mejs-video .mejs-controls {
+    display: none !important;
+}
+
+.mejs-video:not(.mejs-long-video) .video-progress-con *, .mejs-video:not(.mejs-long-video) .progress-hover-time {
+    display: none !important;
+}
+
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
