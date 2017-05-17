@@ -265,6 +265,7 @@ function videoAddEventListeners(div) {
     });
     div.find('video').on('timeupdate progress', function(event) {
         updateVideoTime(div);
+        updateVideoUserNoteTime(div);
     });
     div.find('video').on('play', function(event) {
         videoUpdatePlayPauseButton(div);
@@ -771,10 +772,10 @@ function videoProgressMouseMove(div, e) {
             div.find('.video-progress-pointer').css("left", pos_perc*100 + "%");
             vid.currentTime = vid.duration * pos_perc;
         }
-        div.find('.progress-hover-time').html(timeToString(pos_perc * vid.duration));
-        div.find('.progress-hover-time').css('left', pos + div.find('.video-progress-con')[0].offsetLeft);
-        div.find('.progress-hover-time').css('margin-left', "-" + (div.find('.progress-hover-time').outerWidth() / 2) + "px");
     }
+    div.find('.progress-hover-time').html(createTimeStringColons(pos_perc * vid.duration));
+    div.find('.progress-hover-time').css('left', pos + div.find('.video-progress-con')[0].offsetLeft);
+    div.find('.progress-hover-time').css('margin-left', "-" + (div.find('.progress-hover-time').outerWidth() / 2) + "px");
 }
 
 // GENERAL VIDEO PLAYER -------------------------------------
@@ -789,11 +790,11 @@ function updateVideoTime(div) {
 
     // time fields
     if(!videoProgressMouseDown) {
-        time_field.html(timeToString(time));
+        time_field.html(createTimeStringColons(time));
         if(video_timestyle === video_timetypes.TIMELEFT) {
-            if(!isNaN(timeleft)) timeleft_field.html("-" + timeToString(timeleft));
+            if(!isNaN(timeleft)) timeleft_field.html("-" + createTimeStringColons(timeleft));
         }
-        else if(video_timestyle === video_timetypes.DURATION) timeleft_field.html(timeToString(vid.duration));
+        else if(video_timestyle === video_timetypes.DURATION) timeleft_field.html(createTimeStringColons(vid.duration));
     }
 
     // progress bar
@@ -856,34 +857,6 @@ function videoRemoveBuffering(div, event) {
     }
 }
 
-
-
-function timeToString(seconds) {
-    seconds = Math.floor(Math.abs(seconds));
-    var hours = Math.floor(seconds / (60*60));
-    seconds -= hours*60*60;
-    var minutes = Math.floor(seconds / 60);
-    seconds -= minutes*60;
-
-    var time_str = seconds;
-    if(seconds < 10) {
-        time_str = "0" + time_str;
-    }
-    time_str = minutes + ":" + time_str;
-    if(hours > 0) {
-        if(minutes < 10) {
-                time_str = "0" + time_str;
-        }
-        time_str = hours + ":" + time_str;
-    }
-
-    if(time_str.toLowerCase().match(/nan/g)) {
-        time_str = "";
-    }
-
-    return time_str;
-}
-
 function resizeAllVideoPlayers() {
     $('.elearnjs-video:visible').each(function(i,e) {
         resizeVideoPlayer($(this));
@@ -943,49 +916,81 @@ function initiateVideoNotes() {
     loadLocalVideoNotesStorage();
 
     // create list with sorted times for faster checking if something needs to be shown
-    $('.elearnjs-video').each(function(i,e) {
+    $('.elearnjs-video').each(function(idx,e) {
         var videoContainer = $(this).closest('.video-container');
-        var videoNotes = videoContainer.next('.video_notes');
+        var videoNotesContainer = $("<div class='video_notes_container'>");
+        var videoNotes;
+        var userNotes;
 
-        if(videoNotes.length === 0) {
-            addVideoNotesContainer(videoContainer);
-            videoNotes = videoContainer.find('.video_notes');
+        videoContainer.append(videoNotesContainer);
+
+        // No video notes in .html
+        if(videoContainer.next('.video_notes').length !== 0) {
+            videoNotes = videoContainer.next('.video_notes');
+            videoNotesContainer.append(videoNotes);
+            videoNotes.addClass("note_container");
         }
 
-        videoContainer.append(videoNotes);
+        // Create user note container
+        if(videoContainer.find('.allow_user_notes').length > 0) {
+            userNotes = getUserVideoNotesContainer();
+            videoContainer.addClass('allow_user_notes');
+            videoNotesContainer.append(userNotes);
+            userNotes.addClass("note_container");
+            addVideoUserNoteListeners(videoContainer);
+        }
 
-        // initiate user video notes
-        initiateUserVideoNotes(videoContainer);
+        // Wrap in tabbed box if both are present
+        if(videoNotes != undefined && userNotes != undefined) {
+            videoNotesContainer.addClass("tabbed-box");
+
+            videoNotes.addClass("tab");
+            videoNotes.attr("name", "Annotationen");
+
+            userNotes.addClass("tab");
+            userNotes.attr("name", "Notizen");
+
+            initiateTabbedBox(videoNotesContainer);
+
+            videoNotesContainer.closest(".tabbed-container").addClass("video_notes_wrapper");
+        }
+        else {
+            videoNotesContainer.addClass("video_notes_wrapper");
+        }
+        // TODO LOAD FROM LOCAL STORAGE
+
+        var video_user_notes = getVideoNotesFor(videoContainer.find('video').find('source').first()[0].src);
+        for(var i=0; video_user_notes != undefined && i<video_user_notes.length; i++) {
+            var user_note = video_user_notes[i];
+            addNoteToUserNotes(videoContainer,
+                createUserNote(user_note.text, user_note.timefrom, user_note.timeto));
+        }
 
         // fetch existing video notes
-        videoNoteTimes[i] = getVideoNoteTimeArray(videoNotes);
+        videoNoteTimes[idx] = getVideoNoteTimeArray(videoNotesContainer);
+        removeAllVideoNotes(videoNotesContainer);
+        addNotesToProgressbar($(e), idx);
+        noteTimeUpdate($(e), videoNotesContainer, idx);
 
         $(this).find('video').on('timeupdate', function(event) {
-            noteTimeUpdate(event, $(e), videoNotes, i);
+            noteTimeUpdate($(e), videoNotesContainer, idx);
         });
-        addNotesToProgressbar($(e), i);
     });
 }
 
-function initiateUserVideoNotes(videoContainer) {
-    if(videoContainer.find('.allow_user_notes').length > 0) {
-        var videoNotes = videoContainer.find('.video_notes');
-        videoNotes.closest('.video-container').addClass('allow_user_notes');
-        videoNotes.append('<div class="note_add_container">'
-                            + '<hr>'
-                            + '<textarea placeholder="Schreibe eine Notiz... (diese sind lokal gespeichert und nicht öffentlich)"></textarea>'
-                            + '<button class="note_add">Notiz speichern</button>'
-                            + '<button class="note_cancel">Abbrechen</button>'
-                            + '</div>')
-        videoNotes.append('<button class="toggle_note_add">Notiz hinzufügen</button>');
+function getUserVideoNotesContainer() {
+    var userNotes = $('<div class="user_notes timestamps"><h4>Notizen</h4></div>');
+    userNotes.append('<div class="note_add_container">'
+                        + '<hr>'
+                        + '<input class="user_note_from" placeholder="Startzeit (<HH>:<MM>:SS)" type="text"/>'
+                        + '<input class="user_note_to" placeholder="Endzeit (<HH>:<MM>:SS)" type="text"/>'
+                        + '<textarea class="user_note_text" placeholder="Schreibe eine Notiz... (diese sind lokal gespeichert und nicht öffentlich)"></textarea>'
+                        + '<button class="note_add">Notiz speichern</button>'
+                        + '<button class="note_cancel">Abbrechen</button>'
+                        + '</div>');
+    userNotes.append('<button class="toggle_note_add">Notiz hinzufügen</button>');
 
-        addVideoUserNoteListeners(videoContainer);
-    }
-    // TODO LOAD FROM LOCAL STORAGE
-}
-
-function addVideoNotesContainer(videoContainer) {
-    videoContainer.append('<div class="video_notes timestamps"><h4>Notizen</h4></div>');
+    return userNotes;
 }
 
 function addNotesToProgressbar(videoContainer, index) {
@@ -996,13 +1001,25 @@ function addNotesToProgressbar(videoContainer, index) {
         setTimeout(function() {addNotesToProgressbar(videoContainer, index);}, 100);
     }
     else {
+        videoContainer.find('.video-progress-con').find('.video-progress-note').remove();
         for(var i=0; i<videoNoteTimes[index].length; i++) {
             var info = videoNoteTimes[index][i];
             var start = info['time'];
 
             var progress_note = $('<div class="video-progress-note">');
+            if(info['user_note']) progress_note.addClass('user-progress-note');
             progress_note.css('left', (start*100)/length + "%");
-            videoContainer.find('.video-progress').after(progress_note);
+
+            var exists = false;
+            videoContainer.find('.video-progress-con').find('.video-progress-note').each(function(idx, e) {
+                if($(this).css('left') == progress_note.css('left')) {
+                    exists = true;
+                    return 0;
+                }
+            });
+            if(!exists) {
+                videoContainer.find('.video-progress').after(progress_note);
+            }
         }
     }
 
@@ -1011,42 +1028,56 @@ function addNotesToProgressbar(videoContainer, index) {
 /**
 * Wird beim timeupdate event eines videos ausgeführt. Blendet notes ein oder aus
 */
-function noteTimeUpdate(event, videoContainer, notes_con, index) {
+function noteTimeUpdate(videoContainer, notes_con, index) {
     var vid = videoContainer.find('video')[0];
     var time = vid.currentTime;
 
     for(var i=0; i<videoNoteTimes[index].length; i++) {
         var info = videoNoteTimes[index][i];
+        // time not reached
         if(info["time"] > time) {
             // remove
-            notes_con.find('.video_note').filter('#'+info["index"]).remove();
+            notes_con.find('.video_note').not('.backup').filter('#'+info["index"]).remove();
         }
-        else if(info["time"] < time) {
+        else if(info["time"] <= time) {
+            // note ended
             if(info["time_to"] != undefined
                 && info["time_to"] != -1
                 && info["time_to"] <= time) {
                 // remove
-                notes_con.find('.video_note').filter('#'+info["index"]).remove();
+                notes_con.find('.video_note').not('.backup').filter('#'+info["index"]).remove();
             }
             else {
                 // skip if already shown
-                if(notes_con.find('.video_note#'+info["index"]).length > 0) continue;
+                if(notes_con.find('.video_note#'+info["index"]).not('.backup').length > 0) continue;
                 // create new node
-                var original_note = notes_con.find('.video_note.backup').eq(info["index"]);
-                var new_note = original_note.clone();
-                new_note.removeClass('backup');
-                new_note.attr('id', info["index"]);
-
-                // timestamp if activated
-                if(notes_con.is('.timestamps')) {
-                    new_note.prepend('<span class="video_note_timestamp">'
-                                        +timeToString(info["time"])+'</span>');
-                }
-                original_note.after(new_note);
+                showVideoNote(notes_con, info);
             }
         }
         checkVisibleNotes(videoContainer, notes_con);
     }
+}
+
+function showVideoNote(notes_con, info) {
+    var original_note = notes_con.find('.video_note.backup').filter('#'+info["index"]);
+    var new_note = original_note.clone();
+    new_note.removeClass('backup');
+    //new_note.attr('id', info["index"]);
+
+    // timestamp if activated
+    if(original_note.closest('.note_container').is('.timestamps')) {
+        new_note.prepend('<span class="video_note_timestamp">'
+                            +createTimeStringColons(info["time"])+'</span>');
+    }
+    // add user note menu button
+    if(original_note.is('.user_note')) {
+        new_note.prepend('<div class="user_note_menu_wrap"><div class="user_note_menu">m</div></div>');
+    }
+    original_note.after(new_note);
+}
+
+function removeAllVideoNotes(notes_con) {
+    notes_con.find('.video_note').not('.backup').remove();
 }
 
 function checkVisibleNotes(videoContainer, notes_con) {
@@ -1063,15 +1094,28 @@ function checkVisibleNotes(videoContainer, notes_con) {
 * .video_note objekt hinweist, eine anfangszeit time und ggf. eine time_to.
 * Sortiert ist das Array nach dem key "time"
 */
+var lastIndexSet = -1;
+
 function getVideoNoteTimeArray(videoContainer) {
     var times = [];
-    videoContainer.find('.video_note').each(function(i,e) {
+    videoContainer.find('.video_note.backup').each(function(i,e) {
         var timeFrom = $(this).attr('timefrom');
         var timeTo = $(this).attr('timeto');
+        var user_note = $(this).is(".user_note");
+
+        // get and set id on backup note
+        var id = $(this).attr("id");
+        if(id == undefined || id.length == 0 || id == "undefined") {
+            lastIndexSet++
+            id = lastIndexSet;
+            $(this).attr("id", id);
+        }
+
         if(timeTo == undefined) timeTo = -1;
-        times.push({"time" : timeStringToSeconds(timeFrom),
-                    "time_to" : timeStringToSeconds(timeTo),
-                    "index" : i});
+        times.push({"time" : parseTimeString(timeFrom),
+                    "time_to" : parseTimeString(timeTo),
+                    "user_note" : user_note,
+                    "index" : id});
     });
     times.sort(function(a,b) {
         return a["time"]-b["time"];
@@ -1079,45 +1123,6 @@ function getVideoNoteTimeArray(videoContainer) {
     return times;
 }
 
-/**
-* Übersetzt einen String in einen Integerwert in Sekunden.
-* Dabei können Strings erkannt werden die aus Zahlen bestehen und den
-* zugehörigen Einheiten h,m,s.
-*
-* Bsp: timeStringToSeconds("01m15s") : 75
-*/
-function timeStringToSeconds(str) {
-    if(typeof str != typeof "string") return undefined;
-
-    var factors = {
-        "h":60*60,
-        "m":60,
-        "s":1
-    };
-
-    str = str.toLowerCase();
-
-    var seconds = 0;
-    var partTime = "";
-
-    for(var i=0; i<str.length; i++) {
-        var char = str.charAt(i);
-        if(char.match(/\d/g)) {
-            partTime += char;
-        }
-        else if(char.match(/[hms]/g)){
-            seconds += parseInt(partTime, 10) * factors[char];
-            partTime = "";
-        }
-        else if(char.match(/\S/g)){
-            return undefined;
-        }
-    }
-    if(partTime.length > 0) {
-        seconds += parseInt(partTime, 10);
-    }
-    return seconds;
-}
 
 // --------------- User Notes ----------------
 
@@ -1148,29 +1153,76 @@ function setVideoNotesAddContainerVisible(videoContainer, bool) {
     else {
         videoContainer.find('.note_add_container').hide();
         videoContainer.find('.toggle_note_add').show();
-        videoContainer.find('.video_notes').find('textarea').val("");
+    }
+}
+
+function createUserNote(text, timefrom, timeto, id) {
+    return $('<div class="video_note backup user_note" timefrom="'
+                    + createTimeStringLetters(parseTimeString(timefrom))
+                    + '" timeto="'
+                    + createTimeStringLetters(parseTimeString(timeto))
+                    + '" id="' + id + '">'
+                    + text
+                    + '</div>');
+}
+
+function addNoteToUserNotes(videoContainer, note) {
+    var existingNotes = videoContainer.find('.user_notes').find('.video_note');
+    if(existingNotes.length > 0) {
+        videoContainer.find('.user_notes').find('.video_note').last().after(note);
+    }
+    else {
+        videoContainer.find('.note_add_container').before(note);
     }
 }
 
 function saveVideoNote(videoContainer) {
-    // TODO read correct values
-    var element = '<div class="video_note backup user_note" timefrom="0m01s" timeto="0m5s">'
-                    +     'BSP TEXT'
-                    + '</div>';
+    var noteAddContainer = videoContainer.find('.note_add_container');
+    var fr = noteAddContainer.find('.user_note_from').val();
+    var to = noteAddContainer.find('.user_note_to').val();
+    var text = noteAddContainer.find('.user_note_text').val();
+
+    if(fr.length == 0) {
+        fr = noteAddContainer.find('.user_note_from').attr("placeholder").replace(/^\D*/g, "");
+    }
+    if(to.length == 0) {
+        to = noteAddContainer.find('.user_note_to').attr("placeholder").replace(/^\D*/g, "");
+    }
+
+    if(text.length == 0) {
+        alert("Text eingeben, um Notiz speichern zu können.");
+        return;
+    }
+    else if(parseTimeString(fr) == undefined) {
+        alert("Die Startzeit ist keine gültige Eingabe.\r\nFormat: HH:MM:SS");
+        return;
+    }
+    else if(parseTimeString(to) == undefined) {
+        alert("Die Endzeit ist keine gültige Eingabe.\r\nFormat: HH:MM:SS");
+        return;
+    }
+
+    var element = createUserNote(text, fr, to);
 
     if(videoContainer != editingDiv || editingNote == null) {
-        videoContainer.find('.video_notes').find('.video_note').last().after(element);
+        addNoteToUserNotes(videoContainer, element);
     }
     else {
         editingNote.replaceWith(element);
     }
-    cancelEdits();
+    cancelEdits(videoContainer);
 
     // fetch existing video notes
+    var notes_con = videoContainer.find('.video_notes_container');
     var idx = $('.elearnjs-video').index(videoContainer.find('.elearnjs-video'));
-    videoNoteTimes[idx] = getVideoNoteTimeArray(videoContainer.find('.video_notes'));
+    videoNoteTimes[idx] = getVideoNoteTimeArray(notes_con);
+    removeAllVideoNotes(notes_con);
+    noteTimeUpdate(videoContainer, notes_con, idx);
+    addNotesToProgressbar(videoContainer, idx);
 
     updateUserNotesArray(videoContainer);
+
+    setVideoNotesAddContainerVisible(videoContainer, false);
 }
 
 function editNote(videoContainer) {
@@ -1178,8 +1230,10 @@ function editNote(videoContainer) {
     // set editing index
 }
 
-function cancelEdits() {
-    // TODO reset html forms
+function cancelEdits(videoContainer) {
+    videoContainer.find('.note_add_container').find('.user_note_from').val("");
+    videoContainer.find('.note_add_container').find('.user_note_to').val("");
+    videoContainer.find('.note_add_container').find('textarea').val("");
     editingDiv = null;
     editingNote = null;
 }
@@ -1189,7 +1243,7 @@ function cancelEdits() {
 function updateUserNotesArray(videoContainer) {
     var src = videoContainer.find('video').find('source').first()[0].src;
     var user_video_notes = [];
-    videoContainer.find('.video_notes').find('.user_note').each(function(i, e) {
+    videoContainer.find('.user_notes').find('.user_note.backup').each(function(i, e) {
         var video_note_object = {timefrom: $(this).attr('timefrom'),
                                 timeto: $(this).attr('timeto'),
                                 text: $(this).html()};
@@ -1198,11 +1252,40 @@ function updateUserNotesArray(videoContainer) {
     setVideoNotesFor(src, user_video_notes);
 }
 
+function updateVideoUserNoteTime(div) {
+    var videoContainer = div.closest('.video-container');
+    var noteAddContainer = videoContainer.find('.note_add_container');
+    var userNoteFrom = noteAddContainer.find('.user_note_from');
+    var userNoteTo = noteAddContainer.find('.user_note_to');
+
+    // default user note duration
+    var noteDuration = 10;
+
+    var timeFrom = parseTimeString(userNoteFrom.val());
+    var timeTo = parseTimeString(userNoteTo.val());
+
+    // Not entered anything
+    if(timeFrom == undefined) {
+        timeFrom = div.find('video')[0].currentTime;
+        userNoteFrom.attr("placeholder", "Start: " + createTimeStringColons(timeFrom));
+    }
+
+    if(timeTo == undefined || timeTo < timeFrom) {
+        timeTo = timeFrom + noteDuration;
+        if(timeTo > div.find('video')[0].duration) {
+            timeTo = Math.ceil(div.find('video')[0].duration);
+        }
+        userNoteTo.attr("placeholder", "Ende: " + createTimeStringColons(timeTo));
+    }
+}
+
 // ------------ Local Storage ----------
 
 function loadLocalVideoNotesStorage() {
     var user_notes_str = localStorage.getItem('elearnjs-user-notes');
-    if(user_notes === null || user_notes === undefined) {
+    if(user_notes_str === null
+        || user_notes_str === undefined
+        || user_notes_str == "") {
         localStorage.setItem('elearnjs-user-notes', '{}');
         user_notes_str = '{}';
     }
@@ -1211,7 +1294,7 @@ function loadLocalVideoNotesStorage() {
 
 function updateLocalVideoNotesStorage() {
     // TODO REMOVE COMMENT
-    //localStorage.setItem('elearnjs-user-notes', JSON.stringify(user_notes));
+    localStorage.setItem('elearnjs-user-notes', JSON.stringify(user_notes));
 }
 
 function getVideoNotesFor(src) {
@@ -1221,4 +1304,104 @@ function getVideoNotesFor(src) {
 function setVideoNotesFor(src, val) {
     user_notes[src] = val;
     updateLocalVideoNotesStorage();
+}
+
+
+// ================================ HELP =====================================
+
+/**
+* Übersetzt einen String in einen Integerwert in Sekunden.
+* Dabei können Strings erkannt werden die aus Zahlen bestehen und den
+* zugehörigen Einheiten h,m,s.
+*
+* Bsp: parseTimeString("01m15s") : 75
+*/
+function parseTimeString(str) {
+    if(typeof str != typeof "string") return undefined;
+
+    str = str.trim().toLowerCase();
+
+    var seconds = undefined;
+
+    // Style <HH>:<MM>:SS or S{n-times}
+    if(str.match(/^(\d*:){0,2}\d+$/g)) {
+        seconds = 0;
+        str_parts = str.split(":");
+        for(var i=0; i<str_parts.length && i<3; i++) {
+            // from end to start
+            var part = str_parts[str_parts.length - 1 - i];
+            if(part.length > 0) {
+                seconds += parseInt(part) * Math.pow(60, i);
+            }
+        }
+    }
+    // Style Xh Ym Zs
+    else if(str.match(/^(\d+[hms]\s*)+$/g)){
+        var factors = {
+            "h":60*60,
+            "m":60,
+            "s":1
+        };
+
+        seconds = 0;
+        var partTime = "";
+
+        for(var i=0; i<str.length; i++) {
+            var char = str.charAt(i);
+            if(char.match(/\d/g)) {
+                partTime += char;
+            }
+            else if(char.match(/[hms]/g)){
+                seconds += parseInt(partTime, 10) * factors[char];
+                partTime = "";
+            }
+            else if(char.match(/\S/g)){
+                return undefined;
+            }
+        }
+        if(partTime.length > 0) {
+            seconds += parseInt(partTime, 10);
+        }
+    }
+
+
+    return seconds;
+}
+
+function createTimeStringLetters(seconds) {
+    var secLeft = seconds;
+
+    var hours = parseInt(secLeft / 360);
+    secLeft -= hours * 360;
+
+    var minutes = parseInt(secLeft / 60);
+    secLeft -= minutes * 60;
+
+    return hours + "h" + minutes + "m" + seconds + "s";
+}
+
+function createTimeStringColons(seconds) {
+    seconds = Math.floor(Math.abs(seconds));
+    var hours = Math.floor(seconds / (60*60));
+    seconds -= hours*60*60;
+    var minutes = Math.floor(seconds / 60);
+    seconds -= minutes*60;
+
+    var time_str = seconds;
+    if(seconds < 10) {
+        time_str = "0" + time_str;
+    }
+    time_str = minutes + ":" + time_str;
+    if(hours > 0) {
+        if(minutes < 10) {
+                time_str = "0" + time_str;
+        }
+        time_str = hours + ":" + time_str;
+    }
+
+    if(time_str.toLowerCase().match(/nan/g)) {
+        time_str = "";
+    }
+
+    return time_str;
 }
