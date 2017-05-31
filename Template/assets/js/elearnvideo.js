@@ -957,7 +957,6 @@ function initiateVideoNotes() {
         else {
             videoNotesContainer.addClass("video_notes_wrapper");
         }
-        // TODO LOAD FROM LOCAL STORAGE
 
         var video_user_notes = getVideoNotesFor(videoContainer.find('video').find('source').first()[0].src);
         for(var i=0; video_user_notes != undefined && i<video_user_notes.length; i++) {
@@ -976,6 +975,8 @@ function initiateVideoNotes() {
             noteTimeUpdate($(e), videoNotesContainer, idx);
         });
     });
+
+    initiateUserNotes();
 }
 
 function getUserVideoNotesContainer() {
@@ -1071,7 +1072,7 @@ function showVideoNote(notes_con, info) {
     }
     // add user note menu button
     if(original_note.is('.user_note')) {
-        new_note.prepend('<div class="user_note_menu_wrap"><div class="user_note_menu">m</div></div>');
+        new_note.prepend('<div class="user_note_menu_wrap" onclick="javascript: toggleUserNoteMenu(this);"><div class="user_note_menu">m</div></div>');
     }
     original_note.after(new_note);
 }
@@ -1131,6 +1132,22 @@ var editingDiv = null;
 // the note being edited (jquery object)
 var editingNote = null;
 
+var userNoteMenuNode = null;
+
+function initiateUserNotes() {
+    addUserNoteListeners();
+}
+
+function addUserNoteListeners() {
+    $(document).on('click', function(e) {
+        if($('.user_note_dropdown').length > 0
+            &&!$(e.target).is('.user_note_menu_wrap')
+            && !$(e.target).is('.user_note_menu_wrap *')) {
+            hideUserNoteMenu();
+        }
+    });
+}
+
 function addVideoUserNoteListeners(videoContainer) {
     videoContainer.find('.toggle_note_add').on('click', function() {
         setVideoNotesAddContainerVisible(videoContainer, true);
@@ -1153,6 +1170,7 @@ function setVideoNotesAddContainerVisible(videoContainer, bool) {
     else {
         videoContainer.find('.note_add_container').hide();
         videoContainer.find('.toggle_note_add').show();
+        cancelEdits(videoContainer);
     }
 }
 
@@ -1204,7 +1222,7 @@ function saveVideoNote(videoContainer) {
 
     var element = createUserNote(text, fr, to);
 
-    if(videoContainer != editingDiv || editingNote == null) {
+    if(!videoContainer.is(editingDiv) || editingNote == null) {
         addNoteToUserNotes(videoContainer, element);
     }
     else {
@@ -1225,9 +1243,15 @@ function saveVideoNote(videoContainer) {
     setVideoNotesAddContainerVisible(videoContainer, false);
 }
 
-function editNote(videoContainer) {
-    // TODO load text into textarea
-    // set editing index
+function editNote(videoContainer, note) {
+    editingDiv = videoContainer;
+    editingNote = note;
+
+    videoContainer.find('.note_add_container').find('.user_note_from').val(createTimeStringColons(parseTimeString(editingNote.attr("timefrom"))));
+    videoContainer.find('.note_add_container').find('.user_note_to').val(createTimeStringColons(parseTimeString(editingNote.attr("timeto"))));
+    videoContainer.find('.note_add_container').find('textarea').val(editingNote.html());
+
+    setVideoNotesAddContainerVisible(videoContainer, true);
 }
 
 function cancelEdits(videoContainer) {
@@ -1238,7 +1262,21 @@ function cancelEdits(videoContainer) {
     editingNote = null;
 }
 
+
 // TODO Delete Note function
+function deleteNote(videoContainer, note) {
+    videoContainer.find('.user_note').filter('#' + note.attr('id')).remove();
+
+    // fetch existing video notes
+    var notes_con = videoContainer.find('.video_notes_container');
+    var idx = $('.elearnjs-video').index(videoContainer.find('.elearnjs-video'));
+    videoNoteTimes[idx] = getVideoNoteTimeArray(notes_con);
+    removeAllVideoNotes(notes_con);
+    noteTimeUpdate(videoContainer, notes_con, idx);
+    addNotesToProgressbar(videoContainer, idx);
+
+    updateUserNotesArray(videoContainer);
+}
 
 function updateUserNotesArray(videoContainer) {
     var src = videoContainer.find('video').find('source').first()[0].src;
@@ -1304,6 +1342,82 @@ function getVideoNotesFor(src) {
 function setVideoNotesFor(src, val) {
     user_notes[src] = val;
     updateLocalVideoNotesStorage();
+}
+
+// User Note Menu
+
+function createUserNoteMenu() {
+    var dropDownCode = '<div class="user_note_dropdown">'
+        + '<div class="dropdown_element edit">Edit note</div>'
+        + '<div class="dropdown_element delete">Delete note</div>'
+        + '</div>';
+    $('body').append(dropDownCode);
+
+    $('.user_note_dropdown').find('.dropdown_element.edit').on('click', function(e) {
+        userNoteMenuEdit();
+    });
+    $('.user_note_dropdown').find('.dropdown_element.delete').on('click', function(e) {
+        userNoteMenuDelete();
+    });
+}
+
+function hideUserNoteMenu() {
+    $('.user_note_dropdown').hide();
+}
+
+function toggleUserNoteMenu(element) {
+    element = $(element);
+    var dropDown = $('.user_note_dropdown');
+    var node = element.closest('.user_note');
+
+    if(dropDown.length == 0) {
+        createUserNoteMenu();
+        dropDown = $('.user_note_dropdown');
+    }
+
+    var align = false;
+
+    // last edited accessed again
+    if(node.is(userNoteMenuNode)) {
+        if(dropDown.is(':visible')) {
+            dropDown.hide();
+        }
+        else if(!dropDown.is(':visible')) {
+            dropDown.show();
+            align = true;
+        }
+    }
+    // other node, always show
+    else {
+        dropDown.show();
+        align = true;
+    }
+
+    // set position
+    if(align) {
+        dropDown.css({
+            top: (element.offset().top - dropDown.outerHeight(true) + 29) + "px",
+            left: (element.offset().left - dropDown.outerWidth(true)) + "px"
+        });
+    }
+
+    userNoteMenuNode = node;
+}
+
+function userNoteMenuEdit() {
+    var backup_note = userNoteMenuNode.siblings('#' + userNoteMenuNode.attr("id") + ".backup");
+    var videoContainer = backup_note.closest('.video-container');
+
+    editNote(backup_note.closest('.video-container'), backup_note);
+}
+
+function userNoteMenuDelete() {
+    var backup_note = userNoteMenuNode.siblings('#' + userNoteMenuNode.attr("id") + ".backup");
+    var videoContainer = backup_note.closest('.video-container');
+
+    if(confirm("Are you sure you want to delete this note permanently?")) {
+        deleteNote(backup_note.closest('.video-container'), backup_note);
+    }
 }
 
 
