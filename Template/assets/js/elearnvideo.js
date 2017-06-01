@@ -1291,6 +1291,8 @@ function saveVideoNote(videoContainer) {
         return;
     }
 
+    text = text.trim().replace(/\r/g, "").replace(/\n/g, "<br>");
+
     var element = createUserNote(text, fr, to);
 
     if(!videoContainer.is(editingDiv) || editingNote == null) {
@@ -1311,9 +1313,11 @@ function editNote(videoContainer, note) {
     editingDiv = videoContainer;
     editingNote = note;
 
+    var text = editingNote.html().trim().replace(/<br>/g, "\r\n");
+
     videoContainer.find('.note_add_container').find('.user_note_from').val(createTimeStringColons(parseTimeString(editingNote.attr("timefrom"))));
     videoContainer.find('.note_add_container').find('.user_note_to').val(createTimeStringColons(parseTimeString(editingNote.attr("timeto"))));
-    videoContainer.find('.note_add_container').find('textarea').val(editingNote.html());
+    videoContainer.find('.note_add_container').find('textarea').val(text);
 
     setVideoNotesAddContainerVisible(videoContainer, true);
 }
@@ -1501,10 +1505,10 @@ function setVideoNotesFor(src, val) {
 
 function createUserNoteMenu() {
     var dropDownCode = '<div class="user_note_dropdown">'
-        + '<div class="dropdown_element edit">Edit note</div>'
-        + '<div class="dropdown_element delete">Delete note</div>'
-        + '<div class="dropdown_element move_up">Move up</div>'
-        + '<div class="dropdown_element move_down">Move down</div>'
+        + '<div class="dropdown_element edit">Bearbeiten</div>'
+        + '<div class="dropdown_element delete">Löschen</div>'
+        + '<div class="dropdown_element move_up">Nach oben bewegen</div>'
+        + '<div class="dropdown_element move_down">Nach unten bewegen</div>'
         + '</div>';
     $('body').append(dropDownCode);
 

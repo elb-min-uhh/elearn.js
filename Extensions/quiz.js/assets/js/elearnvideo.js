@@ -1291,6 +1291,8 @@ function saveVideoNote(videoContainer) {
         return;
     }
 
+    text = text.trim().replace(/\r/g, "").replace(/\n/g, "<br>");
+
     var element = createUserNote(text, fr, to);
 
     if(!videoContainer.is(editingDiv) || editingNote == null) {
@@ -1311,9 +1313,11 @@ function editNote(videoContainer, note) {
     editingDiv = videoContainer;
     editingNote = note;
 
+    var text = editingNote.html().trim().replace(/<br>/g, "\r\n");
+
     videoContainer.find('.note_add_container').find('.user_note_from').val(createTimeStringColons(parseTimeString(editingNote.attr("timefrom"))));
     videoContainer.find('.note_add_container').find('.user_note_to').val(createTimeStringColons(parseTimeString(editingNote.attr("timeto"))));
-    videoContainer.find('.note_add_container').find('textarea').val(editingNote.html());
+    videoContainer.find('.note_add_container').find('textarea').val(text);
 
     setVideoNotesAddContainerVisible(videoContainer, true);
 }
@@ -1333,21 +1337,39 @@ function deleteNote(videoContainer, note) {
     updateUserNotesArray(videoContainer);
 }
 
-function moveNote(videoContainer, backup_note, direction) {
+function moveNote(videoContainer, display_note, backup_note, direction) {
     var user_notes = backup_note.closest('.user_notes');
-    var idx = user_notes.find('.user_note.backup').index(backup_note);
+
+    var idx = user_notes.find('.user_note').not('.backup').index(display_note);
     var newPos = idx + direction;
+
+
+    // determine position of display_note
     // move up
     if(direction < 0) {
         if(newPos < 0) newPos = 0;
-        user_notes.find('.user_note.backup').eq(newPos).before(backup_note);
     }
     // move down
     else if(direction > 0) {
-        if(newPos > user_notes.find('.user_note.backup').length - 1)
-            newPos = user_notes.find('.user_note.backup').length - 1;
-        user_notes.find('.user_note.backup').eq(newPos).after(backup_note);
+        if(newPos > user_notes.find('.user_note').not('.backup').length - 1)
+            newPos = user_notes.find('.user_note').not('.backup').length - 1;
     }
+
+    // determine neighbor to align to
+    var neighbor = user_notes.find('.user_note').not('.backup').eq(newPos);
+    var neighborBackup = user_notes.find('.user_note.backup').filter('#' + neighbor.attr('id'));
+
+    // move display note
+    if(direction < 0) {
+        neighborBackup.before(display_note);
+    }
+    // move down
+    else if(direction > 0) {
+        neighborBackup.after(display_note);
+    }
+
+    // move backup_not before display_note
+    display_note.before(backup_note);
 
     updateUserNotes(videoContainer);
     updateUserNotesArray(videoContainer);
@@ -1462,7 +1484,12 @@ function loadLocalVideoNotesStorage() {
 }
 
 function updateLocalVideoNotesStorage() {
-    localStorage.setItem('elearnjs-user-notes', JSON.stringify(user_notes));
+    try {
+        localStorage.setItem('elearnjs-user-notes', JSON.stringify(user_notes));
+    }
+    catch(e) {
+        alert("Die letzte Notizänderung konnte nicht gespeichert werden, da der lokale Speicher voll ist.");
+    }
 }
 
 function getVideoNotesFor(src) {
@@ -1478,10 +1505,10 @@ function setVideoNotesFor(src, val) {
 
 function createUserNoteMenu() {
     var dropDownCode = '<div class="user_note_dropdown">'
-        + '<div class="dropdown_element edit">Edit note</div>'
-        + '<div class="dropdown_element delete">Delete note</div>'
-        + '<div class="dropdown_element move_up">Move up</div>'
-        + '<div class="dropdown_element move_down">Move down</div>'
+        + '<div class="dropdown_element edit">Bearbeiten</div>'
+        + '<div class="dropdown_element delete">Löschen</div>'
+        + '<div class="dropdown_element move_up">Nach oben bewegen</div>'
+        + '<div class="dropdown_element move_down">Nach unten bewegen</div>'
         + '</div>';
     $('body').append(dropDownCode);
 
@@ -1563,7 +1590,7 @@ function userNoteMenuMove(direction) {
     var backup_note = userNoteMenuNode.siblings('#' + userNoteMenuNode.attr("id") + ".backup");
     var videoContainer = backup_note.closest('.video-container');
 
-    moveNote(videoContainer, backup_note, direction);
+    moveNote(videoContainer, userNoteMenuNode, backup_note, direction);
 }
 
 
