@@ -1041,7 +1041,7 @@ function addNotesToProgressbar(videoContainer, index) {
     var vid = videoContainer.find('video')[0];
     var length = vid.duration;
 
-    if(vid.readyState == 0) {
+    if(vid.readyState == 0 || vid.duration == 0) {
         setTimeout(function() {addNotesToProgressbar(videoContainer, index);}, 100);
     }
     else {
@@ -1411,11 +1411,17 @@ function updateVideoUserNoteTime(div) {
 function importUserNotes(videoContainer) {
     var idx = $('.elearnjs-video').index(videoContainer.find('.elearnjs-video'));
 
-    var fileChoser = $('<input type="file"/>');
-    $('body').append(fileChoser);
-    fileChoser.on('change', function(e) {
-        importFileChosen(videoContainer, e);
-    });
+    var fileChoser = $('.user_note_import_filechoser');
+    if(fileChoser.length == 0) {
+        fileChoser = $('<input type="file" class="user_note_import_filechoser"/>');
+        $('body').append(fileChoser);
+        fileChoser.on('change', function(e) {
+            var overwrite = confirm("Aktuelle Notizen können vor dem Import gelöscht und somit durch neue Notizen ersetzt werden.\r\n"
+                + "'OK' zum Ersetzen, 'Abbrechen' zum Hinzufügen.");
+            importFileChosen(videoContainer, e, overwrite);
+            fileChoser.remove();
+        });
+    }
     fileChoser.trigger('click');
 }
 
@@ -1425,7 +1431,7 @@ function exportUserNotes(videoContainer) {
     download('user_notes_' + idx + '.txt', JSON.stringify(user_notes[src]));
 }
 
-function importFileChosen(videoContainer, e) {
+function importFileChosen(videoContainer, e, overwrite) {
     var src = videoContainer.find('video').find('source').first()[0].src;
     var files = e.target.files;
     var file = files[0];
@@ -1434,6 +1440,8 @@ function importFileChosen(videoContainer, e) {
         try {
             var notes = JSON.parse(event.target.result);
             user_notes[src] = notes;
+
+            if(overwrite) videoContainer.find('.user_note').remove();
 
             var video_user_notes = getVideoNotesFor(src);
             // from back to front, since addNoteToUserNotes adds in front
@@ -1542,7 +1550,7 @@ function toggleUserNoteMenu(element) {
     // set position
     if(align) {
         dropDown.css({
-            top: (element.offset().top - dropDown.outerHeight(true) + 29) + "px",
+            top: (element.offset().top - dropDown.outerHeight(true) + 28) + "px",
             left: (element.offset().left - dropDown.outerWidth(true)) + "px"
         });
     }
