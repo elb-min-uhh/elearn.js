@@ -10,6 +10,9 @@ Eine umfassende Dokumentation des Projekts befindet sich unter http://www.sumo.u
 
 ## Versionen
 
+_Hinweis:_ Erweiterungen zum eLearn.js, welche in diesem Repository enthalten
+sind, haben jeweils eine eigene Versionsübersicht weiter unten.
+
 ### eLearn.js
 * __0.9.9__:
   * Neuerungen:

@@ -4,8 +4,8 @@
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 */
 
-var VERSION_NR = "0.9.8";
-var VERSION_DATE = "02/2017";
+var VERSION_NR = "0.9.9";
+var VERSION_DATE = "06/2017";
 
 var actions = {
     CONTENT_RESIZE : "ContentResize",
