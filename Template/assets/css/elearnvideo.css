@@ -66,6 +66,7 @@
     overflow: hidden;
     min-height: 125px;
     min-width: 220px;
+    background: #000;
 
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -73,6 +74,11 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.elearnjs-video video {
+    display: block;
+    margin: auto;
 }
 
 .elearnjs-video.full {

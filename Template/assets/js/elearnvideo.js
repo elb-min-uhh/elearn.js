@@ -81,6 +81,10 @@ function initiateVideoPlayers() {
     });
 
     addGenerelVideoPlayerListener();
+    
+    // User to explicitly set video-note width to equal video width
+    eLearnJS.registerAfterWindowResize("video-resize", resizeAllVideoPlayers);
+    eLearnJS.registerAfterShow("video-resize", resizeAllVideoPlayers);
     eLearnJS.addTouchMouseChangeListener("video-mobile", switchTouchMouse);
     initiateVideoNotes();
 }
@@ -285,6 +289,9 @@ function videoAddEventListeners(div) {
     });
     div.find('video').on('waiting', function(event) {
         videoOnBuffering(div, event);
+    });
+    div.find('video').on('resize', function(event) {
+        resizeVideoPlayer(div);
     });
     videoCheckDelayedError(div);
 }
@@ -866,33 +873,8 @@ function resizeAllVideoPlayers() {
 
 
 function resizeVideoPlayer(div) {
-
-    // check text field sizes
-    var time_field = div.find('.playtime');
-    var timeleft_field = div.find('.timeleft');
-
-    if(time_field.width() > parseFloat(time_field.css("min-width").replace("px", ""))+1) {
-        var min_width = time_field.width() + 10;
-        time_field.css("min-width", min_width + "px");
-    }
-    if(timeleft_field.width() > parseFloat(timeleft_field.css("min-width").replace("px", ""))+1) {
-        var min_width = timeleft_field.width() + 10;
-        timeleft_field.css("min-width", min_width + "px");
-    }
-
-    // calculate progress bar width
-    var icon_width = 0.0;
-
-    div.find('.controls').find('.bottom-row').children(':visible').each(function(i,e) {
-        if(!$(this).is('.video-progress-con')) {
-            icon_width += $(this).outerWidth(true);
-        }
-    });
-
-    var progress_width = div.find('.bottom-row').width() - icon_width - 5
-                        - parseInt(div.find('.video-progress-con').css("margin-left").replace("px", ""))
-                        - parseInt(div.find('.video-progress-con').css("margin-right").replace("px", ""));
-    div.find('.video-progress-con').css("width", progress_width + "px");
+    var videoContainer = div.closest('.video-container');
+    videoContainer.find('.video_notes_wrapper').css("width", div.find('video').width());
 }
 
 function switchTouchMouse() {
@@ -1141,6 +1123,8 @@ function showVideoNote(notes_con, info) {
     if(original_note.is('.user_note')) {
         new_note.prepend('<div class="user_note_menu_wrap" onclick="javascript: toggleUserNoteMenu(this);"><div class="user_note_menu">m</div></div>');
     }
+
+    new_note.wrapInner('<div class="content">');
     original_note.after(new_note);
 }
 
