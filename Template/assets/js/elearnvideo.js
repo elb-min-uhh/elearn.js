@@ -1012,10 +1012,30 @@ function addNotesToProgressbar(videoContainer, index) {
             progress_note.css('left', (start*100)/length + "%");
 
             var exists = false;
+            var moved = false;
             videoContainer.find('.video-progress-con').find('.video-progress-note').each(function(idx, e) {
-                if($(this).css('left') == progress_note.css('left')) {
+                var percentageDiff =
+                    parseFloat($(this)[0].style.left.replace(/\D*/g,""))
+                    - parseFloat(progress_note[0].style.left.replace(/\D*/g,""));
+
+                // Note of same type exists at this position
+                if(Math.abs(percentageDiff) < 0.5
+                    && ($(this).is('.user-progress-note') == progress_note.is('.user-progress-note')
+                        || moved)) {
                     exists = true;
                     return 0;
+                }
+                // move up to one time to the best position left/right to
+                // show multiple types of notes right beside each other
+                else if(Math.abs(percentageDiff) < 0.5
+                    && $(this).is('.user-progress-note') != progress_note.is('.user-progress-note')
+                    && !moved) {
+                    // move further to the right to +0.75% of the other note
+                    var newPos = Math.round((start*100)/length) + (0.75 - percentageDiff);
+                    // move further to the left to -0.75% of the other note
+                    if(percentageDiff < 0) newPos = Math.round((start*100)/length) - (0.75 + percentageDiff);
+                    progress_note.css('left', newPos + "%");
+                    moved = true;
                 }
             });
             if(!exists) {
@@ -1023,7 +1043,6 @@ function addNotesToProgressbar(videoContainer, index) {
             }
         }
     }
-
 }
 
 /**
