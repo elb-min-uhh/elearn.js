@@ -1056,9 +1056,9 @@ function addNotesToProgressbar(videoContainer, index) {
                     && $(this).is('.user-progress-note') != progress_note.is('.user-progress-note')
                     && !moved) {
                     // move further to the right to +0.75% of the other note
-                    var newPos = Math.round((start*100)/length) + (0.75 - percentageDiff);
+                    var newPos = (start*100)/length + (0.75 - percentageDiff);
                     // move further to the left to -0.75% of the other note
-                    if(percentageDiff < 0) newPos = Math.round((start*100)/length) - (0.75 + percentageDiff);
+                    if(percentageDiff < 0) newPos = (start*100)/length - (0.75 + percentageDiff);
                     progress_note.css('left', newPos + "%");
                     moved = true;
                 }
