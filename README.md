@@ -11,15 +11,20 @@ Eine umfassende Dokumentation des Projekts befindet sich unter http://www.sumo.u
 ## Versionen
 
 ### eLearn.js
-
+* __0.9.9__:
+  * Neuerungen:
+    * Stil der Kacheln im Inhaltsverzeichnis angepasst
+    * Stil von Slider, Multiboxes und ausklappbaren Bereichen angepasst
+  * Fehlerbehebungen:
+    * Auswahl von Text durch mehrfaches Klicken auf bestimmte Buttons entfernt
 * __0.9.8__:
   * Neuerungen:
-    * Automatischer Übergang zwischen Touch- und Maussteuerung auch während 
+    * Automatischer Übergang zwischen Touch- und Maussteuerung auch während
     der Nutzung
   * Fehlerbehebungen:
     * Darstellungsfehler bei einzelnen Icons behoben
     * Fehler in Touch- und Maussteuerungserkennung bei iOS behoben
-    * Fehlerbehungen im Template 
+    * Fehlerbehungen im Template
 * __0.9.7__:
   * Neuerungen:
     * Einzelne Sections werden automatisch in den Browserverlauf aufgenommen
@@ -104,7 +109,10 @@ Eine umfassende Dokumentation des Projekts befindet sich unter http://www.sumo.u
 
 ### quiz.js
 
-* __0.3.3__:
+* __0.3.4__ (zu eLearn.js 0.9.9):
+  * Neuerungen:
+    * Button Stil selbstdefiniert, da abweichend von eLearn.js Stil (ab 0.9.9)
+* __0.3.3__ (zu eLearn.js 0.9.7):
   * Neuerungen:
     * Darstellung der richtigen und falschen Antworten für Auswahlfragen
     verändert
@@ -145,12 +153,27 @@ Eine umfassende Dokumentation des Projekts befindet sich unter http://www.sumo.u
 
 ### elearnvideo.js
 
-* __0.1__:
+* __0.2__ (zu eLearn.js 0.9.9):
+  * Neuerungen:
+    * Bufferanimation
+    * Videoplayerskalierung nicht mehr über JavaScript sondern CSS
+    * Fehlermeldung, wenn Video nicht geladen werden kann
+    * Unterstützung für Einbindung in OLAT. OLAT-Player wird dafür unterdrückt
+    * Persönliche Notizen können auf Wunsch unter jedem Video ergänzt werden.
+    Videos können dazu mit der Klasse "allow_user_notes" versehen werden
+  * Fehlerbehebungen:
+    * Zeitvorschau über Fortschrittsbalken jetzt korrekt
+    * Wechsel zwischen Touch- und Maussteuerung jetzt funktionsfähig
+    * Videosteuerung verbessert. Keine ungewollten Sprünge im Videofortschritt
+    mehr
+    * Keine Tastensteuerung zum Sectionwechsel möglich, wenn Video im
+    Vollbildmodus abgespielt wird
+* __0.1__ (zu eLearn.js 0.9.8):
   * Grundversion:
     * Eigener HTML5 Videoplayer (Mobile + Desktop)
     * Anmerkungen unter dem Video möglich (Durch Ersteller des Skripts)
-    
-    
+
+
 ## Lizensierung
 
 elearn.js ist eine Entwicklung des [eLearning-Büro MIN](https://www.min.uni-hamburg.de/studium/elearning.html) der Universität Hamburg.

@@ -1,7 +1,7 @@
 /*
-* video.js v0.1 - 17/02/03
-* Ergänzend zum elearn.js v0.9.8
-* JavaScript Quiz - by Arne Westphal
+* video.js v0.2 - 17/06/01
+* Ergänzend zum elearn.js v0.9.9
+* JavaScript Videoplayer - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 */
 
