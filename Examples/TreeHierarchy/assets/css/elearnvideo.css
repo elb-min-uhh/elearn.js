@@ -12,13 +12,18 @@
     src: url('../font/eLearn-Video.woff') format('woff');
 }
 
+.video-container {
+    display: inline-block;
+    max-width: 100%;
+}
+
 .elearnjs-video {
     max-width:100%;
     margin:3em 0px 3em 0px;
     -webkit-user-select: none;  /* Chrome all / Safari all */
     -moz-user-select: none;     /* Firefox all */
     -ms-user-select: none;      /* IE 10+ */
-    user-select: none;          /* Likely future */   
+    user-select: none;          /* Likely future */
 }
 
 /* Apple player hide */
@@ -61,6 +66,7 @@
     overflow: hidden;
     min-height: 125px;
     min-width: 220px;
+    background: #000;
 
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -68,6 +74,11 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.elearnjs-video video {
+    display: block;
+    margin: auto;
 }
 
 .elearnjs-video.full {
@@ -86,10 +97,8 @@
     position: fixed;
     right: 0;
     bottom: 0;
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
+    width: 100%;
+    height: 100%;
     z-index: -100;
     background: #000;
 }
@@ -470,29 +479,62 @@
 
 /* ------------------------- VIDEO NOTES ------------------------- */
 
-.noted_video .elearnjs-video {
+.video-container.noted_video .elearnjs-video,
+.video-container.allow_user_notes .elearnjs-video {
     margin-bottom: 0;
 }
 
-.video_notes {
+.video_notes_wrapper {
     display: none;
+    max-width: 100%;
     background: #888;
-    padding: 10px;
+    padding: 1.8em;
     border-radius: 0 0 5px 5px;
     color: white;
     margin-bottom: 3em;
 }
 
-.noted_video .video_notes {
+.video_notes_wrapper.tabbed-container {
+    padding: 0;
+}
+
+.video_notes_wrapper .tabs {
+    background-color: #666;
+}
+
+.video_notes_wrapper .tab-select {
+    color: #fff;
+    border-right: 1px solid #888888;
+    background: 0;
+}
+
+.video_notes_wrapper .tab-select.act {
+    background: #888;
+}
+
+.video_notes_wrapper .tabbed-box {
+    background: none;
+}
+
+.video-container.noted_video .video_notes_wrapper,
+.video-container.allow_user_notes .video_notes_wrapper {
     display: block;
 }
 
-.noted_video .video_notes span.video_note_timestamp {
+.video-container.noted_video .video_notes_wrapper span.video_note_timestamp,
+.video-container.allow_user_notes .video_notes_wrapper span.video_note_timestamp {
     font-weight: bold;
     margin-right: 0.5em;
 }
 
-.video_notes .video_note.backup {
+.video_notes_wrapper .video_note {
+    padding: 0.2em 0.5em;
+    margin: 4px 0;
+    background: #666;
+    border-radius: 3px;
+}
+
+.video_notes_wrapper .video_note.backup {
     display: none;
 }
 
@@ -504,9 +546,120 @@
     width: 4px;
     height: 8px;
     background: #F7EF00;
-    background: rgba(247, 239, 0, 0.9);
     pointer-events: none;
 }
+
+.elearnjs-video .controls .video-progress-con .video-progress-note.user-progress-note {
+    background: rgba(16, 167, 255, 0.9);
+}
+
+.show_all_notes {
+    float: right;
+}
+
+/* USER NOTES */
+
+.video-container .video_notes_wrapper .note_add_container {
+    display: none;
+    margin-bottom: 5px;
+}
+
+.video-container .note_add_container textarea {
+    width: 100% !important;
+    height: 80px;
+    box-sizing: border-box;
+    font-family: Open Sans, sans-serif;
+}
+
+.video-container .toggle_note_add {
+    margin-top: 2em;
+}
+
+.video-container .user_note_menu_wrap {
+    float: right;
+    width: 22px;
+    opacity: 0.7;
+    cursor: pointer;
+    text-align: center;
+    font-family: eLearn-icons;
+}
+
+.video-container .user_note_menu_wrap:hover {
+    opacity: 1;
+}
+
+.video-container .user_note_menu {
+    font-size: 140%;
+    transform: scale(0.15, 1);
+}
+
+.user_note_dropdown {
+    font-size: 12px;
+    position: absolute;
+    top: -27px;
+    border: 1px solid #b4b4b4;
+    border-radius: 3px;
+    background-color: white;
+    padding: 4px;
+    z-index: 5;
+}
+
+.user_note_dropdown.top {
+    top: 0px;
+}
+
+.user_note_dropdown:before {
+    content: "";
+    position: absolute;
+    bottom: 8px;
+    right: -8px;
+    border-style: solid;
+    border-width: 7px 0 7px 7px;
+    border-color: transparent #b4b4b4;
+    display: block;
+    width: 0;
+    z-index: 1;
+}
+
+.user_note_dropdown:after {
+    content: "";
+    position: absolute;
+    bottom: 8px;
+    right: -7px;
+    border-style: solid;
+    border-width: 7px 0 7px 7px;
+    border-color: transparent #ffffff;
+    display: block;
+    width: 0;
+    z-index: 1;
+}
+
+.user_note_dropdown.top:before,
+.user_note_dropdown.top:after{
+    top: 4px;
+    bottom: auto;
+}
+
+.user_note_dropdown > .dropdown_element {
+    border-radius: 2px;
+    padding: 4px 4px 4px;
+    background: white;
+    color: #484848;
+    cursor: pointer;
+    line-height: 120%;
+}
+
+.user_note_dropdown >.dropdown_element:hover {
+    background: #888;
+    color: white;
+}
+
+
+.user_note_import_filechoser {
+    display: none;
+}
+
+/* ---------------------------------------------------------------------- */
 
 .loading-overlay {
     display: none;

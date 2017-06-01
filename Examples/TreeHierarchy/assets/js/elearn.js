@@ -1621,28 +1621,32 @@ function toggleHideable(element) {
 
 function initiateTabbedBoxes() {
     $('.tabbed-box').each(function() {
-        var div = $(this);
-
-        div.wrap('<div class="tabbed-container"></div>');
-
-        div.before('<div class="tabs"></div>');
-
-        var tabs = div.parent().find('.tabs');
-
-        div.find('.tab').each(function() {
-            var tab = $(this);
-            tabs.append('<div class="tab-select" onclick="selectTab(this);">'
-                            + tab.attr('name')
-                            + '</div>');
-        });
-
-        // set active tab to first
-        div.find('.tab').hide();
-        div.find('.tab').first().show();
-        tabs.find('.tab-select').first().addClass('act');
-
-        registerAfterTabChange("slider-resize", resizeAllSliders);
+        initiateTabbedBox($(this));
     });
+}
+
+function initiateTabbedBox(box) {
+    var div = box;
+
+    div.wrap('<div class="tabbed-container"></div>');
+
+    div.before('<div class="tabs"></div>');
+
+    var tabs = div.parent().find('.tabs');
+
+    div.find('.tab').each(function() {
+        var tab = $(this);
+        tabs.append('<div class="tab-select" onclick="selectTab(this);">'
+                        + tab.attr('name')
+                        + '</div>');
+    });
+
+    // set active tab to first
+    div.find('.tab').hide();
+    div.find('.tab').first().show();
+    tabs.find('.tab-select').first().addClass('act');
+
+    registerAfterTabChange("slider-resize", resizeAllSliders);
 }
 
 function selectTab(element) {
@@ -1857,10 +1861,16 @@ function windowOnResize() {
 */
 $(document).keydown(function(e){
     if(!allShown && keyNavigationEnabled) {
-        if(e.keyCode == 37) {
+        if(e.keyCode == 37
+            && !$(document.activeElement).is('input')
+            && !$(document.activeElement).is('textarea')
+            && $(document.activeElement).attr("contentEditable") != "true") {
             showPrev();
         }
-        else if(e.keyCode == 39) {
+        else if(e.keyCode == 39
+            && !$(document.activeElement).is('input')
+            && !$(document.activeElement).is('textarea')
+            && $(document.activeElement).attr("contentEditable") != "true") {
             showNext();
         }
     }
