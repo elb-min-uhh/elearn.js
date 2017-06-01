@@ -1480,7 +1480,12 @@ function loadLocalVideoNotesStorage() {
 }
 
 function updateLocalVideoNotesStorage() {
-    localStorage.setItem('elearnjs-user-notes', JSON.stringify(user_notes));
+    try {
+        localStorage.setItem('elearnjs-user-notes', JSON.stringify(user_notes));
+    }
+    catch(e) {
+        alert("Die letzte Notizänderung konnte nicht gespeichert werden, da der lokale Speicher voll ist.");
+    }
 }
 
 function getVideoNotesFor(src) {

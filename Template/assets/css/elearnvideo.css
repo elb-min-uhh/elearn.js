@@ -532,6 +532,7 @@
     margin: 4px 0;
     background: #666;
     border-radius: 3px;
+    word-break: break-word;
 }
 
 .video_notes_wrapper .video_note.backup {
