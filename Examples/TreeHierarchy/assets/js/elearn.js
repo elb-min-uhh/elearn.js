@@ -104,12 +104,12 @@ $(document).ready(function() {
 */
 function initiateELearnJS() {
     $($('#wrap')[0]).prepend(
-            "<div class='skip-arrows'>" // <!-- Arrow Left and Right -->
+            "<div class='skip-arrows noselect'>" // <!-- Arrow Left and Right -->
                 + "<div onclick='javascript: showPrev();' id='btnPrev' class='icon-back before-padding btn'></div>"
                 + "<div onclick='javascript: showNext();' id='btnNext' class='icon-next before-padding btn'></div>"
             + "</div>"
-            + "<div class='section-overview'></div>" // <!-- Container for Overview -->
-            + "<div id='navigation'>"
+            + "<div class='section-overview noselect'></div>" // <!-- Container for Overview -->
+            + "<div id='navigation' class='noselect'>"
                 // <!-- Grey Top Menu-bar - Reihenfolge wichtig -->
                 + "<div id='nav-bar'>"
                     + "<div onclick='javascript: backButtonPressed();' id='btnBackCon' class ='btn' title='Zurück zur Übersicht'><div class='icon-font' id='btnBack'>b</div><div id='btnBackText'>Zurück</div></div>"

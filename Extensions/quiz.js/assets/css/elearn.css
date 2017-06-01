@@ -57,6 +57,16 @@ iframe, video {
     transition: none !important;
 }
 
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                          supported by Chrome and Opera */
+}
+
 #wrap {
     min-height:100%;
     vertical-align:center;
@@ -74,10 +84,6 @@ iframe, video {
     font-size:0.8em;
     color:rgb(204,204,204);
     z-index: 5;
-    -webkit-user-select: none;  /* Chrome all / Safari all */
-    -moz-user-select: none;     /* Firefox all */
-    -ms-user-select: none;      /* IE 10+ */
-    user-select: none;          /* Likely future */
 }
 
 #nav-bar {
@@ -555,6 +561,13 @@ a:active {
     cursor: pointer;
     background-color: #eee;
     border-right: 1px solid #dcdcdc;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                          supported by Chrome and Opera */
 }
 
 .tabs .tab-select:last-child {
@@ -776,19 +789,20 @@ a:active {
 }
 
 button {
-    margin: 0em;
-    padding:0.5em 1em 0.5em 1.7em;
-    border:1px solid rgb(240,240,240);
-    background-color:rgb(240,240,240);
+    margin: 0.2em;
+    padding: 0.5em 0.5em 0.5em 1.3em;
+    border: 1px solid #dcdcdc;
+    background-color: rgb(240,240,240);
     color: rgb(140,140,140);
-    text-align:left;
+    text-align: left;
     width:50%;
+    width: calc(50% - 0.4em);
 }
 
 button:hover, button:active {
     background:rgb(220,220,220);
     color: rgb(140,140,140);
-    }
+}
 
 /*Diverses*/
 
@@ -1361,7 +1375,7 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
         padding: 5px 0 5px 162px;
     }
 
-    .tabbed-box {
+    .tabbed-box, .hideable-container .hideable {
         padding: 1.4em;
     }
 }
@@ -1454,7 +1468,7 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
         margin-right: 0;
     }
 
-    .tabbed-box {
+    .tabbed-box, .hideable-container .hideable {
         padding: 0.8em;
     }
 }
