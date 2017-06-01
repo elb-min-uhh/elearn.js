@@ -998,6 +998,7 @@ function initiateGalleries() {
         $(this).parent().after("<div class='slider-description'></div>");
         showSlideDescription(ul, 0);
     });
+    registerAfterWindowResize("slider-resize", resizeAllSliders);
 }
 
 /**
@@ -1833,7 +1834,6 @@ $(window).on('scrollbarHidden', function() {
 function windowOnResize() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function(){
-        resizeAllSliders();
         if(isSideMenuVisible()) {
             $('#sideMenu').css('right', "0");
         }
@@ -1973,8 +1973,6 @@ function notifyIFrameParent(message) {
 // Touch Scroll part
 // --------------------------------------------------------------------------------------
 
-
-var maxDiff = 0;
 var clickedAlready = false;
 
 var touchMouseChangeTimer = null;
@@ -2057,13 +2055,17 @@ function addTouchToSections() {
         }
     });
 
+    resizeTouchArrows();
+    registerAfterWindowResize("touch-arrows", resizeTouchArrows);
+};
 
-    maxDiff = $("body").width()/4;
+function resizeTouchArrows() {
+    var maxDiff = $("body").width()/4;
     $('#leftTouch').css('width', maxDiff-1);
     $('#rightTouch').css('width', maxDiff-1);
     $('#leftTouch').css('left', '-' + maxDiff + 'px');
     $('#rightTouch').css('right', '-' + maxDiff + 'px');
-};
+}
 
 
 // TOUCH-EVENTS SINGLE-FINGER SWIPE-SENSING JAVASCRIPT
@@ -2216,6 +2218,7 @@ function touchMove(event) {
 }
 
 function touchEnd(event) {
+    var maxDiff = $("body").width()/4;
     calcSpeed(startX - curX);
     if (swipeStarted && fingerCount == 1 && curX >= 0 ) {
         //swipeLength = Math.round(Math.sqrt(Math.pow(curX - startX,2) + Math.pow(curY - startY,2)));
@@ -2319,6 +2322,7 @@ function processingRoutine(dir, type) {
 * Wird aufgerufen, wenn wie die aktuelle Touchbewegung Horizontal ist und von einer Section ausgeht.
 */
 function touchMoveSection(dif) {
+    var maxDiff = $("body").width()/4;
     if(dif >= 0 && visSection < $('section').length - 1) // nach Links streifen, rechts kommt raus
     {
         if(dif > maxDiff) {

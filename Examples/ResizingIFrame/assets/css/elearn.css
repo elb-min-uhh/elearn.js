@@ -812,6 +812,7 @@ button:hover, button:active {
 
 .skip-arrows {
     position: fixed;
+    top: 35%;
     width:1100px;
     max-width: 100%;
 }
@@ -819,14 +820,12 @@ button:hover, button:active {
 #btnNext {
     color:rgb(200,200,200);
     position:absolute;
-    top:5em;
     right:6%;
 }
 
 #btnPrev {
     color:rgb(200,200,200);
     position:absolute;
-    top:5em;
     left:6%;
 }
 
@@ -1099,19 +1098,6 @@ div.slider-nav ul.img-gallery li.active{
     opacity: 1;
 }
 
-/* AUSKOMMENTIERT FÜR STATISCHE ANZEIGE -
-- Wenn es eingeblendet werden soll muss jeweils statiscch opacity:0 und left/right: -15px*/
-/*
-div.slider-con:hover .slider-back, div.preview-con:hover .slider-back {
-    left: 15px;
-    opacity: 1;
-}
-
-div.slider-con:hover .slider-next, div.preview-con:hover .slider-next {
-    right: 15px;
-    opacity: 1;
-}
-*/
 div.slider-con:hover .slider-zoom{
     right: 15px;
     opacity: 1;
@@ -1317,15 +1303,9 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     #btnNext, #tooltipTouchRight {
         right:1%;
     }
-    #btnNext{
-        top:6em;
-    }
 
     #btnPrev, #tooltipTouchLeft {
         left:1%;
-    }
-    #btnPrev{
-        top:6em;
     }
 
     #btnNext {
@@ -1339,16 +1319,19 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     .side-menu {
         max-width: 65%;
     }
-    div.slider:hover .slider-back, div.slider-nav:hover .slider-back {
-        left: 10px;
+    div.slider-con, div.preview-con {
+        padding: 20px 50px 20px;
+    }
+    div.slider-con .slider-back, div.preview-con .slider-back {
+        left: 12px;
         opacity: 1;
     }
-    div.slider:hover .slider-next, div.slider-nav:hover .slider-next {
-        right: 10px;
+    div.slider-con .slider-next, div.preview-con .slider-next {
+        right: 12px;
         opacity: 1;
     }
     .slider-back-area, .slider-next-area {
-        width: 40px;
+        width: 50px;
     }
     .img-lightbox img {
         margin: 40px 20px;
@@ -1376,6 +1359,10 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     }
     .section-overview-element.active.subsub {
         padding: 5px 0 5px 162px;
+    }
+
+    .tabbed-box {
+        padding: 1.4em;
     }
 }
 
@@ -1413,16 +1400,19 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     .side-menu {
         max-width: 85%;
     }
-    div.slider:hover .slider-back, div.slider-nav:hover .slider-back {
-        left: 4px;
+    div.slider-con, div.preview-con {
+        padding: 20px 40px 20px;
+    }
+    div.slider-con .slider-back, div.preview-con .slider-back {
+        left: 10px;
         opacity: 1;
     }
-    div.slider:hover .slider-next, div.slider-nav:hover .slider-next {
-        right: 4px;
+    div.slider-con .slider-next, div.preview-con .slider-next {
+        right: 10px;
         opacity: 1;
     }
     .slider-back-area, .slider-next-area {
-        width: 25px;
+        width: 40px;
     }
     .img-lightbox img {
         margin: 20px 10px;
@@ -1462,6 +1452,10 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     }
     #btnHelp {
         margin-right: 0;
+    }
+
+    .tabbed-box {
+        padding: 0.8em;
     }
 }
 
