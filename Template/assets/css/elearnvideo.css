@@ -547,6 +547,9 @@
     background: rgba(16, 167, 255, 0.9);
 }
 
+.show_all_notes {
+    float: right;
+}
 
 /* USER NOTES */
 
@@ -604,7 +607,7 @@
 .user_note_dropdown:before {
     content: "";
     position: absolute;
-    top: 30px;
+    bottom: 8px;
     right: -8px;
     border-style: solid;
     border-width: 7px 0 7px 7px;
@@ -614,15 +617,10 @@
     z-index: 1;
 }
 
-.user_note_dropdown.top:before,
-.user_note_dropdown.top:after{
-    top: 4px;
-}
-
 .user_note_dropdown:after {
     content: "";
     position: absolute;
-    top: 30px;
+    bottom: 8px;
     right: -7px;
     border-style: solid;
     border-width: 7px 0 7px 7px;
@@ -630,6 +628,12 @@
     display: block;
     width: 0;
     z-index: 1;
+}
+
+.user_note_dropdown.top:before,
+.user_note_dropdown.top:after{
+    top: 4px;
+    bottom: auto;
 }
 
 .user_note_dropdown > .dropdown_element {
@@ -642,7 +646,7 @@
 }
 
 .user_note_dropdown >.dropdown_element:hover {
-    background: #376092;
+    background: #888;
     color: white;
 }
 
