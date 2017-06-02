@@ -1255,9 +1255,10 @@ function dragReset(e) {
     // remove emphasis
     if(e != undefined) $(e.target).closest(".answers").find(".emph").removeClass("emph");
 
+    console.log("asd");
     $('.draggedover').removeClass("draggedover");
-    $(".object").css("opacity", false);
-    $(".object").css("background", false);
+    $(".object").css("opacity", "");
+    $(".object").css("background", "");
     $('.question[qtype="'+quizTypes.ORDER+'"]').find(".destination").removeClass("vis");
     draggedObjects = null;
     startedObject = null;

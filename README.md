@@ -115,6 +115,8 @@ sind, haben jeweils eine eigene Versionsübersicht weiter unten.
 * __0.3.4__ (zu eLearn.js 0.9.9):
   * Neuerungen:
     * Button Stil selbstdefiniert, da abweichend von eLearn.js Stil (ab 0.9.9)
+  * Fehlerbehebungen:
+    * Fehler in der Darstellung von Klassifikations- und Sortieraufgaben behoben
 * __0.3.3__ (zu eLearn.js 0.9.7):
   * Neuerungen:
     * Darstellung der richtigen und falschen Antworten für Auswahlfragen
