@@ -492,6 +492,7 @@
     border-radius: 0 0 5px 5px;
     color: white;
     margin-bottom: 3em;
+    box-sizing: border-box;
 }
 
 .video_notes_wrapper.tabbed-container {
@@ -579,6 +580,7 @@
 .video-container .user_note_menu_wrap {
     float: right;
     width: 22px;
+    margin-left: 10px;
     opacity: 0.7;
     cursor: pointer;
     text-align: center;
