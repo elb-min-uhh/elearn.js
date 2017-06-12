@@ -1,0 +1,623 @@
+/*
+* Styles zum quiz.js v0.3.3 by Arne Westphal
+* Ergänzend zum elearn.js v0.9.7
+* eLearning Buero MIN-Fakultaet - Universitaet Hamburg
+*/
+
+.question, .q-ergebnis {
+    border: 2px solid rgb(240,240,240);
+    margin:30px 0 0;
+    padding:0em 1em 1em 1.2em;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.question h4 {
+    font-family: TheSansUHH,sans-serif;
+    font-size:120%;
+    font-style: normal;
+    font-weight: normal;
+    background: rgb(240,240,240);
+    margin: 0 -1em 1em;
+    padding: 0.3em 1em 0.3em;
+}
+
+.question input[type="checkbox"],
+.question input[type="radio"] {
+    vertical-align: middle;
+}
+
+.question img {
+    float:left;
+    width: auto;
+    max-width:100%;
+    margin:1em 0em 1em 0em;
+}
+
+.question img.small {
+    max-width: 50%;
+}
+
+.question .answers {
+    padding:1em 0em 1em 0em;
+    width: auto;
+}
+
+.question label {
+    display:block;
+    margin:0.5em 0 0.5em 2.2em;
+    padding: 0.5em 3.8em 0.5em 1.6em;
+}
+
+.question label:hover {
+    background-color: rgb(240,240,240);
+}
+
+
+.question label.right,
+.question .object.right {
+    background-color:rgb(240,255,240);
+}
+
+.question label.right:hover,
+.question .object.right:hover {
+    background-color: rgb(230,245,230);
+}
+
+
+.question label.wrong {
+    background-color: rgb(255,240,240);
+}
+
+.question label.wrong:hover {
+    background-color: rgb(245,230,230);
+}
+
+
+.question .right_icon:after {
+    font-family: eLearn-icons;
+    font-size: 1.75em;
+    content: "r";
+    padding-left: 5px;
+    vertical-align: middle;
+    color: #888;
+}
+
+.question .wrong_icon:after {
+    font-family: eLearn-icons;
+    font-size:1.75em;
+    content: "w";
+    padding-left: 5px;
+    vertical-align: middle;
+    color: #888;
+}
+
+.question .right.right_icon:after,
+.question .wrong.right_icon:after {
+    color: #007900;
+}
+.question .right.wrong_icon:after,
+.question .wrong.wrong_icon:after {
+    color: #790000;
+}
+
+/* -------------------------------- Image Selection -------------------------------- */
+
+.question label.img_radio{
+    border: 5px solid transparent;
+    display: inline-block;
+    overflow-y: auto;
+    float: left;
+    padding: 0;
+}
+
+.question label.img_radio:hover {
+    background: 0;
+}
+
+.question label.img_radio input{
+    display:none;
+}
+
+.question label.img_radio img{
+    border: 5px solid transparent;
+    padding: 0;
+    margin:3px;
+    max-width: calc(100% - 6px);
+}
+
+.question label.img_radio:hover img {
+    border: 5px solid #dcdcdc;
+}
+
+.question label.img_radio input:checked + img {
+    border: 5px solid #CAE8F0;
+}
+
+.question label.img_radio.right, .question label.img_radio.wrong {
+    background: 0;
+}
+
+.question label.img_radio.right {
+    border: 5px solid rgb(200,255,200);
+}
+
+.question label.img_radio.wrong {
+    border: 5px solid rgb(255,200,200);
+}
+
+
+
+.question .feedback, .q-ergebnis .feedback {
+    word-break: break-word;
+    margin:1.5em 1.9em 2em 2.2em;
+    padding:0em 1.6em 0em 1.6em;
+    border-left: 1.2em solid rgb(200,200,200);
+    width: calc(100% - 8.5em);
+    float:left;
+}
+
+.question .ans {
+    display:none;
+}
+
+.q-ergebnis h2{
+    text-align: center;
+    width: 100%;
+}
+
+
+
+/* BEREITS BEANTWORTETE FRAGE */
+.question .answered_hint {
+    float: right;
+    opacity: 0.5;
+    font-size: 80%;
+    margin-top: -1em;
+    padding-bottom: 0.5em;
+    padding-left: 0.5em;
+}
+
+/* -------------------------------- CHOICE -------------------------------- */
+
+.question[qtype="choice"] label.right_icon:after,
+.question[qtype="choice"] label.wrong_icon:after {
+    content: none;
+}
+
+.question[qtype="choice"] label.right_icon:before {
+    font-family: eLearn-icons;
+    font-size: 1.75em;
+    content: "r";
+    padding-left: 5px;
+    vertical-align: middle;
+    color: #888;
+}
+
+.question[qtype="choice"] label.wrong_icon:before {
+    font-family: eLearn-icons;
+    font-size:1.75em;
+    content: "w";
+    padding-left: 5px;
+    vertical-align: middle;
+    color: #888;
+}
+
+/* .question[qtype="choice"] label.right.right_icon:before, */
+.question[qtype="choice"] label.wrong.right_icon:before {
+    color: #790000;
+}
+/* .question[qtype="choice"] label.right.wrong_icon:before, */
+.question[qtype="choice"] label.wrong.wrong_icon:before {
+    color: #790000;
+}
+
+
+/* -------------------------------- FREE TEXT -------------------------------- */
+
+.question .answers textarea {
+    display: block;
+    width: 100%;
+}
+
+.question.answered .answers textarea {
+    opacity: 0.6;
+    background: #eeeeee;
+}
+
+
+/* -------------------------------- FILL BLANK -------------------------------- */
+
+.question[qtype="fill_blank"] label,
+.question[qtype="fill_blank_choice"] label {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* ------------------------------- ERROR TEXT -------------------------------- */
+
+.question[qtype="error_text"] button.error_button {
+    width: auto;
+    padding: 3px;
+    font-size: 100%;
+}
+
+.question[qtype="error_text"] button.error_button.act {
+    text-decoration: line-through;
+    text-decoration-color: #f00;
+}
+
+.question[qtype="error_text"] .underline button.error_button.act {
+    text-decoration: underline;
+    text-decoration-color: #000;
+}
+
+.question[qtype="error_text"] label {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+/* ----------------------------- CLASSIFICATION ------------------------------ */
+
+.question[qtype="classification"] .answers .object,
+.question[qtype="order"] .answers .object {
+    display: inline-block;
+    border: 2px solid #dcdcdc;
+    overflow-y: auto;
+    cursor: move;
+    padding: 5px;
+
+    text-align: center;
+
+    min-width: 100px;
+    min-height: 50px;
+}
+
+.question[qtype="classification"] .answers .object:hover,
+.question[qtype="order"] .answers .object:hover {
+    border-color: #888;
+}
+
+.question[qtype="classification"] .answers .object.emph,
+.question[qtype="order"] .answers .object.emph {
+    background: #ddddff;
+    border: 2px dashed #b4b4b4;
+}
+
+.question[qtype="classification"] .answers .object.draggedover,
+.question[qtype="order"] .answers .object.draggedover {
+    background: #ccccee;
+    border: 2px dashed #888;
+}
+
+/* Kein Drop auf Objekte innerhalb der Blöcke */
+.question[qtype="classification"] .answers .object *,
+.question[qtype="order"] .answers .object * {
+    pointer-events: none;
+}
+
+.question[qtype="classification"] .answers .object.used *,
+.question[qtype="order"] .answers .object.used * {
+    opacity: 0.4;
+}
+
+.question[qtype="classification"] .answers .object.blocked,
+.question[qtype="order"] .answers .object.blocked {
+    opacity: 0.8;
+    background: #dcdcdc;
+}
+
+
+/* ORDER */
+
+.question[qtype="order"] .answers .object,
+.question[qtype="order"] .answers .destination {
+    float: left;
+    margin: 3px;
+}
+
+.question[qtype="order"] .answers.fill .object {
+    width: 95%;
+}
+
+.question[qtype="order"] .answers .destination {
+    display: none;
+}
+
+.question[qtype="order"] .answers .destination.vis {
+    display: inline-block;
+    border: 2px dashed #b4b4b4;
+    min-height: 50px;
+    min-width: 20px;
+    background: #ddddff;
+}
+
+.question[qtype="order"] .answers .destination.vis.draggedover {
+    background: #ccccee;
+    border: 2px dashed #888;
+}
+
+
+/* ----------------------------- MATRIX CHOICE ------------------------------ */
+
+.question[qtype="matrix_choice"] .answers .matrix {
+
+}
+
+.question[qtype="matrix_choice"] .answers .matrix label {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+.question[qtype="matrix_choice"] .answers .matrix td,
+.question[qtype="matrix_choice"] .answers .matrix th {
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #888;
+}
+
+
+.question[qtype="matrix_choice"] label.right_icon:after,
+.question[qtype="matrix_choice"] label.wrong_icon:after {
+    content: none;
+}
+
+.question[qtype="matrix_choice"] label.right_icon:before {
+    font-family: eLearn-icons;
+    font-size: 1.75em;
+    content: "r";
+    padding-left: 5px;
+    vertical-align: middle;
+    color: #888;
+}
+
+.question[qtype="matrix_choice"] label.wrong_icon:before {
+    font-family: eLearn-icons;
+    font-size:1.75em;
+    content: "w";
+    padding-left: 5px;
+    vertical-align: middle;
+    color: #888;
+}
+
+/* .question[qtype="matrix_choice"] label.right.right_icon:before, */
+.question[qtype="matrix_choice"] label.wrong.right_icon:before {
+    color: #790000;
+}
+/* .question[qtype="matrix_choice"] label.right.wrong_icon:before, */
+.question[qtype="matrix_choice"] label.wrong.wrong_icon:before {
+    color: #790000;
+}
+
+/* ----------------------------- HOTSPOT ------------------------------ */
+
+.question[qtype="hotspot"] .answers .hotspot_image {
+    display: inline-block;
+    position: relative;
+    overflow-y: auto;
+    max-width: 100%;
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image img {
+    margin: 0;
+}
+
+/*
+.question[qtype="hotspot"] .answers .hotspot_image * {
+    pointer-events: none;
+}
+*/
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot {
+    display:none;
+    position: absolute;
+
+    /*
+    width is calculated in quiz.js
+    */
+
+    border: 1px solid white;
+    border-radius: 50%;
+
+    background: rgb(0,0,255);
+    background: rgba(0,0,255,0.3);
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image:hover .hotspot {
+    display: block;
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot:hover {
+    background: rgb(0,0,200);
+    background: rgba(0,0,255,0.6);
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot.act {
+    display: block !important;
+    background: rgb(255,0,0);
+    background: rgba(255,0,0,0.3);
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot.act:hover {
+    background: rgb(200,0,0);
+    background: rgba(255,0,0,0.6);
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot.blocked {
+    display: block !important;
+    background: rgb(150,150,150);
+    background: rgba(100,100,100,0.3);
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot.blocked:hover {
+    background: rgb(100,100,100);
+    background: rgba(100,100,100,0.6);
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot .descr {
+    display: none;
+    /* visibility in quiz.js */
+    position: absolute;
+    background: #fff;
+    border: 1px solid #dcdcdc;
+    padding: 3px;
+    z-index: 10;
+}
+
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot .descr .cor {
+    color: #0a0;
+}
+.question[qtype="hotspot"] .answers .hotspot_image .hotspot .descr .inc {
+    color: #a00;
+    text-decoration: line-through;
+}
+
+
+/* ----------------------------- PETRI-NETZ ------------------------------ */
+
+.question[qtype="petri"] .petri_aufgabe {
+    position: relative;
+    overflow-y: auto;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.question[qtype="petri"] .petri_image {
+    position: relative;
+    display: inline-block;
+    max-width: 90%;
+}
+
+.question[qtype="petri"] .petri_image img {
+    margin: 0;
+}
+
+.question[qtype="petri"] .petri_image .place {
+    position: absolute;
+    background: #dcdcdc;
+    background: rgba(220,220,220, 0.6);
+    width: 25px;
+    height: 25px;
+    margin-left: -10px;
+    margin-top: -10px;
+    border-radius: 50%;
+}
+
+.question[qtype="petri"] .petri_image .place:hover {
+    background: #b4b4b4;
+    background: rgba(150,150,150, 0.6);
+}
+
+.question[qtype="petri"] .petri_image .place.act {
+    background: #b4b4b4;
+    background: rgb(0,0,255);
+    background: rgba(0,0,255,0.5);
+}
+
+.question[qtype="petri"] .petri_image .place.blocked {
+    display: none;
+}
+
+.question[qtype="petri"] .place.right:after,
+.question[qtype="petri"] .place.wrong:after {
+    padding-left: 100%;
+}
+
+/* ----------------------------- ZEICHNEN ------------------------------ */
+
+.question[qtype="drawing"] .drawing_canvas_container {
+    display: inline-block;
+    position: relative;
+    overflow-y: auto;
+    border: 1px solid #888;
+    cursor: crosshair;
+}
+
+.question[qtype="drawing"] .drawing_canvas_container img {
+    margin: 0;
+}
+
+.question[qtype="drawing"] .drawing_canvas_container img.correct {
+    display: none;
+}
+
+.question[qtype="drawing"].answered .drawing_canvas_container img.correct {
+    display: block;
+}
+
+.question[qtype="drawing"].answered .drawing_canvas_container img.background {
+    display: none;
+}
+
+.question[qtype="drawing"] .drawing_canvas_container canvas {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.question[qtype="drawing"] .drawing_canvas_container canvas.drawing_canvas {
+    display: none;
+}
+
+.question[qtype="drawing"] .drawing_canvas_container canvas.drawing_canvas.act,
+.question[qtype="drawing"] .drawing_canvas_container canvas#imageTemp {
+    display: block;
+}
+
+
+/*Media-Querys für Responsivität*/
+
+
+
+@media screen and (max-width:800px) {
+    .question label{
+        margin:0.5em 1em 0.5em 1.2em;
+    }
+    .question .feedback, .q-ergebnis .feedback {
+        margin:1.5em 1em 2em 1.2em;
+        width: calc(100% - 6.6em);
+    }
+}
+
+@media screen and (max-width:440px) {
+    .question label{
+        margin:0.5em 0.5em 0.5em 0.5em;
+    }
+    .question .feedback, .q-ergebnis .feedback {
+        margin:1.5em 0.5em 2em 0.5em;
+        width: calc(100% - 5.4em);
+    }
+}
+
+@media screen and (max-width:350px) {
+    .question label{
+        margin:0.5em 0.3em 0.5em 0.3em;
+    }
+    .question .feedback, .q-ergebnis .feedback {
+        margin:1.5em 0.3em 2em 0.3em;
+        width: calc(100% - 5em);
+    }
+}
+
+@media print {
+  body {
+      font-size:78%;
+  }
+  .page {
+      padding: 45px 8.5% 68px 8.5%;
+  }
+
+  #navigation {
+    font-size: 1em;
+      display:none;
+  }
+  h2 {page-break-before:always;}
+}

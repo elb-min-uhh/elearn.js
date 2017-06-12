@@ -7,6 +7,10 @@
 var VERSION_NR = "0.9.8";
 var VERSION_DATE = "02/2017";
 
+var actions = {
+    CONTENT_RESIZE : "ContentResize",
+}
+
 // Will be set on first Touch event. See Help Functions at bottom
 var touchSupported = false;
 
@@ -35,10 +39,13 @@ var progressbarEnabled = true;
 // Funktionen die aufgerufen werden, wenn eine neue section angezeigt wird
 // diese sind registrierbar mit registerAfterShow(KEY, FNC)
 var afterShow = {};
+var afterShowLate = {};
 var afterPageInteraction = {};
 // für tabbed boxes / multiboxes
 var afterTabChange = {};
 var afterWindowResize = {};
+var afterWindowResizeLate = {};
+var afterSliderResize = {};
 
 // Nur damit Scriptaufrufe übersichtlicher sind.
 var eLearnJS = this;
@@ -77,8 +84,12 @@ $(document).ready(function() {
 
     registerAfterShow("slider-resize", resizeAllSliders);
     registerAfterPageInteraction("history-push", pushHistoryState);
+    registerAfterShow("messageIframeParent", updateWrapSize, true);
+    registerAfterWindowResize("messageIframeParent", updateWrapSize, true);
+    registerAfterSliderResize("messageIframeParent", updateWrapSize);
 
     checkParameters();
+    updateWrapSize();
 
     $('#qrcode').qrcode({
         "width": 256,
@@ -335,7 +346,7 @@ function setBackPage(val, type) {
 */
 function showPrev() {
     var ret = showSection(visSection-1);
-    // Ausführen registrierten funktionen
+    // Ausführen registrierter Funktionen
     if(ret) {
         $.each(afterPageInteraction, function(key, fnc) {
             fnc();
@@ -353,7 +364,7 @@ function showNext() {
     // oder alle (sichtbaren) Fragen beantwortet
     if(!checkBlockProgress()) {
         var ret = showSection(visSection+1);
-        // Ausführen registrierten funktionen
+        // Ausführen registrierter Funktionen
         if(ret) {
             $.each(afterPageInteraction, function(key, fnc) {
                 fnc();
@@ -365,7 +376,7 @@ function showNext() {
 function overviewShowSection(i) {
     var ret = showSection(i);
 
-    // Ausführen registrierten funktionen
+    // Ausführen registrierter Funktionen
     if(ret) {
         $.each(afterPageInteraction, function(key, fnc) {
             fnc();
@@ -422,8 +433,12 @@ function showSection(i) {
         setDirectionButtonsEnabledIdx(visSection);
     }
 
-    // Ausführen registrierten funktionen
+    // Ausführen registrierter Funktionen
     $.each(afterShow, function(key, fnc) {
+        fnc();
+    });
+    // Ausführen registrierter Funktionen
+    $.each(afterShowLate, function(key, fnc) {
         fnc();
     });
 
@@ -434,8 +449,13 @@ function showSection(i) {
 * Registriert eine Funktion, die ausgeführt wird, nachdem eine neue Section
 * angezeigt wurde.
 */
-function registerAfterShow(key, fnc) {
-    afterShow[key] = fnc;
+function registerAfterShow(key, fnc, late) {
+    if(late) {
+        afterShowLate[key] = fnc;
+    }
+    else {
+        afterShow[key] = fnc;
+    }
 }
 
 /**
@@ -459,8 +479,17 @@ function registerAfterTabChange(key, fnc) {
 * Registriert eine Funktion, die ausgeführt wird, nachdem ein neuer Tab
 * in einer tabbed-box angezeigt wurde.
 */
-function registerAfterWindowResize(key, fnc) {
-    afterWindowResize[key] = fnc;
+function registerAfterWindowResize(key, fnc, late) {
+    if(late) {
+        afterWindowResizeLate[key] = fnc;
+    }
+    else {
+        afterWindowResize[key] = fnc;
+    }
+}
+
+function registerAfterSliderResize(key, fnc) {
+    afterSliderResize[key] = fnc;
 }
 
 function pushHistoryState() {
@@ -504,7 +533,7 @@ function toggleAllSections() {
         $(document).scrollTop($($('section')[visSection]).position().top - $('#navigation').height() - 10);
         allShown = true;
         resizeAllSliders();
-        // Ausführen registrierten funktionen
+        // Ausführen registrierter Funktionen
         $.each(afterShow, function(key, fnc) {
             fnc();
         });
@@ -1206,6 +1235,11 @@ function resizeAllSliders() {
         resizeSliders();
         resizeNavigationSliders();
         resizeZoomContainer();
+
+        // Ausführen registrierter Funktionen
+        $.each(afterSliderResize, function(key, fnc) {
+            fnc();
+        });
     }, 250);
 
 }
@@ -1561,7 +1595,7 @@ function selectTab(element) {
     e.parent().find('.tab-select').removeClass("act");
     e.addClass("act");
 
-    // Ausführen registrierten funktionen
+    // Ausführen registrierter Funktionen
     $.each(afterTabChange, function(key, fnc) {
         fnc();
     });
@@ -1746,6 +1780,10 @@ function windowOnResize() {
         $.each(afterWindowResize, function(key, fnc) {
             fnc();
         });
+        // Ausführen registrierter funktionen
+        $.each(afterWindowResizeLate, function(key, fnc) {
+            fnc();
+        });
     }, 250);
     updateNavBarWidth();
     hoverInfoSetPositions();
@@ -1833,6 +1871,32 @@ function getOuterWidth(e, outer) {
     }
 
     return width;
+}
+
+var wrapDimensions = {width: 0, height: 0};
+
+function checkWrapResize() {
+    var changed = false;
+    var wrap = $('#wrap');
+
+    if(wrap.width() != wrapDimensions.width
+        || wrap.height() != wrapDimensions.height) {
+        changed = true;
+        wrapDimensions.width = wrap.width();
+        wrapDimensions.height = wrap.height();
+    }
+
+    return changed;
+}
+
+function updateWrapSize() {
+    if(checkWrapResize()) {
+        notifyIFrameParent({action: eLearnJS.actions.CONTENT_RESIZE, dimensions: wrapDimensions});
+    }
+}
+
+function notifyIFrameParent(message) {
+    window.parent.postMessage(message, '*');
 }
 
 // --------------------------------------------------------------------------------------
