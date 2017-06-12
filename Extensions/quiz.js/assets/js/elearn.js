@@ -263,6 +263,7 @@ function setBackButtonEnabled(b) {
     else {
         $('#navigation').removeClass("back-enabled");
     }
+    updateNavBarWidth();
 }
 
 /**
