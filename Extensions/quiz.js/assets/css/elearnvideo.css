@@ -499,9 +499,29 @@
     background: #555;
 }
 
-.video_notes_wrapper textarea, .video_notes_wrapper input[type="text"] {
-    background: #555;
+.video_notes_wrapper textarea,
+.video_notes_wrapper input[type="text"] {
+    border: 1px solid rgb(169, 169, 169);
+    background: #666;
     color: white;
+}
+
+.video_notes_wrapper ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:    #b4b4b4;
+}
+.video_notes_wrapper :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    #b4b4b4;
+   opacity:  1;
+}
+.video_notes_wrapper ::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    #b4b4b4;
+   opacity:  1;
+}
+.video_notes_wrapper :-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color:    #b4b4b4;
+}
+.video_notes_wrapper ::-ms-input-placeholder { /* Microsoft Edge */
+   color:    #b4b4b4;
 }
 
 .video_notes_wrapper.tabbed-container {
@@ -545,6 +565,13 @@
     word-break: break-word;
 }
 
+
+
+.video_notes_wrapper .video_note textarea,
+.video_notes_wrapper .video_note input[type="text"] {
+    background: #555;
+}
+
 .video_notes_wrapper .video_note.backup {
     display: none;
 }
@@ -574,6 +601,16 @@
     display: none;
     margin-bottom: 5px;
 }
+
+
+.video-container .note_add_container .user_note_from,
+.video-container .note_add_container .user_note_to {
+    font-family: Open Sans, sans-serif;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    padding: 2px;
+}
+
 
 .video-container .note_add_container textarea {
     width: 100% !important;

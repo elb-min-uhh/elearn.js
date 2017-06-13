@@ -1414,6 +1414,11 @@ function exportUserNotes(videoContainer, type) {
     var src = videoContainer.find('video').find('source').first()[0].src;
     var text;
 
+    if(user_notes[src] == undefined || user_notes[src].length == 0) {
+        alert("Keine Notizen vorhanden.");
+        return;
+    }
+
     if(type === FILETYPE_JSON) {
         text = JSON.stringify(user_notes[src]);
     }
