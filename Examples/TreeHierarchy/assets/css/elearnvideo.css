@@ -565,7 +565,9 @@
     word-break: break-word;
 }
 
-
+.video_notes_wrapper .video_note .content {
+    display: inline;
+}
 
 .video_notes_wrapper .video_note textarea,
 .video_notes_wrapper .video_note input[type="text"] {

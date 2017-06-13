@@ -1228,7 +1228,7 @@ function createUserNote(text, timefrom, timeto, id) {
                     + '" timeto="'
                     + createTimeStringLetters(parseTimeString(timeto))
                     + '" id="' + id + '">'
-                    + text
+                    + '<div class="content">' + text + '</content>'
                     + '</div>');
 }
 
@@ -1291,7 +1291,7 @@ function editNote(videoContainer, note) {
     editingDiv = videoContainer;
     editingNote = note;
 
-    var text = editingNote.html().trim().replace(/<br>/g, "\r\n");
+    var text = editingNote.find('.content').html().trim().replace(/<br>/g, "\r\n");
 
     videoContainer.find('.note_add_container').find('.user_note_from').val(createTimeStringColons(parseTimeString(editingNote.attr("timefrom"))));
     videoContainer.find('.note_add_container').find('.user_note_to').val(createTimeStringColons(parseTimeString(editingNote.attr("timeto"))));
@@ -1357,9 +1357,10 @@ function updateUserNotesArray(videoContainer) {
     var src = videoContainer.find('video').find('source').first()[0].src;
     var user_video_notes = [];
     videoContainer.find('.user_notes').find('.user_note.backup').each(function(i, e) {
+        var text = $(this).find('.content').html();
         var video_note_object = {timefrom: $(this).attr('timefrom'),
                                 timeto: $(this).attr('timeto'),
-                                text: $(this).html()};
+                                text: text};
         user_video_notes.push(video_note_object);
     });
     setVideoNotesFor(src, user_video_notes);
