@@ -819,7 +819,7 @@
     border: 5px solid #a26e6e;
 }
 
-.video_notes_wrapper .question[qtype="classification"] .answers .object.blocked, 
+.video_notes_wrapper .question[qtype="classification"] .answers .object.blocked,
 .video_notes_wrapper .question[qtype="order"] .answers .object.blocked {
     background: #555;
 }
