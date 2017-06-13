@@ -897,6 +897,7 @@ var videoNoteTimes = [];
 */
 function initiateVideoNotes() {
     $('.video_note').addClass('backup');
+    $('.video_note').wrapInner('<div class="content">');
 
     loadLocalVideoNotesStorage();
 
@@ -1012,7 +1013,7 @@ function showAllNotes(notes, b) {
     }
     else if(!b) {
         notes.removeClass("show_all");
-        removeAllVideoNotes(notes);
+        hideAllVideoNotes(notes);
         noteTimeUpdate(videoContainer, notes, idx);
     }
 }
@@ -1064,7 +1065,7 @@ function noteTimeUpdate(videoContainer, notes_con, index) {
             // time not reached
             if(info["time"] > time) {
                 // remove
-                display_note.remove();
+                hideVideoNote(notes_con, display_note);
             }
             else if(info["time"] <= time) {
                 // note ended
@@ -1072,7 +1073,7 @@ function noteTimeUpdate(videoContainer, notes_con, index) {
                     && info["time_to"] != -1
                     && info["time_to"] <= time) {
                     // remove
-                    display_note.remove();
+                    hideVideoNote(notes_con, display_note);
                 }
                 else {
                     // skip if already shown
@@ -1088,7 +1089,7 @@ function noteTimeUpdate(videoContainer, notes_con, index) {
 
 function showVideoNote(notes_con, info) {
     var original_note = notes_con.find('.video_note.backup').filter('#'+info["index"]);
-    var new_note = original_note.clone();
+    var new_note = original_note.clone(true, true); // clone with all listeners
     new_note.removeClass('backup');
     //new_note.attr('id', info["index"]);
 
@@ -1101,13 +1102,20 @@ function showVideoNote(notes_con, info) {
     if(original_note.is('.user_note')) {
         new_note.prepend('<div class="user_note_menu_wrap" onclick="javascript: toggleUserNoteMenu(this);"><div class="user_note_menu">m</div></div>');
     }
-
-    new_note.wrapInner('<div class="content">');
     original_note.after(new_note);
 }
 
-function removeAllVideoNotes(notes_con) {
-    notes_con.find('.video_note').not('.backup').remove();
+function hideVideoNote(notes_con, display_note) {
+    var backup_note = display_note.siblings('#' + display_note.attr("id") + ".backup");
+    backup_note.empty();
+    backup_note.append(display_note.find('.content'));
+    display_note.remove();
+}
+
+function hideAllVideoNotes(notes_con) {
+    notes_con.find('.video_note').not('.backup').each(function(i,e) {
+        hideVideoNote(notes_con, $(this));
+    });
 }
 
 function checkVisibleNotes(videoContainer, notes_con) {
@@ -1172,7 +1180,7 @@ function updateUserNotes(videoContainer) {
     var notes_con = videoContainer.find('.video_notes_container');
     var idx = $('.elearnjs-video').index(videoContainer.find('.elearnjs-video'));
     videoNoteTimes[idx] = getVideoNoteTimeArray(notes_con);
-    removeAllVideoNotes(notes_con);
+    hideAllVideoNotes(notes_con);
     noteTimeUpdate(videoContainer, notes_con, idx);
     checkShowAll(notes_con);
     addNotesToProgressbar(videoContainer, idx);

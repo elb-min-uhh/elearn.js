@@ -495,6 +495,15 @@
     box-sizing: border-box;
 }
 
+.video_notes_wrapper table th {
+    background: #555;
+}
+
+.video_notes_wrapper textarea, .video_notes_wrapper input[type="text"] {
+    background: #555;
+    color: white;
+}
+
 .video_notes_wrapper.tabbed-container {
     padding: 0;
 }
@@ -727,6 +736,92 @@
     border: 3px solid #fff;
     clip: rect(0px, 40px, 40px, 20px);
     animation: spin 2.5s infinite linear;
+}
+
+/* ------------------------ QUIZ.js Style --------------------------- */
+.video_notes_wrapper .question, .video_note .q-ergebnis {
+    border: 2px solid #888;
+}
+
+.video_notes_wrapper .question.answered .answers textarea {
+    background: #444;
+}
+
+.video_notes_wrapper .question h4 {
+    background: #888;
+}
+
+.video_note button.quizButton {
+    border:1px solid #888;
+    background-color:#888;
+    color: white;
+}
+
+.video_notes_wrapper .question label:hover {
+    background-color: #888;
+}
+
+.video_notes_wrapper .question label.right,
+.video_notes_wrapper .question .object.right {
+    background-color: #6a756a;
+}
+
+.video_notes_wrapper .question label.right:hover,
+.video_notes_wrapper .question .object.right:hover {
+    background-color: #5e755e;
+}
+
+
+.video_notes_wrapper .question label.wrong {
+    background-color: #756a6a;
+}
+
+.video_notes_wrapper .question label.wrong:hover {
+    background-color: #755e5e;
+}
+
+.video_notes_wrapper .question .right.right_icon:after,
+.video_notes_wrapper .question .wrong.right_icon:after {
+    color: #38b738;
+}
+
+.video_notes_wrapper .question[qtype="choice"] label.right_icon:before,
+.video_notes_wrapper .question[qtype="choice"] label.wrong_icon:before,
+.video_notes_wrapper .question[qtype="matrix_choice"] label.right_icon:before,
+.video_notes_wrapper .question[qtype="matrix_choice"] label.wrong_icon:before {
+    color: #b4b4b4;
+}
+
+/* .question[qtype="choice"] label.right.right_icon:before, */
+.video_notes_wrapper .question[qtype="choice"] label.wrong.right_icon:before,
+.video_notes_wrapper .question[qtype="matrix_choice"] label.wrong.right_icon:before {
+    color: #790000;
+}
+/* .question[qtype="choice"] label.right.wrong_icon:before, */
+.video_notes_wrapper .question[qtype="choice"] label.wrong.wrong_icon:before
+.video_notes_wrapper .question[qtype="matrix_choice"] label.wrong.wrong_icon:before, {
+    color: #790000;
+}
+
+.video_notes_wrapper .question label.img_radio:hover img {
+    border: 5px solid #666;
+}
+
+.video_notes_wrapper .question label.img_radio input:checked + img {
+    border: 5px solid #5ba8bd
+}
+
+.video_notes_wrapper .question label.img_radio.right {
+    border: 5px solid #6ea277;
+}
+
+.video_notes_wrapper .question label.img_radio.wrong {
+    border: 5px solid #a26e6e;
+}
+
+.video_notes_wrapper .question[qtype="classification"] .answers .object.blocked,
+.video_notes_wrapper .question[qtype="order"] .answers .object.blocked {
+    background: #555;
 }
 
 /* ------------------------ SUPPRESS OLAT PLAYER --------------------------- */

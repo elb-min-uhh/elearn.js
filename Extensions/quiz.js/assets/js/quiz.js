@@ -13,7 +13,7 @@ var passed_time = [];
 * Wenn fragen <input> fokussiert ist, kann mit Enter die Antwort abgeschickt werden.
 */
 $(document).ready(function() {
-    init();
+    initiateQuiz();
 
     // resize Funktion wird aufgerufen, wenn im eLearnJS eine neue section
     // angezeigt wird
@@ -61,7 +61,7 @@ function getVisibleQuestionsAnswered() {
 /**
 * Diese Funktion initialisiert das Quiz.
 */
-function init() {
+function initiateQuiz() {
     // Keine Tastaturnavigation
     keyAllowed = false;
 
@@ -2089,7 +2089,7 @@ function createDrawingCanvas(element, color) {
   var tool;
   var tool_default = 'pencil';
 
-  function init () {
+  function initCanvas() {
 
     canvasoList = [];
     contextoList = [];
@@ -2330,7 +2330,7 @@ function createDrawingCanvas(element, color) {
     };
   };
 
-  init();
+  initCanvas();
 
   return this;
 }
