@@ -1,7 +1,7 @@
 /*
-* video.js v0.1 - 17/02/03
-* Ergänzend zum elearn.js v0.9.8
-* JavaScript Quiz - by Arne Westphal
+* video.js v0.2 - 17/06/01
+* Ergänzend zum elearn.js v0.9.9
+* JavaScript Videoplayer - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 */
 
@@ -22,6 +22,8 @@ const video_timetypes = {
     TIMELEFT : 0,
     DURATION : 1
 };
+const FILETYPE_JSON = 'json';
+const FILETYPE_CSV = 'csv';
 var video_timestyle = 0;
 var touchend_block = false;
 var touchend_timer = null;
@@ -895,6 +897,7 @@ var videoNoteTimes = [];
 */
 function initiateVideoNotes() {
     $('.video_note').addClass('backup');
+    $('.video_note').wrapInner('<div class="content">');
 
     loadLocalVideoNotesStorage();
 
@@ -922,6 +925,7 @@ function initiateVideoNotes() {
             videoNotesContainer.append(userNotes);
             userNotes.addClass("note_container");
             addShowAllTo(userNotes);
+            addUserNoteMenuTo(userNotes);
             addVideoUserNoteListeners(videoContainer);
         }
 
@@ -968,16 +972,15 @@ function getUserVideoNotesContainer() {
     var userNotes = $('<div class="user_notes timestamps"><h4>Notizen</h4></div>');
     userNotes.append('<div class="note_add_container">'
                         + '<hr>'
+                        + '<form accept-charset="UTF-8">'
                         + '<input class="user_note_from" placeholder="Startzeit (<HH>:<MM>:SS)" type="text"/>'
                         + '<input class="user_note_to" placeholder="Endzeit (<HH>:<MM>:SS)" type="text"/>'
                         + '<textarea class="user_note_text" placeholder="Schreibe eine Notiz... (diese sind lokal gespeichert und nicht öffentlich)"></textarea>'
+                        + '</form>'
                         + '<button class="note_add">Notiz speichern</button>'
                         + '<button class="note_cancel">Abbrechen</button>'
                         + '</div>');
     userNotes.append('<button class="toggle_note_add">Notiz hinzufügen</button>');
-    userNotes.append('<br><br>');
-    userNotes.append('<button class="note_import">Notizen importieren</button>');
-    userNotes.append('<button class="note_export">Notizen exportieren</button>');
 
     return userNotes;
 }
@@ -987,6 +990,10 @@ function addShowAllTo(notes) {
     notes.find('input[name="show_all"]').on('change', function(e) {
         showAllNotes(notes, $(this).is(':checked'));
     });
+}
+
+function addUserNoteMenuTo(notes) {
+    notes.prepend('<div class="user_note_menu_wrap general_user_note_menu" onclick="javascript: toggleUserNoteMenu(this);"><div class="user_note_menu">m</div></div>');
 }
 
 function showAllNotes(notes, b) {
@@ -1006,7 +1013,7 @@ function showAllNotes(notes, b) {
     }
     else if(!b) {
         notes.removeClass("show_all");
-        removeAllVideoNotes(notes);
+        hideAllVideoNotes(notes);
         noteTimeUpdate(videoContainer, notes, idx);
     }
 }
@@ -1033,39 +1040,11 @@ function addNotesToProgressbar(videoContainer, index) {
             var start = info['time'];
 
             var progress_note = $('<div class="video-progress-note">');
+            var progress_pos = (start*100)/length;
             if(info['user_note']) progress_note.addClass('user-progress-note');
-            progress_note.css('left', (start*100)/length + "%");
-
-            var exists = false;
-            var moved = false;
-            videoContainer.find('.video-progress-con').find('.video-progress-note').each(function(idx, e) {
-                var percentageDiff =
-                    parseFloat($(this)[0].style.left.replace(/\D*/g,""))
-                    - parseFloat(progress_note[0].style.left.replace(/\D*/g,""));
-
-                // Note of same type exists at this position
-                if(Math.abs(percentageDiff) < 0.5
-                    && ($(this).is('.user-progress-note') == progress_note.is('.user-progress-note')
-                        || moved)) {
-                    exists = true;
-                    return 0;
-                }
-                // move up to one time to the best position left/right to
-                // show multiple types of notes right beside each other
-                else if(Math.abs(percentageDiff) < 0.5
-                    && $(this).is('.user-progress-note') != progress_note.is('.user-progress-note')
-                    && !moved) {
-                    // move further to the right to +0.75% of the other note
-                    var newPos = (start*100)/length + (0.75 - percentageDiff);
-                    // move further to the left to -0.75% of the other note
-                    if(percentageDiff < 0) newPos = (start*100)/length - (0.75 + percentageDiff);
-                    progress_note.css('left', newPos + "%");
-                    moved = true;
-                }
-            });
-            if(!exists) {
-                videoContainer.find('.video-progress').after(progress_note);
-            }
+            progress_note.css('left', progress_pos + "%");
+            // add all notes, always, since collisions are always based on the width at this moment
+            videoContainer.find('.video-progress').after(progress_note);
         }
     }
 }
@@ -1086,7 +1065,7 @@ function noteTimeUpdate(videoContainer, notes_con, index) {
             // time not reached
             if(info["time"] > time) {
                 // remove
-                display_note.remove();
+                hideVideoNote(notes_con, display_note);
             }
             else if(info["time"] <= time) {
                 // note ended
@@ -1094,7 +1073,7 @@ function noteTimeUpdate(videoContainer, notes_con, index) {
                     && info["time_to"] != -1
                     && info["time_to"] <= time) {
                     // remove
-                    display_note.remove();
+                    hideVideoNote(notes_con, display_note);
                 }
                 else {
                     // skip if already shown
@@ -1110,7 +1089,7 @@ function noteTimeUpdate(videoContainer, notes_con, index) {
 
 function showVideoNote(notes_con, info) {
     var original_note = notes_con.find('.video_note.backup').filter('#'+info["index"]);
-    var new_note = original_note.clone();
+    var new_note = original_note.clone(true, true); // clone with all listeners
     new_note.removeClass('backup');
     //new_note.attr('id', info["index"]);
 
@@ -1123,13 +1102,20 @@ function showVideoNote(notes_con, info) {
     if(original_note.is('.user_note')) {
         new_note.prepend('<div class="user_note_menu_wrap" onclick="javascript: toggleUserNoteMenu(this);"><div class="user_note_menu">m</div></div>');
     }
-
-    new_note.wrapInner('<div class="content">');
     original_note.after(new_note);
 }
 
-function removeAllVideoNotes(notes_con) {
-    notes_con.find('.video_note').not('.backup').remove();
+function hideVideoNote(notes_con, display_note) {
+    var backup_note = display_note.siblings('#' + display_note.attr("id") + ".backup");
+    backup_note.empty();
+    backup_note.append(display_note.find('.content'));
+    display_note.remove();
+}
+
+function hideAllVideoNotes(notes_con) {
+    notes_con.find('.video_note').not('.backup').each(function(i,e) {
+        hideVideoNote(notes_con, $(this));
+    });
 }
 
 function checkVisibleNotes(videoContainer, notes_con) {
@@ -1194,7 +1180,7 @@ function updateUserNotes(videoContainer) {
     var notes_con = videoContainer.find('.video_notes_container');
     var idx = $('.elearnjs-video').index(videoContainer.find('.elearnjs-video'));
     videoNoteTimes[idx] = getVideoNoteTimeArray(notes_con);
-    removeAllVideoNotes(notes_con);
+    hideAllVideoNotes(notes_con);
     noteTimeUpdate(videoContainer, notes_con, idx);
     checkShowAll(notes_con);
     addNotesToProgressbar(videoContainer, idx);
@@ -1222,14 +1208,6 @@ function addVideoUserNoteListeners(videoContainer) {
     videoContainer.find('.note_cancel').on('click', function() {
         setVideoNotesAddContainerVisible(videoContainer, false);
     });
-
-    videoContainer.find('.note_import').on('click', function() {
-        importUserNotes(videoContainer);
-    });
-
-    videoContainer.find('.note_export').on('click', function() {
-        exportUserNotes(videoContainer);
-    });
 }
 
 function setVideoNotesAddContainerVisible(videoContainer, bool) {
@@ -1250,7 +1228,7 @@ function createUserNote(text, timefrom, timeto, id) {
                     + '" timeto="'
                     + createTimeStringLetters(parseTimeString(timeto))
                     + '" id="' + id + '">'
-                    + text
+                    + '<div class="content">' + text + '</content>'
                     + '</div>');
 }
 
@@ -1313,7 +1291,7 @@ function editNote(videoContainer, note) {
     editingDiv = videoContainer;
     editingNote = note;
 
-    var text = editingNote.html().trim().replace(/<br>/g, "\r\n");
+    var text = editingNote.find('.content').html().trim().replace(/<br>/g, "\r\n");
 
     videoContainer.find('.note_add_container').find('.user_note_from').val(createTimeStringColons(parseTimeString(editingNote.attr("timefrom"))));
     videoContainer.find('.note_add_container').find('.user_note_to').val(createTimeStringColons(parseTimeString(editingNote.attr("timeto"))));
@@ -1379,9 +1357,10 @@ function updateUserNotesArray(videoContainer) {
     var src = videoContainer.find('video').find('source').first()[0].src;
     var user_video_notes = [];
     videoContainer.find('.user_notes').find('.user_note.backup').each(function(i, e) {
+        var text = $(this).find('.content').html();
         var video_note_object = {timefrom: $(this).attr('timefrom'),
                                 timeto: $(this).attr('timeto'),
-                                text: $(this).html()};
+                                text: text};
         user_video_notes.push(video_note_object);
     });
     setVideoNotesFor(src, user_video_notes);
@@ -1431,20 +1410,42 @@ function importUserNotes(videoContainer) {
     fileChoser.trigger('click');
 }
 
-function exportUserNotes(videoContainer) {
+function exportUserNotes(videoContainer, type) {
     var idx = $('.elearnjs-video').index(videoContainer.find('.elearnjs-video'));
     var src = videoContainer.find('video').find('source').first()[0].src;
-    download('user_notes_' + idx + '.txt', JSON.stringify(user_notes[src]));
+    var text;
+
+    if(user_notes[src] == undefined || user_notes[src].length == 0) {
+        alert("Keine Notizen vorhanden.");
+        return;
+    }
+
+    if(type === FILETYPE_JSON) {
+        text = JSON.stringify(user_notes[src]);
+    }
+    else if(type === FILETYPE_CSV) {
+        text = getCSVFromJSON(user_notes[src]);
+    }
+
+    download('user_notes_' + idx + '.' + type, text);
 }
 
 function importFileChosen(videoContainer, e, overwrite) {
     var src = videoContainer.find('video').find('source').first()[0].src;
     var files = e.target.files;
     var file = files[0];
+    var type = file.name.split(".").pop();
     var reader = new FileReader();
     reader.onload = function(event) {
         try {
-            var notes = JSON.parse(event.target.result);
+            var notes;
+            if(type === FILETYPE_JSON) {
+                notes = JSON.parse(event.target.result);
+            }
+            else if(type === FILETYPE_CSV) {
+                notes = JSON.parse(getJSONFromCSV(event.target.result));
+            }
+            console.log(notes);
             user_notes[src] = notes;
 
             if(overwrite) videoContainer.find('.user_note').remove();
@@ -1503,6 +1504,39 @@ function setVideoNotesFor(src, val) {
 
 // User Note Menu
 
+function createGeneralUserNoteMenu() {
+    var dropDownCode = '<div class="user_note_dropdown general">'
+        + '<div class="dropdown_element note_import">Notizen importieren</div>'
+        + '<div class="dropdown_element note_export">Notizen exportieren als JSON</div>'
+        + '<div class="dropdown_element note_export_csv">Notizen exportieren als CSV</div>'
+        + '<div class="dropdown_element note_remove_all">Alle Notizen löschen</div>'
+        + '</div>';
+    $('body').append(dropDownCode);
+
+    var dropDown = $('.user_note_dropdown.general');
+
+    dropDown.find('.note_import').on('click', function() {
+        importUserNotes(userNoteMenuNode.closest('.video-container'));
+    });
+
+    dropDown.find('.note_export').on('click', function() {
+        exportUserNotes(userNoteMenuNode.closest('.video-container'), FILETYPE_JSON);
+    });
+
+    dropDown.find('.note_export_csv').on('click', function() {
+        exportUserNotes(userNoteMenuNode.closest('.video-container'), FILETYPE_CSV);
+    });
+
+    dropDown.find('.note_remove_all').on('click', function() {
+        if(confirm("Sollen wirklich alle Notizen dieses Videos dauerhaft gelöscht werden?")
+            && userNoteMenuNode.is('.user_notes')) {
+            userNoteMenuNode.find('.user_note').remove();
+            updateUserNotes(userNoteMenuNode.closest('.video-container'));
+            updateUserNotesArray(userNoteMenuNode.closest('.video-container'));
+        }
+    });
+}
+
 function createUserNoteMenu() {
     var dropDownCode = '<div class="user_note_dropdown">'
         + '<div class="dropdown_element edit">Bearbeiten</div>'
@@ -1512,16 +1546,18 @@ function createUserNoteMenu() {
         + '</div>';
     $('body').append(dropDownCode);
 
-    $('.user_note_dropdown').find('.dropdown_element.edit').on('click', function(e) {
+    var dropDown = $('.user_note_dropdown').not('.general');
+
+    dropDown.find('.dropdown_element.edit').on('click', function(e) {
         userNoteMenuEdit();
     });
-    $('.user_note_dropdown').find('.dropdown_element.delete').on('click', function(e) {
+    dropDown.find('.dropdown_element.delete').on('click', function(e) {
         userNoteMenuDelete();
     });
-    $('.user_note_dropdown').find('.dropdown_element.move_up').on('click', function(e) {
+    dropDown.find('.dropdown_element.move_up').on('click', function(e) {
         userNoteMenuMove(-1);
     });
-    $('.user_note_dropdown').find('.dropdown_element.move_down').on('click', function(e) {
+    dropDown.find('.dropdown_element.move_down').on('click', function(e) {
         userNoteMenuMove(1);
     });
 }
@@ -1535,10 +1571,21 @@ function toggleUserNoteMenu(element) {
     var dropDown = $('.user_note_dropdown');
     var node = element.closest('.user_note');
 
-    if(dropDown.length == 0) {
+    if($('.user_note_dropdown').length == 0) {
         createUserNoteMenu();
-        dropDown = $('.user_note_dropdown');
+        createGeneralUserNoteMenu();
     }
+
+    if(element.is('.general_user_note_menu')) {
+        dropDown = $('.user_note_dropdown.general');
+        node = element.closest('.user_notes'); // node is the container
+    }
+    else {
+        dropDown = $('.user_note_dropdown').not('.general');
+    }
+
+    // hide other either way
+    $('.user_note_dropdown').not(dropDown).hide();
 
     var align = false;
 
@@ -1580,11 +1627,10 @@ function userNoteMenuDelete() {
     var backup_note = userNoteMenuNode.siblings('#' + userNoteMenuNode.attr("id") + ".backup");
     var videoContainer = backup_note.closest('.video-container');
 
-    if(confirm("Are you sure you want to delete this note permanently?")) {
+    if(confirm("Soll diese Notiz wirklich dauerhaft gelöscht werden?")) {
         deleteNote(videoContainer, backup_note);
     }
 }
-
 
 function userNoteMenuMove(direction) {
     var backup_note = userNoteMenuNode.siblings('#' + userNoteMenuNode.attr("id") + ".backup");

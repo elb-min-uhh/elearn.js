@@ -1,11 +1,11 @@
 /*
-* v0.9.8 17/02/03 JavaScript eLearn.js - by Arne Westphal
+* v0.9.9 17/06/01 JavaScript eLearn.js - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 */
 
-var VERSION_NR = "0.9.8";
-var VERSION_DATE = "02/2017";
+var VERSION_NR = "0.9.9";
+var VERSION_DATE = "06/2017";
 
 var actions = {
     CONTENT_RESIZE : "ContentResize",
@@ -104,12 +104,12 @@ $(document).ready(function() {
 */
 function initiateELearnJS() {
     $($('#wrap')[0]).prepend(
-            "<div class='skip-arrows'>" // <!-- Arrow Left and Right -->
+            "<div class='skip-arrows noselect'>" // <!-- Arrow Left and Right -->
                 + "<div onclick='javascript: showPrev();' id='btnPrev' class='icon-back before-padding btn'></div>"
                 + "<div onclick='javascript: showNext();' id='btnNext' class='icon-next before-padding btn'></div>"
             + "</div>"
-            + "<div class='section-overview'></div>" // <!-- Container for Overview -->
-            + "<div id='navigation'>"
+            + "<div class='section-overview noselect'></div>" // <!-- Container for Overview -->
+            + "<div id='navigation' class='noselect'>"
                 // <!-- Grey Top Menu-bar - Reihenfolge wichtig -->
                 + "<div id='nav-bar'>"
                     + "<div onclick='javascript: backButtonPressed();' id='btnBackCon' class ='btn' title='Zurück zur Übersicht'><div class='icon-font' id='btnBack'>b</div><div id='btnBackText'>Zurück</div></div>"
@@ -2557,6 +2557,97 @@ function initiateScrollBarListener() {
     setTimeout(initiateScrollBarListener, 500);
 }
 
+
+
+// --------------------------------------------------------------------------------------
+// JSON - CSV
+// --------------------------------------------------------------------------------------
+
+var CSV_COLUMN_DELIMITER = ";";
+var CSV_ROW_DELIMITER = "\n";
+
+/**
+* Returns a CSV string parsed from the JSON data.
+* JSONData can be a JSON string or object
+* Will return false if the json data is invalid
+*/
+function getCSVFromJSON(JSONData) {
+    //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
+    var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+
+
+    var csv = '';
+
+    //This will generate the Label/Header
+    var row = "";
+
+    //This loop will extract the label from 1st index of on array
+    for (var index in arrData[0]) {
+        //Now convert each value to string and comma-seprated
+        row += '"' + index.replace(/"/g, '""') + '"' + CSV_COLUMN_DELIMITER;
+    }
+    //append Label row with line break
+    csv += row + CSV_ROW_DELIMITER;
+
+    //1st loop is to extract each row
+    for (var i = 0; i < arrData.length; i++) {
+        var row = "";
+
+        //2nd loop will extract each column and convert it in string comma-seprated
+        for (var index in arrData[i]) {
+            row += '"' + arrData[i][index].replace(/"/g, '""') + '"' + CSV_COLUMN_DELIMITER;
+        }
+        //add a line break after each row
+        csv += row + CSV_ROW_DELIMITER;
+    }
+
+    if (csv == '') {
+        return false;
+    }
+
+    return csv;
+}
+
+function getJSONFromCSV(CSVData) {
+    var lines=CSVData.replace(/\r/g, "").split(CSV_ROW_DELIMITER);
+
+    var result = [];
+
+    // extract header values: take quote blocks with trailing DELIMITER
+    var cells=lines[0].match(new RegExp('"(?:[^"]|(""))*"' + CSV_COLUMN_DELIMITER, "g"));
+    var headers = [];
+    // extract headers by removing trailing delimiter
+    for(var i=0; i<cells.length; i++) {
+        headers.push(
+            cells[i]
+                .replace(new RegExp(CSV_COLUMN_DELIMITER + "$", "g"), "")
+                .replace(/^"/g, "")
+                .replace(/"$/g, "")
+                .replace(/""/g, '"'));
+    }
+
+    // go through lines below header
+    for(var i=1;i<lines.length;i++) {
+        var obj = {};
+        var currentline=lines[i].match(new RegExp('"(?:[^"]|(""))*"' + CSV_COLUMN_DELIMITER, "g"));
+
+        if(!currentline ||
+            headers.length > currentline.length) break;
+
+        // go through cells
+        for(var j=0;j<headers.length;j++) {
+            obj[headers[j]] = currentline[j]
+                .replace(new RegExp(CSV_COLUMN_DELIMITER + "$", "g"), "")
+                .replace(/^"/g, "")
+                .replace(/"$/g, "")
+                .replace(/""/g, '"');
+        }
+
+        result.push(obj);
+    }
+
+    return JSON.stringify(result); //JavaScript object
+}
 
 
 // --------------------------------------------------------------------------------------

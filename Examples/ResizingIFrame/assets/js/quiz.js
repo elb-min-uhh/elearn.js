@@ -1,6 +1,6 @@
 /*
-* quiz.js v0.3.3 - 16/09/28
-* Ergänzend zum elearn.js v0.9.7
+* quiz.js v0.3.4 - 17/06/01
+* Ergänzend zum elearn.js v0.9.9
 * JavaScript Quiz - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 */
@@ -13,7 +13,7 @@ var passed_time = [];
 * Wenn fragen <input> fokussiert ist, kann mit Enter die Antwort abgeschickt werden.
 */
 $(document).ready(function() {
-    init();
+    initiateQuiz();
 
     // resize Funktion wird aufgerufen, wenn im eLearnJS eine neue section
     // angezeigt wird
@@ -61,7 +61,7 @@ function getVisibleQuestionsAnswered() {
 /**
 * Diese Funktion initialisiert das Quiz.
 */
-function init() {
+function initiateQuiz() {
     // Keine Tastaturnavigation
     keyAllowed = false;
 
@@ -1255,9 +1255,10 @@ function dragReset(e) {
     // remove emphasis
     if(e != undefined) $(e.target).closest(".answers").find(".emph").removeClass("emph");
 
+    console.log("asd");
     $('.draggedover').removeClass("draggedover");
-    $(".object").css("opacity", false);
-    $(".object").css("background", false);
+    $(".object").css("opacity", "");
+    $(".object").css("background", "");
     $('.question[qtype="'+quizTypes.ORDER+'"]').find(".destination").removeClass("vis");
     draggedObjects = null;
     startedObject = null;
@@ -2088,7 +2089,7 @@ function createDrawingCanvas(element, color) {
   var tool;
   var tool_default = 'pencil';
 
-  function init () {
+  function initCanvas() {
 
     canvasoList = [];
     contextoList = [];
@@ -2329,7 +2330,7 @@ function createDrawingCanvas(element, color) {
     };
   };
 
-  init();
+  initCanvas();
 
   return this;
 }

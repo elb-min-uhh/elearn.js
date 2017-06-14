@@ -1,8 +1,23 @@
 /*
-* Styles zum quiz.js v0.3.3 by Arne Westphal
-* Ergänzend zum elearn.js v0.9.7
+* Styles zum quiz.js v0.3.4 by Arne Westphal
+* Ergänzend zum elearn.js v0.9.9
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 */
+
+button.quizButton {
+    margin: 0em;
+    padding:0.5em 1em 0.5em 1.7em;
+    border:1px solid rgb(240,240,240);
+    background-color:rgb(240,240,240);
+    color: rgb(140,140,140);
+    text-align:left;
+    width: 50%;
+}
+
+button.quizButton:hover, button.quizButton:active {
+    background:rgb(220,220,220);
+    color: rgb(140,140,140);
+}
 
 .question, .q-ergebnis {
     border: 2px solid rgb(240,240,240);
