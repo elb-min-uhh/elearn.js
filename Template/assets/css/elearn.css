@@ -287,7 +287,8 @@ pre {
     background-color: #eee;
     padding:1.8em;
     overflow:auto;
-    width:95%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 table {
@@ -806,14 +807,14 @@ button:hover, button:active {
     max-width: 100%;
 }
 
-#btnNext:before {
+#btnNext {
     color:rgb(200,200,200);
     position:absolute;
     top:5em;
     right:6%;
 }
 
-#btnPrev:before {
+#btnPrev {
     color:rgb(200,200,200);
     position:absolute;
     top:5em;
@@ -1265,11 +1266,11 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     #navigation {
         font-size: 0.8em;
     }
-    #btnNext:before, #tooltipArrowRight {
+    #btnNext, #tooltipArrowRight {
         right:4%;
     }
 
-    #btnPrev:before, #tooltipArrowLeft {
+    #btnPrev, #tooltipArrowLeft {
         left:4%;
     }
 
@@ -1304,17 +1305,17 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
         font-size:1.2em;
         margin: 1em 0em 0.8em 0em;
     }
-    #btnNext:before, #tooltipArrowRight {
+    #btnNext, #tooltipArrowRight {
         right:1%;
     }
-    #btnNext:before{
+    #btnNext{
         top:6em;
     }
 
-    #btnPrev:before, #tooltipArrowLeft {
+    #btnPrev, #tooltipArrowLeft {
         left:1%;
     }
-    #btnPrev:before{
+    #btnPrev{
         top:6em;
     }
 
@@ -1396,7 +1397,7 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
         margin: 1em 0em 0.8em 0em;
     }
 
-    #btnNext:before, #btnPrev:before, #tooltipArrowRight, #tooltipArrowLeft {
+    #btnNext, #btnPrev, #tooltipArrowRight, #tooltipArrowLeft {
         display: none;
     }
 
