@@ -2034,22 +2034,27 @@ function isSectionSwipeEnabled() {
 * Fügt allen Sections eine Touchabfrage hinzu.
 */
 function addTouchToSections() {
-    $(document).bind('touchstart', function(event) {
+
+    document.addEventListener('touchstart',
+    function(event) {
         if(secSwipeEnabled) {
             touchStart(event, this);
         }
     });
-    $(document).bind('touchend', function(event) {
+    document.addEventListener('touchmove',
+        function(event) {
+            if(secSwipeEnabled) {
+                touchMove(event);
+            }
+        },
+        {passive: false}
+    );
+    document.addEventListener('touchend', function(event) {
         if(secSwipeEnabled) {
             touchEnd(event);
         }
     });
-    $(document).bind('touchmove', function(event) {
-        if(secSwipeEnabled) {
-            touchMove(event);
-        }
-    });
-    $(document).bind('touchcancel', function(event) {
+    document.addEventListener('touchcancel', function(event) {
         if(secSwipeEnabled) {
             touchCancel(event);
         }
@@ -2201,6 +2206,7 @@ function touchMove(event) {
         if(isHorizontalSwipe) {
             if(swipeType == "section") {
                 touchMoveSection(dif);
+                event.preventDefault();
             }
             if(swipeType == "menu" && dif > 0) {
                 touchMoveMenu(dif);
