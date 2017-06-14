@@ -1382,37 +1382,78 @@ function resizeZoomContainer() {
 // --------------------------------------------------------------------------------------
 
 var activeTooltip = 0;
-var tooltips = ['<div id="tooltipBack" class="tooltip fixed">'
-                + 'Verlinkt normalerweise auf eine <br>vorangegane Seite oder den Anfang <br>des Dokuments.'
-                + '</div>',
-                '<div id="tooltipShowAll" class="tooltip fixed">'
-                + 'Alle Inhalte auf einer Seite anzeigen <br>oder vertikal navigierbar machen.'
-                + '</div>',
-                '<div id="tooltipChapter" class="tooltip fixed">'
-                + 'Klappt die Kapitelübersicht zur schnellen <br>Navigation aus bzw. ein.'
-                + '</div>',
-                '<div id="tooltipMenu" class="tooltip fixed right">'
-                + 'Öffnet ein Menü mit Optionen zum Drucken <br>und Teilen der Seite sowie der Anzeige von <br>Informationen.'
-                + '</div>',
-                '<div id="tooltipArrowRight" class="tooltip fixed right">'
-                + 'Klicken, um auf die nächste Seite zu wechseln.'
-                + '</div>',
-                '<div id="tooltipArrowLeft" class="tooltip fixed left">'
-                + 'Klicken, um auf die vorherige Seite zu wechseln.'
-                + '</div>',
-                '<div id="tooltipArrowRight" class="tooltip fixed right">'
-                + 'Wischen, um auf die nächste Seite zu wechseln.'
-                + '</div>',
-                '<div id="tooltipArrowLeft" class="tooltip fixed left">'
-                + 'Wischen, um auf die vorherige Seite zu wechseln.'
-                + '</div>'];
-
-var ttMaxWidth = [-1, -1, -1, -1, 440, 440, -1, -1];
-var ttMinWidth = [-1, -1, -1, -1, -1, -1, -1, -1];
-// in bedingung muss entweder eine Funktion die ein bool returned stehen oder direkt ein bool
-var bedingung = [isBackButtonEnabled, true, true, true, true, true, isTouchSupported, isTouchSupported];
-var anchor = ["#btnBack", "#btnAll", "#btnExp", "#btnMenu", "#btnNext", "#btnPrev", "#btnNext", "#btnPrev"];
-var positions = ["#btnBack", "#btnAll", "#btnExp", "#btnMenu", [0,0], [0,0], [0,0], [0,0]];
+/*
+* One tooltip is an object containing following keys:
+* Necessary:
+* - html: containing the whole html which should be displayed.
+*   usually wrapped in an div.tooltip
+* Optional:
+* - condition: a function returning a bool to
+*   define if the tooltip should be displayed or not
+* - anchor: the tag for an object to which this TT is aligned to
+*   e.g. "#btnBack" to position the Tooltip to point at #btnBack
+*   Important: the anchor has to be visible, otherwise the tt-condition
+*   will be false
+* - offset: an object like {top: "5px", left: "5px", bottom: "5px", right: "100px"}
+*   this offset will be set as margin added to the anchor position.
+*   All key-values are optional, so e.g. only top can be defined
+*/
+var tooltips =
+[
+    {
+        html : '<div id="tooltipBack" class="tooltip fixed">'
+            + 'Verlinkt normalerweise auf eine <br>vorangegane Seite oder den Anfang <br>des Dokuments.'
+            + '</div>',
+        condition : isBackButtonEnabled,
+        anchor : "#btnBack"
+    },
+    {
+        html : '<div id="tooltipShowAll" class="tooltip fixed">'
+            + 'Alle Inhalte auf einer Seite anzeigen <br>oder horizontal navigierbar machen.'
+            + '</div>',
+        anchor : "#btnAll"
+    },
+    {
+        html : '<div id="tooltipChapter" class="tooltip fixed">'
+            + 'Klappt die Kapitelübersicht zur schnellen <br>Navigation aus bzw. ein.'
+            + '</div>',
+        anchor : "#btnExp"
+    },
+    {
+        html : '<div id="tooltipMenu" class="tooltip fixed right">'
+            + 'Öffnet ein Menü mit Optionen zum Drucken <br>und Teilen der Seite sowie der Anzeige von <br>Informationen.'
+            + '</div>',
+        anchor : "#btnMenu"
+    },
+    {
+        html : '<div id="tooltipArrowRight" class="tooltip fixed right">'
+            + 'Klicken, um auf die nächste Seite zu wechseln.'
+            + '</div>',
+        condition: function() {return $(window).width() > 440},
+        anchor : "#btnNext",
+        offset : {right: "-8px"}
+    },
+    {
+        html : '<div id="tooltipArrowLeft" class="tooltip fixed left">'
+            + 'Klicken, um auf die vorherige Seite zu wechseln.'
+            + '</div>',
+        condition: function() {return $(window).width() > 440},
+        anchor : "#btnPrev",
+        offset : {left: "10px"}
+    },
+    {
+        html : '<div id="tooltipTouchRight" class="tooltip fixed right">'
+            + 'Wischen, um auf die nächste Seite zu wechseln.'
+            + '</div>',
+        condition: isTouchSupported
+    },
+    {
+        html : '<div id="tooltipTouchLeft" class="tooltip fixed left">'
+            + 'Wischen, um auf die vorherige Seite zu wechseln.'
+            + '</div>',
+        condition: isTouchSupported
+    }
+];
 
 /**
 * Fügt die Buttons und die Funktionen der Buttons hinzu, die zum Durchklicken der
@@ -1420,7 +1461,7 @@ var positions = ["#btnBack", "#btnAll", "#btnExp", "#btnMenu", [0,0], [0,0], [0,
 */
 function initiateTooltips() {
     for(var i=0, tt=tooltips[0]; i<tooltips.length; i++, tt=tooltips[i]) {
-        $('.page').before(tt);
+        $('.page').before(tt.html);
     }
     $('.tooltip').prepend('<div id="cancel">x</div>');
     $('.tooltip').append('<div><button id="next">Nächster</button></div>');
@@ -1445,66 +1486,84 @@ function startHelp() {
 * (id = "tooltipX" : mit X - Nummer des Tooltips)
 */
 function showTooltip(nr) {
+    var tooltip = tooltips[nr];
+
     closeTooltips();
-    if($('.tooltip').length <= nr) {
+    // invalid tooltip
+    if($('.tooltip').length <= nr || nr < 0) {
         activeTooltip = 0;
         return;
     }
+
     activeTooltip = nr;
-    if((ttMaxWidth[nr] < 0 || $(window).width() > ttMaxWidth[nr])
-        && (ttMinWidth[nr] < 0 || $(window).width() <= ttMinWidth[nr])
-        && (isFunction(bedingung[nr]) ? bedingung[nr]() : bedingung[nr])
-        && $(anchor[nr]).is(":visible")) {
-        if(typeof positions[nr] == 'string' && !$(positions[nr]).is(':visible')) {
-            nextTooltip();
-            return;
-        }
-        if(typeof positions[nr] == 'string') {
+    // Tooltip condition is true and anchor is visible if defined
+    if((tooltip.condition == undefined
+            || tooltip.condition())
+        && (tooltip.anchor == undefined
+            || $(tooltip.anchor).is(':visible'))) {
+
+        // get base margins [might be undefined]: copy to not overwrite original
+        var margin = Object.assign({}, tooltip.offset);
+
+        // align to anchor if set
+        if(tooltip.anchor != undefined) {
+            var anchor = $(tooltip.anchor);
+
+            // calculate positions based on anchor
+            var offsetTop = anchor.offset().top
+                - $(document).scrollTop()
+                + parseInt(anchor.css("margin-top").replace(/\D/g, "")) + 38;
+
+            var offsetLeft = anchor.offset().left
+                + parseInt(anchor.css("margin-left").replace(/\D/g, ""))
+                - $('#wrap').offset().left - 10;
+
+            // update margin top
+            if(margin.top != undefined)
+                margin.top = "calc(" + margin.top + " + " + offsetTop + "px)";
+            else margin.top = offsetTop + "px";
+
+            // update margin right
             if($($('.tooltip')[nr]).is(".right")) {
-                setTooltipPosition(nr, true,
-                                $(positions[nr]).offset().top
-                                - $(document).scrollTop()
-                                + parseInt($(positions[nr]).css("margin-top").replace(/\D/g, "")) + 38,
-                                $('#wrap').width()
-                                - ($(positions[nr]).offset().left
-                                 + parseInt($(positions[nr]).css("margin-left").replace(/\D/g, ""))
-                                 - $('#wrap').offset().left) - 40);
+                if(margin.right != undefined)
+                    margin.right = "calc(" + margin.right + " + "
+                        + ($('#wrap').width() - offsetLeft - 50) + "px)";
+                else margin.right = ($('#wrap').width() - offsetLeft - 50) + "px";
             }
+            // update margin left
             else {
-                setTooltipPosition(nr, false,
-                                $(positions[nr]).offset().top
-                                - $(document).scrollTop()
-                                + parseInt($(positions[nr]).css("margin-top").replace(/\D/g, "")) + 40,
-                                $(positions[nr]).offset().left
-                                + parseInt($(positions[nr]).css("margin-left").replace(/\D/g, ""))
-                                - $('#wrap').offset().left - 10);
+                if(margin.left != undefined)
+                    margin.left = "calc(" + margin.left + " + " + offsetLeft + "px)";
+                else margin.left = offsetLeft + "px";
             }
         }
-        else {
-            setTooltipPosition(nr, true,
-                            positions[nr][0],
-                            positions[nr][1]);
-        }
+
+        setTooltipMargin(nr, margin);
+
+        // display the tooltip
+        $($('.tooltip')[nr]).show();
     }
+    // tooltip condition is false, try to display next
     else {
         nextTooltip();
         return;
     }
-    $($('.tooltip')[nr]).show();
 }
 
-function setTooltipPosition(nr, isRight, top, leftRight) {
-    if(isRight) {
-        $($('.tooltip')[nr]).css({
-            "margin-top": top + "px",
-            "margin-right": leftRight + "px"
-        });
+function setTooltipMargin(nr, margin) {
+    if(margin == undefined) return;
+
+    if(margin.top != undefined) {
+        $($('.tooltip')[nr]).css("margin-top", margin.top);
     }
-    else {
-        $($('.tooltip')[nr]).css({
-            "margin-top": top + "px",
-            "margin-left": leftRight + "px"
-        });
+    if(margin.bottom != undefined) {
+        $($('.tooltip')[nr]).css("margin-bottom", margin.bottom);
+    }
+    if(margin.left != undefined) {
+        $($('.tooltip')[nr]).css("margin-left", margin.left);
+    }
+    if(margin.right != undefined) {
+        $($('.tooltip')[nr]).css("margin-right", margin.right);
     }
 }
 

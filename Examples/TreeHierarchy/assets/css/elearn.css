@@ -287,7 +287,8 @@ pre {
     background-color: #eee;
     padding:1.8em;
     overflow:auto;
-    width:95%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 table {
@@ -515,16 +516,16 @@ a:active {
 
 /* --------------------------- Exakte Tooltips -------------------------------------- */
 
-#tooltipArrowRight {
+#tooltipTouchRight {
     position: fixed;
-    top: 13em;
+    top: 45%;
     right: calc((100% - 1100px) / 2 + 66px);
     margin: 0;
 }
 
-#tooltipArrowLeft {
+#tooltipTouchLeft {
     position: fixed;
-    top: 13em;
+    top: 45%;
     left: calc((100% - 1100px) / 2 + 66px);
     margin: 0;
 }
@@ -687,14 +688,23 @@ a:active {
 }
 
 .touchScroll div {
-    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+    box-shadow: 0 0 5px rgba(0,0,0,0.4);
     position:relative;
     top: calc(50% - 25px);
-    margin: auto;
     background-color: #fff;
     border-radius: 50%;
     width: 50px;
     height: 50px;
+}
+
+.touchScroll#rightTouch div {
+    left: 0;
+    float: left;
+}
+
+.touchScroll#leftTouch div {
+    right: 0;
+    float: right;
 }
 
 .touchScroll div p{
@@ -806,14 +816,14 @@ button:hover, button:active {
     max-width: 100%;
 }
 
-#btnNext:before {
+#btnNext {
     color:rgb(200,200,200);
     position:absolute;
     top:5em;
     right:6%;
 }
 
-#btnPrev:before {
+#btnPrev {
     color:rgb(200,200,200);
     position:absolute;
     top:5em;
@@ -1249,11 +1259,11 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     .tooltip.right {
         right: 0;
     }
-    #tooltipArrowRight {
+    #tooltipTouchRight {
         right: 6%;
     }
 
-    #tooltipArrowLeft {
+    #tooltipTouchLeft {
         left: 6%;
     }
 }
@@ -1265,11 +1275,11 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     #navigation {
         font-size: 0.8em;
     }
-    #btnNext:before, #tooltipArrowRight {
+    #btnNext, #tooltipTouchRight {
         right:4%;
     }
 
-    #btnPrev:before, #tooltipArrowLeft {
+    #btnPrev, #tooltipTouchLeft {
         left:4%;
     }
 
@@ -1304,17 +1314,17 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
         font-size:1.2em;
         margin: 1em 0em 0.8em 0em;
     }
-    #btnNext:before, #tooltipArrowRight {
+    #btnNext, #tooltipTouchRight {
         right:1%;
     }
-    #btnNext:before{
+    #btnNext{
         top:6em;
     }
 
-    #btnPrev:before, #tooltipArrowLeft {
+    #btnPrev, #tooltipTouchLeft {
         left:1%;
     }
-    #btnPrev:before{
+    #btnPrev{
         top:6em;
     }
 
@@ -1396,8 +1406,8 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
         margin: 1em 0em 0.8em 0em;
     }
 
-    #btnNext:before, #btnPrev:before, #tooltipArrowRight, #tooltipArrowLeft {
-        display: none;
+    #btnNext, #btnPrev {
+        display: none !important;
     }
 
     .side-menu {
