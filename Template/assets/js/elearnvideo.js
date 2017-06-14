@@ -28,7 +28,7 @@ var video_timestyle = 0;
 var touchend_block = false;
 var touchend_timer = null;
 
-var user_notes = null;
+var user_notes = {};
 
 function initiateVideoPlayers() {
     loadLocalVideoNotesStorage();
@@ -83,7 +83,7 @@ function initiateVideoPlayers() {
     });
 
     addGenerelVideoPlayerListener();
-    
+
     // User to explicitly set video-note width to equal video width
     eLearnJS.registerAfterWindowResize("video-resize", resizeAllVideoPlayers);
     eLearnJS.registerAfterShow("video-resize", resizeAllVideoPlayers);
@@ -750,9 +750,8 @@ function videoProgressMouseLeave(div, e) {
 }
 
 function videoProgressMouseMove(div, e) {
-
+    var vid = div.find('video')[0];
     if(videoOverProgress || videoProgressMouseDown) {
-        var vid = div.find('video')[0];
         var pos = 0;
 
         if(videoProgressMouseDown) {
@@ -1445,7 +1444,6 @@ function importFileChosen(videoContainer, e, overwrite) {
             else if(type === FILETYPE_CSV) {
                 notes = JSON.parse(getJSONFromCSV(event.target.result));
             }
-            console.log(notes);
             user_notes[src] = notes;
 
             if(overwrite) videoContainer.find('.user_note').remove();
@@ -1474,17 +1472,29 @@ function importFileChosen(videoContainer, e, overwrite) {
 // ------------ Local Storage ----------
 
 function loadLocalVideoNotesStorage() {
-    var user_notes_str = localStorage.getItem('elearnjs-user-notes');
-    if(user_notes_str === null
-        || user_notes_str === undefined
-        || user_notes_str == "") {
-        localStorage.setItem('elearnjs-user-notes', '{}');
-        user_notes_str = '{}';
+    try {
+        var user_notes_str = localStorage.getItem('elearnjs-user-notes');
+        if(user_notes_str === null
+            || user_notes_str === undefined
+            || user_notes_str == "") {
+            localStorage.setItem('elearnjs-user-notes', '{}');
+            user_notes_str = '{}';
+        }
+        user_notes = JSON.parse(user_notes_str);
     }
-    user_notes = JSON.parse(user_notes_str);
+    catch(e) {
+        console.log("LocalStorage konnte nicht geladen werden");
+    }
+
 }
 
 function updateLocalVideoNotesStorage() {
+    try {
+        if(!localStorage) return;
+    }
+    catch(e) {
+        console.log("Zugriff auf localStorage wurde verweigert.");
+    }
     try {
         localStorage.setItem('elearnjs-user-notes', JSON.stringify(user_notes));
     }
