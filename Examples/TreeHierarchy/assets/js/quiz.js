@@ -1361,7 +1361,7 @@ function calculateHotspotDimensions() {
 }
 
 function calculateHotspotDescriptions(root) {
-    const descr_margin = {
+    var descr_margin = {
         top : 5,
         left : 0
     };

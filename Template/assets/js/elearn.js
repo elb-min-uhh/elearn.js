@@ -1709,8 +1709,8 @@ function hoverInfoSetPositions() {
 }
 
 function hoverInfoSetPosition(div) {
-    const min_width = 200;
-    const perc_from = 400;
+    var min_width = 200;
+    var perc_from = 400;
 
     var width = 0;
     if(div.closest('section').width() > perc_from) {

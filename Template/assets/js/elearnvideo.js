@@ -18,12 +18,12 @@ $(document).ready(function() {
 
 var video_hover_timers = {};
 var video_volumes = {};
-const video_timetypes = {
+var video_timetypes = {
     TIMELEFT : 0,
     DURATION : 1
 };
-const FILETYPE_JSON = 'json';
-const FILETYPE_CSV = 'csv';
+var FILETYPE_JSON = 'json';
+var FILETYPE_CSV = 'csv';
 var video_timestyle = 0;
 var touchend_block = false;
 var touchend_timer = null;
@@ -382,7 +382,7 @@ function checkVideoFullscreen() {
 var videoFullscreenPending = {};
 
 function videoOnClick(div) {
-    const dblclick_time = 250;
+    var dblclick_time = 250;
     var idx = $('.elearnjs-video').index(div);
 
     if(videoFullscreenPending[idx] == undefined
