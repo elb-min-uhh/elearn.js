@@ -516,16 +516,16 @@ a:active {
 
 /* --------------------------- Exakte Tooltips -------------------------------------- */
 
-#tooltipArrowRight {
+#tooltipTouchRight {
     position: fixed;
-    top: 13em;
+    top: 45%;
     right: calc((100% - 1100px) / 2 + 66px);
     margin: 0;
 }
 
-#tooltipArrowLeft {
+#tooltipTouchLeft {
     position: fixed;
-    top: 13em;
+    top: 45%;
     left: calc((100% - 1100px) / 2 + 66px);
     margin: 0;
 }
@@ -688,14 +688,23 @@ a:active {
 }
 
 .touchScroll div {
-    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+    box-shadow: 0 0 5px rgba(0,0,0,0.4);
     position:relative;
     top: calc(50% - 25px);
-    margin: auto;
     background-color: #fff;
     border-radius: 50%;
     width: 50px;
     height: 50px;
+}
+
+.touchScroll#rightTouch div {
+    left: 0;
+    float: left;
+}
+
+.touchScroll#leftTouch div {
+    right: 0;
+    float: right;
 }
 
 .touchScroll div p{
@@ -1250,11 +1259,11 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     .tooltip.right {
         right: 0;
     }
-    #tooltipArrowRight {
+    #tooltipTouchRight {
         right: 6%;
     }
 
-    #tooltipArrowLeft {
+    #tooltipTouchLeft {
         left: 6%;
     }
 }
@@ -1266,11 +1275,11 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     #navigation {
         font-size: 0.8em;
     }
-    #btnNext, #tooltipArrowRight {
+    #btnNext, #tooltipTouchRight {
         right:4%;
     }
 
-    #btnPrev, #tooltipArrowLeft {
+    #btnPrev, #tooltipTouchLeft {
         left:4%;
     }
 
@@ -1305,14 +1314,14 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
         font-size:1.2em;
         margin: 1em 0em 0.8em 0em;
     }
-    #btnNext, #tooltipArrowRight {
+    #btnNext, #tooltipTouchRight {
         right:1%;
     }
     #btnNext{
         top:6em;
     }
 
-    #btnPrev, #tooltipArrowLeft {
+    #btnPrev, #tooltipTouchLeft {
         left:1%;
     }
     #btnPrev{
@@ -1397,8 +1406,8 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
         margin: 1em 0em 0.8em 0em;
     }
 
-    #btnNext, #btnPrev, #tooltipArrowRight, #tooltipArrowLeft {
-        display: none;
+    #btnNext, #btnPrev {
+        display: none !important;
     }
 
     .side-menu {
