@@ -956,7 +956,9 @@ function startDownload(url) {
 * der oberste Slider im Quelltext)
 * An dem Index steht dann welches Bild aktuell sichtbar ist.
 */
-var visibleImage = [];
+var visibleImage = {};
+var lastSliderDimensions = {};
+var ulTransitionDuration = "0.5s";
 
 
 /**
@@ -973,11 +975,14 @@ function initiateGalleries() {
                     + '</div>');
     $('.slider').wrap("<div class='slider-con'></div>");
     $('.slider').each(function() {
-        visibleImage[visibleImage.length] = 0;
+        var ul = $($(this).children('ul.img-gallery')[0]);
+
+        // initiate preview if activated
         if($(this).filter('.preview-nav').length > 0) {
             initiateSliderPreview($(this).parent());
         }
-        var ul = $($(this).children('ul.img-gallery')[0]);
+
+        // initiate gallery buttons
         $(this).after('<div class="slider-back-area btn" onclick="goLeft(this);">'
                         + '<div class="icon-back slider-back btn"></div>'
                     + '</div>'
@@ -990,15 +995,25 @@ function initiateGalleries() {
         ul.children('li').prepend("<span class='helper'></span>");
         showSlideButtons(ul, 0, false);
 
+        // add index as loopid for loop
+        ul.children('li').each(function(i,e) {
+            $(this).attr('loopid', i);
+        });
+
         if(ul.not('.fixed-size').length > 0) {
             getImageSize($(ul.children('li')[0]).children("img"), function(width, height){
                 ul.parent().css("height", height + "px");
             });
         }
         $(this).parent().after("<div class='slider-description'></div>");
-        showSlideDescription(ul, 0);
+
+        if(ul.parent().filter('.loop').length > 0)
+            createLoopFor(ul, $('.img-gallery').index(ul), 0);
+        var visImage = ul.children('li').index(ul.children('li').not('.loop_clone').first());
+        showSlide(ul, visImage, true, false, "0s");
     });
     registerAfterWindowResize("slider-resize", resizeAllSliders);
+    resizeAllSliders();
 }
 
 /**
@@ -1018,8 +1033,12 @@ function initiateSliderPreview(div) {
         var li = $(this);
         li.prepend("<span class='helper'></span>");
         $(this).click(function() {
+            var parentUl = $(this).closest('.preview-con').prevAll('.slider-con').find('ul.img-gallery').last();
             var idx = $(this).parent().children('li').index($(this));
-            showSlide($(this).parent().parent().parent().prevAll('.slider-con').find('ul.img-gallery').last(), idx);
+            var parentIdx = parentUl.children('li').index(
+                parentUl.children('li')
+                    .not('.loop_clone').filter('[loopid="' + idx+ '"]'));
+            showSlide(parentUl, parentIdx, true, true);
         });
     });
     $(ul.children('li')[0]).addClass("active");
@@ -1034,6 +1053,14 @@ function initiateSliderPreview(div) {
     visibleImage[visibleImage.length] = 0;
 }
 
+function updateSliderDimensions(ul) {
+    var ul_id = $('.img-gallery').index(ul);
+    var slider = ul.closest('.slider');
+    if(slider.length == 0) slider = ul.closest('.slider-nav');
+    if(slider.length == 0) return;
+    lastSliderDimensions[ul_id] = {width: slider.width(), height: slider.height()};
+}
+
 /**
 * Zeigt das Bild weiter links an.
 * @param button - der Button der diese Funktion aufruft. (Der Button befindet
@@ -1041,7 +1068,7 @@ function initiateSliderPreview(div) {
 */
 function goLeft(button) {
     var ul = $(button).prevAll('div').find('.img-gallery').first();
-    showSlide(ul, visibleImage[$('.img-gallery').index(ul)]-1);
+    showSlide(ul, visibleImage[$('.img-gallery').index(ul)]-1, true, true);
 }
 
 /**
@@ -1051,82 +1078,198 @@ function goLeft(button) {
 */
 function goRight(button) {
     var ul = $(button).prevAll('div').find('.img-gallery').first();
-    showSlide(ul, visibleImage[$('.img-gallery').index(ul)]+1);
+    showSlide(ul, visibleImage[$('.img-gallery').index(ul)]+1, true, true);
 }
 
 // Wird benutzt, um eine Höhenveränderungsanimation zu starten, wenn das neue
 // Bild komplett angezeigt wird.
-var timeoutId = [];
+var slideSwitchTimeouts = {};
+var loopTimeouts = {};
 
 /**
 * Zeigt ein bestimmtes Bild in einem Slider an.
 * @param ul - das <ul> in dem sich das Bild an Stelle "slide" befindet
 * @param slide - die Stelle / Nummer des Bildes im <ul> (startet mit 0)
 */
-function showSlide(ul, slide) {
+function showSlide(ul, slide, updatePreview, animate, duration) {
+    var ul_id = $('.img-gallery').index(ul);
+
+    var slide_intended = (ul.children('li').not('.loop_clone').length + slide) % ul.children('li').not('.loop_clone').length;
+    var slideChanged = false;
+
     // Falls Loop aktiviert springt es mit -1 an die letzte Stelle und mit
     // "x.length" an Stelle 0
     if(ul.parent().filter('.loop').length > 0) {
-        slide = (ul.children('li').length + slide) % ul.children('li').length;
+        if(slide <= 0 || slide >= ul.children('li').length - 1) {
+            slide = createLoopFor(ul, ul_id, slide);
+        }
+
+        // clear loop timeout
+        if(animate) {
+            if(duration == undefined) duration = ulTransitionDuration;
+            var timeoutDuration = parseFloat(duration.replace(/[^\d\.]/g, "")) * 1000;
+            clearTimeout(loopTimeouts[ul_id]);
+            loopTimeouts[ul_id] = setTimeout(function() {
+                clearLoop(ul);
+            }, timeoutDuration);
+        }
     }
-    var ul_id = $('.img-gallery').index(ul);
-    // Für alle Slider
+
+    // Für alle Slider, falls showSlide möglich
     if((ul.parent().is('.slider') && (slide >= 0 && slide < ul.children('li').length))
        || (ul.parent().is('.slider-nav') && (slide >= 0 && slide*4 < ul.children('li').length))) {
-        var hasScroll = hasScrollbar();
-        ul.parent().addClass("switching");
-        var ul_id = $('.img-gallery').index(ul);
-        visibleImage[ul_id] = slide;
-        // Die X-Position an die die Transformation stattfindet
-        var x = ul.children('li').outerWidth(true)*slide*-1;
-        if(ul.parent().filter('.slider-nav').length > 0) {
-            x = ul.children('li').outerWidth(true)*slide*-4;
-        }
-        ul.css({
-            transform: "translate3d(" + x + "px, 0px, 0px)"
-        });
-        // Nur für Slider mit variabler Höhe
-        if(ul.not('fixed-size').length > 0 && ul.parent().is('.slider')) {
-            var idx = $('.img-gallery').index(ul);
-            var check = timeoutId[idx];
-            if(!(check >= 0)) {
-                timeoutId[idx] = 0;
-                check = 0;
-            }
-            setTimeout(function() {
-                if(check+1 == timeoutId[idx]) {
-                    var height = $(ul.children('li')[visibleImage[ul_id]]).height();
-                    // if($(ul.children('li')[visibleImage[ul_id]]).children('p').length > 0) {
-//                         height += $(ul.children('li')[visibleImage[ul_id]]).children('p').height();
-//                     }
-                    ul.parent().animate({height: height + "px"}, 500, function() {
-                        ul.parent().removeClass("switching");
-                        if(hasScrollbar() != hasScroll) {
-                            resizeAllSliders();
-                        }
-                    });
-                }
-            }, 500);
-            timeoutId[idx] += 1;
-        }
+        showSlideLi(ul, ul_id, slide, animate, duration);
+
     }
-    // Bildbeschreibung laden
+
+    var actual_slide = ul.children('li').eq(visibleImage[ul_id]).attr('loopid');
+
+    // Bildbeschreibung laden, wenn es sich nicht um einen navigations-slider handelt
     if(!ul.parent().is(".slider-nav")) {
         showSlideDescription(ul, slide);
     }
 
     // Zusätzlich für Slider mit Preview Nav
-    if(ul.parent().filter('.preview-nav').length > 0) {
-        var allListings = ul.parent().parent().nextAll('.preview-con').find('.slider-nav').first().children('ul.img-gallery').children('li');
-        allListings.removeClass('active');
-        $(allListings[slide]).addClass('active');
-        showSlide(allListings.parent(), Math.floor(slide/4));
+    if(updatePreview
+        && ul.parent().filter('.preview-nav').length > 0) {
+        var previeNavLis = ul.parent().parent().nextAll('.preview-con').find('.slider-nav').first().children('ul.img-gallery').children('li');
+        previeNavLis.removeClass('active');
+        previeNavLis.eq(actual_slide).addClass('active');
+        showSlide(previeNavLis.parent(), Math.floor(actual_slide/4), false, animate, duration);
     }
+
     showSlideButtons(ul, slide, ul.parent().filter('.slider-nav').length > 0);
 }
 
+function createLoopFor(ul, ul_id, slide) {
+    var active_slide = visibleImage[ul_id];
+
+    // moving right
+    if(slide == ul.children('li').length - 1) {
+        var slide_next = parseInt(ul.children('li').eq(slide).attr('loopid')) + 1;
+        // create loop li
+        var originalSlide = ul.children('li').not('.loop_clone').eq(slide_next % ul.children('li').not('.loop_clone').length);
+        var newSlide = originalSlide.clone();
+        newSlide.addClass('loop_clone');
+        ul.children('li').last().after(newSlide);
+    }
+    // moving left
+    else if(slide == 0){
+        var slide_next = parseInt(ul.children('li').eq(slide).attr('loopid')) - 1 + ul.children('li').not('.loop_clone').length;
+        // create loop li
+        var originalSlide = ul.children('li').not('.loop_clone').eq(slide_next % ul.children('li').not('.loop_clone').length);
+        var newSlide = originalSlide.clone();
+        newSlide.addClass('loop_clone');
+        ul.children('li').first().before(newSlide);
+        active_slide++;
+        slide++;
+
+        var marginLeft = ul.children('li').not('.loop_clone').first().prevAll('.loop_clone').length
+                        * ul.children('li').outerWidth(true)
+                        * -1;
+
+        ul.css({
+            "transition-duration": "0s",
+            "margin-left" : marginLeft + "px"
+        });
+    }
+
+    // expand width
+    ul.css({
+        "transition-duration": "0s",
+        "width": ul.children('li').outerWidth(true) * ul.children('li').length + 10 + "px"
+    });
+    ul[0].offsetHeight; // apply css changes
+    ul.css("transition-duration", ulTransitionDuration);
+
+    return slide;
+}
+
+function clearLoop(ul) {
+    var ul_id = $('.img-gallery').index(ul);
+    var visibleLi = ul.children('li').eq(visibleImage[ul_id]);
+    var originalSlide = ul.children('li').not('.loop_clone').filter('[loopid="' + visibleLi.attr('loopid') + '"]');
+
+    ul.find('.loop_clone').not(originalSlide.prev()).not(originalSlide.next()).remove();
+
+    var marginLeft = ul.children('li').not('.loop_clone').first().prevAll('.loop_clone').length
+                    * ul.children('li').outerWidth(true)
+                    * -1;
+
+    ul.css({
+        "transition-duration": "0s",
+        "margin-left" : marginLeft + "px",
+        "width": ul.children('li').outerWidth(true) * ul.children('li').length + 10 + "px"
+    });
+
+    ul[0].offsetHeight; // apply css changes
+    ul.css("transition-duration", ulTransitionDuration);
+
+    var toShow = ul.children('li').index(originalSlide);
+    // always show, to update visibleImage[...], preview should be set already
+    showSlide(ul, parseInt(toShow), false, false);
+}
+
+function showSlideLi(ul, ul_id, slide, animate, duration) {
+    // set animation
+    if(duration == undefined) duration = ulTransitionDuration;
+    if(animate) {
+        ul.css("transition-duration", duration);
+    }
+    else if(!animate) {
+        ul.css("transition-duration", "0s");
+    }
+    ul[0].offsetHeight; // apply css changes
+
+    var hasScroll = hasScrollbar();
+    if(animate && ul.not('fixed-size').length > 0 && ul.parent().is('.slider')) ul.parent().addClass("switching");
+    visibleImage[ul_id] = slide;
+    // Die X-Position an die die Transformation stattfindet
+    var x = ul.children('li').outerWidth(true)*slide*-1
+        + parseFloat(ul.css('margin-left').replace(/[^\d\.]/g, ""));
+    if(ul.parent().filter('.slider-nav').length > 0) {
+        x = ul.children('li').outerWidth(true)*slide*-4
+            + parseFloat(ul.css('margin-left').replace(/[^\d\.]/g, ""));
+    }
+    ul.css({
+        transform: "translate3d(" + x + "px, 0px, 0px)"
+    });
+
+
+    // set timeout to wait for sliding animation
+    var oldTimeout = slideSwitchTimeouts[ul_id];
+    var timeoutDuration = parseFloat(duration.replace(/[^\d\.]/g, "")) * 1000;
+    if(!animate) timeoutDuration = 0;
+
+    clearTimeout(oldTimeout);
+    var newTimeout = setTimeout(function() {
+        var height = $(ul.children('li')[visibleImage[ul_id]]).height();
+        // start height change animation; only for variable height sliders
+        if(ul.not('fixed-size').length > 0 && ul.parent().is('.slider')){
+            var animationDuration = 500;
+            if(!animate) {
+                // will be ulTransitionDuration if duration is not set explicitly
+                animationDuration = parseFloat(duration.replace(/[^\d\.]/g, "")) * 1000;
+            }
+            ul.parent().animate({height: height + "px"}, animationDuration, function() {
+                ul.parent().removeClass("switching");
+                if(hasScrollbar() != hasScroll) {
+                    resizeAllSliders();
+                }
+            });
+        }
+        else {
+            ul.parent().removeClass("switching");
+        }
+    }, timeoutDuration);
+    slideSwitchTimeouts[ul_id] = newTimeout;
+
+    ul[0].offsetHeight; // apply css changes
+    ul.css("transition-duration", ulTransitionDuration);
+}
+
 function showSlideDescription(ul, slide) {
-    var p = $(ul.children('li')[slide]).children('p');
+    var p = ul.children('li').eq(slide).children('p');
     var descDiv = ul.parent().parent().nextAll('.slider-description').first();
     if(p.length > 0) {
         descDiv.text(p.text());
@@ -1224,15 +1367,15 @@ function closeZoom(button) {
     lb.find('img').remove();
 }
 
-var resizeTimer = null;
+var resizeTimerSliders = null;
 
 /**
 * Passt alle Slider und auch das Zoom Fenster an die Fenstergröße des Browsers
 * an.
 */
 function resizeAllSliders() {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function() {
+    clearTimeout(resizeTimerSliders);
+    resizeTimerSliders = setTimeout(function() {
         resizeSliders();
         resizeNavigationSliders();
         resizeZoomContainer();
@@ -1249,15 +1392,30 @@ function resizeAllSliders() {
 * Passt alle Bildergallerien (normalen Slider) an neue Fenstergröße an.
 */
 function resizeSliders() {
-    $('.slider:visible').not('.switching').each(function() {
+    $('.slider:visible').each(function() {
         var slider = $(this);
         var ul = slider.children('ul.img-gallery');
+        var ul_id = $('.img-gallery').index(ul);
+
+        // width did not change since last update
+        if(lastSliderDimensions[ul_id] != undefined
+            && lastSliderDimensions[ul_id].width == slider.width()) {
+            // continue
+            return true;
+        }
+
+        // clear timeouts
+        if(slider.is('.switching')) {
+            clearTimeout(slideSwitchTimeouts[ul_id]);
+            clearTimeout(loopTimeouts[ul_id]);
+            slider.removeClass("switching");
+        }
 
         ul.css("transition-duration", "0s");
         ul[0].offsetHeight; // apply css changes
         ul.find('img').css({'max-height': ''});
 
-        var slide = visibleImage[$('.img-gallery').index(ul)];
+        var slide = visibleImage[ul_id];
         var heights = 0;
         var testedImages = 0;
         slider.children('ul.img-gallery').children('li').each(function(i, e) {
@@ -1301,13 +1459,20 @@ function resizeSliders() {
             });
         });
         var x = ul.children('li').outerWidth(true)*slide*-1;
+        var marginLeft = ul.children('li').not('.loop_clone').first().prevAll('.loop_clone').length
+                        * ul.children('li').outerWidth(true)
+                        * -1;
         ul.css({
             // + 10 for safety, +1 or ceil should be enough though
             width: ul.children('li').outerWidth(true) * ul.children('li').length + 10 + "px",
+            "margin-left" : marginLeft + "px",
             transform: "translate3d(" + x + "px, 0px, 0px)"
         });
         ul[0].offsetHeight; // apply css changes
-        ul.css("transition-duration", "0.5s");
+        ul.css("transition-duration", ulTransitionDuration);
+        showSlide(ul, visibleImage[ul_id], false, false, "0s");
+
+        updateSliderDimensions(ul);
     });
 }
 
@@ -1318,10 +1483,23 @@ function resizeNavigationSliders() {
     $('.slider-nav:visible').each(function() {
         var slider = $(this);
         var ul = slider.children('ul.img-gallery');
+        var ul_id = $('.img-gallery').index(ul);
         var slide = visibleImage[$('.img-gallery').index(ul)];
         var fullWidth = slider.width();
         var liWidth = fullWidth / 4.5;
         var liHeight = fullWidth / 6.0;
+
+        // width did not change since last update
+        if(lastSliderDimensions[ul_id] != undefined
+            && lastSliderDimensions[ul_id].width == slider.width()) {
+            // continue
+            return true;
+        }
+
+        // clear transition duration
+        ul.css("transition-duration", "0s");
+        ul[0].offsetHeight; // apply css changes
+
         ul.children('li').css({
             width: liWidth + "px",
             height: liHeight + "px"
@@ -1360,6 +1538,12 @@ function resizeNavigationSliders() {
             });
         });
         slider.css("height", liHeight + "px");
+
+        // reset transition duration
+        ul[0].offsetHeight;
+        ul.css("transition-duration", ulTransitionDuration);
+
+        updateSliderDimensions(ul);
     });
 }
 
@@ -2384,7 +2568,10 @@ function touchMoveMenu(dif) {
 */
 function touchMoveSlider(dif, ul) {
     var vimg = visibleImage[$('.img-gallery').index(ul)];
-    ul.css("margin-left", -dif + "px");
+    var marginLeft = ul.children('li').not('.loop_clone').first().prevAll('.loop_clone').length
+                    * ul.children('li').outerWidth(true)
+                    * -1;
+    ul.css("margin-left", marginLeft-dif + "px");
 }
 
 // ---------------------------------------------------------------------------------------
@@ -2401,42 +2588,49 @@ function touchEndSlider() {
     var dif = startX - curX;
     var ul = $(swipeTarget);
     var vimg = visibleImage[$('.img-gallery').index(ul)];
-    var margin = parseInt(ul.css("margin-left").replace("px", ""));
-    var x = parseFloat(-vimg*$(swipeTarget).children("li").outerWidth(true));
+    var marginLeft = ul.children('li').not('.loop_clone').first().prevAll('.loop_clone').length
+                    * ul.children('li').outerWidth(true)
+                    * -1;
+    var margin = parseInt(ul.css("margin-left").replace("px", "")) - marginLeft;
+    // set translate to last margin
+    var x = -vimg*parseFloat($(swipeTarget).children("li").outerWidth(true));
     if(ul.parent().is('.slider-nav')) {
-        x = parseFloat(-4*vimg*$(swipeTarget).children("li").outerWidth(true));
+        x = 4 * x;
     }
-    x += margin;
+    x += margin - marginLeft;
     ul.css({
         transform: "translate3d("+x+"px, 0px, 0px)",
-        margin: "0 0 0 0"
+        margin: "0 0 0 0",
+        "margin-left": marginLeft + "px"
     });
 
     // lastSpeed ist px/ms, berechne animationsdauer daraus
     var duration = (ul.parent().width()-dif) / Math.abs(lastSpeed*1000);
 
+    // finish swipe movement in direction
     if(duration < 1 && lastSpeed > 0) {
-        if((!ul.parent().is('.slider-nav') && vimg < ul.children('li').length-1)
-            || (ul.parent().is('.slider-nav') && (vimg+1)*4 < ul.children('li').length)
-            || ul.parent().filter('.loop').length > 0) {
-            vimg++;
-        }
-        else duration = 0.5;
+        vimg++;
     }
+    // finish swipe movement in direction
     else if(duration < 1 && lastSpeed < 0) {
-        if(vimg > 0 || ul.parent().filter('.loop').length > 0) {
-            vimg--;
-        }
-        else duration = 0.5;
+        vimg--;
     }
+    // atleast half way to next image
+    else if(dif > ul.children('li').outerWidth(true)/2 && lastSpeed >= 0) {
+        vimg++;
+        duration = 0.5;
+    }
+    // atleast half way to prev image
+    else if(dif < -ul.children('li').outerWidth(true)/2 && lastSpeed <= 0) {
+        vimg--;
+        duration = 0.5;
+    }
+    // scroll back to active image
     else {
         duration = 0.5;
     }
 
-    ul.css("transition-duration", duration+"s");
-    ul[0].offsetHeight; // apply css changes
-    showSlide(ul, vimg);
-    ul.css("transition-duration", "0.5s");
+    showSlide(ul, vimg, true, true, duration+"s");
 }
 
 

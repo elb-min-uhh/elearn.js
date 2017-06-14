@@ -16,6 +16,8 @@ sind, haben jeweils eine eigene Versionsübersicht weiter unten.
 ### eLearn.js
 * __0.9.9__:
   * Neuerungen:
+    * Bildergallerien springen bei einem Loop nicht mehr, sondern behalten 
+    die Bewegungsrichtung bei
     * Stil der Kacheln im Inhaltsverzeichnis angepasst
     * Stil von Slider, Multiboxes und ausklappbaren Bereichen angepasst
   * Fehlerbehebungen:
