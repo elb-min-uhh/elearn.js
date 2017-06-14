@@ -1301,7 +1301,8 @@ function resizeSliders() {
         });
         var x = ul.children('li').outerWidth(true)*slide*-1;
         ul.css({
-            width: ul.children('li').outerWidth(true) * ul.children('li').length + "px",
+            // + 10 for safety, +1 or ceil should be enough though
+            width: ul.children('li').outerWidth(true) * ul.children('li').length + 10 + "px",
             transform: "translate3d(" + x + "px, 0px, 0px)"
         });
         ul[0].offsetHeight; // apply css changes
@@ -1326,7 +1327,7 @@ function resizeNavigationSliders() {
         });
         var x = ul.children('li').outerWidth(true)*slide*-4;
         ul.css({
-            width: ul.children('li').outerWidth(true) * (ul.children('li').length) + "px",
+            width: ul.children('li').outerWidth(true) * (ul.children('li').length) + 10 + "px",
             height: liHeight + "px",
             transform: "translate3d(" + x + "px, 0px, 0px)"
         });
@@ -1503,7 +1504,7 @@ function showTooltip(nr) {
             || $(tooltip.anchor).is(':visible'))) {
 
         // get base margins [might be undefined]: copy to not overwrite original
-        var margin = Object.assign({}, tooltip.offset);
+        var margin = $.extend(true, {}, tooltip.offset);
 
         // align to anchor if set
         if(tooltip.anchor != undefined) {
