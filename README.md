@@ -8,6 +8,31 @@ Eine umfassende Dokumentation des Projekts befindet sich unter http://www.sumo.u
 
 > There is no English or international version so far.
 
+## Empfehlung zur Verwendung
+
+Um bei einem Versionsupdate keine Schwierigkeiten zu erhalten, sollten alle vom
+Nutzer durchgeführten Änderungen in zusätzlichen Dateien umgesetzt werden.
+Welche Dateien genau bei einem Update überschrieben werden, ist im
+nachfolgenden Bereich zu erkennen.
+
+Generell sollten besonders Veränderungen des Stils der Seite entweder direkt
+in der _HTML_ Datei oder in einer neuangelegten _.CSS_ Datei geschehen.
+
+## Vorhandenes Skript Updaten
+
+Um ein vorhandenes Skript auf die neuste Version upzudaten ist nicht viel
+Aufwand nötig. Hierzu sollte zunächst das Repository heruntergeladen werden.
+Anschließend kopiert man den Ordner `Template/assets/` in das vorhandene Skript.
+Dieser beinhaltet alle zwangsläufig notwendigen Dateien. Der darin enthaltene
+Ordner `Template/assets/img/template-media` ist nicht notwendig, da er nur  
+Dateien enthält, welche in dem Template verlinkt sind. Dieser kann also
+nachträglich vollständig entfernt werden.
+
+Sollten vom Nutzer Änderungen an diesen Dateien vorgenommen worden sein, werden
+die Änderungen dabei natürlich überschrieben und sie müssten ggf. erneut
+angewendet werden. Die HTML Seiten, welche die Skripte verwenden bleiben bei
+diesem Vorgang natürlich unberührt.
+
 ## Versionen
 
 _Hinweis:_ Erweiterungen zum eLearn.js, welche in diesem Repository enthalten
@@ -16,11 +41,12 @@ sind, haben jeweils eine eigene Versionsübersicht weiter unten.
 ### eLearn.js
 * __0.9.9__:
   * Neuerungen:
-    * Bildergallerien springen bei einem Loop nicht mehr, sondern behalten 
+    * Bildergallerien springen bei einem Loop nicht mehr, sondern behalten
     die Bewegungsrichtung bei
     * Stil der Kacheln im Inhaltsverzeichnis angepasst
     * Stil von Slider, Multiboxes und ausklappbaren Bereichen angepasst
   * Fehlerbehebungen:
+    * Fehler der Bildergallerien behoben
     * Auswahl von Text durch mehrfaches Klicken auf bestimmte Buttons entfernt
 * __0.9.8__:
   * Neuerungen:
