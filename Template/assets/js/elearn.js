@@ -105,8 +105,8 @@ $(document).ready(function() {
 function initiateELearnJS() {
     $($('#wrap')[0]).prepend(
             "<div class='skip-arrows noselect'>" // <!-- Arrow Left and Right -->
-                + "<div onclick='javascript: showPrev();' id='btnPrev' class='icon-back before-padding btn'></div>"
-                + "<div onclick='javascript: showNext();' id='btnNext' class='icon-next before-padding btn'></div>"
+                + "<div onclick='javascript: showPrev();' id='btnPrev' class='icon-back btn'></div>"
+                + "<div onclick='javascript: showNext();' id='btnNext' class='icon-next btn'></div>"
             + "</div>"
             + "<div class='section-overview noselect'></div>" // <!-- Container for Overview -->
             + "<div id='navigation' class='noselect'>"
@@ -1615,17 +1615,13 @@ var tooltips =
         html : '<div id="tooltipArrowRight" class="tooltip fixed right">'
             + 'Klicken, um auf die nächste Seite zu wechseln.'
             + '</div>',
-        condition: function() {return $(window).width() > 440},
-        anchor : "#btnNext",
-        offset : {right: "-8px"}
+        condition: function() {return $(window).width() > 440}
     },
     {
         html : '<div id="tooltipArrowLeft" class="tooltip fixed left">'
             + 'Klicken, um auf die vorherige Seite zu wechseln.'
             + '</div>',
-        condition: function() {return $(window).width() > 440},
-        anchor : "#btnPrev",
-        offset : {left: "10px"}
+        condition: function() {return $(window).width() > 440}
     },
     {
         html : '<div id="tooltipTouchRight" class="tooltip fixed right">'
