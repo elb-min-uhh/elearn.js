@@ -17,8 +17,8 @@ $(document).ready(function() {
 
     // resize Funktion wird aufgerufen, wenn im eLearnJS eine neue section
     // angezeigt wird
-    eLearnJS.registerAfterShow("quiz-resizing", windowResizing);
-    eLearnJS.registerAfterShow("quiz-timer-init", initTimers);
+    document.addEventListener("ejssectionchange", windowResizing);
+    document.addEventListener("ejssectionchange", initTimers);
 });
 
 

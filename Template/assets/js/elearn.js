@@ -36,17 +36,6 @@ var dirButtonsEnabled = true;
 var keyNavigationEnabled = true;
 var progressbarEnabled = true;
 
-// List of functions called on/after specific events.
-// You can register them by registerAfterShow(KEY, FNC)
-var afterShow = {};
-var afterShowLate = {};
-var afterPageInteraction = {};
-// for tabbed boxes / multiboxes
-var afterTabChange = {};
-var afterWindowResize = {};
-var afterWindowResizeLate = {};
-var afterSliderResize = {};
-
 // For more intuitive usage of functions. (e.g. eLearnJS.showNext())
 var eLearnJS = this;
 
@@ -83,11 +72,11 @@ $(document).ready(function() {
     updateNavBarWidth();
 
     // add listeners
-    registerAfterShow("slider-resize", resizeAllSliders);
-    registerAfterPageInteraction("history-push", pushHistoryState);
-    registerAfterShow("messageIframeParent", updateWrapSize, true);
-    registerAfterWindowResize("messageIframeParent", updateWrapSize, true);
-    registerAfterSliderResize("messageIframeParent", updateWrapSize);
+    document.addEventListener("ejssectionchange", resizeAllSliders);
+    document.addEventListener("ejssectionchangelate", updateWrapSize);
+    document.addEventListener("ejspageinteraction", pushHistoryState);
+    document.addEventListener("ejssliderresize", updateWrapSize);
+    window.addEventListener("ejswindowresizelate", updateWrapSize);
 
     // checks parameters for navigation to specific page
     checkParameters();
@@ -350,20 +339,20 @@ function setBackPage(val, type) {
 /**
 * Zeigt die vorherige Section
 * Funktioniert nur, wenn nicht alle Sections angezeigt werden.
+* @event: Fires "ejspageinteraction" event on document when done successfully.
 */
 function showPrev() {
     var ret = showSection(visSection-1);
     // Ausführen registrierter Funktionen
     if(ret) {
-        $.each(afterPageInteraction, function(key, fnc) {
-            fnc();
-        });
+        fireEvent(document, createEvent("ejspageinteraction", {}));
     }
 };
 
 /**
 * Zeigt die nächste Section
 * Funktioniert nur, wenn nicht alle Sections angezeigt werden.
+* @event: Fires "ejspageinteraction" event on document when done successfully.
 */
 function showNext() {
 
@@ -373,9 +362,7 @@ function showNext() {
         var ret = showSection(visSection+1);
         // Ausführen registrierter Funktionen
         if(ret) {
-            $.each(afterPageInteraction, function(key, fnc) {
-                fnc();
-            });
+            fireEvent(document, createEvent("ejspageinteraction", {}));
         }
     }
 };
@@ -383,25 +370,28 @@ function showNext() {
 /**
 * Zeigt eine bestimmte section an.
 * Wird von der section overview ausgeführt. (Ausklappbares Inhaltsverzeichnis)
+* @event: Fires "ejspageinteraction" event on document when done successfully.
 */
 function overviewShowSection(i) {
     var ret = showSection(i);
 
     // Ausführen registrierter Funktionen
     if(ret) {
-        $.each(afterPageInteraction, function(key, fnc) {
-            fnc();
-        });
+        fireEvent(document, createEvent("ejspageinteraction", {}));
     }
 }
 
 /**
 * Zeigt eine bestimmte Section (nach Index)
 * Funktioniert nur, wenn nicht alle Sections angezeigt werden.
+* @event: Fires "ejssectionchange" + "ejssectionchangelate" event on
+*   document when done successfully.
 */
 function showSection(i) {
     overviewShown = true;
     showSectionOverview();
+
+    var sectionBefore = visSection;
 
     // get section to name
     if(typeof i === 'string' || i instanceof String) {
@@ -432,7 +422,6 @@ function showSection(i) {
         return false;
     }
 
-
     // section was updated
     if(i >= 0 && i < $('section').length) {
         visSection = i;
@@ -444,14 +433,13 @@ function showSection(i) {
         setDirectionButtonsEnabledIdx(visSection);
     }
 
-    // Ausführen registrierter Funktionen
-    $.each(afterShow, function(key, fnc) {
-        fnc();
-    });
-    // Ausführen registrierter Funktionen
-    $.each(afterShowLate, function(key, fnc) {
-        fnc();
-    });
+    var sectionChange = {
+        "section": visSection,
+        "sectionbefore" : sectionBefore,
+        "changed" : visSection !== sectionBefore,
+        "allShownChange" : false};
+    fireEvent(document, createEvent("ejssectionchange", sectionChange));
+    fireEvent(document, createEvent("ejssectionchangelate", sectionChange));
 
     return true;
 };
@@ -459,13 +447,16 @@ function showSection(i) {
 /**
 * Registriert eine Funktion, die ausgeführt wird, nachdem eine neue Section
 * angezeigt wurde.
+*
+* @depracted Since version 1.0.0. Simply add the event listener yourself.
+*   this makes better event handling possible.
 */
 function registerAfterShow(key, fnc, late) {
     if(late) {
-        afterShowLate[key] = fnc;
+        document.addEventListener("ejssectionchangelate", fnc);
     }
     else {
-        afterShow[key] = fnc;
+        document.addEventListener("ejssectionchange", fnc);
     }
 }
 
@@ -473,17 +464,23 @@ function registerAfterShow(key, fnc, late) {
 * Registriert eine Funktion, die ausgeführt wird, nachdem ein sectionwechsel
 * durchgeführt wurde. Im gegensatz zu "afterShow" nur, wenn die section
 * tatsächlich verändert wurde.
+*
+* @depracted Since version 1.0.0. Simply add the event listener yourself.
+*   this makes better event handling possible.
 */
 function registerAfterPageInteraction(key, fnc) {
-    afterPageInteraction[key] = fnc;
+    document.addEventListener("ejspageinteraction", fnc);
 }
 
 /**
 * Registriert eine Funktion, die ausgeführt wird, nachdem ein neuer Tab
 * in einer tabbed-box angezeigt wurde.
+*
+* @depracted Since version 1.0.0. Simply add the event listener yourself.
+*   this makes better event handling possible.
 */
 function registerAfterTabChange(key, fnc) {
-    afterTabChange[key] = fnc;
+    document.addEventListener("ejstabchange", fnc);
 }
 
 /**
@@ -492,22 +489,28 @@ function registerAfterTabChange(key, fnc) {
 * sondern mit einer kurzen Verzörung ausgeführt, damit sie bei einer
 * kontinuierlichen Veränderung nicht ständig sondern nur einmal ausgeführt
 * werden.
+*
+* @depracted Since version 1.0.0. Simply add the event listener yourself.
+*   this makes better event handling possible.
 */
 function registerAfterWindowResize(key, fnc, late) {
     if(late) {
-        afterWindowResizeLate[key] = fnc;
+        window.addEventListener("ejswindowresizelate", fnc);
     }
     else {
-        afterWindowResize[key] = fnc;
+        window.addEventListener("ejswindowresize", fnc);
     }
 }
 
 /**
 * Registriert eine Funktion, die ausgeführt wird, nachdem alle Slider
 * an die Fenstergröße angepasst wurden.
+*
+* @depracted Since version 1.0.0. Simply add the event listener yourself.
+*   this makes better event handling possible.
 */
 function registerAfterSliderResize(key, fnc) {
-    afterSliderResize[key] = fnc;
+    document.addEventListener("ejssliderresize", fnc);
 }
 
 /**
@@ -540,6 +543,8 @@ function calcProgress(i) {
 
 /**
 * Schaltet zwischen alle Sections anzeigen und nur eine um.
+* @event: Fires "ejssectionchange" + "ejssectionchangelate" event on
+*   document when done successfully.
 */
 function toggleAllSections() {
     setDirectionButtonsEnabled(allShown);
@@ -555,10 +560,14 @@ function toggleAllSections() {
         $(document).scrollTop($($('section')[visSection]).position().top - $('#navigation').height() - 10);
         allShown = true;
         resizeAllSliders();
-        // Ausführen registrierter Funktionen
-        $.each(afterShow, function(key, fnc) {
-            fnc();
-        });
+
+        var sectionChange = {
+            "section": visSection,
+            "sectionbefore" : visSection,
+            "changed" : false,
+            "allShownChange" : true};
+        fireEvent(document, createEvent("ejssectionchange", sectionChange));
+        fireEvent(document, createEvent("ejssectionchangelate", sectionChange));
     }
 };
 
@@ -1040,7 +1049,7 @@ function initiateGalleries() {
         var visImage = ul.children('li').index(ul.children('li').not('.loop_clone').first());
         showSlide(ul, visImage, true, false, "0s");
     });
-    registerAfterWindowResize("slider-resize", resizeAllSliders);
+    window.addEventListener("ejswindowresize", resizeAllSliders);
     resizeAllSliders();
 }
 
@@ -1430,6 +1439,7 @@ var resizeTimerSliders = null;
 /**
 * Passt alle Slider und auch das Zoom Fenster an die Fenstergröße des Browsers
 * an.
+* @event: Fires "ejssliderresize"event on document when done successfully.
 */
 function resizeAllSliders() {
     clearTimeout(resizeTimerSliders);
@@ -1438,10 +1448,7 @@ function resizeAllSliders() {
         resizeNavigationSliders();
         resizeZoomContainer();
 
-        // Ausführen registrierter Funktionen
-        $.each(afterSliderResize, function(key, fnc) {
-            fnc();
-        });
+        fireEvent(document, createEvent("ejssliderresize", {}));
     }, 250);
 
 }
@@ -1889,12 +1896,19 @@ function initiateTabbedBox(box) {
     div.find('.tab').first().show();
     tabs.find('.tab-select').first().addClass('act');
 
-    registerAfterTabChange("slider-resize", resizeAllSliders);
+    div.closest('.tabbed-container')[0].addEventListener("ejstabchange", resizeAllSliders);
 }
 
+/**
+* Selects a tab of a tabbed box
+* @param elemt, the tab element clicked on
+* @event: Fires "ejstabchange"event on the .tabbed-container when done successfully.
+*/
 function selectTab(element) {
     var e = $(element);
     var div = e.parent().nextAll().first('.tabbed-box');
+
+    var tabbefore = div.find('.tab:visible').attr("name");
 
     // show only new
     div.find('.tab').hide();
@@ -1902,10 +1916,10 @@ function selectTab(element) {
     e.parent().find('.tab-select').removeClass("act");
     e.addClass("act");
 
-    // Ausführen registrierter Funktionen
-    $.each(afterTabChange, function(key, fnc) {
-        fnc();
-    });
+    var eventObj = {
+        "tab": e.html(),
+        "tabbefore" : tabbefore};
+    fireEvent(div.closest('.tabbed-container')[0], createEvent("ejstabchange", eventObj));
 }
 
 
@@ -2073,6 +2087,11 @@ $(window).on('scrollbarHidden', function() {
     windowOnResize();
 });
 
+/**
+* Called on window resize
+* @event: Fires "ejswindowresize" + " ejswindowresizelate"
+*   event on the window when done successfully.
+*/
 function windowOnResize() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function(){
@@ -2082,14 +2101,9 @@ function windowOnResize() {
         else {
             $('#sideMenu').css('right', "-"+($('#sideMenu').width()+10)+"px");
         }
-        // Ausführen registrierter funktionen
-        $.each(afterWindowResize, function(key, fnc) {
-            fnc();
-        });
-        // Ausführen registrierter funktionen
-        $.each(afterWindowResizeLate, function(key, fnc) {
-            fnc();
-        });
+
+        fireEvent(window, createEvent("ejswindowresize", {}));
+        fireEvent(window, createEvent("ejswindowresizelate", {}));
     }, 250);
     updateNavBarWidth();
     hoverInfoSetPositions();
@@ -2206,7 +2220,6 @@ var clickedAlready = false;
 
 var touchMouseChangeTimer = null;
 var lastTouch = undefined;
-var touchMouseFunctions = {};
 
 /**
 * Simply returns the current touchSupported var value
@@ -2245,18 +2258,20 @@ function initiateTouchDetection() {
 
 /**
 * Will call all functions registered on touchSupportedChanged
+* @event: Fires "ejstouchmousechange" event on the window when done successfully.
 */
 function touchSupportedChanged() {
-    $.each(touchMouseFunctions, function(key, fnc) {
-        fnc();
-    });
+    fireEvent(window, createEvent("ejstouchmousechange", {}));
 }
 
 /**
 * Adds a listener function called on touch support/usage changes.
+*
+* @depracted Since version 1.0.0. Simply add the event listener yourself.
+*   this makes better event handling possible.
 */
 function addTouchMouseChangeListener(key, fnc) {
-    touchMouseFunctions[key] = fnc;
+    window.addEventListener("ejstouchmousechange", fnc);
 }
 
 
@@ -2306,7 +2321,7 @@ function addTouchToSections() {
     });
 
     resizeTouchArrows();
-    registerAfterWindowResize("touch-arrows", resizeTouchArrows);
+    window.addEventListener("ejswindowresize", resizeTouchArrows);
 };
 
 /**
@@ -2344,6 +2359,22 @@ var lastSpeed = 0;
 var lastTime = undefined;
 var lastDif = undefined;
 var startScrollLeft = 0;
+
+var touchDeactivatedElements = {};
+
+function registerTouchDeactivatedElement(key, elem) {
+    if(touchDeactivatedElements[key] == undefined
+        || touchDeactivatedElements[key] == null) {
+        touchDeactivatedElements[key] = elem;
+    }
+    else if(!touchDeactivatedElements[key].is(elem)) {
+        Array.prototype.push.apply(touchDeactivatedElements[key], elem);
+    }
+}
+
+function removeTouchDeactivatedElement(key) {
+    delete touchDeactivatedElements[key];
+}
 
 /**
 * Überprüft, um welche Touchfunktion es sich handelt.
@@ -2764,7 +2795,33 @@ function getSpeed(lastDif, lastTime, dif, time) {
 }
 
 
+function createEvent(eventName, eventObj) {
+    var event; // The custom event that will be created
 
+    if (document.createEvent) {
+      event = document.createEvent("HTMLEvents");
+      event.initEvent(eventName, true, true);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+    }
+
+    event.eventName = eventName;
+
+    $.each(eventObj, function(k,v) {
+        event[k] = v;
+    });
+
+    return event;
+}
+
+function fireEvent(element, event) {
+    if (document.createEvent) {
+      element.dispatchEvent(event);
+    } else {
+      element.fireEvent("on" + event.eventType, event);
+    }
+}
 
 // Initiates the QueryString object, which contains all url parameters
 var QueryString = function () {

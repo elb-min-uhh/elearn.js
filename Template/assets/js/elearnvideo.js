@@ -90,9 +90,9 @@ function initiateVideoPlayers() {
     addGenerelVideoPlayerListener();
 
     // User to explicitly set video-note width to equal video width
-    eLearnJS.registerAfterWindowResize("video-resize", resizeAllVideoPlayers);
-    eLearnJS.registerAfterShow("video-resize", resizeAllVideoPlayers);
-    eLearnJS.addTouchMouseChangeListener("video-mobile", switchTouchMouse);
+    document.addEventListener("ejssectionchange", resizeAllVideoPlayers);
+    window.addEventListener("ejswindowresize", resizeAllVideoPlayers);
+    window.addEventListener("ejstouchmousechange", switchTouchMouse);
     initiateVideoNotes();
 }
 
