@@ -30,6 +30,11 @@ var touchend_timer = null;
 
 var user_notes = {};
 
+/**
+* Initiates all videoplayers, by adding wrapper around <video> elements.
+* Also initiates all listeners and everything necessary, so that the players
+* work correctly.
+*/
 function initiateVideoPlayers() {
     loadLocalVideoNotesStorage();
 
@@ -85,12 +90,16 @@ function initiateVideoPlayers() {
     addGenerelVideoPlayerListener();
 
     // User to explicitly set video-note width to equal video width
-    eLearnJS.registerAfterWindowResize("video-resize", resizeAllVideoPlayers);
-    eLearnJS.registerAfterShow("video-resize", resizeAllVideoPlayers);
-    eLearnJS.addTouchMouseChangeListener("video-mobile", switchTouchMouse);
+    document.addEventListener("ejssectionchange", resizeAllVideoPlayers);
+    window.addEventListener("ejswindowresize", resizeAllVideoPlayers);
+    window.addEventListener("ejstouchmousechange", switchTouchMouse);
     initiateVideoNotes();
 }
 
+/**
+* Add general video player listeners. These are listeners which are not on the
+* player itself but on the document.
+*/
 function addGenerelVideoPlayerListener() {
     // Fullscreenchange
     $(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange', function() {
@@ -123,6 +132,11 @@ function addGenerelVideoPlayerListener() {
     });
 }
 
+/**
+* Adds all video player specific listeners. So every listener which is appended
+* on a single video element or the wrapper of it.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function addVideoPlayerListener(div) {
 
     videoAddButtonListeners(div);
@@ -140,7 +154,10 @@ function addVideoPlayerListener(div) {
     });
 }
 
-
+/**
+* Adds listeners to buttons within the video player.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoAddButtonListeners(div) {
     // buttons
     div.find('.playpause').click(function(event) {
@@ -170,6 +187,11 @@ function videoAddButtonListeners(div) {
     });
 }
 
+/**
+* Adds listeners to other player interaction. E.g. clicks on the video
+* or touch events which are not targeted at a button.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoAddUserInteractionListeners(div) {
     div.on('touchstart touchend touchcancel', function(event) {
         videoRefreshHover(div, event);
@@ -226,6 +248,10 @@ function videoAddUserInteractionListeners(div) {
     });
 }
 
+/**
+* Adds listeners to the progress bar. E.g. for time skipping and hover events.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoAddProgressBarListeners(div) {
     // progressbar
     div.find('.video-progress-con').on('mouseenter', function(event) {
@@ -250,6 +276,10 @@ function videoAddProgressBarListeners(div) {
     });
 }
 
+/**
+* Adds listeners to the volume bar. For volume changes.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoAddVolumeListeners(div) {
     // listener for video volume control
     div.on('mousemove touchmove', function(event) {
@@ -264,43 +294,51 @@ function videoAddVolumeListeners(div) {
     });
 }
 
+/**
+* Adds all events based on the exact video element. E.g. timeupdate/playpause
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoAddEventListeners(div) {
+    var video = div.find('video');
     // listener to video progress
-    div.find('video').on('ended', function(event) {
+    video.on('ended', function(event) {
         videoHover(div);
     });
-    div.find('video').on('timeupdate progress', function(event) {
+    video.on('timeupdate progress', function(event) {
         updateVideoTime(div);
         updateVideoUserNoteTime(div);
     });
-    div.find('video').on('play', function(event) {
+    video.on('play', function(event) {
         videoUpdatePlayPauseButton(div);
     });
-    div.find('video').on('pause', function(event) {
+    video.on('pause', function(event) {
         videoUpdatePlayPauseButton(div);
     });
-    div.find('video').on('volumechange', function(event) {
+    video.on('volumechange', function(event) {
         updateVideoVolume(div);
     });
-    div.find('video').on('error abort', function(event) {
+    video.on('error abort', function(event) {
         videoOnError(div, event);
     });
-    div.find('video').on('canplay', function(event) {
+    video.on('canplay', function(event) {
         videoRemoveError(div, event);
         videoRemoveBuffering(div);
     });
-    div.find('video').on('waiting', function(event) {
+    video.on('waiting', function(event) {
         videoOnBuffering(div, event);
     });
-    div.find('video').on('resize', function(event) {
+    video.on('resize', function(event) {
         resizeVideoPlayer(div);
     });
     videoCheckDelayedError(div);
 }
 
 
-
-
+/**
+* Checks for browser specific adjustments to the video player.
+* E.G. mobile safari does not allow volume changes. These elements are hidden.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoCheckForBrowserSpecifics(div) {
     var device = "";
     var ua = navigator.userAgent.toLowerCase();
@@ -317,6 +355,10 @@ function videoCheckForBrowserSpecifics(div) {
 
 // HOVER ---------------------------------------------------
 
+/**
+* Toggles the hover overlay of one specific video wrapper.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoToggleHover(div) {
     if(div.is('.hovered')) {
         videoHoverEnd(div);
@@ -326,6 +368,11 @@ function videoToggleHover(div) {
     }
 }
 
+/**
+* Checks if the videoHover should be refreshed based on the given events target.
+* Refreshes the hover if so.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoRefreshHover(div, event) {
     var trgt = $(event.target);
     if(trgt.is('.mobile-overlay *') || trgt.is('.controls *')) {
@@ -333,6 +380,12 @@ function videoRefreshHover(div, event) {
     }
 }
 
+/**
+* Sets a video player hovered. Will show the controls overlay.
+* Initiates a timeout for automatic hiding of the overlay after a hard coded
+* time.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoHover(div) {
     if(!div.is(".hovered")) {
         div.addClass("hovered");
@@ -352,6 +405,10 @@ function videoHover(div) {
     }
 }
 
+/**
+* Removes the hover overlay for a specific video player.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoHoverEnd(div) {
     var vid = div.find('video')[0];
     if(!vid.ended) {
@@ -361,6 +418,10 @@ function videoHoverEnd(div) {
 
 // FULLSCREEN -----------------------------------------------
 
+/**
+* Checks if the browser is in fullscreen mode. If not all video players are
+* reset to normal display mode.
+*/
 function checkVideoFullscreen() {
     var isFullScreen = document.fullScreen ||
                    document.mozFullScreen ||
@@ -381,6 +442,11 @@ function checkVideoFullscreen() {
 
 var videoFullscreenPending = {};
 
+/**
+* Called when clicked on a video.
+* This will pause or check for double click and set the video to fullscreen/back
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoOnClick(div) {
     var dblclick_time = 250;
     var idx = $('.elearnjs-video').index(div);
@@ -404,6 +470,10 @@ function videoOnClick(div) {
     }
 }
 
+/**
+* Toggles play for a video player. Updates the playpause button
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoTogglePlay(div) {
     var vid = div.find('video')[0];
     var btn = div.find('.playpause')[0];
@@ -424,6 +494,10 @@ function videoTogglePlay(div) {
     videoUpdatePlayPauseButton(div);
 }
 
+/**
+* Updates the play/pause button based on the video play-status.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoUpdatePlayPauseButton(div) {
     var vid = div.find('video')[0];
 
@@ -441,7 +515,10 @@ function videoUpdatePlayPauseButton(div) {
     }
 }
 
-
+/**
+* Toggles between the display of timeleft (e.g. -0:12) and the videos duration
+* (e.g. 0:28, static)
+*/
 function videoToggleTimeleftDuration(div) {
     video_timestyle = (video_timestyle + 1) % 2;
 
@@ -461,6 +538,10 @@ function videoToggleTimeleftDuration(div) {
 var secSwipeBefore = undefined;
 var keyEnabledBefore = undefined;
 
+/**
+* Toggles fullscreen for a video player.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoToggleFullscreen(div) {
     // to fullscreen
     if(!div.is(".full")) {
@@ -531,6 +612,7 @@ var videoVolumeMouseDownTarget = null;
 /**
 * Called when clicked on the volume icon
 * should open volume control on touch devices and mute/unmute otherwise
+* @param div: the .elearnjs-video Wrapper of the video element.
 */
 function videoVolumeClick(div, e) {
     var vid = div.find('video')[0];
@@ -565,6 +647,7 @@ function videoVolumeClick(div, e) {
 /**
 * Called when hovering over the volume icon
 * shouldn't do anything on touch devices, because they have no hover
+* @param div: the .elearnjs-video Wrapper of the video element.
 */
 function videoVolumeHover(div, event) {
     if(!div.is('.mobile')) {
@@ -584,6 +667,7 @@ function videoVolumeHover(div, event) {
 /**
 * Opens or closes the Volume Control
 * is called by videoVolumeHover, videoVolumeClick and setVideoVolumeMouseDown
+* @param div: the .elearnjs-video Wrapper of the video element.
 */
 function videoSetVolumeControlOpen(div, bool) {
     var idx = $('.elearnjs-video').index(div);
@@ -612,6 +696,7 @@ function videoSetVolumeControlOpen(div, bool) {
 /**
 * Called when moving the mouse over any .elearnjs-video (@param: div)
 * Used to apply volume changes
+* @param div: the .elearnjs-video Wrapper of the video element.
 */
 function videoProgressVolumeMouseMove(div, e) {
     if(videoVolumeMouseDown) {
@@ -642,6 +727,8 @@ function videoProgressVolumeMouseMove(div, e) {
 
 /**
 * Used to set volume change active or not.
+* @param div: the .elearnjs-video Wrapper of the video element.
+* @param e: the event occured initiating this. (mousedown/touchstart...)
 */
 function setVideoVolumeMouseDown(div, bool, e) {
     videoVolumeMouseDown = bool;
@@ -667,6 +754,7 @@ function setVideoVolumeMouseDown(div, bool, e) {
 
 /**
 * Called when the video within the div has a volume change
+* @param div: the .elearnjs-video Wrapper of the video element.
 */
 function updateVideoVolume(div) {
     var vid = div.find('video')[0];
@@ -695,6 +783,11 @@ function updateVideoVolume(div) {
 
 // VIDEO KEYBOARD EVENTS ------------------------------------
 
+/**
+* Processes a keypress event on a video player. The player needs to be target
+* of the event so this is triggered. (e.g. Space to toggle play/pause)
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoKeyPress(div, event) {
     if(event.which === 32) {
         event.preventDefault();
@@ -710,6 +803,11 @@ var videoProgressMouseDownTarget = null;
 var videoProgressMouseDown = false;
 var videoSpeedBefore = 1;
 
+/**
+* Sets video mouse down state enabled or disabled.
+* Used the progress mousemove/touchmove events on the player
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function setVideoMouseDown(div, b) {
     var vid = div.find('video')[0];
     if(b && !videoProgressMouseDown) {
@@ -734,6 +832,10 @@ function setVideoMouseDown(div, b) {
     }
 }
 
+/**
+* Processes a mouse enter event on the progress bar.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoProgressMouseEnter(div, e) {
     var con = div.find('.video-progress-con');
     var back = con.find('.video-progress');
@@ -742,6 +844,10 @@ function videoProgressMouseEnter(div, e) {
     videoOverProgress = true;
 }
 
+/**
+* Processes a mouse leave event on the progress bar.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoProgressMouseLeave(div, e) {
     var con = div.find('.video-progress-con');
     con.find('.video-progress-hover').remove();
@@ -749,6 +855,11 @@ function videoProgressMouseLeave(div, e) {
     videoOverProgress = false;
 }
 
+/**
+* Processes a mouse move event on the video player if either the event is
+* targeted at the progressbar or the state videoProgressMouseDown is true.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoProgressMouseMove(div, e) {
     var vid = div.find('video')[0];
     if(videoOverProgress || videoProgressMouseDown) {
@@ -789,6 +900,11 @@ function videoProgressMouseMove(div, e) {
 
 // GENERAL VIDEO PLAYER -------------------------------------
 
+/**
+* Updates the video time. Will set the time indicator and progressbar width
+* to values based on the video elements currentTime
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function updateVideoTime(div) {
     var vid = div.find('video')[0];
     var time_field = div.find('.playtime');
@@ -823,6 +939,10 @@ function updateVideoTime(div) {
     div.find('.video-progress-loaded').css("width", buffered_perc*100 + "%");
 }
 
+/**
+* Processes a video error. Will show an error overlay.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoOnError(div, event) {
     div.append('<div class="error-con">');
     div.find('.error-con').append('<span>Ein Fehler ist aufgetreten.<br>Das Video kann nicht abgespielt werden.<br>Klicken zum neu laden!</span>');
@@ -835,10 +955,18 @@ function videoOnError(div, event) {
     });
 }
 
+/**
+* Will hide a video error overlay
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoRemoveError(div, event) {
     div.find('.error-con').remove();
 }
 
+/**
+* Checks for a delayed error. Will check after 1s.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoCheckDelayedError(div) {
     setTimeout(function() {
         var vid = div.find('video')[0];
@@ -851,7 +979,10 @@ function videoCheckDelayedError(div) {
     }, 1000);
 }
 
-
+/**
+* Displays a loading indicator when a buffer event is triggered.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoOnBuffering(div, event) {
     if(div.find('.play-overlay').length == 0) {
         if(div.is('.mobile')) div.find('.mobile-overlay').hide();
@@ -859,6 +990,10 @@ function videoOnBuffering(div, event) {
     }
 }
 
+/**
+* Hides the loading indicator, when the video is not buffering anymore.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function videoRemoveBuffering(div, event) {
     if(div.find('.play-overlay').length == 0) {
         if(div.is('.mobile')) div.find('.mobile-overlay').show();
@@ -866,18 +1001,29 @@ function videoRemoveBuffering(div, event) {
     }
 }
 
+/**
+* Resizes all video Players. Will call resizeVideoPlayer simply on all
+* .elearnjs-video elements.
+*/
 function resizeAllVideoPlayers() {
     $('.elearnjs-video:visible').each(function(i,e) {
         resizeVideoPlayer($(this));
     });
 }
 
-
+/**
+* Recalculates video note container widths. for every video.
+*/
 function resizeVideoPlayer(div) {
     var videoContainer = div.closest('.video-container');
     videoContainer.find('.video_notes_wrapper').css("width", div.find('video').width());
 }
 
+/**
+* Switches the video player style between mouse and touch for easier control.
+* Will be triggered on delayed switches between those based on events.
+* @param div: the .elearnjs-video Wrapper of the video element.
+*/
 function switchTouchMouse() {
     if(eLearnJS.isTouchSupported()) {
         $('.elearnjs-video').addClass("mobile");
@@ -892,7 +1038,10 @@ function switchTouchMouse() {
 var videoNoteTimes = [];
 
 /**
-* Initialisiert die Time Notes
+* Initializes the time notes for all video players.
+* Will be called in the generell video player initiation.
+* Players can have the class "allow_user_notes" which lets them define if
+* the allow user notes (class is set) or not (class is not set).
 */
 function initiateVideoNotes() {
     $('.video_note').addClass('backup');
@@ -967,6 +1116,9 @@ function initiateVideoNotes() {
     initiateUserNotes();
 }
 
+/**
+* Creates and returns a user video notes container
+*/
 function getUserVideoNotesContainer() {
     var userNotes = $('<div class="user_notes timestamps"><h4>Notizen</h4></div>');
     userNotes.append('<div class="note_add_container">'
@@ -984,6 +1136,9 @@ function getUserVideoNotesContainer() {
     return userNotes;
 }
 
+/**
+* Adds the "show all notes" checkbox to a notes container.
+*/
 function addShowAllTo(notes) {
     notes.prepend('<label class="show_all_notes"><input type="checkbox" name="show_all" value="show_all"/>Alle einblenden</label>');
     notes.find('input[name="show_all"]').on('change', function(e) {
@@ -991,10 +1146,17 @@ function addShowAllTo(notes) {
     });
 }
 
+/**
+* Adds the user Note Menu to the user note container.
+*/
 function addUserNoteMenuTo(notes) {
     notes.prepend('<div class="user_note_menu_wrap general_user_note_menu" onclick="javascript: toggleUserNoteMenu(this);"><div class="user_note_menu">m</div></div>');
 }
 
+/**
+* Enables or disables the display of all video notes in the specific notes
+* container.
+*/
 function showAllNotes(notes, b) {
     var videoContainer = notes.closest('.video-container');
     var idx = $('.elearnjs-video').index(videoContainer.find('.elearnjs-video'));
@@ -1017,6 +1179,10 @@ function showAllNotes(notes, b) {
     }
 }
 
+/**
+* Checks if show all is activated. Will display all notes if so.
+* Will NOT hide others if not.
+*/
 function checkShowAll(notes_con) {
     notes_con.find('.note_container').each(function(i,e) {
         if($(this).is('.show_all')) {
@@ -1025,6 +1191,10 @@ function checkShowAll(notes_con) {
     });
 }
 
+/**
+* Adds note indicators to the videos progressbar
+* @param videoContainer: the .video-container wrapper around the video
+*/
 function addNotesToProgressbar(videoContainer, index) {
     var vid = videoContainer.find('video')[0];
     var length = vid.duration;
@@ -1050,6 +1220,7 @@ function addNotesToProgressbar(videoContainer, index) {
 
 /**
 * Wird beim timeupdate event eines videos ausgeführt. Blendet notes ein oder aus
+* @param videoContainer: the .video-container wrapper around the video
 */
 function noteTimeUpdate(videoContainer, notes_con, index) {
     var vid = videoContainer.find('video')[0];
@@ -1086,6 +1257,10 @@ function noteTimeUpdate(videoContainer, notes_con, index) {
     checkVisibleNotes(videoContainer, notes_con);
 }
 
+/**
+* Displays a video note specified by its @param info object within the
+* @param notes_con notes container.
+*/
 function showVideoNote(notes_con, info) {
     var original_note = notes_con.find('.video_note.backup').filter('#'+info["index"]);
     var new_note = original_note.clone(true, true); // clone with all listeners
@@ -1104,6 +1279,10 @@ function showVideoNote(notes_con, info) {
     original_note.after(new_note);
 }
 
+/**
+* Hides a @param display_note displayed note within a @param notes_con notes
+* container.
+*/
 function hideVideoNote(notes_con, display_note) {
     var backup_note = display_note.siblings('#' + display_note.attr("id") + ".backup");
     backup_note.empty();
@@ -1111,12 +1290,19 @@ function hideVideoNote(notes_con, display_note) {
     display_note.remove();
 }
 
+/**
+* Hides all video notes within a specific container.
+*/
 function hideAllVideoNotes(notes_con) {
     notes_con.find('.video_note').not('.backup').each(function(i,e) {
         hideVideoNote(notes_con, $(this));
     });
 }
 
+/**
+* Checks if atleast one note is displayed. Sets the
+* @param videoContainer's class based on that.
+*/
 function checkVisibleNotes(videoContainer, notes_con) {
     if(notes_con.find('.video_note').not('.backup').length > 0) {
         videoContainer.parent().addClass('noted_video');
@@ -1126,13 +1312,14 @@ function checkVisibleNotes(videoContainer, notes_con) {
     }
 }
 
+var lastIndexSet = -1;
+
 /**
 * Erstellt ein sortiertes Array mit Objekten die einen Index haben, der auf ein
 * .video_note objekt hinweist, eine anfangszeit time und ggf. eine time_to.
 * Sortiert ist das Array nach dem key "time"
+* @param videoContainer: the .video-container wrapper around the video
 */
-var lastIndexSet = -1;
-
 function getVideoNoteTimeArray(videoContainer) {
     var times = [];
     videoContainer.find('.video_note.backup').each(function(i,e) {
@@ -1170,10 +1357,33 @@ var editingNote = null;
 
 var userNoteMenuNode = null;
 
+/**
+* Initiates the general user note functionality by adding global event
+* listeners.
+*/
 function initiateUserNotes() {
     addUserNoteListeners();
 }
+/**
+* Adds general listeners used for user note functionality
+*/
+function addUserNoteListeners() {
+    $(document).on('click', function(e) {
+        if($('.user_note_dropdown').length > 0
+            &&!$(e.target).is('.user_note_menu_wrap')
+            && !$(e.target).is('.user_note_menu_wrap *')) {
+            hideUserNoteMenu();
+        }
+    });
+}
 
+/**
+* Updates all displayed values based on the notes withing the videoContainers
+* user note container.
+* Updates internal array info values about notes, adds notes to progressbar,
+* hides/shows necessary notes.
+* @param videoContainer: the .video-container wrapper around the video
+*/
 function updateUserNotes(videoContainer) {
     // fetch existing video notes
     var notes_con = videoContainer.find('.video_notes_container');
@@ -1185,16 +1395,10 @@ function updateUserNotes(videoContainer) {
     addNotesToProgressbar(videoContainer, idx);
 }
 
-function addUserNoteListeners() {
-    $(document).on('click', function(e) {
-        if($('.user_note_dropdown').length > 0
-            &&!$(e.target).is('.user_note_menu_wrap')
-            && !$(e.target).is('.user_note_menu_wrap *')) {
-            hideUserNoteMenu();
-        }
-    });
-}
-
+/**
+* Adds listeners for the user note add functionality
+* @param videoContainer: the .video-container wrapper around the video
+*/
 function addVideoUserNoteListeners(videoContainer) {
     videoContainer.find('.toggle_note_add').on('click', function() {
         setVideoNotesAddContainerVisible(videoContainer, true);
@@ -1209,6 +1413,9 @@ function addVideoUserNoteListeners(videoContainer) {
     });
 }
 
+/**
+* Shows/Hides the "add user note"-container.
+*/
 function setVideoNotesAddContainerVisible(videoContainer, bool) {
     if(bool) {
         videoContainer.find('.note_add_container').show();
@@ -1221,6 +1428,14 @@ function setVideoNotesAddContainerVisible(videoContainer, bool) {
     }
 }
 
+/**
+* Creates the user note dom element based on the necessary values.
+* @param text: the note text
+* @param timefrom: time where the note will be displayed
+* @param timeto: time where the note will be hidden
+* @param id: the id within the current note context. This might be set later
+*   by other functions. (e.g. getVideoNoteTimeArray)
+*/
 function createUserNote(text, timefrom, timeto, id) {
     return $('<div class="video_note backup user_note" timefrom="'
                     + createTimeStringLetters(parseTimeString(timefrom))
@@ -1231,6 +1446,10 @@ function createUserNote(text, timefrom, timeto, id) {
                     + '</div>');
 }
 
+/**
+* Appends a given @param note dom element to the user notes within the videoContainer
+* @param videoContainer: the .video-container wrapper around the video
+*/
 function addNoteToUserNotes(videoContainer, note) {
     var existingNotes = videoContainer.find('.user_notes').find('.video_note');
     if(existingNotes.length > 0) {
@@ -1242,6 +1461,11 @@ function addNoteToUserNotes(videoContainer, note) {
     }
 }
 
+/**
+* Processes the input in the note add container.
+* Will add/save the note if input is correct.
+* @param videoContainer: the .video-container wrapper around the video
+*/
 function saveVideoNote(videoContainer) {
     var noteAddContainer = videoContainer.find('.note_add_container');
     var fr = noteAddContainer.find('.user_note_from').val();
@@ -1286,6 +1510,11 @@ function saveVideoNote(videoContainer) {
     setVideoNotesAddContainerVisible(videoContainer, false);
 }
 
+/**
+* Called when a dispalyed note is edited (ui call by the user)
+* @param videoContainer: the .video-container wrapper around the video
+* @param note: the BACKUP note of the edited note.
+*/
 function editNote(videoContainer, note) {
     editingDiv = videoContainer;
     editingNote = note;
@@ -1299,6 +1528,10 @@ function editNote(videoContainer, note) {
     setVideoNotesAddContainerVisible(videoContainer, true);
 }
 
+/**
+* Resets the note add container values and the editing variables.
+* @param videoContainer: the .video-container wrapper around the video
+*/
 function cancelEdits(videoContainer) {
     videoContainer.find('.note_add_container').find('.user_note_from').val("");
     videoContainer.find('.note_add_container').find('.user_note_to').val("");
@@ -1307,6 +1540,12 @@ function cancelEdits(videoContainer) {
     editingNote = null;
 }
 
+/**
+* Deletes a given user note completely within the storage and from the dom
+* @param videoContainer: the .video-container wrapper around the video
+* @param note: the backup note (might be the displayed note, because only
+*   ID is necessary)
+*/
 function deleteNote(videoContainer, note) {
     videoContainer.find('.user_note').filter('#' + note.attr('id')).remove();
 
@@ -1314,6 +1553,14 @@ function deleteNote(videoContainer, note) {
     updateUserNotesArray(videoContainer);
 }
 
+/**
+* Moves a note within the array and dom up or down one step.
+* Used to make it possible to arrange the user notes.
+* @param videoContainer: the .video-container wrapper around the video
+* @param display_note: the displayed version of the note to move
+* @param backup_note: the backup version of the note to move
+* @param direction: -1: up, 1: down
+*/
 function moveNote(videoContainer, display_note, backup_note, direction) {
     var user_notes = backup_note.closest('.user_notes');
 
@@ -1352,6 +1599,11 @@ function moveNote(videoContainer, display_note, backup_note, direction) {
     updateUserNotesArray(videoContainer);
 }
 
+/**
+* Creates a user note array for the videoContainer, containing necessary info
+* updates this in the local storage.
+* @param videoContainer: the .video-container wrapper around the video
+*/
 function updateUserNotesArray(videoContainer) {
     var src = videoContainer.find('video').find('source').first()[0].src;
     var user_video_notes = [];
@@ -1365,6 +1617,11 @@ function updateUserNotesArray(videoContainer) {
     setVideoNotesFor(src, user_video_notes);
 }
 
+/**
+* Updates the placeholder of the time values within the note add container,
+* based on the current video time.
+* @param div: the .elearnjs-video wrapper around the video
+*/
 function updateVideoUserNoteTime(div) {
     var videoContainer = div.closest('.video-container');
     var noteAddContainer = videoContainer.find('.note_add_container');
@@ -1392,6 +1649,12 @@ function updateVideoUserNoteTime(div) {
     }
 }
 
+/**
+* Starts the import notes process. Opening a filechoser for the user to
+* insert a file of exported user notes.
+* This can be .json or .csv files.
+* @param videoContainer: the .video-container wrapper around the video
+*/
 function importUserNotes(videoContainer) {
     var idx = $('.elearnjs-video').index(videoContainer.find('.elearnjs-video'));
 
@@ -1409,6 +1672,12 @@ function importUserNotes(videoContainer) {
     fileChoser.trigger('click');
 }
 
+/**
+* Exports the usernotes to a given filetype. Offers the user a download of
+* the generated file.
+* @param videoContainer: the .video-container wrapper around the video
+* @param type: either FILETYPE_JSON or FILETYPE_CSV
+*/
 function exportUserNotes(videoContainer, type) {
     var idx = $('.elearnjs-video').index(videoContainer.find('.elearnjs-video'));
     var src = videoContainer.find('video').find('source').first()[0].src;
@@ -1429,6 +1698,14 @@ function exportUserNotes(videoContainer, type) {
     download('user_notes_' + idx + '.' + type, text);
 }
 
+/**
+* Processes the import file. This will be called, when the filechoser
+* returns a chosen file.
+* @param videoContainer: the .video-container wrapper around the video
+* @param e: the filechoser change event
+* @param overwrite: wether current user notes should be deleted (true) or
+* imported notes should be appended (false)
+*/
 function importFileChosen(videoContainer, e, overwrite) {
     var src = videoContainer.find('video').find('source').first()[0].src;
     var files = e.target.files;
@@ -1471,6 +1748,10 @@ function importFileChosen(videoContainer, e, overwrite) {
 
 // ------------ Local Storage ----------
 
+/**
+* Loads the user notes from localstorage.
+* Will set the "user_notes" object based on that value.
+*/
 function loadLocalVideoNotesStorage() {
     try {
         var user_notes_str = localStorage.getItem('elearnjs-user-notes');
@@ -1488,6 +1769,9 @@ function loadLocalVideoNotesStorage() {
 
 }
 
+/**
+* Will save the current "user_notes" object in the local storage.
+*/
 function updateLocalVideoNotesStorage() {
     try {
         if(!localStorage) return;
@@ -1503,10 +1787,17 @@ function updateLocalVideoNotesStorage() {
     }
 }
 
+/**
+* Returns the video notes array for the specified video src.
+*/
 function getVideoNotesFor(src) {
     return user_notes[src];
 }
 
+/**
+* Saves the given video notes array (@param val) for the specified video src
+* in the local storage and updates the "user_notes" object.
+*/
 function setVideoNotesFor(src, val) {
     user_notes[src] = val;
     updateLocalVideoNotesStorage();
@@ -1514,6 +1805,10 @@ function setVideoNotesFor(src, val) {
 
 // User Note Menu
 
+/**
+* Creates the user note container menu for import/export ...
+* This element will be displayed and positioned on click of the menu button.
+*/
 function createGeneralUserNoteMenu() {
     var dropDownCode = '<div class="user_note_dropdown general">'
         + '<div class="dropdown_element note_import">Notizen importieren</div>'
@@ -1547,6 +1842,10 @@ function createGeneralUserNoteMenu() {
     });
 }
 
+/**
+* Creates the user note drop down menu for edit/delete...
+* This element will be displayed and positioned on click of the menu button.
+*/
 function createUserNoteMenu() {
     var dropDownCode = '<div class="user_note_dropdown">'
         + '<div class="dropdown_element edit">Bearbeiten</div>'
@@ -1572,10 +1871,17 @@ function createUserNoteMenu() {
     });
 }
 
+/**
+* Hides the user note menu
+*/
 function hideUserNoteMenu() {
     $('.user_note_dropdown').hide();
 }
 
+/**
+* Toggles the user note menu note.
+* @param element: the user note menu button dom element.
+*/
 function toggleUserNoteMenu(element) {
     element = $(element);
     var dropDown = $('.user_note_dropdown');
@@ -1626,6 +1932,9 @@ function toggleUserNoteMenu(element) {
     userNoteMenuNode = node;
 }
 
+/**
+* Processes the click on the edit option of a user note.
+*/
 function userNoteMenuEdit() {
     var backup_note = userNoteMenuNode.siblings('#' + userNoteMenuNode.attr("id") + ".backup");
     var videoContainer = backup_note.closest('.video-container');
@@ -1633,6 +1942,9 @@ function userNoteMenuEdit() {
     editNote(videoContainer, backup_note);
 }
 
+/**
+* Processes the click on the delete option of a user note.
+*/
 function userNoteMenuDelete() {
     var backup_note = userNoteMenuNode.siblings('#' + userNoteMenuNode.attr("id") + ".backup");
     var videoContainer = backup_note.closest('.video-container');
@@ -1642,6 +1954,10 @@ function userNoteMenuDelete() {
     }
 }
 
+/**
+* Processes the click on the move option of a user note.
+* @param direction: -1: up, 1: down
+*/
 function userNoteMenuMove(direction) {
     var backup_note = userNoteMenuNode.siblings('#' + userNoteMenuNode.attr("id") + ".backup");
     var videoContainer = backup_note.closest('.video-container');
@@ -1649,7 +1965,11 @@ function userNoteMenuMove(direction) {
     moveNote(videoContainer, userNoteMenuNode, backup_note, direction);
 }
 
-
+/**
+* Generates a text file and offers it for download.
+* @param filename: the filename
+* @param text: the files text content
+*/
 function download(filename, text) {
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
@@ -1669,8 +1989,10 @@ function download(filename, text) {
 * Übersetzt einen String in einen Integerwert in Sekunden.
 * Dabei können Strings erkannt werden die aus Zahlen bestehen und den
 * zugehörigen Einheiten h,m,s.
+* Außerdem können mit : getrennte Zeiten erkannt werden.
 *
 * Bsp: parseTimeString("01m15s") : 75
+* Bsp: parseTimeString("01:15") : 75
 */
 function parseTimeString(str) {
     if(typeof str != typeof "string") return undefined;
@@ -1724,6 +2046,10 @@ function parseTimeString(str) {
     return seconds;
 }
 
+/**
+* Generates a letter style time string. E.g. "1m15s"
+* @param seconds: integer value of seconds
+*/
 function createTimeStringLetters(seconds) {
     var secLeft = seconds;
 
@@ -1736,6 +2062,10 @@ function createTimeStringLetters(seconds) {
     return hours + "h" + minutes + "m" + seconds + "s";
 }
 
+/**
+* Generates a colon style time string. E.g. "01:15"
+* @param seconds: integer value of seconds
+*/
 function createTimeStringColons(seconds) {
     seconds = Math.floor(Math.abs(seconds));
     var hours = Math.floor(seconds / (60*60));

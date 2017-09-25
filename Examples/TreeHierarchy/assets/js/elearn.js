@@ -23,31 +23,20 @@ var backbuttonEnabled = false;
 var backpage = 0;
 var backpagetype = "index";
 
-
+// used to block "showNext()". Optional for quiz based on eLearn.js
 var blockProgressQuizJS = false;
 var blockProgressAlertActivated = false;
 var blockProgressAlertText = "";
 var blockProgressShowElementActivated = false;
 var blockProgressShowElementText = "";
 
-// Zum generellen Aktivieren oder Deaktivieren der Knöpfe
+// For general activation or deactivation of functions (set by functions)
 var secSwipeEnabled = true;
 var dirButtonsEnabled = true;
 var keyNavigationEnabled = true;
 var progressbarEnabled = true;
 
-// Funktionen die aufgerufen werden, wenn eine neue section angezeigt wird
-// diese sind registrierbar mit registerAfterShow(KEY, FNC)
-var afterShow = {};
-var afterShowLate = {};
-var afterPageInteraction = {};
-// für tabbed boxes / multiboxes
-var afterTabChange = {};
-var afterWindowResize = {};
-var afterWindowResizeLate = {};
-var afterSliderResize = {};
-
-// Nur damit Scriptaufrufe übersichtlicher sind.
+// For more intuitive usage of functions. (e.g. eLearnJS.showNext())
 var eLearnJS = this;
 
 /**
@@ -82,15 +71,20 @@ $(document).ready(function() {
     initiateScrollBarListener();
     updateNavBarWidth();
 
-    registerAfterShow("slider-resize", resizeAllSliders);
-    registerAfterPageInteraction("history-push", pushHistoryState);
-    registerAfterShow("messageIframeParent", updateWrapSize, true);
-    registerAfterWindowResize("messageIframeParent", updateWrapSize, true);
-    registerAfterSliderResize("messageIframeParent", updateWrapSize);
+    // add listeners
+    document.addEventListener("ejssectionchange", resizeAllSliders);
+    document.addEventListener("ejssectionchangelate", updateWrapSize);
+    document.addEventListener("ejspageinteraction", pushHistoryState);
+    document.addEventListener("ejssliderresize", updateWrapSize);
+    window.addEventListener("ejswindowresizelate", updateWrapSize);
 
+    // checks parameters for navigation to specific page
     checkParameters();
+
+    // used for size checks. Used for iFrame messaging on size change
     updateWrapSize();
 
+    // init QR Code for sharing
     $('#qrcode').qrcode({
         "width": 256,
         "height": 256,
@@ -105,8 +99,8 @@ $(document).ready(function() {
 function initiateELearnJS() {
     $($('#wrap')[0]).prepend(
             "<div class='skip-arrows noselect'>" // <!-- Arrow Left and Right -->
-                + "<div onclick='javascript: showPrev();' id='btnPrev' class='icon-back before-padding btn'></div>"
-                + "<div onclick='javascript: showNext();' id='btnNext' class='icon-next before-padding btn'></div>"
+                + "<div onclick='javascript: showPrev();' id='btnPrev' class='icon-back btn'></div>"
+                + "<div onclick='javascript: showNext();' id='btnNext' class='icon-next btn'></div>"
             + "</div>"
             + "<div class='section-overview noselect'></div>" // <!-- Container for Overview -->
             + "<div id='navigation' class='noselect'>"
@@ -228,7 +222,9 @@ function initiateSideMenu() {
     $('#sideMenu').css('right', "-"+($('#sideMenu').width()+10)+"px");
 }
 
-
+/**
+* Passt die Navigationsleiste an die Breite des window an
+*/
 function updateNavBarWidth() {
     var headerSpace = 15.0; // standard wert
     $('#nav-bar').children(':visible').not('#btnExp').each(function(i,e){
@@ -343,20 +339,20 @@ function setBackPage(val, type) {
 /**
 * Zeigt die vorherige Section
 * Funktioniert nur, wenn nicht alle Sections angezeigt werden.
+* @event: Fires "ejspageinteraction" event on document when done successfully.
 */
 function showPrev() {
     var ret = showSection(visSection-1);
     // Ausführen registrierter Funktionen
     if(ret) {
-        $.each(afterPageInteraction, function(key, fnc) {
-            fnc();
-        });
+        fireEvent(document, createEvent("ejspageinteraction", {}));
     }
 };
 
 /**
 * Zeigt die nächste Section
 * Funktioniert nur, wenn nicht alle Sections angezeigt werden.
+* @event: Fires "ejspageinteraction" event on document when done successfully.
 */
 function showNext() {
 
@@ -366,31 +362,36 @@ function showNext() {
         var ret = showSection(visSection+1);
         // Ausführen registrierter Funktionen
         if(ret) {
-            $.each(afterPageInteraction, function(key, fnc) {
-                fnc();
-            });
+            fireEvent(document, createEvent("ejspageinteraction", {}));
         }
     }
 };
 
+/**
+* Zeigt eine bestimmte section an.
+* Wird von der section overview ausgeführt. (Ausklappbares Inhaltsverzeichnis)
+* @event: Fires "ejspageinteraction" event on document when done successfully.
+*/
 function overviewShowSection(i) {
     var ret = showSection(i);
 
     // Ausführen registrierter Funktionen
     if(ret) {
-        $.each(afterPageInteraction, function(key, fnc) {
-            fnc();
-        });
+        fireEvent(document, createEvent("ejspageinteraction", {}));
     }
 }
 
 /**
 * Zeigt eine bestimmte Section (nach Index)
 * Funktioniert nur, wenn nicht alle Sections angezeigt werden.
+* @event: Fires "ejssectionchange" + "ejssectionchangelate" event on
+*   document when done successfully.
 */
 function showSection(i) {
     overviewShown = true;
     showSectionOverview();
+
+    var sectionBefore = visSection;
 
     // get section to name
     if(typeof i === 'string' || i instanceof String) {
@@ -421,7 +422,6 @@ function showSection(i) {
         return false;
     }
 
-
     // section was updated
     if(i >= 0 && i < $('section').length) {
         visSection = i;
@@ -433,14 +433,13 @@ function showSection(i) {
         setDirectionButtonsEnabledIdx(visSection);
     }
 
-    // Ausführen registrierter Funktionen
-    $.each(afterShow, function(key, fnc) {
-        fnc();
-    });
-    // Ausführen registrierter Funktionen
-    $.each(afterShowLate, function(key, fnc) {
-        fnc();
-    });
+    var sectionChange = {
+        "section": visSection,
+        "sectionbefore" : sectionBefore,
+        "changed" : visSection !== sectionBefore,
+        "allShownChange" : false};
+    fireEvent(document, createEvent("ejssectionchange", sectionChange));
+    fireEvent(document, createEvent("ejssectionchangelate", sectionChange));
 
     return true;
 };
@@ -448,13 +447,16 @@ function showSection(i) {
 /**
 * Registriert eine Funktion, die ausgeführt wird, nachdem eine neue Section
 * angezeigt wurde.
+*
+* @depracted Since version 1.0.0. Simply add the event listener yourself.
+*   this makes better event handling possible.
 */
 function registerAfterShow(key, fnc, late) {
     if(late) {
-        afterShowLate[key] = fnc;
+        document.addEventListener("ejssectionchangelate", fnc);
     }
     else {
-        afterShow[key] = fnc;
+        document.addEventListener("ejssectionchange", fnc);
     }
 }
 
@@ -462,36 +464,59 @@ function registerAfterShow(key, fnc, late) {
 * Registriert eine Funktion, die ausgeführt wird, nachdem ein sectionwechsel
 * durchgeführt wurde. Im gegensatz zu "afterShow" nur, wenn die section
 * tatsächlich verändert wurde.
+*
+* @depracted Since version 1.0.0. Simply add the event listener yourself.
+*   this makes better event handling possible.
 */
 function registerAfterPageInteraction(key, fnc) {
-    afterPageInteraction[key] = fnc;
+    document.addEventListener("ejspageinteraction", fnc);
 }
 
 /**
 * Registriert eine Funktion, die ausgeführt wird, nachdem ein neuer Tab
 * in einer tabbed-box angezeigt wurde.
+*
+* @depracted Since version 1.0.0. Simply add the event listener yourself.
+*   this makes better event handling possible.
 */
 function registerAfterTabChange(key, fnc) {
-    afterTabChange[key] = fnc;
+    document.addEventListener("ejstabchange", fnc);
 }
 
 /**
-* Registriert eine Funktion, die ausgeführt wird, nachdem ein neuer Tab
-* in einer tabbed-box angezeigt wurde.
+* Registriert eine Funktion, die ausgeführt wird, wenn die Fenstergröße
+* sich verändert hat. Alle hier registrierten Funktionen werden nicht direkt,
+* sondern mit einer kurzen Verzörung ausgeführt, damit sie bei einer
+* kontinuierlichen Veränderung nicht ständig sondern nur einmal ausgeführt
+* werden.
+*
+* @depracted Since version 1.0.0. Simply add the event listener yourself.
+*   this makes better event handling possible.
 */
 function registerAfterWindowResize(key, fnc, late) {
     if(late) {
-        afterWindowResizeLate[key] = fnc;
+        window.addEventListener("ejswindowresizelate", fnc);
     }
     else {
-        afterWindowResize[key] = fnc;
+        window.addEventListener("ejswindowresize", fnc);
     }
 }
 
+/**
+* Registriert eine Funktion, die ausgeführt wird, nachdem alle Slider
+* an die Fenstergröße angepasst wurden.
+*
+* @depracted Since version 1.0.0. Simply add the event listener yourself.
+*   this makes better event handling possible.
+*/
 function registerAfterSliderResize(key, fnc) {
-    afterSliderResize[key] = fnc;
+    document.addEventListener("ejssliderresize", fnc);
 }
 
+/**
+* Fügt einen Zustand in die Browser-Historie ein. Hierbei werden benötigte
+* Parameter automatisch gesetzt.
+*/
 function pushHistoryState() {
     if(!allShown) {
         try {
@@ -518,6 +543,8 @@ function calcProgress(i) {
 
 /**
 * Schaltet zwischen alle Sections anzeigen und nur eine um.
+* @event: Fires "ejssectionchange" + "ejssectionchangelate" event on
+*   document when done successfully.
 */
 function toggleAllSections() {
     setDirectionButtonsEnabled(allShown);
@@ -533,10 +560,14 @@ function toggleAllSections() {
         $(document).scrollTop($($('section')[visSection]).position().top - $('#navigation').height() - 10);
         allShown = true;
         resizeAllSliders();
-        // Ausführen registrierter Funktionen
-        $.each(afterShow, function(key, fnc) {
-            fnc();
-        });
+
+        var sectionChange = {
+            "section": visSection,
+            "sectionbefore" : visSection,
+            "changed" : false,
+            "allShownChange" : true};
+        fireEvent(document, createEvent("ejssectionchange", sectionChange));
+        fireEvent(document, createEvent("ejssectionchangelate", sectionChange));
     }
 };
 
@@ -660,7 +691,12 @@ function setBlockProgressAlert(enabled, text) {
     blockProgressAlertText = text;
 }
 
-
+/**
+* Aktiviert oder deaktiviert ein Element mit dem @param text als selector.
+* Beispiel: setBlockProgressShowElement(true, "#blocktext") aktiviert das
+* einblenden des Elements mit der ID="blocktext", wenn der Fortschritt blockiert
+* wurde.
+*/
 function setBlockProgressShowElement(enabled, text) {
     blockProgressShowElementActivated = enabled;
     blockProgressShowElementText = text;
@@ -682,6 +718,7 @@ function setNavigationTitle(text) {
 // Overview
 // -------------------------------------------------------------------------------------
 
+// beinhaltet eine Liste alle bereits betrachteten Sections.
 var sectionsVisited = [];
 
 /**
@@ -766,7 +803,10 @@ function createContentOverview() {
     }
 }
 
-
+/**
+* Aktualisiert die "gelesen" Anzeige in dem Inhaltsverzeichnis,
+* welches in #content-overview erstellt wurde.
+*/
 function updateContentOverview() {
     sectionsVisited[visSection] = true;
     var li_idx = 0;
@@ -787,8 +827,6 @@ function updateContentOverview() {
     }
 }
 
-
-var justOpenedOverview = false;
 /**
 * Erstellt ein Inhaltsverzeichnis. (Für die Nav-Leiste)
 */
@@ -828,7 +866,6 @@ function showSectionOverview() {
         }
     }
     else {
-        justOpenedOverview = true;
         $('.section-overview').show();
         $('.section-overview').find(".section-overview-element").removeClass("active");
         $($('.section-overview').find(".section-overview-element")[visSection]).addClass("active");
@@ -1012,7 +1049,7 @@ function initiateGalleries() {
         var visImage = ul.children('li').index(ul.children('li').not('.loop_clone').first());
         showSlide(ul, visImage, true, false, "0s");
     });
-    registerAfterWindowResize("slider-resize", resizeAllSliders);
+    window.addEventListener("ejswindowresize", resizeAllSliders);
     resizeAllSliders();
 }
 
@@ -1053,6 +1090,10 @@ function initiateSliderPreview(div) {
     visibleImage[visibleImage.length] = 0;
 }
 
+/**
+* Hinterlegt für ein ul (aus einem Slider) die Dimensionen in einem Array.
+* Wird genutzt, um zu bestimmen ob eine Neuberechnung nötig ist.
+*/
 function updateSliderDimensions(ul) {
     var ul_id = $('.img-gallery').index(ul);
     var slider = ul.closest('.slider');
@@ -1088,6 +1129,7 @@ var loopTimeouts = {};
 
 /**
 * Zeigt ein bestimmtes Bild in einem Slider an.
+* Händelt Animationen und Dauern und ähnliches.
 * @param ul - das <ul> in dem sich das Bild an Stelle "slide" befindet
 * @param slide - die Stelle / Nummer des Bildes im <ul> (startet mit 0)
 */
@@ -1141,6 +1183,10 @@ function showSlide(ul, slide, updatePreview, animate, duration) {
     showSlideButtons(ul, slide, ul.parent().filter('.slider-nav').length > 0);
 }
 
+/**
+* Fügt für "Loop" benötigte Elemente in den Slider ein, damit eine sprunglose
+* Übergänge zwischen den Elementen in eine Richtung möglich sind.
+*/
 function createLoopFor(ul, ul_id, slide) {
     var active_slide = visibleImage[ul_id];
 
@@ -1185,6 +1231,10 @@ function createLoopFor(ul, ul_id, slide) {
     return slide;
 }
 
+/**
+* Entfernt nicht benötigte Elemente aus dem Slider und springt an die korrekte
+* Position auf einem Originalelement
+*/
 function clearLoop(ul) {
     var ul_id = $('.img-gallery').index(ul);
     var visibleLi = ul.children('li').eq(visibleImage[ul_id]);
@@ -1210,6 +1260,16 @@ function clearLoop(ul) {
     showSlide(ul, parseInt(toShow), false, false);
 }
 
+/**
+* Zeigt in einem Slider das korrekte slide an.
+* Nutzt die korrekte animationsdauer.
+* @param ul: Element als JQuery element
+* @param ul_id: Index des UL in allen ULs
+* @param slide: Index des anzuzeigenden Slides (0 - X)
+* @param animate: bool if animation should be done or not (optional)
+* @param duration: animation duration, only necessary if animation is true.
+*   If not set, this will be the standard ulTransitionDuration
+*/
 function showSlideLi(ul, ul_id, slide, animate, duration) {
     // set animation
     if(duration == undefined) duration = ulTransitionDuration;
@@ -1268,6 +1328,12 @@ function showSlideLi(ul, ul_id, slide, animate, duration) {
     ul.css("transition-duration", ulTransitionDuration);
 }
 
+/**
+* Zeigt den Beschreibungstext zu einem bestimmten Slide in einem bestimmten ul
+* an.
+* @param ul: Element als JQuery element
+* @param slide: Index des anzuzeigenden Slides (0 - X)
+*/
 function showSlideDescription(ul, slide) {
     var p = ul.children('li').eq(slide).children('p');
     var descDiv = ul.parent().parent().nextAll('.slider-description').first();
@@ -1306,7 +1372,7 @@ function showSlideButtons(ul, slide, isNavigation) {
 /**
 * Gibt die originale Dimension der Bilddatei zurück
 * @param img - ein <img> Element
-* @param callback - function(width, height) {} in der etwas mit der Größe
+* @param callback - function(width, height) in der etwas mit der Größe
 *   gemacht werden kann.
 */
 function getImageSize(img, callback){
@@ -1367,11 +1433,13 @@ function closeZoom(button) {
     lb.find('img').remove();
 }
 
+// var für Timeout des resizes
 var resizeTimerSliders = null;
 
 /**
 * Passt alle Slider und auch das Zoom Fenster an die Fenstergröße des Browsers
 * an.
+* @event: Fires "ejssliderresize"event on document when done successfully.
 */
 function resizeAllSliders() {
     clearTimeout(resizeTimerSliders);
@@ -1380,10 +1448,7 @@ function resizeAllSliders() {
         resizeNavigationSliders();
         resizeZoomContainer();
 
-        // Ausführen registrierter Funktionen
-        $.each(afterSliderResize, function(key, fnc) {
-            fnc();
-        });
+        fireEvent(document, createEvent("ejssliderresize", {}));
     }, 250);
 
 }
@@ -1615,17 +1680,13 @@ var tooltips =
         html : '<div id="tooltipArrowRight" class="tooltip fixed right">'
             + 'Klicken, um auf die nächste Seite zu wechseln.'
             + '</div>',
-        condition: function() {return $(window).width() > 440},
-        anchor : "#btnNext",
-        offset : {right: "-8px"}
+        condition: function() {return $(window).width() > 440}
     },
     {
         html : '<div id="tooltipArrowLeft" class="tooltip fixed left">'
             + 'Klicken, um auf die vorherige Seite zu wechseln.'
             + '</div>',
-        condition: function() {return $(window).width() > 440},
-        anchor : "#btnPrev",
-        offset : {left: "10px"}
+        condition: function() {return $(window).width() > 440}
     },
     {
         html : '<div id="tooltipTouchRight" class="tooltip fixed right">'
@@ -1736,6 +1797,10 @@ function showTooltip(nr) {
     }
 }
 
+/**
+* Setzt den Tooltip margin am tatsächlichen HTML Element. Nutzt @param nr als
+* index des tooltips
+*/
 function setTooltipMargin(nr, margin) {
     if(margin == undefined) return;
 
@@ -1831,12 +1896,19 @@ function initiateTabbedBox(box) {
     div.find('.tab').first().show();
     tabs.find('.tab-select').first().addClass('act');
 
-    registerAfterTabChange("slider-resize", resizeAllSliders);
+    div.closest('.tabbed-container')[0].addEventListener("ejstabchange", resizeAllSliders);
 }
 
+/**
+* Selects a tab of a tabbed box
+* @param elemt, the tab element clicked on
+* @event: Fires "ejstabchange"event on the .tabbed-container when done successfully.
+*/
 function selectTab(element) {
     var e = $(element);
     var div = e.parent().nextAll().first('.tabbed-box');
+
+    var tabbefore = div.find('.tab:visible').attr("name");
 
     // show only new
     div.find('.tab').hide();
@@ -1844,10 +1916,10 @@ function selectTab(element) {
     e.parent().find('.tab-select').removeClass("act");
     e.addClass("act");
 
-    // Ausführen registrierter Funktionen
-    $.each(afterTabChange, function(key, fnc) {
-        fnc();
-    });
+    var eventObj = {
+        "tab": e.html(),
+        "tabbefore" : tabbefore};
+    fireEvent(div.closest('.tabbed-container')[0], createEvent("ejstabchange", eventObj));
 }
 
 
@@ -2015,6 +2087,11 @@ $(window).on('scrollbarHidden', function() {
     windowOnResize();
 });
 
+/**
+* Called on window resize
+* @event: Fires "ejswindowresize" + " ejswindowresizelate"
+*   event on the window when done successfully.
+*/
 function windowOnResize() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function(){
@@ -2024,14 +2101,9 @@ function windowOnResize() {
         else {
             $('#sideMenu').css('right', "-"+($('#sideMenu').width()+10)+"px");
         }
-        // Ausführen registrierter funktionen
-        $.each(afterWindowResize, function(key, fnc) {
-            fnc();
-        });
-        // Ausführen registrierter funktionen
-        $.each(afterWindowResizeLate, function(key, fnc) {
-            fnc();
-        });
+
+        fireEvent(window, createEvent("ejswindowresize", {}));
+        fireEvent(window, createEvent("ejswindowresizelate", {}));
     }, 250);
     updateNavBarWidth();
     hoverInfoSetPositions();
@@ -2064,7 +2136,6 @@ $(document).keydown(function(e){
 /**
 * Aktiviert oder Deaktiviert Tastaturnavigation
 */
-
 function setKeyNavigationEnabled(b) {
     keyNavigationEnabled = b;
 }
@@ -2104,31 +2175,13 @@ function isFunction(functionToCheck) {
  return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
 }
 
-
-function getOuterWidth(e, outer) {
-    var element = e[0];
-    var rect = element.getBoundingClientRect();
-
-    var width;
-    if (rect.width) {
-      // `width` is available for IE9+
-      width = rect.width;
-    } else {
-      // Calculate width for IE8 and below
-      width = rect.right - rect.left;
-    }
-
-    if(outer) {
-        var style = element.currentStyle || window.getComputedStyle(element);
-        var margin = parseFloat(style.marginLeft) + parseFloat(style.marginRight);
-        width += margin;
-    }
-
-    return width;
-}
-
 var wrapDimensions = {width: 0, height: 0};
 
+/**
+* Checks the size of #wrap.
+* Will set the wrapDimensions object to the actual size
+* @return whether it changed or not
+*/
 function checkWrapResize() {
     var changed = false;
     var wrap = $('#wrap');
@@ -2143,14 +2196,20 @@ function checkWrapResize() {
     return changed;
 }
 
+/**
+* Will send a @param message to the windows parent
+*/
+function notifyIFrameParent(message) {
+    window.parent.postMessage(message, '*');
+}
+
+/**
+* Will check the wrap size and notify IFrameParent if it did change
+*/
 function updateWrapSize() {
     if(checkWrapResize()) {
         notifyIFrameParent({action: eLearnJS.actions.CONTENT_RESIZE, dimensions: wrapDimensions});
     }
-}
-
-function notifyIFrameParent(message) {
-    window.parent.postMessage(message, '*');
 }
 
 // --------------------------------------------------------------------------------------
@@ -2161,12 +2220,21 @@ var clickedAlready = false;
 
 var touchMouseChangeTimer = null;
 var lastTouch = undefined;
-var touchMouseFunctions = {};
 
+/**
+* Simply returns the current touchSupported var value
+* This value will not really return if touch is supported, but if it is
+* actively used. So it returns if the last event was a touch event or a mouse
+* was used. This way it can swap, based on the users preference.
+*/
 function isTouchSupported() {
     return touchSupported;
 }
 
+/**
+* Initiates the touch detection.
+* This will set listeners to specific events which can detect
+*/
 function initiateTouchDetection() {
     $(document).bind('touchstart', function(event) {
         lastTouch = new Date().getTime();
@@ -2188,14 +2256,22 @@ function initiateTouchDetection() {
     });
 }
 
+/**
+* Will call all functions registered on touchSupportedChanged
+* @event: Fires "ejstouchmousechange" event on the window when done successfully.
+*/
 function touchSupportedChanged() {
-    $.each(touchMouseFunctions, function(key, fnc) {
-        fnc();
-    });
+    fireEvent(window, createEvent("ejstouchmousechange", {}));
 }
 
+/**
+* Adds a listener function called on touch support/usage changes.
+*
+* @depracted Since version 1.0.0. Simply add the event listener yourself.
+*   this makes better event handling possible.
+*/
 function addTouchMouseChangeListener(key, fnc) {
-    touchMouseFunctions[key] = fnc;
+    window.addEventListener("ejstouchmousechange", fnc);
 }
 
 
@@ -2245,9 +2321,12 @@ function addTouchToSections() {
     });
 
     resizeTouchArrows();
-    registerAfterWindowResize("touch-arrows", resizeTouchArrows);
+    window.addEventListener("ejswindowresize", resizeTouchArrows);
 };
 
+/**
+* Sets max swipe width for section changes by swiping
+*/
 function resizeTouchArrows() {
     var maxDiff = $("body").width()/4;
     $('#leftTouch').css('width', maxDiff-1);
@@ -2346,10 +2425,17 @@ function setSwipeType() {
     }
 }
 
+/**
+* Will reset swipe type if it is not an horizontal movement
+*/
 function checkSwipeType() {
     if(!isHorizontalSwipe) swipeType = "normal";
 }
 
+/**
+* Called on touch start.
+* Will set inital values for movement. Or cancel if it is multi finger touch.
+*/
 function touchStart(event,passedName) {
     swipeTarget = $(event.target);
     setSwipeType();
@@ -2368,6 +2454,11 @@ function touchStart(event,passedName) {
         touchCancel(event);
     }
 }
+
+/**
+* Called on touch move.
+* Will update values and distinguish between swipe types for further processing.
+*/
 function touchMove(event) {
     fingerCount = event.touches.length;
     if (swipeStarted && fingerCount == 1) {
@@ -2407,6 +2498,10 @@ function touchMove(event) {
     }
 }
 
+/**
+* Ends a touch event. Calculates speed and processes the whole touch movement
+* based on the swipeType
+*/
 function touchEnd(event) {
     var maxDiff = $("body").width()/4;
     calcSpeed(startX - curX);
@@ -2428,6 +2523,9 @@ function touchEnd(event) {
     touchCancel(event);
 }
 
+/**
+* Resets all touch values.
+*/
 function touchCancel(event, dir) {
     if(triggerElementID != null) {
         fingerCount = 0;
@@ -2454,6 +2552,9 @@ function touchCancel(event, dir) {
     }
 }
 
+/**
+* Sets the value for swipe direction
+*/
 function setSwipeDirection() {
     if(curX != startX || curY != startY) {
         caluculateAngle();
@@ -2468,6 +2569,9 @@ function setSwipeDirection() {
     }
 };
 
+/**
+* Calculates and returns an angle for the swipe direction
+*/
 function caluculateAngle() {
     var X = startX-curX;
     var Y = curY-startY;
@@ -2477,6 +2581,9 @@ function caluculateAngle() {
     if ( swipeAngle < 0 ) { swipeAngle =  360 - Math.abs(swipeAngle); }
 }
 
+/**
+* Will set the swipe direction based on the current swipeAngle
+*/
 function determineSwipeDirection() {
     if ( (swipeAngle <= 45) && (swipeAngle >= 0) ) {
         swipeDirection = 'left';
@@ -2491,6 +2598,10 @@ function determineSwipeDirection() {
     }
 }
 
+/**
+* Processes section swipe based on the direction. Distance or speed
+* of swipe movement is not considered
+*/
 function processingRoutine(dir, type) {
     if(type == "section") {
         if ( dir == 'left' ) {
@@ -2684,9 +2795,35 @@ function getSpeed(lastDif, lastTime, dif, time) {
 }
 
 
+function createEvent(eventName, eventObj) {
+    var event; // The custom event that will be created
 
+    if (document.createEvent) {
+      event = document.createEvent("HTMLEvents");
+      event.initEvent(eventName, true, true);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+    }
 
-//
+    event.eventName = eventName;
+
+    $.each(eventObj, function(k,v) {
+        event[k] = v;
+    });
+
+    return event;
+}
+
+function fireEvent(element, event) {
+    if (document.createEvent) {
+      element.dispatchEvent(event);
+    } else {
+      element.fireEvent("on" + event.eventType, event);
+    }
+}
+
+// Initiates the QueryString object, which contains all url parameters
 var QueryString = function () {
   // This function is anonymous, is executed immediately and
   // the return value is assigned to QueryString!
@@ -2709,8 +2846,6 @@ var QueryString = function () {
   }
     return query_string;
 } ();
-
-
 
 var hasScrollbar = function() {
     // The Modern solution
@@ -2745,6 +2880,11 @@ var hasScrollbar = function() {
 
 var scrollbarBefore = false;
 
+/**
+* Initiates a scrollbar listener, checking for scrollbar changes regularly.
+* Triggers scrollbarVisible and scrollbarHidden events on the window element
+* on change.
+*/
 function initiateScrollBarListener() {
     var hasScroll = hasScrollbar();
     if(hasScroll &&  !scrollbarBefore) {

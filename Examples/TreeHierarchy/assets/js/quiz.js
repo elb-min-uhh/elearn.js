@@ -5,6 +5,9 @@
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 */
 
+// anonymous function, so functions cannot be used from console or by mistake
+(function() {
+
 var start_time = [];
 var passed_time = [];
 
@@ -17,8 +20,8 @@ $(document).ready(function() {
 
     // resize Funktion wird aufgerufen, wenn im eLearnJS eine neue section
     // angezeigt wird
-    eLearnJS.registerAfterShow("quiz-resizing", windowResizing);
-    eLearnJS.registerAfterShow("quiz-timer-init", initTimers);
+    document.addEventListener("ejssectionchange", windowResizing);
+    document.addEventListener("ejssectionchange", initTimers);
 });
 
 
@@ -390,8 +393,6 @@ function getCorrectFillBlank(labels, answers, force) {
     labels.each(function(i, e) {
         var input = $(this).find("input");
         var id = input.attr("id");
-
-        console.log("test");
 
         // alle richtigen antworten zu der ID
         var cor = elementsToTextArray(answers.filter("#"+id));
@@ -1255,7 +1256,6 @@ function dragReset(e) {
     // remove emphasis
     if(e != undefined) $(e.target).closest(".answers").find(".emph").removeClass("emph");
 
-    console.log("asd");
     $('.draggedover').removeClass("draggedover");
     $(".object").css("opacity", "");
     $(".object").css("background", "");
@@ -2512,7 +2512,7 @@ function encryptMD5(str) {
     S44 = 21;
 
 
-  str = this.utf8_encode(str);
+  str = utf8_encode(str);
   x = convertToWordArray(str);
   a = 0x67452301;
   b = 0xEFCDAB89;
@@ -2668,3 +2668,5 @@ function utf8_encode(argString) {
 
   return utftext;
 }
+
+}())
