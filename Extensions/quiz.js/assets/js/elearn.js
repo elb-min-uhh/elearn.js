@@ -1,5 +1,5 @@
 /*
-* v0.9.9 17/06/01 JavaScript eLearn.js - by Arne Westphal
+* v1.0.0 17/09/25 JavaScript eLearn.js - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 */

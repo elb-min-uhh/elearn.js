@@ -39,6 +39,18 @@ _Hinweis:_ Erweiterungen zum eLearn.js, welche in diesem Repository enthalten
 sind, haben jeweils eine eigene Versionsübersicht weiter unten.
 
 ### eLearn.js
+* __1.0.0__:
+  * Neuerungen:
+    * Die Pfeile für die Sectionwechsel wurden neu positioniert und die
+    klickbaren Bereiche umfassen nun die volle Fensterhöhe
+    * Für Sectionwechsel, Berechnungen bei Fenstergrößenveränderungen,
+    Touch-Maus-Wechsel, Tab-Wechsel (für Tabbed-Boxes) werden nun Events
+    gesendet
+      * alle Funktionen die Events senden sind mit _@event_ gekennzeichnet
+      * alte _registerAfter..._ Funktionen werden weiterhin unterstützt, zählen
+      aber als veraltet
+  * Fehlerbehebungen:
+    * Im Template wurde die MathJax-Verlinkung angepasst
 * __0.9.9__:
   * Neuerungen:
     * Bildergallerien springen bei einem Loop nicht mehr, sondern behalten
@@ -140,6 +152,14 @@ sind, haben jeweils eine eigene Versionsübersicht weiter unten.
 
 ### quiz.js
 
+* __0.3.5__ (zu eLearn.js 1.0.0):
+  * Neuerungen:
+    * Das QuizJS ist als anonyme Funktion umgesetzt und somit voll
+    automatisiert. Über Javascript ist keine Schnittstelle verfügbar, es wird
+    alles über die Code-Ergänzungen in HTML umgesetzt
+  * Fehlerbehebungen:
+    * Für Sortieraufgaben wurde ein Fehler behoben, durch den nach Zurücksetzen
+    der Frage keine Antworten mehr sichtbar waren
 * __0.3.4__ (zu eLearn.js 0.9.9):
   * Neuerungen:
     * Button Stil selbstdefiniert, da abweichend von eLearn.js Stil (ab 0.9.9)
@@ -186,6 +206,10 @@ sind, haben jeweils eine eigene Versionsübersicht weiter unten.
 
 ### elearnvideo.js
 
+* __0.3__ (zu eLearn.js 1.0.0):
+  * Neuerungen:
+    * Es wurden weitere Quelltextkommentare ergänzt, um alle Funktionen zu
+    erklären
 * __0.2__ (zu eLearn.js 0.9.9):
   * Neuerungen:
     * Bufferanimation
