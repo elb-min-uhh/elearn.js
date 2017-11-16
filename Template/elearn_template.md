@@ -4,9 +4,9 @@
 Institution des Autors     
 cc by-sa | 2015
 
-![Titelbild](assets/img/illu-concept.png)
+![Titelbild](assets/img/template-media/illu-concept.png)
 
-\\\Textebenen///
+|||Textebenen///
 
 ## Überschrift 2. Ordnung
 
@@ -26,7 +26,7 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
 
 At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.
 
-\\\Abbildungen///
+|||Abbildungen///
 
 ### Bilder
 
@@ -34,11 +34,11 @@ Bilder können als einzelne Abbildungen oder als Galerien eingebunden werden.Fü
 
 <div class="slider preview-nav loop">
 <ul class="img-gallery" id="x" style="list-style:none;">
-<li><img src="assets/img/md-illu_1.png" alt="md-produktion" /><p>Markdown ist kinderleicht zu erlernen.</p></li>
-<li><img src="assets/img/md-illu_2.png" alt="Components" /><p>Zusammenspiel der Komponenten bei der Produktion von digitalen Skripten mit Markdown.</p>"</li>
-<li><img src="assets/img/md-illu_3.png" alt="Future" /><p>Die Zukunft von Markdown als Autorensprache.</p></li>
-<li><img src="assets/img/md-illu_4.png" alt="Media" /><p>Markdown kann viele verschiedene Medientypen in Html einfügen.</p></li>
-<li><img src="assets/img/md-illu_5.png" alt="Hello" /><p>Versuche auch mal, ein Markdown-Dokument zu erstellen. Ist gar nicht schwer!</p></li>
+<li><img src="assets/img/template-media/md-illu_1.png" alt="md-produktion" /><p>Markdown ist kinderleicht zu erlernen.</p></li>
+<li><img src="assets/img/template-media/md-illu_2.png" alt="Components" /><p>Zusammenspiel der Komponenten bei der Produktion von digitalen Skripten mit Markdown.</p>"</li>
+<li><img src="assets/img/template-media/md-illu_3.png" alt="Future" /><p>Die Zukunft von Markdown als Autorensprache.</p></li>
+<li><img src="assets/img/template-media/md-illu_4.png" alt="Media" /><p>Markdown kann viele verschiedene Medientypen in Html einfügen.</p></li>
+<li><img src="assets/img/template-media/md-illu_5.png" alt="Hello" /><p>Versuche auch mal, ein Markdown-Dokument zu erstellen. Ist gar nicht schwer!</p></li>
 </ul>
 </div>
 
@@ -54,7 +54,7 @@ Die Höhe der Gaalerie kann vorgegeben werden, damit der Content unter der Galer
 * `<ul class="img-gallery fixed-size">` ist eine Galerie mit der Höhe des größten Bildes.
 * `<ul class="img-gallery fixed-size" style="max-height: 400px">` ist eine Galerie mit der Höhe von 400px.
 
-\\\Medien///
+|||Medien///
 
 ### Medieneinbindung
 
@@ -66,10 +66,10 @@ Hier wird ein Video eingebunden, welches sich direkt im Asset-Ordner des Skrips 
 Zusätzlich enthält das Video Anmerkungen, die unter dem Video angezeigt werden. Diese sind durch die Erweiterung video.js möglich.
 
 <video preload="auto" controls="controls" style="max-width:100%">
-    <source src="assets/img/beispiel-video.mp4" type="video/mp4">
-    <source src="assets/img/beispiel-video.webm" type="video/webm">
+    <source src="assets/img/template-media/beispiel-video.mp4" type="video/mp4">
+    <source src="assets/img/template-media/beispiel-video.webm" type="video/webm">
            Dein Browser unterstützt kein HTML5-Video. Um dir das Video dennoch ansehen zu können,
-           folge einfach diesem <a href="assets/img/beispiel-video.mp4">Link</a>.
+           folge einfach diesem <a href="assets/img/template-media/beispiel-video.mp4">Link</a>.
 </video>
 <div class="video_notes timestamps">
     <h5>Untertitel:</h5>
@@ -94,12 +94,12 @@ Hier ist ein Video von einem Streaming-Server als iFrame eingebunden.
 Da Audio-Dateien als mp3s in der Regel nicht so groß sind, dass ein Streaming-Server benötigt wird, können diese aus dem Assets-Ordner progressiv als Download eingebunden worden. Hier ein Beispiel:
 
 <audio preload="auto" controls="controls">
-    <source src="assets/img/beispiel-audio.mp3" type="audio/mpeg">
+    <source src="assets/img/template-media/beispiel-audio.mp3" type="audio/mpeg">
            Dein Browser unterstützt kein HTML5-Audio. Um dir das Audio-File dennoch anhören zu können,
-           folge einfach diesem <a href="img/beispiel-audio.mp3">Link</a>.
+           folge einfach diesem <a href="img/template-media/beispiel-audio.mp3">Link</a>.
 </audio>
 
-\\\Mathematische Formeln///
+|||Mathematische Formeln///
 
 ### Mathematische Formeln
 
@@ -123,7 +123,7 @@ $P\left(A=2\middle|\frac{A^2}{B}>4\right)$
 
 At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
 
-\\\Quiz///
+|||Quiz///
 
 ### Quizfragen
 
@@ -170,7 +170,7 @@ In deiner Antwort ist mindestens ein Ordner, der nicht unbedingt benötigt wird.
 
 Es existieren auch noch andere Fragetypen, diese sind in der Dokumentation vom quiz.js beschrieben.
 
-\\\Literatur///
+|||Literatur///
 
 ### Literatur
 
