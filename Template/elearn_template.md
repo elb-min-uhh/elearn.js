@@ -35,7 +35,7 @@ Bilder können als einzelne Abbildungen oder als Galerien eingebunden werden.Fü
 <div class="slider preview-nav loop">
 <ul class="img-gallery" id="x" style="list-style:none;">
 <li><img src="assets/img/template-media/md-illu_1.png" alt="md-produktion" /><p>Markdown ist kinderleicht zu erlernen.</p></li>
-<li><img src="assets/img/template-media/md-illu_2.png" alt="Components" /><p>Zusammenspiel der Komponenten bei der Produktion von digitalen Skripten mit Markdown.</p>"</li>
+<li><img src="assets/img/template-media/md-illu_2.png" alt="Components" /><p>Zusammenspiel der Komponenten bei der Produktion von digitalen Skripten mit Markdown.</p></li>
 <li><img src="assets/img/template-media/md-illu_3.png" alt="Future" /><p>Die Zukunft von Markdown als Autorensprache.</p></li>
 <li><img src="assets/img/template-media/md-illu_4.png" alt="Media" /><p>Markdown kann viele verschiedene Medientypen in Html einfügen.</p></li>
 <li><img src="assets/img/template-media/md-illu_5.png" alt="Hello" /><p>Versuche auch mal, ein Markdown-Dokument zu erstellen. Ist gar nicht schwer!</p></li>
