@@ -1,3 +1,5 @@
+|||Template///
+
 # Template elearn.js
 
 **Name des Autors**    
@@ -65,7 +67,7 @@ Hier sollen vor allem Video und Audio-Einbindung demonstriert werden. At vero eo
 Hier wird ein Video eingebunden, welches sich direkt im Asset-Ordner des Skrips befindet. Diese Lösung ist nur für relativ kurze Videos empfehlenswert (max. fünf Minuten).
 Zusätzlich enthält das Video Anmerkungen, die unter dem Video angezeigt werden. Diese sind durch die Erweiterung video.js möglich.
 
-<video preload="auto" controls="controls" style="max-width:100%">
+<video class="allow_user_notes" preload="auto" controls="controls" style="max-width:100%">
     <source src="assets/img/template-media/beispiel-video.mp4" type="video/mp4">
     <source src="assets/img/template-media/beispiel-video.webm" type="video/webm">
            Dein Browser unterstützt kein HTML5-Video. Um dir das Video dennoch ansehen zu können,
@@ -87,7 +89,7 @@ Zusätzlich enthält das Video Anmerkungen, die unter dem Video angezeigt werden
 
 Hier ist ein Video von einem Streaming-Server als iFrame eingebunden.
 
-<iframe src='https://lecture2go.uni-hamburg.de/liferay-jedi-theme/javascript/strobe/embed.html?src=https://fms.rrz.uni-hamburg.de/vod/_definst_/mp4:8l2gbal1768/64.280_werz_2013-06-26_16-15.mp4/manifest.f4m&poster=https://lecture2go.uni-hamburg.de/images/64.280_werz_2013-06-26_16-15.jpg' class='strobemediaplayback-video-player' type='text/html' width='500' height='250'> </iframe>
+<iframe src='https://lecture2go.uni-hamburg.de/liferay-jedi-theme/javascript/strobe/embed.html?src=https://fms.rrz.uni-hamburg.de/vod/_definst_/mp4:8l2gbal1768/64.280_werz_2013-06-26_16-15.mp4/manifest.f4m&poster=https://lecture2go.uni-hamburg.de/images/64.280_werz_2013-06-26_16-15.jpg' class='strobemediaplayback-video-player' type='text/html' width='500' height='250'></iframe>
 
 #### Audio-Files
 
@@ -110,11 +112,11 @@ Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lo
 Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.
 
 $
-M = \begin{bmatrix}
-       \frac{5}{6} & \frac{1}{6} & 0           \\[0.3em]
-       \frac{5}{6} & 0           & \frac{1}{6} \\[0.3em]
-       0           & \frac{5}{6} & \frac{1}{6}
-     \end{bmatrix}
+M = \\begin{bmatrix}
+       \\frac{5}{6} & \\frac{1}{6} & 0           \\\\[0.3em]
+       \\frac{5}{6} & 0           & \\frac{1}{6} \\\\[0.3em]
+       0           & \\frac{5}{6} & \\frac{1}{6}
+     \\end{bmatrix}
 $
 
 Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.   
@@ -165,7 +167,6 @@ In deiner Antwort ist mindestens ein Ordner, der nicht unbedingt benötigt wird.
 <a class="ans">b5ceb729a1b347aa357790e1588c88b3</a>
 <a class="ans">1fd302a9c89fc92eead418857a7e5a07</a>
 <a class="ans">4fc364339b2127eb81c13ab986a27085</a>
-<a class="ans">a66ed4f718095c6e9d9d13a5d5ad60a3</a>
 </div>
 
 Es existieren auch noch andere Fragetypen, diese sind in der Dokumentation vom quiz.js beschrieben.
