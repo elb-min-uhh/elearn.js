@@ -365,6 +365,9 @@ a:active {
     position: relative;
     background: #e7e7e7;
     min-width: 150px;
+    max-width: 100%;
+    max-width: calc(100% - 10px);
+    box-sizing: border-box;
     margin: 5px 5px;
     padding-bottom: 3px;
     text-align: left;
