@@ -591,8 +591,6 @@ button.quizButton:hover, button.quizButton:active {
 
 /*Media-Querys für Responsivität*/
 
-
-
 @media screen and (max-width:800px) {
     .question label{
         margin:0.5em 1em 0.5em 1.2em;
@@ -621,19 +619,4 @@ button.quizButton:hover, button.quizButton:active {
         margin:1.5em 0.3em 2em 0.3em;
         width: calc(100% - 5em);
     }
-}
-
-@media print {
-  body {
-      font-size:78%;
-  }
-  .page {
-      padding: 45px 8.5% 68px 8.5%;
-  }
-
-  #navigation {
-    font-size: 1em;
-      display:none;
-  }
-  h2 {page-break-before:always;}
 }
