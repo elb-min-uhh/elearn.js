@@ -125,6 +125,62 @@ $P\left(A=2\middle|\frac{A^2}{B}>4\right)$
 
 At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
 
+|||Textblöcke///
+
+### Textblöcke
+
+#### Informationen per Mouseover/Klick
+
+Bei solchen Blöcken werden zusätzliche
+
+<div class="hover-info">
+    Informationen
+    <div>Zusätzliche Informationen sind in den meisten Fällen
+    Texte. Es könnten theoretisch aber auch Bilder eingefügt
+    werden.
+    </div>
+</div>
+
+angezeigt, wenn man mit der Maus hinüber geht oder bei Touch-Geräten
+darauf klickt. Dazu wird in einem __div.hover-info__
+zunächst der markierte Bereich angegeben. In einem zusätzlichen
+__div__ direkt dahinter können darauf hin die weiterführenden
+Informationen angezeigt werden.
+
+#### Ausklappbare Bereiche
+
+Der folgende Block ist mit einem Knopf aus- und einklappbar.
+
+<div class="hideable" name="Übersetzung" show="Zeige" hide="Verberge">
+    Hier steht ein Beispieltext.
+</div>
+
+Das entscheidende hierbei sind die Attribute.  
+Dabei wird dem ganzen ein __name__ gegeben, der in
+dem Knopf immer eingesetzt wird. Zustäzlich werden
+die Wörter für __show__ und __hide__ angegeben.
+So kann man hier auch bspw. andere Sprachen verwenden.
+
+#### Multiboxes
+
+Der folgende Block besteht aus mehreren Boxen, zwischen denen man wählen kann.
+
+<div class="tabbed-box">
+    <div class="tab" name="Deutsch">
+        Dieser Block wird unter dem deutschen Tab angezeigt.
+    </div>
+    <div class="tab" name="English">
+        This block will be visible when english is selected.
+    </div>
+</div>
+
+Hier wird ein umschließendes __div.tabbed-box__ erstellt.
+Innerhalb dieses Blocks können dann beliebig viele
+__div.tab__ erstellt werden, die jeweils einen __name__
+haben unter dem der Tab ausgewählt werden kann.
+Innerhalb eines jeden __div.tab__ kann dann alles
+beliebig verändert werden.
+
 |||Quiz///
 
 ### Quizfragen
