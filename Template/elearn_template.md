@@ -1,6 +1,29 @@
-|||Template///
+<!--meta
+Title: elearn.js Template
+Author: Name Autor
+Description: Hier Beschreibung einfügen
+Keywords: Key, Words
+Custom: "<script type=\"text/x-mathjax-config\">
+            MathJax.Hub.Config({
+                extensions: [\"tex2jax.js\"],
+                jax: [\"input/TeX\", \"output/HTML-CSS\"],
+                tex2jax: {
+                    inlineMath: [ ['$','$'], [\"\\(\",\"\\)\"] ],
+                    displayMath: [ ['$$','$$'], [\"\\[\",\"\\]\"] ],
+                    processEscapes: true
+                },
+                \"HTML-CSS\": { availableFonts: [\"TeX\"] }
+            });
+        </script>
+        <script type=\"text/javascript\" src=\"https://cdn.mathjax.org/mathjax/latest/MathJax.js\"></script>"
+-->
 
-# Template elearn.js
+<!--imprint
+#### elearn.js Template
+Universität Hamburg
+-->
+
+# Template elearn.js <!--hide-in-overview-->
 
 **Name des Autors**    
 Institution des Autors     
@@ -8,7 +31,18 @@ cc by-sa | 2015
 
 ![Titelbild](assets/img/template-media/illu-concept.png)
 
-|||Textebenen///
+## Inhaltsverzeichnis <!--hide-in-overview-->
+
+<!-- Zusatz class="kachel" ändert die Darstellung -->
+<!-- Zusatz class="hide-read" verhindert die Anzeige gelesener Sections -->
+<div id="content-overview" class="kachel">
+    <!--
+        Hier wird automatisch ein Inhaltsverzeichnis
+        eingefügt, wenn das div#content-overview vorhanden
+        ist.
+    -->
+</div>
+
 
 ## Überschrift 2. Ordnung
 
@@ -16,7 +50,7 @@ cc by-sa | 2015
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
-### Überschrift dritter Ordung
+### Überschrift dritter Ordung <!--no-section-->
 
 Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.   
 
@@ -27,8 +61,6 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
 ##### Wenn man noch eine fünfte Ebene braucht
 
 At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.
-
-|||Abbildungen///
 
 ### Bilder
 
@@ -55,8 +87,6 @@ Die Höhe der Gaalerie kann vorgegeben werden, damit der Content unter der Galer
 * `<ul class="img-gallery">` ist eine Galerie mit unterschiedlicher Bilderhöhe.
 * `<ul class="img-gallery fixed-size">` ist eine Galerie mit der Höhe des größten Bildes.
 * `<ul class="img-gallery fixed-size" style="max-height: 400px">` ist eine Galerie mit der Höhe von 400px.
-
-|||Medien///
 
 ### Medieneinbindung
 
@@ -101,31 +131,30 @@ Da Audio-Dateien als mp3s in der Regel nicht so groß sind, dass ein Streaming-S
            folge einfach diesem <a href="img/template-media/beispiel-audio.mp3">Link</a>.
 </audio>
 
-|||Mathematische Formeln///
-
 ### Mathematische Formeln
 
-Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.   
+Mathematische Formeln finden in vielen Texten Verwendung, können aber nicht
+immer vernünftig dargestellt werden.
 
 #### Formeldarstellung via MathJax
 
-Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.
+MathJax kann genutzt werden, um mathematische Formeln darzustellen.
+Hierzu wird die LaTeX Syntax verwendet. Es existieren Blockformeln wie diese
 
-$
+$$
 M = \\begin{bmatrix}
        \\frac{5}{6} & \\frac{1}{6} & 0           \\\\[0.3em]
        \\frac{5}{6} & 0           & \\frac{1}{6} \\\\[0.3em]
        0           & \\frac{5}{6} & \\frac{1}{6}
      \\end{bmatrix}
-$
+$$
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.   
-
-$P\left(A=2\middle|\frac{A^2}{B}>4\right)$
-
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-
-|||Textblöcke///
+und auch Inline-Formeln wie $P\\left(A=2\\middle|\\frac{A^2}{B}>4\\right)$,
+welche in einem Fließtext angezeigt werden können.
+Um im Text dennoch ein \\$ verwenden zu können, muss dieses escaped werden.
+Hierzu schreibt man `\\$` anstatt des einfachen `$` Symbols, für jedes einzelne
+anzuzeigende Zeichen, um durch das `\\` in der Ausgabe ein `\` zu erzeugen,
+welches MathJax wiederum als _escape_ für das darauffolgende `$` sieht.
 
 ### Textblöcke
 
@@ -181,8 +210,6 @@ haben unter dem der Tab ausgewählt werden kann.
 Innerhalb eines jeden __div.tab__ kann dann alles
 beliebig verändert werden.
 
-|||Quiz///
-
 ### Quizfragen
 
 Auf dieser Seite sind einige Quiz-Fragen Beispielhaft dargestellt.
@@ -226,8 +253,6 @@ In deiner Antwort ist mindestens ein Ordner, der nicht unbedingt benötigt wird.
 </div>
 
 Es existieren auch noch andere Fragetypen, diese sind in der Dokumentation vom quiz.js beschrieben.
-
-|||Literatur///
 
 ### Literatur
 

@@ -10,6 +10,18 @@ Eine umfassende Dokumentation des Projekts befindet sich unter http://www.sumo.u
 
 ## Empfehlung zur Verwendung
 
+Es gibt für den Texteditor _Atom_ ein Package, welches ein einfaches
+Konvertieren von Markdown zu elearn.js Ausgaben ermöglicht. Dieses bietet
+sowohl eine HTML- als auch eine PDF-Ausgabe an. Weitere Informationen finden
+Sie unter diesem Link https://github.com/elb-min-uhh/atom-elearnjs.
+Das hier enthaltene Markdown-Template (unter `Template/elearn_template.md`)
+nutzt Funktionen, welche nur von diesem Package unterstützt werden.
+Mit diesem Package erspart man sich viele sonst nötige Arbeitsschritte.
+
+## Manuelle Erstellung ohne _atom-elearnjs_
+
+Sollten Sie das Package nicht nutzen wollen oder können, können Sie auch auf
+andere Weise einen HTML Quelltext erzeugen und dort das elearn.js einbinden.
 Um bei einem Versionsupdate keine Schwierigkeiten zu erhalten, sollten alle vom
 Nutzer durchgeführten Änderungen in zusätzlichen Dateien umgesetzt werden.
 Welche Dateien genau bei einem Update überschrieben werden, ist im
@@ -18,7 +30,7 @@ nachfolgenden Bereich zu erkennen.
 Generell sollten besonders Veränderungen des Stils der Seite entweder direkt
 in der _HTML_ Datei oder in einer neuangelegten _.CSS_ Datei geschehen.
 
-## Vorhandenes Skript Updaten
+### Vorhandenes Skript Updaten
 
 Um ein vorhandenes Skript auf die neuste Version upzudaten ist nicht viel
 Aufwand nötig. Hierzu sollte zunächst das Repository heruntergeladen werden.
