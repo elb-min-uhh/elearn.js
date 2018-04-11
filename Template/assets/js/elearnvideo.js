@@ -124,7 +124,7 @@ function initListeners() {
         // resizesensor as visibility listener this will only work with Chrome engine browsers
         try {
             new ResizeSensor(el, function(dim) {
-                resizeVideoPlayer(div)(el);
+                resizeVideoPlayer(el);
             });
         } catch(e) {
             // ignore
