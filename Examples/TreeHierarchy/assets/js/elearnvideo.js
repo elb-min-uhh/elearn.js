@@ -4,11 +4,13 @@
 * JavaScript Videoplayer - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 */
+(function() {
 
 /**
 * Initialisiert die Videoplayer
 */
 $(document).ready(function() {
+    initiateTouchDetection();
     initiateVideoPlayers();
 });
 
@@ -89,11 +91,45 @@ function initiateVideoPlayers() {
 
     addGenerelVideoPlayerListener();
 
-    // User to explicitly set video-note width to equal video width
+    // only fallback values, should work without this resizes,
+    // based on IntersectionObserver support
     document.addEventListener("ejssectionchange", resizeAllVideoPlayers);
     window.addEventListener("ejswindowresize", resizeAllVideoPlayers);
-    window.addEventListener("ejstouchmousechange", switchTouchMouse);
+    $(window).resize(resizeAllVideoPlayers);
+    // Used to explicitly set video-note width to equal video width
+    window.addEventListener("ejsvideotouchmousechange", switchTouchMouse);
     initiateVideoNotes();
+}
+
+function initListeners() {
+    $('.elearnjs-video').each(function(i, e) {
+        const el = $(e);
+        try {
+            var options = {
+                root: document.body,
+                rootMargin: '0px',
+                threshold: 1.0
+            }
+
+            var observer = new IntersectionObserver(function(entries, observer) {
+                for(var entry of entries) {
+                    resizeVideoPlayer($(entry.target));
+                }
+            }, options);
+
+            observer.observe(el.get(0));
+        } catch(e) {
+            // ignore
+        };
+        // resizesensor as visibility listener this will only work with Chrome engine browsers
+        try {
+            new ResizeSensor(el, function(dim) {
+                resizeVideoPlayer(div)(el);
+            });
+        } catch(e) {
+            // ignore
+        };
+    });
 }
 
 /**
@@ -151,6 +187,18 @@ function addVideoPlayerListener(div) {
     });
     div.find('video').on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(event) {
         checkVideoFullscreen();
+    });
+
+    // stop propagation at div in fullscreen, event not triggert in any parent
+    div.on('blur change click contextmenu copy cut dblclick error foxus focusin focusout '
+        + 'keydown keypress keyup load mousedown mouseenter mouseleave mousemove '
+        + 'mouseout mouseover mouseup mousewheel paste reset resize scroll '
+        + 'select submit textinput unload wheel '
+        + 'orientationchange pointerdown pointermove pointerup '
+        + 'touchstart touchmove touchend ', function(e) {
+        if(div.is('.full')) {
+            e.stopPropagation();
+        }
     });
 }
 
@@ -429,12 +477,6 @@ function checkVideoFullscreen() {
 
     if(!isFullScreen) {
         $('.elearnjs-video').removeClass("full");
-        if(secSwipeBefore !== undefined && keyEnabledBefore !== undefined) {
-            eLearnJS.generalSectionSwipeEnabled(secSwipeBefore);
-            eLearnJS.setKeyNavigationEnabled(keyEnabledBefore);
-            secSwipeBefore = undefined;
-            keyEnabledBefore = undefined;
-        }
     }
 };
 
@@ -534,10 +576,6 @@ function videoToggleTimeleftDuration(div) {
     updateVideoTime(div);
 }
 
-
-var secSwipeBefore = undefined;
-var keyEnabledBefore = undefined;
-
 /**
 * Toggles fullscreen for a video player.
 * @param div: the .elearnjs-video Wrapper of the video element.
@@ -575,12 +613,6 @@ function videoToggleFullscreen(div) {
             return;
         }
         div.addClass("full");
-        if(secSwipeBefore === undefined && keyEnabledBefore === undefined) {
-            secSwipeBefore = eLearnJS.isSectionSwipeEnabled();
-            keyEnabledBefore = eLearnJS.isKeyNavigationEnabled();
-            eLearnJS.generalSectionSwipeEnabled(false);
-            eLearnJS.setKeyNavigationEnabled(false);
-        }
     }
     else {
         if (document.exitFullscreen) {
@@ -593,12 +625,6 @@ function videoToggleFullscreen(div) {
             document.webkitExitFullscreen();
         }
         div.removeClass("full");
-        if(secSwipeBefore !== undefined && keyEnabledBefore !== undefined) {
-            eLearnJS.generalSectionSwipeEnabled(secSwipeBefore);
-            eLearnJS.setKeyNavigationEnabled(keyEnabledBefore);
-            secSwipeBefore = undefined;
-            keyEnabledBefore = undefined;
-        }
     }
 }
 
@@ -1025,7 +1051,7 @@ function resizeVideoPlayer(div) {
 * @param div: the .elearnjs-video Wrapper of the video element.
 */
 function switchTouchMouse() {
-    if(eLearnJS.isTouchSupported()) {
+    if(isTouchSupported()) {
         $('.elearnjs-video').addClass("mobile");
     }
     else {
@@ -1150,7 +1176,11 @@ function addShowAllTo(notes) {
 * Adds the user Note Menu to the user note container.
 */
 function addUserNoteMenuTo(notes) {
-    notes.prepend('<div class="user_note_menu_wrap general_user_note_menu" onclick="javascript: toggleUserNoteMenu(this);"><div class="user_note_menu">m</div></div>');
+    var div = $('<div class="user_note_menu_wrap general_user_note_menu"><div class="user_note_menu">m</div></div>');
+    div.on('click', function() {
+        toggleUserNoteMenu(this);
+    });
+    notes.prepend(div);
 }
 
 /**
@@ -1274,7 +1304,11 @@ function showVideoNote(notes_con, info) {
     }
     // add user note menu button
     if(original_note.is('.user_note')) {
-        new_note.prepend('<div class="user_note_menu_wrap" onclick="javascript: toggleUserNoteMenu(this);"><div class="user_note_menu">m</div></div>');
+        var div = $('<div class="user_note_menu_wrap"><div class="user_note_menu">m</div></div>');
+        div.on('click', function() {
+            toggleUserNoteMenu(this);
+        });
+        new_note.prepend(div);
     }
     original_note.after(new_note);
 }
@@ -2091,3 +2125,127 @@ function createTimeStringColons(seconds) {
 
     return time_str;
 }
+
+function initiateTabbedBox(box) {
+    var div = box;
+
+    div.wrap('<div class="tabbed-container"></div>');
+
+    div.before('<div class="tabs"></div>');
+
+    var tabs = div.parent().find('.tabs');
+
+    div.find('.tab').each(function() {
+        var tab = $(this);
+        var tabSelect = $('<div class="tab-select">' + tab.attr('name') + '</div>');
+        tabSelect.on('click', function(e) {
+            selectTab(this);
+        });
+        tabs.append(tabSelect);
+    });
+
+    // set active tab to first
+    div.find('.tab').hide();
+    div.find('.tab').first().show();
+    tabs.find('.tab-select').first().addClass('act');
+}
+
+/**
+* Selects a tab of a tabbed box
+* @param elemt, the tab element clicked on
+* @event: Fires "ejstabchange"event on the .tabbed-container when done successfully.
+*/
+function selectTab(element) {
+    var e = $(element);
+    var div = e.parent().nextAll().first('.tabbed-box');
+
+    var tabbefore = div.find('.tab:visible').attr("name");
+
+    // show only new
+    div.find('.tab').hide();
+    div.find('.tab').filter('[name="' + e.html() + '"]').show();
+    e.parent().find('.tab-select').removeClass("act");
+    e.addClass("act");
+
+    var eventObj = {
+        "tab": e.html(),
+        "tabbefore" : tabbefore};
+    fireEvent(div.closest('.tabbed-container')[0], createEvent("ejstabchange", eventObj));
+}
+
+var touchSupported = false;
+var touchMouseChangeTimer = null;
+var lastTouch = undefined;
+
+/**
+* Simply returns the current touchSupported var value
+* This value will not really return if touch is supported, but if it is
+* actively used. So it returns if the last event was a touch event or a mouse
+* was used. This way it can swap, based on the users preference.
+*/
+function isTouchSupported() {
+    return touchSupported;
+}
+
+/**
+* Initiates the touch detection.
+* This will set listeners to specific events which can detect
+*/
+function initiateTouchDetection() {
+    $(document).bind('touchstart', function(event) {
+        lastTouch = new Date().getTime();
+        clearTimeout(touchMouseChangeTimer);
+        if(!touchSupported) {
+            touchSupported = true;
+            touchSupportedChanged();
+        }
+    });
+    $(document).bind('mousemove', function(event) {
+        // asynchronous for touch events fired afterwards
+        touchMouseChangeTimer = setTimeout(function() {
+            // more than 2s ago
+            if(touchSupported && lastTouch < new Date().getTime() - 2000) {
+                touchSupported = false;
+                touchSupportedChanged();
+            }
+        }, 200);
+    });
+}
+
+/**
+* Will call all functions registered on touchSupportedChanged
+* @event: Fires "ejsvideotouchmousechange" event on the window when done successfully.
+*/
+function touchSupportedChanged() {
+    fireEvent(window, createEvent("ejsvideotouchmousechange", {}));
+}
+
+function createEvent(eventName, eventObj) {
+    var event; // The custom event that will be created
+
+    if (document.createEvent) {
+      event = document.createEvent("HTMLEvents");
+      event.initEvent(eventName, true, true);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+    }
+
+    event.eventName = eventName;
+
+    $.each(eventObj, function(k,v) {
+        event[k] = v;
+    });
+
+    return event;
+}
+
+function fireEvent(element, event) {
+    if (document.createEvent) {
+      element.dispatchEvent(event);
+    } else {
+      element.fireEvent("on" + event.eventType, event);
+    }
+}
+
+})();

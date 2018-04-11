@@ -11,6 +11,31 @@
     font-weight: normal;
     src: url('../font/eLearn-Video.woff') format('woff');
 }
+@font-face {
+    font-family: 'eLearn-Icons';
+    font-style: normal;
+    font-weight: normal;
+    src: url('../font/eLearn-Icons.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../font/OpenSans-Regular-webfont.woff') format('woff');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../font/OpenSans-Bold-webfont.woff') format('woff');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 400;
+    src: url('../font/OpenSans-Italic-webfont.woff') format('woff');
+}
 
 .video-container {
     display: inline-block;
@@ -528,8 +553,30 @@
     padding: 0;
 }
 
+/* ------------------------------------------ TABBED BOXES ------------------------------------------ */
+
 .video_notes_wrapper .tabs {
     background-color: #666;
+}
+
+.video_notes_wrapper .tab-select {
+    display: inline-block;
+    padding: 5px 8px;
+        color: #fff;
+    cursor: pointer;
+    background: 0;
+    border-right: 1px solid #888888;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                          supported by Chrome and Opera */
+}
+
+.tabs .tab-select:last-child {
+    border-right: none;
 }
 
 .video_notes_wrapper .tab-select {
@@ -544,6 +591,7 @@
 
 .video_notes_wrapper .tabbed-box {
     background: none;
+    padding: 1.8em;
 }
 
 .video-container.noted_video .video_notes_wrapper,
@@ -563,10 +611,16 @@
     background: #666;
     border-radius: 3px;
     word-break: break-word;
+    min-height: 28px;
 }
 
 .video_notes_wrapper .video_note .content {
     display: inline;
+    max-width: 100%;
+}
+
+.video_notes_wrapper .video_note .content * {
+    max-width: 100%;
 }
 
 .video_notes_wrapper .video_note textarea,
