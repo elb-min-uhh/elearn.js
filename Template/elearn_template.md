@@ -15,7 +15,7 @@ Custom: "<script type=\"text/x-mathjax-config\">
                 \"HTML-CSS\": { availableFonts: [\"TeX\"] }
             });
         </script>
-        <script type=\"text/javascript\" src=\"https://cdn.mathjax.org/mathjax/latest/MathJax.js\"></script>"
+        <script type=\"text/javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js\"></script>"
 -->
 
 <!--imprint
