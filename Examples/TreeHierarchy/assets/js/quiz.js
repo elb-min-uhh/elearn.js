@@ -1,6 +1,6 @@
 /*
-* quiz.js v0.3.5 - 17/09/25
-* Ergänzend zum elearn.js v1.0.0
+* quiz.js v0.4.0 - 18/04/16
+* Ergänzend zum elearn.js v1.0.1
 * JavaScript Quiz - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 */

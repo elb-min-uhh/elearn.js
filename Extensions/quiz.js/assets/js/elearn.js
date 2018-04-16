@@ -1,11 +1,12 @@
 /*
-* v1.0.0 17/09/25 JavaScript eLearn.js - by Arne Westphal
+* v1.0.1 18/04/16 JavaScript eLearn.js - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
+* uses ResizeSensor by Marc J. Schmidt. https://github.com/marcj/css-element-queries/
 */
 
-var VERSION_NR = "0.1.0";
-var VERSION_DATE = "09/2017";
+var VERSION_NR = "1.0.1";
+var VERSION_DATE = "04/2018";
 
 var actions = {
     CONTENT_RESIZE : "ContentResize",
@@ -449,7 +450,7 @@ function showSection(i) {
 * Registriert eine Funktion, die ausgeführt wird, nachdem eine neue Section
 * angezeigt wurde.
 *
-* @depracted Since version 1.0.0. Simply add the event listener yourself.
+* @deprecated Since version 1.0.0. Simply add the event listener yourself.
 *   this makes better event handling possible.
 */
 function registerAfterShow(key, fnc, late) {
@@ -466,7 +467,7 @@ function registerAfterShow(key, fnc, late) {
 * durchgeführt wurde. Im gegensatz zu "afterShow" nur, wenn die section
 * tatsächlich verändert wurde.
 *
-* @depracted Since version 1.0.0. Simply add the event listener yourself.
+* @deprecated Since version 1.0.0. Simply add the event listener yourself.
 *   this makes better event handling possible.
 */
 function registerAfterPageInteraction(key, fnc) {
@@ -477,7 +478,7 @@ function registerAfterPageInteraction(key, fnc) {
 * Registriert eine Funktion, die ausgeführt wird, nachdem ein neuer Tab
 * in einer tabbed-box angezeigt wurde.
 *
-* @depracted Since version 1.0.0. Simply add the event listener yourself.
+* @deprecated Since version 1.0.0. Simply add the event listener yourself.
 *   this makes better event handling possible.
 */
 function registerAfterTabChange(key, fnc) {
@@ -491,7 +492,7 @@ function registerAfterTabChange(key, fnc) {
 * kontinuierlichen Veränderung nicht ständig sondern nur einmal ausgeführt
 * werden.
 *
-* @depracted Since version 1.0.0. Simply add the event listener yourself.
+* @deprecated Since version 1.0.0. Simply add the event listener yourself.
 *   this makes better event handling possible.
 */
 function registerAfterWindowResize(key, fnc, late) {
@@ -507,7 +508,7 @@ function registerAfterWindowResize(key, fnc, late) {
 * Registriert eine Funktion, die ausgeführt wird, nachdem alle Slider
 * an die Fenstergröße angepasst wurden.
 *
-* @depracted Since version 1.0.0. Simply add the event listener yourself.
+* @deprecated Since version 1.0.0. Simply add the event listener yourself.
 *   this makes better event handling possible.
 */
 function registerAfterSliderResize(key, fnc) {
@@ -2268,7 +2269,7 @@ function touchSupportedChanged() {
 /**
 * Adds a listener function called on touch support/usage changes.
 *
-* @depracted Since version 1.0.0. Simply add the event listener yourself.
+* @deprecated Since version 1.0.0. Simply add the event listener yourself.
 *   this makes better event handling possible.
 */
 function addTouchMouseChangeListener(key, fnc) {
