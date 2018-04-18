@@ -4,6 +4,10 @@ _Hinweis:_ Erweiterungen zum eLearn.js, welche in diesem Repository enthalten
 sind, haben jeweils eine eigene Versionsübersicht weiter unten.
 
 ### eLearn.js
+* __1.0.2__:
+  * Fehlerbehebungen:
+    * Schriftarten zusätzlich als _.ttf_ hinzugefügt
+    * Fehlerbehebungen für CSS Flex Attribut (WebKit)
 * __1.0.1__:
   * Neuerungen:
     * Markdown Template wurde angepasst für das `atom-elearnjs` package
@@ -185,6 +189,10 @@ sind, haben jeweils eine eigene Versionsübersicht weiter unten.
 
 ### elearnvideo.js
 
+* __0.4.1__ (zu eLearn.js 1.0.2):
+  * Fehlerbehebungen:
+    * Schriftarten zusätzlich als _.ttf_ hinzugefügt
+    * Fehlerbehebungen für CSS Flex Attribut (WebKit)
 * __0.4.0__ (zu eLearn.js 1.0.1):
   * Neuerungen:
     * Das _elearnvideo.js_ kann nun auch unabhängig vom _elearn.js_ verwendet werden
