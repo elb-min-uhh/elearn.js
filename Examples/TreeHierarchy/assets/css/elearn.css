@@ -379,7 +379,9 @@ a:active {
     cursor: pointer;
     word-wrap: break-word;
     flex-shrink: 0;
+    -webkit-flex-shrink: 0;
     flex-grow: 1;
+    -webkit-flex-grow: 1;
 }
 
 .kachel ul li ul li {
