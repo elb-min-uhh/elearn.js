@@ -9,32 +9,36 @@
     font-family: 'eLearn-Video';
     font-style: normal;
     font-weight: normal;
-    src: url('../font/eLearn-Video.woff') format('woff');
+    src: url('../font/eLearn-Video.woff') format('woff'),
+        url('../font/eLearn-Video.ttf') format('truetype');
 }
 @font-face {
     font-family: 'eLearn-Icons';
     font-style: normal;
     font-weight: normal;
-    src: url('../font/eLearn-Icons.woff') format('woff');
+    src: url('../font/eLearn-Icons.woff') format('woff'),
+        url('../font/eLearn-Icons.ttf') format('truetype');
 }
-
 @font-face {
     font-family: 'Open Sans';
     font-style: normal;
     font-weight: 400;
-    src: url('../font/OpenSans-Regular-webfont.woff') format('woff');
+    src: url('../font/OpenSans-Regular-webfont.woff') format('woff'),
+        url('../font/OpenSans-Regular-webfont.ttf') format('truetype');
 }
 @font-face {
     font-family: 'Open Sans';
     font-style: normal;
     font-weight: 700;
-    src: url('../font/OpenSans-Bold-webfont.woff') format('woff');
+    src: url('../font/OpenSans-Bold-webfont.woff') format('woff'),
+        url('../font/OpenSans-Bold-webfont.ttf') format('truetype');
 }
 @font-face {
     font-family: 'Open Sans';
     font-style: italic;
     font-weight: 400;
-    src: url('../font/OpenSans-Italic-webfont.woff') format('woff');
+    src: url('../font/OpenSans-Italic-webfont.woff') format('woff'),
+        url('../font/OpenSans-Italic-webfont.ttf') format('truetype');
 }
 
 .video-container {
