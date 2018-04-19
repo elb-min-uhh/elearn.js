@@ -982,3 +982,41 @@
         font-size: 38pt;
     }
 }
+
+@media print {
+    .video_notes_wrapper {
+        color: #444;
+    }
+
+    .video_notes_wrapper .tabs {
+        display: none;
+    }
+
+    .video_notes_wrapper .tab {
+        display: block !important;
+    }
+
+    .video_notes_wrapper .video_note.backup,
+    .video_notes_wrapper .user_note.backup {
+        display: block;
+    }
+
+    .video_notes_wrapper .video_note:not(.backup),
+    .video_notes_wrapper .user_note:not(.backup)  {
+        display: none !important;
+    }
+
+    .show_all_notes {
+        display: none;
+    }
+
+    /* User notes */
+    .user_note_menu_wrap,
+    .toggle_note_add {
+        display: none;
+    }
+
+    .user_notes {
+        display: block !important;
+    }
+}
