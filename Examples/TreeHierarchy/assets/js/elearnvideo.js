@@ -112,7 +112,8 @@ function initListeners() {
             }
 
             var observer = new IntersectionObserver(function(entries, observer) {
-                for(var entry of entries) {
+                for(var i=0; i<entries.length; i++) {
+                    var entry = entries[i];
                     resizeVideoPlayer($(entry.target));
                 }
             }, options);

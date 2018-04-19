@@ -298,7 +298,8 @@ function initListeners() {
             }
 
             var observer = new IntersectionObserver(function(entries, observer) {
-                for(var entry of entries) {
+                for(var i=0; i<entries.length; i++) {
+                    var entry = entries[i];
                     resizeQuestion($(entry.target));
                 }
             }, options);
@@ -1687,7 +1688,8 @@ function initTimers() {
             }
 
             var observer = new IntersectionObserver(function(entries, observer) {
-                for(var entry of entries) {
+                for(var i=0; i<entries.length; i++) {
+                    var entry = entries[i];
                     quizVisibilityUpdate($(entry.target));
                 }
             }, options);
