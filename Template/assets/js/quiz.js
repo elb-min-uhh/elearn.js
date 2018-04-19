@@ -5,6 +5,23 @@
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 */
 
+
+// Quiztypen. Benennung entspricht dem, was im HTML Attribut qtype angegeben ist.
+var quizTypes = {
+    SHORT_TEXT : "short_text",
+    CHOICE : "choice",
+    FREE_TEXT : "free_text" ,
+    FILL_BLANK : "fill_blank",
+    FILL_BLANK_CHOICE : "fill_blank_choice",
+    ERROR_TEXT : "error_text",
+    HOTSPOT : "hotspot",
+    CLASSIFICATION : "classification",
+    ORDER : "order",
+    MATRIX_CHOICE : "matrix_choice",
+    PETRI : "petri",
+    DRAW : "drawing"
+};
+
 var QuizJSOptions = function(timerAlertActive, timerAlertText) {
     this.timerAlertActive = timerAlertActive;
     this.timerAlertText = timerAlertText;
@@ -13,6 +30,144 @@ var QuizJSOptions = function(timerAlertActive, timerAlertText) {
         this.timerAlertActive = bool;
         this.timerAlertText = text;
     };
+
+    // --------------------------------------------------------------------------------------
+    // COPY QUESTION TO SHOW AGAIN
+    // --------------------------------------------------------------------------------------
+
+    /**
+    * Kopiert die Frage ohne Bestätigungsbuttons (reiner Fragekörper)
+    */
+    this.showQuestionHere = function(button) {
+        var self = this;
+
+        var id = $(button).attr("id").replace("_ref", "");
+
+        var orig = $('#'+id);
+
+        var div = orig.clone();
+        div.addClass("cloned");
+
+        // zählt immer als beantwortet
+        div.addClass("answered");
+
+        // hinweis, dass nicht veränderbar
+        div.find(".answered_hint").remove();
+        div.find("h4").after(
+            '<span class="answered_hint">Nicht änderbar, da die Frage bereits beantwortet wurde</span>');
+
+        var type = orig.attr("qtype");
+        // Verarbeiten der vorherigen Eingaben
+        if(type === quizTypes.FREE_TEXT) {
+            this.copyFreeText(div, orig);
+        }
+        else if(type === quizTypes.FILL_BLANK) {
+            this.copyFillBlank(div, orig);
+        }
+        else if(type === quizTypes.FILL_BLANK_CHOICE) {
+            this.copyFillBlankChoice(div, orig);
+        }
+        else if(type === quizTypes.HOTSPOT) {
+            this.copyHotspot(div);
+        }
+        else if(type === quizTypes.DRAW) {
+            this.copyDrawing(div, orig);
+        }
+
+        this.blockQuestion(div);
+
+
+        var hideButton = $('<button class="free_text_ref" id="'+id+'_ref">Ausblenden</button>');
+        hideButton.on('click', function(e) {
+            self.removeQuestionHere(hideButton);
+        })
+        $(button).before(div);
+        $(button).before(hideButton)
+        $(button).hide();
+    }
+
+    this.removeQuestionHere = function(button) {
+        $(button).prev().remove();
+        $(button).next().show();
+        $(button).remove();
+    }
+
+
+    this.copyFreeText = function(div, orig) {
+        div.find("textarea").val(orig.find("textarea").val());
+    }
+
+    this.copyFillBlank = function(div, orig) {
+        div.find("input").each(function(i, e) {
+            // Kopiert ausgewählten Wert
+            $(this).val($($(orig).find("input").get(i)).val());
+        });
+    }
+
+    this.copyFillBlankChoice = function(div, orig) {
+        div.find("select").each(function(i, e) {
+            // Kopiert ausgewählten Wert
+            $(this).val($($(orig).find("select").get(i)).val());
+        });
+    }
+
+
+    this.copyHotspot = function(div) {
+        // hover funktionen
+        div.find('.hotspot').mouseover(function(event) {
+            if($(this).find('.descr').children().length > 0) $(this).find('.descr').show();
+            calculateHotspotDescriptions($(this).closest('[qtype="'+quizTypes.HOTSPOT+'"]'));
+        });
+        div.find('.hotspot').mouseout(function(event) {
+            $(this).find('.descr').hide();
+        });
+    }
+
+    this.copyDrawing = function(div, orig) {
+        var canvas_orig = orig.find('.drawing_canvas_container').find('canvas.drawing_canvas.act')[0];
+        var canvas = div.find('.drawing_canvas_container').find('canvas.drawing_canvas.act')[0];
+
+        div.find('.drawing_canvas_container').find('canvas').not('.act').remove();
+
+        div.find('.button_container').remove();
+        div.find('.feedback.correct').show();
+
+        canvas.getContext('2d').drawImage(canvas_orig, 0, 0);
+    }
+
+    this.blockQuestion = function(div) {
+        div.addClass("answered");
+
+        var type = div.attr("qtype");
+
+        if(type === quizTypes.FREE_TEXT) {
+            div.find("textarea").attr("readonly", "readonly");
+        }
+        else if(type === quizTypes.SHORT_TEXT
+                || type === quizTypes.CHOICE
+                || type === quizTypes.FILL_BLANK
+                || type === quizTypes.MATRIX_CHOICE
+                || type == undefined) {
+            // Disabled jedes input
+            div.find("input").attr("disabled", true);
+        }
+        else if(type === quizTypes.FILL_BLANK_CHOICE) {
+            div.find("select").attr("disabled", true);
+        }
+        else if(type === quizTypes.CLASSIFICATION
+                || type === quizTypes.ORDER) {
+            div.find('.object').addClass("blocked");
+        }
+        else if(type === quizTypes.HOTSPOT) {
+            div.find('.hotspot').addClass("blocked");
+        }
+        else if(type === quizTypes.PETRI) {
+            div.find('.place').addClass("blocked");
+        }
+        else if(type === quizTypes.DRAW) {
+            div.find('.drawing_canvas_container').addClass("blocked");
+        }
+    }
 }
 
 var quizJS = new QuizJSOptions(false, "");
@@ -35,23 +190,6 @@ $(document).ready(function() {
     // fallback for browsers who do not support IntersectionObservers, only for elearn.js
     document.addEventListener("ejssectionchange", updateQuestionVisibility);
 });
-
-
-// Quiztypen. Benennung entspricht dem, was im HTML Attribut qtype angegeben ist.
-var quizTypes = {
-    SHORT_TEXT : "short_text",
-    CHOICE : "choice",
-    FREE_TEXT : "free_text" ,
-    FILL_BLANK : "fill_blank",
-    FILL_BLANK_CHOICE : "fill_blank_choice",
-    ERROR_TEXT : "error_text",
-    HOTSPOT : "hotspot",
-    CLASSIFICATION : "classification",
-    ORDER : "order",
-    MATRIX_CHOICE : "matrix_choice",
-    PETRI : "petri",
-    DRAW : "drawing"
-};
 
 
 // ------------------------------------------------------------
@@ -323,7 +461,7 @@ function submitAns(button, force) {
         div.children("div.feedback").filter(".information").show();
     }
 
-    blockQuestion(div);
+    quizJS.blockQuestion(div);
 
     div.addClass("answered");
     div.next("button.quizButton").hide();
@@ -805,146 +943,11 @@ function processDrawing(div) {
 
 // --------------------------------------------------------------------------------------
 
-
-// --------------------------------------------------------------------------------------
-// COPY QUESTION TO SHOW AGAIN
-// --------------------------------------------------------------------------------------
-
-/**
-* Kopiert die Frage ohne Bestätigungsbuttons (reiner Fragekörper)
-*/
-function showQuestionHere(button) {
-    var id = $(button).attr("id").replace("_ref", "");
-
-    var orig = $('#'+id);
-
-    var div = orig.clone();
-    div.addClass("cloned");
-
-    // zählt immer als beantwortet
-    div.addClass("answered");
-
-    // hinweis, dass nicht veränderbar
-    div.find(".answered_hint").remove();
-    div.find("h4").after(
-        '<span class="answered_hint">Nicht änderbar, da die Frage bereits beantwortet wurde</span>');
-
-    var type = orig.attr("qtype");
-    // Verarbeiten der vorherigen Eingaben
-    if(type === quizTypes.FREE_TEXT) {
-        copyFreeText(div, orig);
-    }
-    else if(type === quizTypes.FILL_BLANK) {
-        copyFillBlank(div, orig);
-    }
-    else if(type === quizTypes.FILL_BLANK_CHOICE) {
-        copyFillBlankChoice(div, orig);
-    }
-    else if(type === quizTypes.HOTSPOT) {
-        copyHotspot(div);
-    }
-    else if(type === quizTypes.DRAW) {
-        copyDrawing(div, orig);
-    }
-
-    blockQuestion(div);
-
-
-    var hideButton = '<button class="free_text_ref" id="'+id+'_ref" onclick="removeQuestionHere(this)">Ausblenden</button>';
-    $(button).before(div);
-    $(button).before(hideButton)
-    $(button).hide();
-}
-
-function removeQuestionHere(button) {
-    $(button).prev().remove();
-    $(button).next().show();
-    $(button).remove();
-}
-
-
-function copyFreeText(div, orig) {
-    div.find("textarea").val(orig.find("textarea").val());
-}
-
-function copyFillBlank(div, orig) {
-    div.find("input").each(function(i, e) {
-        // Kopiert ausgewählten Wert
-        $(this).val($($(orig).find("input").get(i)).val());
-    });
-}
-
-function copyFillBlankChoice(div, orig) {
-    div.find("select").each(function(i, e) {
-        // Kopiert ausgewählten Wert
-        $(this).val($($(orig).find("select").get(i)).val());
-    });
-}
-
-
-function copyHotspot(div) {
-    // hover funktionen
-    div.find('.hotspot').mouseover(function(event) {
-        if($(this).find('.descr').children().length > 0) $(this).find('.descr').show();
-        calculateHotspotDescriptions($(this).closest('[qtype="'+quizTypes.HOTSPOT+'"]'));
-    });
-    div.find('.hotspot').mouseout(function(event) {
-        $(this).find('.descr').hide();
-    });
-}
-
-function copyDrawing(div, orig) {
-    var canvas_orig = orig.find('.drawing_canvas_container').find('canvas.drawing_canvas.act')[0];
-    var canvas = div.find('.drawing_canvas_container').find('canvas.drawing_canvas.act')[0];
-
-    div.find('.drawing_canvas_container').find('canvas').not('.act').remove();
-
-    div.find('.button_container').remove();
-    div.find('.feedback.correct').show();
-
-    canvas.getContext('2d').drawImage(canvas_orig, 0, 0);
-}
-
-
 function finishQuestion(div) {
     var try_count = 50;
     while(!div.is(".answered") && try_count > 0) {
         submitAns(div.next('button'), true);
         try_count -= 1;
-    }
-}
-
-function blockQuestion(div) {
-    div.addClass("answered");
-
-    var type = div.attr("qtype");
-
-    if(type === quizTypes.FREE_TEXT) {
-        div.find("textarea").attr("readonly", "readonly");
-    }
-    else if(type === quizTypes.SHORT_TEXT
-            || type === quizTypes.CHOICE
-            || type === quizTypes.FILL_BLANK
-            || type === quizTypes.MATRIX_CHOICE
-            || type == undefined) {
-        // Disabled jedes input
-        div.find("input").attr("disabled", true);
-    }
-    else if(type === quizTypes.FILL_BLANK_CHOICE) {
-        div.find("select").attr("disabled", true);
-    }
-    else if(type === quizTypes.CLASSIFICATION
-            || type === quizTypes.ORDER) {
-        div.find('.object').addClass("blocked");
-    }
-    else if(type === quizTypes.HOTSPOT) {
-        div.find('.hotspot').addClass("blocked");
-    }
-    else if(type === quizTypes.PETRI) {
-        div.find('.place').addClass("blocked");
-    }
-    else if(type === quizTypes.DRAW) {
-        div.find('.drawing_canvas_container').addClass("blocked");
     }
 }
 
@@ -1778,7 +1781,7 @@ function updateTimers() {
         }
         else if(!question.is('.answered')) {
             finishQuestion(question);
-            blockQuestion(question);
+            quizJS.blockQuestion(question);
             question.find('.feedback.noselection').hide();
 
             question.append("<div class='feedback timeup'>Die Zeit ist abgelaufen. Die Frage wurde automatisch beantwortet und gesperrt.</div>");

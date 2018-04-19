@@ -45,6 +45,19 @@ die Änderungen dabei natürlich überschrieben und sie müssten ggf. erneut
 angewendet werden. Die HTML Seiten, welche die Skripte verwenden bleiben bei
 diesem Vorgang natürlich unberührt.
 
+## Erweiterungen
+
+Es existieren mehrere Erweiterungen für das _elearn.js_, welche aber auch
+ohne dieses funktionieren:
+
+* [quiz.js](https://github.com/elb-min-uhh/quiz.js) Einbettung von Quizelementen
+* [elearnvideo.js](https://github.com/elb-min-uhh/elearnvideo.js) Videoelemente
+    mit zusätzlichen Informationen und Notizen
+* [clickimage.js](https://github.com/elb-min-uhh/clickimage.js) Interaktive
+    Grafiken
+* [timeslider.js](https://github.com/elb-min-uhh/timeslider.js) Interaktive
+    Zeitleisten
+
 ## Versionen
 
 Bitte sehen sie sich die Datei

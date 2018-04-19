@@ -94,8 +94,11 @@ Hier sollen vor allem Video und Audio-Einbindung demonstriert werden. At vero eo
 
 #### Videos als Asset
 
-Hier wird ein Video eingebunden, welches sich direkt im Asset-Ordner des Skrips befindet. Diese Lösung ist nur für relativ kurze Videos empfehlenswert (max. fünf Minuten).
-Zusätzlich enthält das Video Anmerkungen, die unter dem Video angezeigt werden. Diese sind durch die Erweiterung video.js möglich.
+Hier wird ein Video eingebunden, welches sich direkt im Asset-Ordner des Skrips befindet.
+Diese Lösung ist nur für relativ kurze Videos empfehlenswert (max. fünf Minuten).
+Zusätzlich enthält das Video Anmerkungen, die unter dem Video angezeigt werden.
+Diese sind durch die Erweiterung
+[elearnvideo.js](https://github.com/elb-min-uhh/elearnvideo.js) möglich.
 
 <video class="allow_user_notes" preload="auto" controls="controls" style="max-width:100%">
     <source src="assets/img/template-media/beispiel-video.mp4" type="video/mp4">
@@ -213,6 +216,7 @@ beliebig verändert werden.
 ### Quizfragen
 
 Auf dieser Seite sind einige Quiz-Fragen Beispielhaft dargestellt.
+Diese Quizfragen benötigen das [quiz.js](https://github.com/elb-min-uhh/quiz.js).
 
 <div class="question">
 <h4>Auf welcher Technologie basieren die digitalen Skripte? </h4> <!-- Fragentext -->

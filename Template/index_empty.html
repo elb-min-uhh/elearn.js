@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8">
-		<meta name="keywords" content="Key, Words">
-		<meta name="description" content="Hier Beschreibung einfügen">
-		<meta name="author" content="Name Autor">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <meta name="keywords" content="Key, Words">
+        <meta name="description" content="Hier Beschreibung einfügen">
+        <meta name="author" content="Name Autor">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-		<link rel="stylesheet" type="text/css" href="assets/css/elearn.css">
-		<link rel="stylesheet" type="text/css" href="assets/css/quiz.css">
-		<link rel="stylesheet" type="text/css" href="assets/css/elearnvideo.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/elearn.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/quiz.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/elearnvideo.css">
 
-		<script type="text/javascript" src="assets/js/min.js"></script> <!-- von UHH verwendetes JQuery -->
-		<script type="text/javascript" src="assets/js/elearn.js"></script> <!-- eLearn.js -->
-		<script type="text/javascript" src="assets/js/quiz.js"></script> <!-- Quiz Script -->
-		<script type="text/javascript" src="assets/js/elearnvideo.js"></script> <!-- Video Script -->
+        <script type="text/javascript" src="assets/js/min.js"></script> <!-- von UHH verwendetes JQuery -->
+        <script type="text/javascript" src="assets/js/elearn.js"></script> <!-- eLearn.js -->
+        <script type="text/javascript" src="assets/js/quiz.js"></script> <!-- Quiz Script -->
+        <script type="text/javascript" src="assets/js/elearnvideo.js"></script> <!-- Video Script -->
 
-		<script>
-		    window.onload = function() {
+        <script>
+            window.onload = function() {
 
                 // Erweiterungen hier einfügen
 
@@ -37,7 +37,7 @@
                 eLearnJS.toggleAllSections(); // Zeigt alle Sections an
                 eLearnJS.setNavigationTitle("Überschrift"); // Die Überschrift, wenn alle Sections sichtbar sind
 
-				eLearnJS.setBackButtonEnabled(true); // Zurück button im Header aktivieren
+                eLearnJS.setBackButtonEnabled(true); // Zurück button im Header aktivieren
                 eLearnJS.setBackButtonText("Übersicht"); // "Übersicht" als Text, statt "Zurück" für den Button
 
                 // Beispiele für BackPages (Was geöffnet wird beim Back button):
@@ -48,60 +48,54 @@
                 // "link" funktioniert wie ein href link eines <a>
                 eLearnJS.setBackPage(2, "index"); // Die 3. section
                 eLearnJS.setBackPage("Inhaltsverzeichnis", "name"); // Die section mit name="Inhaltsverzeichnis"
-				eLearnJS.setBackPage("../", "link"); // Im Pfad einen Schritt zurück
+                eLearnJS.setBackPage("../", "link"); // Im Pfad einen Schritt zurück
                 eLearnJS.setBackPage("http://google.de", "link"); // Google wird geöffnet
 
-				eLearnJS.generalDirectionButtonsEnabled(false); // keine Nav. Buttons
-				eLearnJS.setKeyNavigationEnabled(false); // keine Tastaturnavigation
-				eLearnJS.generalProgressbarEnabled(false); // keine Fortschrittsleiste
+                eLearnJS.generalDirectionButtonsEnabled(false); // keine Nav. Buttons
+                eLearnJS.setKeyNavigationEnabled(false); // keine Tastaturnavigation
+                eLearnJS.generalProgressbarEnabled(false); // keine Fortschrittsleiste
                 */
             }
         </script>
 
-		<title>elearn.js Template</title>
-	</head>
-	<body>
-	    <!-- #wrap muss bleiben, sonst funktioniert eLearn.js nicht -->
-		<div id="wrap">
+        <title>elearn.js Template</title>
+    </head>
+    <body>
+        <!-- #wrap muss bleiben, sonst funktioniert eLearn.js nicht -->
+        <div id="wrap">
             <!-- Page Info -->
             <div class="lb-wrap" id="info">
                 <div class="lightbox">
                     <div class="info-wrapper">
-				        <!--Der inhalt der Info-Box kann frei mit html-Inhalt gefüllt werden. -->
-			         	<h4>Produktion digitaler Skripte</h4>
-				        <p>
-				            Michael Heinecke<br>
-				            Universität Hamburg
-				        <p>
-				    </div>
-			    </div>
+                        <!--Der inhalt der Info-Box kann frei mit html-Inhalt gefüllt werden. -->
+                         <h4>Produktion digitaler Skripte</h4>
+                        <p>
+                            Michael Heinecke<br>
+                            Universität Hamburg
+                        <p>
+                    </div>
+                </div>
             </div>
 
-			<div class="page">
+            <div class="page">
 
+                {{ BODY }}
 
-
-                <section name="Titelseite">
-
-<!--Hier den Markdown-Export einfügen-->
-
-{{ BODY }}
-
-                </section>
-
-
-            	<!--MathJax-Einbindung für die Formeldarstellung-->
-	            <script type="text/x-mathjax-config">
-	            	if (typeof MathJaxListener !== 'undefined') {
-	                      MathJax.Hub.Register.StartupHook('End', function () {
-	                        MathJaxListener.invokeCallbackForKey_('End');
-	                      });
-	                    }
-	                    </script>
-
-							<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
+                <!--MathJax-Einbindung für die Formeldarstellung-->
+                <script type="text/x-mathjax-config">
+                    MathJax.Hub.Config({
+                        extensions: ["tex2jax.js"],
+                        jax: ["input/TeX", "output/HTML-CSS"],
+                        tex2jax: {
+                            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                            displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                            processEscapes: true
+                        },
+                        "HTML-CSS": { availableFonts: ["TeX"] }
+                    });
+                </script>
+                <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"></script>
             </div>
-		</div>
-	</body>
+        </div>
+    </body>
 </html>

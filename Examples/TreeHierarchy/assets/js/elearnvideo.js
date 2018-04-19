@@ -40,7 +40,7 @@ var user_notes = {};
 function initiateVideoPlayers() {
     loadLocalVideoNotesStorage();
 
-    $('video').each(function(i,e) {
+    $('video').not('.ignore_elearnvideo').each(function(i,e) {
         this.controls = false;
 
         $(this).wrap('<div class="video-container">');
