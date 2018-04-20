@@ -496,6 +496,7 @@ a:active {
     float: right;
     margin-right: -15px;
     margin-top: 15px;
+    margin-bottom: 0;
     background: #444;
     color: #fff;
     border: 0;
@@ -1416,12 +1417,12 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
 
     #tooltipArrowRight,
     #tooltipTouchRight {
-        right: calc(8.5% - 15px - 0px - 33px);
+        right: calc(8.5% - 15px - 0px - 22px);
         /* right: page padding - #btnNext.MarginLeft - #btnNext:before.MarginLeft - own padding to fit arrow*/
     }
     #tooltipArrowLeft,
     #tooltipTouchLeft {
-        left: calc(8.5% - 15px - 0px - 33px);
+        left: calc(8.5% - 15px - 0px - 22px);
         /* left: page padding - #btnPrev.MarginRight - #btnPrev:before.MarginRight - own padding to fit arrow*/
     }
 
@@ -1504,6 +1505,17 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
 
     #btnNext, #btnPrev {
         display: none !important;
+    }
+
+    #tooltipArrowRight,
+    #tooltipTouchRight {
+        right: 0;
+        /* right: page padding - #btnNext.MarginLeft - #btnNext:before.MarginLeft - own padding to fit arrow*/
+    }
+    #tooltipArrowLeft,
+    #tooltipTouchLeft {
+        left: 0;
+        /* left: page padding - #btnPrev.MarginRight - #btnPrev:before.MarginRight - own padding to fit arrow*/
     }
 
     .side-menu {
