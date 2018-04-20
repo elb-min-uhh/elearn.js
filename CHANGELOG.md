@@ -7,6 +7,10 @@ _Hinweis:_ Erweiterungen zum eLearn.js befinden sich in eigenen Repositories.
   * Fehlerbehebungen:
     * Schriftarten zusätzlich als _.ttf_ hinzugefügt
     * Fehlerbehebungen für CSS Flex Attribut (WebKit)
+  * Anderes:
+    * Das eLearn.js wurde grundlegend Refactored. Alle Funktionen müssen jetzt
+    über das `eLearnJS` Objekt aufgerufen werden und sind nicht mehr global
+    vorhanden
 * __1.0.1__:
   * Neuerungen:
     * Markdown Template wurde angepasst für das `atom-elearnjs` package
