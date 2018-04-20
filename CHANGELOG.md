@@ -7,6 +7,8 @@ _Hinweis:_ Erweiterungen zum eLearn.js befinden sich in eigenen Repositories.
   * Fehlerbehebungen:
     * Schriftarten zusätzlich als _.ttf_ hinzugefügt
     * Fehlerbehebungen für CSS Flex Attribut (WebKit)
+    * Tooltips werden auch bei schmalen Fenstern nicht mehr aus dem Bild
+    geschoben
   * Anderes:
     * Das eLearn.js wurde grundlegend Refactored. Alle Funktionen müssen jetzt
     über das `eLearnJS` Objekt aufgerufen werden und sind nicht mehr global
