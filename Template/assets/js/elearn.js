@@ -110,7 +110,7 @@ function initiateELearnJS() {
                 + "<div id='nav-bar'>"
                     + "<div onclick='javascript: backButtonPressed();' id='btnBackCon' class ='btn' title='Zurück zur Übersicht'><div class='icon-font' id='btnBack'>b</div><div id='btnBackText'>Zurück</div></div>"
                     + "<div onclick='javascript: toggleAllSections();' id='btnAllCon' class ='btn' title='Zeige/verstecke Bereiche'><div class='icon-font' id='btnAll'>s</div><div id='btnAllText'>Ansicht</div></div>"
-                    + "<div onclick='javascript: showSectionOverview();' id='btnExp' class ='btn' title='Inhaltsverzeichnis'><div class='icon-font' id='btnExpSym'>c</div><div id='nav-title'>Name des Moduls</div></div>"
+                    + "<div onclick='javascript: showSectionOverview();' id='btnExp' class ='btn' title='Inhaltsverzeichnis'><div class='icon-font' id='btnExpSym'>c</div><div id='nav-title'>Übersicht</div></div>"
                     + "<div onclick='javascript: toggleSideMenu(isSideMenuVisible());' id='btnMenu' class ='icon-font btn' title='Menü'>m</div>"
                     + "<div onclick='javascript: startHelp();' id='btnHelp' class ='btn' title='Zeige/verstecke Bereiche'><div class='icon-font' id='btnHelpSym'>q</div><div id='btnHelpText'>Hilfe</div></div>"
                     + "<div style='clear:both'></div>"
@@ -710,7 +710,7 @@ function setBlockProgressShowElement(enabled, text) {
 // -------------------------------------------------------------------------------------
 
 function setNavigationTitle(text) {
-    $('#nav-title').text(text);
+    if(allShown) $('#nav-title').text(text);
     // default navigation title (when no single section is open)
     navigationTitle = text;
 }

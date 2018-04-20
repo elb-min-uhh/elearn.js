@@ -8,13 +8,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
         <link rel="stylesheet" type="text/css" href="assets/css/elearn.css">
-        <link rel="stylesheet" type="text/css" href="assets/css/quiz.css">
-        <link rel="stylesheet" type="text/css" href="assets/css/elearnvideo.css">
 
         <script type="text/javascript" src="assets/js/min.js"></script> <!-- von UHH verwendetes JQuery -->
         <script type="text/javascript" src="assets/js/elearn.js"></script> <!-- eLearn.js -->
-        <script type="text/javascript" src="assets/js/quiz.js"></script> <!-- Quiz Script -->
-        <script type="text/javascript" src="assets/js/elearnvideo.js"></script> <!-- Video Script -->
+
+        <!--
+            Diese Erweiterungen finden sie in den jeweiligen Repositories.
+            Die Repositories sind in den zugehörigen Abschnitten verlinkt.
+        -->
+        <!-- quiz.js https://github.com/elb-min-uhh/quiz.js-->
+        <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/elb-min-uhh/quiz.js/master/assets/css/quiz.css">
+        <script type="text/javascript" src="https://cdn.rawgit.com/elb-min-uhh/quiz.js/master/assets/js/quiz.js"></script>
+        <!-- elearnvideo.js https://github.com/elb-min-uhh/elearnvideo.js-->
+        <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/elb-min-uhh/elearnvideo.js/master/assets/css/elearnvideo.css">
+        <script type="text/javascript" src="https://cdn.rawgit.com/elb-min-uhh/elearnvideo.js/master/assets/js/elearnvideo.js"></script>
+        <!-- clickimage.js https://github.com/elb-min-uhh/clickimage.js-->
+        <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/elb-min-uhh/clickimage.js/master/assets/css/clickimage.css">
+        <script type="text/javascript" src="https://cdn.rawgit.com/elb-min-uhh/clickimage.js/master/assets/js/clickimage.js"></script>
+        <!-- timeslider.js https://github.com/elb-min-uhh/timeslider.js-->
+        <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/elb-min-uhh/timeslider.js/master/assets/css/timeslider.css">
+        <script type="text/javascript" src="https://cdn.rawgit.com/elb-min-uhh/timeslider.js/master/assets/js/moment.js"></script>
+        <script type="text/javascript" src="https://cdn.rawgit.com/elb-min-uhh/timeslider.js/master/assets/js/timeslider.js"></script>
 
         <script>
             window.onload = function() {
@@ -312,10 +326,115 @@
                     </div>
                     <p>
                         Es existieren auch noch andere Fragetypen, diese sind in der Dokumentation vom quiz.js beschrieben.
-                        Beispiele sind hier zu finden: <a href="../Extensions/quiz.js/index.html">Link</a>.
                     </p>
+                </section>
 
-                </section><section name="Literatur">
+                <section name="Interaktive Grafik" class="sub"><h3 id="interaktivegrafik">Interaktive Grafik</h3>
+                    <p>Mit der Erweiterung
+                    <a href="https://github.com/elb-min-uhh/clickimage.js">clickImage.js</a> ist es möglich,
+                    interaktive Grafiken zu erstellen. Hier ein Beispiel:</p>
+                    <div class="clickimage">
+                        <div class="imagebox invert">
+                            <img src="assets/img/template-media/schiff.jpg" alt="Schiff" onload="clickimagePins(this,[[10,10,'right'],[50,60,'left'],[42,25],[80,80,'top']])">
+                        </div>
+                        <div class="pininfo">
+                            <div>
+                                <h3><span class="highlight">Aufgabe 1</span> Wie lauten die Bestandteile des Kopfes?</h3>
+                                <p class="task">
+                                Wie jedes Insekt hat auch eine Biene insgesamt 6 Beine. Die Biene
+                                benutzt ihre Beine nicht nur zum Laufen, sondern auch zur Körperpflege
+                                und beim Transport der Pollen zum Stock. Jedes Bein ist in fünf Glieder
+                                unterteilt. Vom Körper aus betrachtet nennt man sie Hüfte (Coxa),
+                                Schenkelring (Trochanter), Schenkel (Femur), Schiene (Tibia) und Fuß
+                                (Tarsus). Der Fuß ist widerum in 4 kleinere Glieder unterteilt. Das
+                                letzte Fußglied trägt eine Kralle und Haftlappen, mit denen sich
+                                Bienen auch auf sehr glatten Oberflächen, wie zum Beispiel Glas
+                                festhalten können.</p>
+                                <p class="hint">Hinweis<br>Wie jedes Insekt hat auch eine Biene
+                                insgesamt 6 Beine. Die Biene benutzt ihre Beine nicht nur zum
+                                Laufen, sondern auch zur Körperpflege und beim Transport der Pollen
+                                zum Stock.</p>
+                                <ul class="links">
+                                    <li>
+                                    <a href="https://de.wikipedia.org/wiki/The_Bird_and_the_Bee">https://de.wikipedia.org/wiki/The_Bird_and_the_Bee</a>
+                                    <br>Dies ist eine Link-Beschreibung, die weitere Informationen zu der zugehörigen URL liefert
+                                    </li>
+                                    <li>
+                                    <a href="https://de.wikipedia.org/wiki/The_Bird_and_the_Bee">https://de.wikipedia.org/wiki/The_Bird_and_the_Bee</a>
+                                    <br>Dies ist eine Link-Beschreibung, die weitere Informationen zu der zugehörigen URL liefert
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3><span class="highlight">Aufgabe 2</span> Wie lauten die Bestandteile des Rumpfes?</h3>
+                                <p>
+                                Wie jedes Insekt hat auch eine Biene insgesamt 6 Beine. Die
+                                Biene benutzt ihre Beine nicht nur zum Laufen, sondern auch zur
+                                Körperpflege und beim Transport der Pollen zum Stock. Jedes Bein ist
+                                in fünf Glieder unterteilt. Vom Körper aus betrachtet nennt man sie
+                                Hüfte (Coxa), Schenkelring (Trochanter), Schenkel (Femur), Schiene
+                                (Tibia) und Fuß (Tarsus). Der Fuß ist widerum in 4 kleinere Glieder
+                                unterteilt. Das letzte Fußglied trägt eine Kralle und Haftlappen,
+                                mit denen sich Bienen auch auf sehr glatten Oberflächen, wie zum
+                                Beispiel Glas festhalten können.
+                                </p>
+                            </div>
+                            <div class="inline">
+                                <h3>Der Mast</h3>
+                                <p>Als Schiffsmast bezeichnet man einen ganz oder annähernd vertikal
+                                auf Schiffen aufgestellten Mast aus Holz, Metall oder anderen festen
+                                Materialien.</p>
+                            </div>
+                            <div>
+                                <h3><span class="highlight">Aufgabe 3</span> Wie lauten die Bestandteile des Rumpfes?</h3>
+                                <p>
+                                Wie jedes Insekt hat auch eine Biene insgesamt 6 Beine. Die
+                                Biene benutzt ihre Beine nicht nur zum Laufen, sondern auch zur
+                                Körperpflege und beim Transport der Pollen zum Stock. Jedes Bein ist
+                                in fünf Glieder unterteilt. Vom Körper aus betrachtet nennt man sie
+                                Hüfte (Coxa), Schenkelring (Trochanter), Schenkel (Femur), Schiene
+                                (Tibia) und Fuß (Tarsus). Der Fuß ist widerum in 4 kleinere Glieder
+                                unterteilt. Das letzte Fußglied trägt eine Kralle und Haftlappen,
+                                mit denen sich Bienen auch auf sehr glatten Oberflächen, wie zum
+                                Beispiel Glas festhalten können.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section name="TimeSlider" class="sub"><h3 id="timeslider">TimeSlider</h3>
+                    <p>
+                        Die Erweiterung <a href="https://github.com/elb-min-uhh/timeslider.js">timeSlider.js</a>
+                        erlaubt es, Zeitleisten zu erstellen, um sich so interaktiv über zeitlich
+                        aufgelistete Informationen zu arbeiten.
+                    </p>
+                    <div class="timeslider" data-interval="year" data-mode="date" data-zoom="1" lang="de">
+                        <div>
+                            <h3><span>2014</span> Das Jahr 2014</h3>
+                            <p>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+                            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+                            sed diam voluptua.
+                            </p>
+                            <p>
+                            At vero eos et accusam et justo duo dolores et ea rebum.
+                            </p>
+                        </div>
+                        <div>
+                            <h3><span>2016 - 2018</span> Weitere Jahre</h3>
+                            <p>
+                            At vero eos et accusamus et iusto odio dignissimos ducimus qui
+                            blanditiis praesentium voluptatum deleniti atque corrupti quos dolores
+                            et quas molestias excepturi sint occaecati cupiditate non provident,
+                            similique sunt in culpa qui officia deserunt mollitia animi, id est
+                            laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita
+                            distinctio.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section name="Literatur">
                     <h3>Literatur</h3>
                     <div class="lit">
                         <p>Adapt learning community. (o. J.). Abgerufen 11. September 2015, von <a href="https://community.adaptlearning.org">https://community.adaptlearning.org</a></p>

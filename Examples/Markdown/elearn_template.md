@@ -1,9 +1,19 @@
+<!--
+This template is written for the `atom-elearnjs` package. You do not need
+anything else but the files linked in here to convert this .md to HTML or PDF.
+-->
+
 <!--meta
 Title: elearn.js Template
 Author: Name Autor
 Description: Hier Beschreibung einfügen
 Keywords: Key, Words
-Custom: "<script type=\"text/x-mathjax-config\">
+Custom: "<script>
+            window.onload = function() {
+                eLearnJS.setNavigationTitle('Template Überschrift');
+            }
+        </script>
+        <script type=\"text/x-mathjax-config\">
             MathJax.Hub.Config({
                 extensions: [\"tex2jax.js\"],
                 jax: [\"input/TeX\", \"output/HTML-CSS\"],
@@ -29,7 +39,7 @@ Universität Hamburg
 Institution des Autors     
 cc by-sa | 2015
 
-![Titelbild](assets/img/template-media/illu-concept.png)
+![Titelbild](images/illu-concept.png)
 
 ## Inhaltsverzeichnis <!--hide-in-overview-->
 
@@ -68,11 +78,11 @@ Bilder können als einzelne Abbildungen oder als Galerien eingebunden werden.Fü
 
 <div class="slider preview-nav loop">
 <ul class="img-gallery" id="x" style="list-style:none;">
-<li><img src="assets/img/template-media/md-illu_1.png" alt="md-produktion" /><p>Markdown ist kinderleicht zu erlernen.</p></li>
-<li><img src="assets/img/template-media/md-illu_2.png" alt="Components" /><p>Zusammenspiel der Komponenten bei der Produktion von digitalen Skripten mit Markdown.</p></li>
-<li><img src="assets/img/template-media/md-illu_3.png" alt="Future" /><p>Die Zukunft von Markdown als Autorensprache.</p></li>
-<li><img src="assets/img/template-media/md-illu_4.png" alt="Media" /><p>Markdown kann viele verschiedene Medientypen in Html einfügen.</p></li>
-<li><img src="assets/img/template-media/md-illu_5.png" alt="Hello" /><p>Versuche auch mal, ein Markdown-Dokument zu erstellen. Ist gar nicht schwer!</p></li>
+<li><img src="images/md-illu_1.png" alt="md-produktion" /><p>Markdown ist kinderleicht zu erlernen.</p></li>
+<li><img src="images/md-illu_2.png" alt="Components" /><p>Zusammenspiel der Komponenten bei der Produktion von digitalen Skripten mit Markdown.</p></li>
+<li><img src="images/md-illu_3.png" alt="Future" /><p>Die Zukunft von Markdown als Autorensprache.</p></li>
+<li><img src="images/md-illu_4.png" alt="Media" /><p>Markdown kann viele verschiedene Medientypen in Html einfügen.</p></li>
+<li><img src="images/md-illu_5.png" alt="Hello" /><p>Versuche auch mal, ein Markdown-Dokument zu erstellen. Ist gar nicht schwer!</p></li>
 </ul>
 </div>
 
@@ -101,10 +111,10 @@ Diese sind durch die Erweiterung
 [elearnvideo.js](https://github.com/elb-min-uhh/elearnvideo.js) möglich.
 
 <video class="allow_user_notes" preload="auto" controls="controls" style="max-width:100%">
-    <source src="assets/img/template-media/beispiel-video.mp4" type="video/mp4">
-    <source src="assets/img/template-media/beispiel-video.webm" type="video/webm">
+    <source src="images/beispiel-video.mp4" type="video/mp4">
+    <source src="images/beispiel-video.webm" type="video/webm">
            Dein Browser unterstützt kein HTML5-Video. Um dir das Video dennoch ansehen zu können,
-           folge einfach diesem <a href="assets/img/template-media/beispiel-video.mp4">Link</a>.
+           folge einfach diesem <a href="images/beispiel-video.mp4">Link</a>.
 </video>
 <div class="video_notes timestamps">
     <h5>Untertitel:</h5>
@@ -129,7 +139,7 @@ Hier ist ein Video von einem Streaming-Server als iFrame eingebunden.
 Da Audio-Dateien als mp3s in der Regel nicht so groß sind, dass ein Streaming-Server benötigt wird, können diese aus dem Assets-Ordner progressiv als Download eingebunden worden. Hier ein Beispiel:
 
 <audio preload="auto" controls="controls">
-    <source src="assets/img/template-media/beispiel-audio.mp3" type="audio/mpeg">
+    <source src="images/beispiel-audio.mp3" type="audio/mpeg">
            Dein Browser unterstützt kein HTML5-Audio. Um dir das Audio-File dennoch anhören zu können,
            folge einfach diesem <a href="img/template-media/beispiel-audio.mp3">Link</a>.
 </audio>
@@ -257,6 +267,112 @@ In deiner Antwort ist mindestens ein Ordner, der nicht unbedingt benötigt wird.
 </div>
 
 Es existieren auch noch andere Fragetypen, diese sind in der Dokumentation vom quiz.js beschrieben.
+
+### Interaktive Grafik
+
+Mit der Erweiterung
+[clickImage.js](https://github.com/elb-min-uhh/clickimage.js) ist es möglich,
+interaktive Grafiken zu erstellen. Hier ein Beispiel:
+
+<div class="clickimage">
+    <div class="imagebox invert">
+        <img src="images/schiff.jpg" alt="Schiff" onload="clickimagePins(this,[[10,10,'right'],[50,60,'left'],[42,25],[80,80,'top']])">
+    </div>
+    <div class="pininfo">
+        <div>
+            <h3><span class="highlight">Aufgabe 1</span> Wie lauten die Bestandteile des Kopfes?</h3>
+            <p class="task">
+            Wie jedes Insekt hat auch eine Biene insgesamt 6 Beine. Die Biene
+            benutzt ihre Beine nicht nur zum Laufen, sondern auch zur Körperpflege
+            und beim Transport der Pollen zum Stock. Jedes Bein ist in fünf Glieder
+            unterteilt. Vom Körper aus betrachtet nennt man sie Hüfte (Coxa),
+            Schenkelring (Trochanter), Schenkel (Femur), Schiene (Tibia) und Fuß
+            (Tarsus). Der Fuß ist widerum in 4 kleinere Glieder unterteilt. Das
+            letzte Fußglied trägt eine Kralle und Haftlappen, mit denen sich
+            Bienen auch auf sehr glatten Oberflächen, wie zum Beispiel Glas
+            festhalten können.</p>
+            <p class="hint">Hinweis<br>Wie jedes Insekt hat auch eine Biene
+            insgesamt 6 Beine. Die Biene benutzt ihre Beine nicht nur zum
+            Laufen, sondern auch zur Körperpflege und beim Transport der Pollen
+            zum Stock.</p>
+            <ul class="links">
+                <li>
+                <a href="https://de.wikipedia.org/wiki/The_Bird_and_the_Bee">https://de.wikipedia.org/wiki/The_Bird_and_the_Bee</a>
+                <br>Dies ist eine Link-Beschreibung, die weitere Informationen zu der zugehörigen URL liefert
+                </li>
+                <li>
+                <a href="https://de.wikipedia.org/wiki/The_Bird_and_the_Bee">https://de.wikipedia.org/wiki/The_Bird_and_the_Bee</a>
+                <br>Dies ist eine Link-Beschreibung, die weitere Informationen zu der zugehörigen URL liefert
+                </li>
+            </ul>
+        </div>
+        <div>
+            <h3><span class="highlight">Aufgabe 2</span> Wie lauten die Bestandteile des Rumpfes?</h3>
+            <p>
+            Wie jedes Insekt hat auch eine Biene insgesamt 6 Beine. Die
+            Biene benutzt ihre Beine nicht nur zum Laufen, sondern auch zur
+            Körperpflege und beim Transport der Pollen zum Stock. Jedes Bein ist
+            in fünf Glieder unterteilt. Vom Körper aus betrachtet nennt man sie
+            Hüfte (Coxa), Schenkelring (Trochanter), Schenkel (Femur), Schiene
+            (Tibia) und Fuß (Tarsus). Der Fuß ist widerum in 4 kleinere Glieder
+            unterteilt. Das letzte Fußglied trägt eine Kralle und Haftlappen,
+            mit denen sich Bienen auch auf sehr glatten Oberflächen, wie zum
+            Beispiel Glas festhalten können.
+            </p>
+        </div>
+        <div class="inline">
+            <h3>Der Mast</h3>
+            <p>Als Schiffsmast bezeichnet man einen ganz oder annähernd vertikal
+            auf Schiffen aufgestellten Mast aus Holz, Metall oder anderen festen
+            Materialien.</p>
+        </div>
+        <div>
+            <h3><span class="highlight">Aufgabe 3</span> Wie lauten die Bestandteile des Rumpfes?</h3>
+            <p>
+            Wie jedes Insekt hat auch eine Biene insgesamt 6 Beine. Die
+            Biene benutzt ihre Beine nicht nur zum Laufen, sondern auch zur
+            Körperpflege und beim Transport der Pollen zum Stock. Jedes Bein ist
+            in fünf Glieder unterteilt. Vom Körper aus betrachtet nennt man sie
+            Hüfte (Coxa), Schenkelring (Trochanter), Schenkel (Femur), Schiene
+            (Tibia) und Fuß (Tarsus). Der Fuß ist widerum in 4 kleinere Glieder
+            unterteilt. Das letzte Fußglied trägt eine Kralle und Haftlappen,
+            mit denen sich Bienen auch auf sehr glatten Oberflächen, wie zum
+            Beispiel Glas festhalten können.
+            </p>
+        </div>
+    </div>
+</div>
+
+### TimeSlider
+
+Die Erweiterung [timeSlider.js](https://github.com/elb-min-uhh/timeslider.js)
+erlaubt es, Zeitleisten zu erstellen, um sich so interaktiv über zeitlich
+aufgelistete Informationen zu arbeiten.
+
+<div class="timeslider" data-interval="year" data-mode="date" data-zoom="1" lang="de">
+    <div>
+        <h3><span>2014</span> Das Jahr 2014</h3>
+        <p>
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+        nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+        sed diam voluptua.
+        </p>
+        <p>
+        At vero eos et accusam et justo duo dolores et ea rebum.
+        </p>
+    </div>
+    <div>
+        <h3><span>2016 - 2018</span> Weitere Jahre</h3>
+        <p>
+        At vero eos et accusamus et iusto odio dignissimos ducimus qui
+        blanditiis praesentium voluptatum deleniti atque corrupti quos dolores
+        et quas molestias excepturi sint occaecati cupiditate non provident,
+        similique sunt in culpa qui officia deserunt mollitia animi, id est
+        laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita
+        distinctio.
+        </p>
+    </div>
+</div>
 
 ### Literatur
 

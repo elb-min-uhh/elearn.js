@@ -14,9 +14,41 @@ Es gibt für den Texteditor _Atom_ ein Package, welches ein einfaches
 Konvertieren von Markdown zu elearn.js Ausgaben ermöglicht. Dieses bietet
 sowohl eine HTML- als auch eine PDF-Ausgabe an. Weitere Informationen finden
 Sie unter diesem Link https://github.com/elb-min-uhh/atom-elearnjs.
-Das hier enthaltene Markdown-Template (unter `Template/elearn_template.md`)
+Das hier enthaltene Markdown-Template (unter
+    [Examples/Markdown/elearn_template.md](/Examples/Markdown/elearn_template.md))
 nutzt Funktionen, welche nur von diesem Package unterstützt werden.
 Mit diesem Package erspart man sich viele sonst nötige Arbeitsschritte.
+
+### Beispiele
+
+Die Beispiele sind sehr hilfreich, wenn man auf ein Problem stößt oder gerade
+erst anfängt mit elearn.js zu arbeiten. Sie sind zumeist darauf
+ausgelegt im Quelltext betrachtet zu werden.
+
+Dort gibt es aktuell Beispiele für die folgenden Fälle:
+* __Markdown__: Beispiel für eine Markdown Datei die mit _atom-elearnjs_ einfach
+    konvertierbar ist.
+* __ResizingIFrame__: Beispiel für ein per IFrame eingebundenes _elearn.js_.
+    Hier wird gezeigt, wie die Größe des IFrames automatisch an die Größe
+    des _elearn.js_ angepasst werden kann.
+* __TreeHierarchy__: Zeigt Beispiele verschachtelter Skripte. So kann man
+    Inhalte einfach auf mehrere Skripte aufteilen, diese aber dennoch
+    hierarchisch verlinken.
+
+### Einstellungsmöglichkeiten
+
+Im _elearn.js_ lassen sich einige Einstellungen tätigen. Diese sind
+beispielhaft in der Datei [Template/index.html](/Template/index.html) gezeigt.
+Im `<head>` befindet sich ein `<script>`, in welchem die Einstellungen in
+auskommentierter Form vorliegen. Dort ist auch erklärt, wie diese eingebaut
+werden können.
+
+__Hinweis__: Bei der Nutzung von _atom-elearnjs_ lassen sich diese Einstellungen
+wie in [Examples/Markdown/elearn_template.md](/Examples/Markdown/elearn_template.md)
+durch den Tag `Custom` im _Meta Block_ einbinden. Weitere Informationen sind
+in der Dokumentation des
+[atom-elearnjs](https://github.com/elb-min-uhh/atom-elearnjs) zu finden.
+
 
 ## Manuelle Erstellung ohne _atom-elearnjs_
 
@@ -32,11 +64,15 @@ in der _HTML_ Datei oder in einer neuangelegten _.CSS_ Datei geschehen.
 
 ### Vorhandenes Skript Updaten
 
-Um ein vorhandenes Skript auf die neuste Version upzudaten ist nicht viel
+Auch hier ist die einfachste Version ein Skript als Markdown Datei vorliegen
+zu haben und dieses per _atom-elearnjs_ zu konvertieren. Hierbei erhält man
+automatisch die aktuellste Version.
+
+Um ein vorhandenes Skript manuell auf die neuste Version upzudaten ist etwas mehr
 Aufwand nötig. Hierzu sollte zunächst das Repository heruntergeladen werden.
 Anschließend kopiert man den Ordner `Template/assets/` in das vorhandene Skript.
 Dieser beinhaltet alle zwangsläufig notwendigen Dateien. Der darin enthaltene
-Ordner `Template/assets/img/template-media` ist nicht notwendig, da er nur  
+Ordner `Template/assets/img/template-media` ist nicht notwendig, da er nur
 Dateien enthält, welche in dem Template verlinkt sind. Dieser kann also
 nachträglich vollständig entfernt werden.
 
