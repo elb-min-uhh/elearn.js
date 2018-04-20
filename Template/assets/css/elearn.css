@@ -1058,6 +1058,26 @@ QR Overlay
     margin: 0;
 }
 
+#info .support .img {
+    float: right;
+    margin: 0;
+}
+
+#info .support .img.logo-bmbf {
+    display: inline-block;
+    width: 168px;
+    height: 126px;
+    background: url('../img/logo-bmbf.gif');
+}
+#info .support .img.logo-uhh {
+    margin:2em 1em 1em 1em;
+    display: inline-block;
+    width: 213px;
+    height: 69px;
+    background: url('../img/logo-uhh.gif');
+    background-repeat: no-repeat;
+}
+
 
 /* -------------------------- Bilder Galerie -------------------------- */
 

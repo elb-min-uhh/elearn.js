@@ -31,6 +31,13 @@ Custom: "<script>
 <!--imprint
 #### elearn.js Template
 Universität Hamburg
+
+<small>
+    Das <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">elearn.js Template</span>
+    von <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">Universität Hamburg</span>
+    ist lizenziert unter einer <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+    Creative Commons Namensnennung</a> - Weitergabe unter gleichen Bedingungen 4.0 International Lizenz
+</small>
 -->
 
 # Template elearn.js <!--hide-in-overview-->

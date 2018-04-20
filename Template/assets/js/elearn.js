@@ -5,40 +5,40 @@
 * uses ResizeSensor by Marc J. Schmidt. https://github.com/marcj/css-element-queries/
 */
 
-var VERSION_NR = "1.0.1";
-var VERSION_DATE = "04/2018";
+// For more intuitive usage of functions. (e.g. eLearnJS.showNext())
+var eLearnJS = eLearnJS || {};
 
-var actions = {
+eLearnJS.VERSION_NR = "1.0.1";
+eLearnJS.VERSION_DATE = "04/2018";
+
+eLearnJS.actions = {
     CONTENT_RESIZE : "ContentResize",
-}
+};
 
 // Will be set on first Touch event. See Help Functions at bottom
-var touchSupported = false;
+eLearnJS.touchSupported = false;
 
-var visSection = 0;
-var allShown = false;
-var overviewShown = false;
-var navigationTitle = "";
+eLearnJS.visSection = 0;
+eLearnJS.allShown = false;
+eLearnJS.overviewShown = false;
+eLearnJS.navigationTitle = "";
 
-var backbuttonEnabled = false;
-var backpage = 0;
-var backpagetype = "index";
+eLearnJS.backbuttonEnabled = false;
+eLearnJS.backPage = 0;
+eLearnJS.backPageType = "index";
 
-// used to block "showNext()". Optional for quiz based on eLearn.js
-var blockProgressQuizJS = false;
-var blockProgressAlertActivated = false;
-var blockProgressAlertText = "";
-var blockProgressShowElementActivated = false;
-var blockProgressShowElementText = "";
+// used to block "eLearnJS.showNext()". Optional for quiz based on eLearn.js
+eLearnJS.blockProgressQuizJS = false;
+eLearnJS.blockProgressAlertActivated = false;
+eLearnJS.blockProgressAlertText = "";
+eLearnJS.blockProgressShowElementActivated = false;
+eLearnJS.blockProgressShowElementText = "";
 
 // For general activation or deactivation of functions (set by functions)
-var secSwipeEnabled = true;
-var dirButtonsEnabled = true;
-var keyNavigationEnabled = true;
-var progressbarEnabled = true;
-
-// For more intuitive usage of functions. (e.g. eLearnJS.showNext())
-var eLearnJS = this;
+eLearnJS.secSwipeEnabled = true;
+eLearnJS.dirButtonsEnabled = true;
+eLearnJS.keyNavigationEnabled = true;
+eLearnJS.progressbarEnabled = true;
 
 /**
 * Going back in History without reloading the page.
@@ -47,10 +47,10 @@ window.onpopstate = function(e){
     e.stopPropagation();
     e.preventDefault();
     if(e.state == undefined || e.state.p == null || e.state.p == undefined) {
-        setTimeout(function() {showSection(parseInt(0));}, 100);
+        setTimeout(function() {eLearnJS.showSection(parseInt(0));}, 100);
     }
     else {
-        setTimeout(function() {showSection(parseInt(e.state.p));}, 100);
+        setTimeout(function() {eLearnJS.showSection(parseInt(e.state.p));}, 100);
     }
 };
 
@@ -59,32 +59,32 @@ window.onpopstate = function(e){
 // --------------------------------------------------------------------------------------
 
 $(document).ready(function() {
-    initiateELearnJS();
-    initiateTouchDetection();
-    initiateInfo();
-    initiateSections();
-    initiateGalleries();
-    initiateSideMenu();
-    initiateTooltips();
-    initiateHideables();
-    initiateTabbedBoxes();
-    initiateHoverInfos();
-    initiateScrollBarListener();
-    updateNavBarWidth();
+    eLearnJS.initiateELearnJS();
+    eLearnJS.initiateTouchDetection();
+    eLearnJS.initiateInfo();
+    eLearnJS.initiateSections();
+    eLearnJS.initiateGalleries();
+    eLearnJS.initiateSideMenu();
+    eLearnJS.initiateTooltips();
+    eLearnJS.initiateHideables();
+    eLearnJS.initiateTabbedBoxes();
+    eLearnJS.initiateHoverInfos();
+    eLearnJS.initiateScrollBarListener();
+    eLearnJS.updateNavBarWidth();
 
     // add listeners
-    document.addEventListener("ejssectionchange", resizeAllSliders);
-    document.addEventListener("ejspageinteraction", pushHistoryState);
+    document.addEventListener("ejssectionchange", eLearnJS.resizeAllSliders);
+    document.addEventListener("ejspageinteraction", eLearnJS.pushHistoryState);
 
     new ResizeSensor(document.body, function(dimensions) {
-        updateWrapSize();
+        eLearnJS.updateWrapSize();
     });
 
     // checks parameters for navigation to specific page
-    checkParameters();
+    eLearnJS.checkParameters();
 
     // used for size checks. Used for iFrame messaging on size change
-    updateWrapSize();
+    eLearnJS.updateWrapSize();
 
     // init QR Code for sharing
     $('#qrcode').qrcode({
@@ -98,21 +98,21 @@ $(document).ready(function() {
 /**
 * Fügt alle notwendigen Elemente in den Quelltext ein.
 */
-function initiateELearnJS() {
+eLearnJS.initiateELearnJS = function () {
     $($('#wrap')[0]).prepend(
             "<div class='skip-arrows noselect'>" // <!-- Arrow Left and Right -->
-                + "<div onclick='javascript: showPrev();' id='btnPrev' class='icon-back btn'></div>"
-                + "<div onclick='javascript: showNext();' id='btnNext' class='icon-next btn'></div>"
+                + "<div onclick='javascript: eLearnJS.showPrev();' id='btnPrev' class='icon-back btn'></div>"
+                + "<div onclick='javascript: eLearnJS.showNext();' id='btnNext' class='icon-next btn'></div>"
             + "</div>"
             + "<div class='section-overview noselect'></div>" // <!-- Container for Overview -->
             + "<div id='navigation' class='noselect'>"
                 // <!-- Grey Top Menu-bar - Reihenfolge wichtig -->
                 + "<div id='nav-bar'>"
-                    + "<div onclick='javascript: backButtonPressed();' id='btnBackCon' class ='btn' title='Zurück zur Übersicht'><div class='icon-font' id='btnBack'>b</div><div id='btnBackText'>Zurück</div></div>"
-                    + "<div onclick='javascript: toggleAllSections();' id='btnAllCon' class ='btn' title='Zeige/verstecke Bereiche'><div class='icon-font' id='btnAll'>s</div><div id='btnAllText'>Ansicht</div></div>"
-                    + "<div onclick='javascript: showSectionOverview();' id='btnExp' class ='btn' title='Inhaltsverzeichnis'><div class='icon-font' id='btnExpSym'>c</div><div id='nav-title'>Übersicht</div></div>"
-                    + "<div onclick='javascript: toggleSideMenu(isSideMenuVisible());' id='btnMenu' class ='icon-font btn' title='Menü'>m</div>"
-                    + "<div onclick='javascript: startHelp();' id='btnHelp' class ='btn' title='Zeige/verstecke Bereiche'><div class='icon-font' id='btnHelpSym'>q</div><div id='btnHelpText'>Hilfe</div></div>"
+                    + "<div onclick='javascript: eLearnJS.backButtonPressed();' id='btnBackCon' class ='btn' title='Zurück zur Übersicht'><div class='icon-font' id='btnBack'>b</div><div id='btnBackText'>Zurück</div></div>"
+                    + "<div onclick='javascript: eLearnJS.toggleAllSections();' id='btnAllCon' class ='btn' title='Zeige/verstecke Bereiche'><div class='icon-font' id='btnAll'>s</div><div id='btnAllText'>Ansicht</div></div>"
+                    + "<div onclick='javascript: eLearnJS.showSectionOverview();' id='btnExp' class ='btn' title='Inhaltsverzeichnis'><div class='icon-font' id='btnExpSym'>c</div><div id='nav-title'>Übersicht</div></div>"
+                    + "<div onclick='javascript: eLearnJS.toggleSideMenu(eLearnJS.isSideMenuVisible());' id='btnMenu' class ='icon-font btn' title='Menü'>m</div>"
+                    + "<div onclick='javascript: eLearnJS.startHelp();' id='btnHelp' class ='btn' title='Zeige/verstecke Bereiche'><div class='icon-font' id='btnHelpSym'>q</div><div id='btnHelpText'>Hilfe</div></div>"
                     + "<div style='clear:both'></div>"
                 + "</div>"
                 // <!-- Touch Gesture Elements -->
@@ -127,9 +127,9 @@ function initiateELearnJS() {
 
     // Anhand der Scrollposition merken welche Section aktiv war.
     $(document).scroll(function() {
-        if(allShown) {
+        if(eLearnJS.allShown) {
             var scrollTop = $(document).scrollTop();
-            var i = visSection;
+            var i = eLearnJS.visSection;
             var sHeight = $($('section')[i]).position().top - $('#navigation').height() - 15;
             while(sHeight < scrollTop) {
                 i++;
@@ -147,34 +147,34 @@ function initiateELearnJS() {
                 }
                 sHeight = $($('section')[i]).position().top - $('#navigation').height() - 15;
             }
-            visSection = i;
-            updateContentOverview();
+            eLearnJS.visSection = i;
+            eLearnJS.updateContentOverview();
         }
     });
-}
+};
 
 /**
 * Erstellt die einfachen Buttons, die das Vor- und Zurückgehen sowie das Anzeigen
 * aller Sections ermöglichen
 */
-function initiateSections() {
+eLearnJS.initiateSections = function() {
     $('#progressbar').css('width', 100/$('section').length + "%");
-    navigationTitle = $('#nav-title').text();
-    addTouchToSections();
-    createContentOverview();
-    createSectionOverview();
+    eLearnJS.navigationTitle = $('#nav-title').text();
+    eLearnJS.addTouchToSections();
+    eLearnJS.createContentOverview();
+    eLearnJS.createSectionOverview();
     $('.section-overview').css('top', $('nav-bar').outerHeight() + "px");
     $('.section-overview').css('height', "calc(100% - " + $('.section-overview').css("top") + ")");
     //$('#sideMenu').css('max-width', Math.min($('#sideMenu').width(), $(document).width()) + "px");
-    setDirectionButtonsEnabled(true);
-    setProgressbarEnabled(true);
-    showSection(0);
+    eLearnJS.setDirectionButtonsEnabled(true);
+    eLearnJS.setProgressbarEnabled(true);
+    eLearnJS.showSection(0);
 };
 
 /**
 * Erstellt das SideMenu
 */
-function initiateSideMenu() {
+eLearnJS.initiateSideMenu = function() {
     var downloadUrl = "./download.zip";
     var downloadPDF = "./page.pdf";
     var downloadEPUB = "./page.epub";
@@ -188,53 +188,53 @@ function initiateSideMenu() {
                                 + '<td class="side-menu-icon"><div class="icon-share"></div></td> '
                                 + '<td class="side-menu-content">Teilen</td>'
                             + '</tr>'
-                            + '<tr class="side-menu-element" onclick="javascript: openInfo();">'
+                            + '<tr class="side-menu-element" onclick="javascript: eLearnJS.openInfo();">'
                                 + '<td class="side-menu-icon"><div class="icon-info"></div></td> '
                                 + '<td class="side-menu-content">Impressum</td>'
                             + '</tr>'
-                            + '<tr class="side-menu-element" id="menu-item-download" onclick="javascript: startDownload(\''+downloadUrl+'\');">'
+                            + '<tr class="side-menu-element" id="menu-item-download" onclick="javascript: eLearnJS.startDownload(\''+downloadUrl+'\');">'
                                 + '<td class="side-menu-icon"><div class="icon-zip"></div></td> '
                                 + '<td class="side-menu-content">Quelldateien herunterladen</td>'
                             + '</tr>'
-                            + '<tr class="side-menu-element" id="menu-item-download-pdf" onclick="javascript: startDownload(\''+downloadPDF+'\');">'
+                            + '<tr class="side-menu-element" id="menu-item-download-pdf" onclick="javascript: eLearnJS.startDownload(\''+downloadPDF+'\');">'
                                 + '<td class="side-menu-icon"><div class="icon-pdf"></div></td> '
                                 + '<td class="side-menu-content">PDF herunterladen</td>'
                             + '</tr>'
-                            + '<tr class="side-menu-element" id="menu-item-download-epub" onclick="javascript: startDownload(\''+downloadEPUB+'\');">'
+                            + '<tr class="side-menu-element" id="menu-item-download-epub" onclick="javascript: eLearnJS.startDownload(\''+downloadEPUB+'\');">'
                                 + '<td class="side-menu-icon"><div class="icon-epub"></div></td> '
                                 + '<td class="side-menu-content">EPUB herunterladen</td>'
                             + '</tr>'
                         + '</table></div>'
                         + '</div>');
-    doesURLExist(downloadUrl, function(exists) {
+    eLearnJS.doesURLExist(downloadUrl, function(exists) {
         if(!exists) {
             $('#menu-item-download').hide();
         }
     });
-    doesURLExist(downloadPDF, function(exists) {
+    eLearnJS.doesURLExist(downloadPDF, function(exists) {
         if(!exists) {
             $('#menu-item-download-pdf').hide();
         }
     });
-    doesURLExist(downloadEPUB, function(exists) {
+    eLearnJS.doesURLExist(downloadEPUB, function(exists) {
         if(!exists) {
             $('#menu-item-download-epub').hide();
         }
     });
     $('#sideMenu').css('right', "-"+($('#sideMenu').width()+10)+"px");
-}
+};
 
 /**
 * Passt die Navigationsleiste an die Breite des window an
 */
-function updateNavBarWidth() {
+eLearnJS.updateNavBarWidth = function() {
     var headerSpace = 15.0; // standard wert
     $('#nav-bar').children(':visible').not('#btnExp').each(function(i,e){
         if($(this).attr("id") != undefined)
             headerSpace += $(this).outerWidth(true);
     });
     $('#btnExp').css("width", "calc(100% - " + (headerSpace+5) + "px)");
-}
+};
 
 
 /**
@@ -245,16 +245,16 @@ function updateNavBarWidth() {
 * mit ?s=Inhaltsverzeichnis würde man die <section name="Inhaltsverzeichnis">
 * öffnen.
 */
-function checkParameters() {
-    if(QueryString.s != undefined) {
-        var sectionName = decodeURI(QueryString.s);
-        showSection(sectionName);
+eLearnJS.checkParameters = function() {
+    if(eLearnJS.QueryString.s != undefined) {
+        var sectionName = decodeURI(eLearnJS.QueryString.s);
+        eLearnJS.showSection(sectionName);
     }
-    else if(QueryString.p != undefined) {
-        var idx = parseInt(QueryString.p);
-        showSection(idx);
+    else if(eLearnJS.QueryString.p != undefined) {
+        var idx = parseInt(eLearnJS.QueryString.p);
+        eLearnJS.showSection(idx);
     }
-}
+};
 
 // ----------------------------------------------------------------------------
 // ------------------------- BACK BUTTON --------------------------------------
@@ -264,52 +264,52 @@ function checkParameters() {
 * Zeigt den "Back-Button" an oder blendet ihn aus.
 * Standardmäßig aus
 */
-function setBackButtonEnabled(b) {
-    backbuttonEnabled = b;
+eLearnJS.setBackButtonEnabled = function(b) {
+    eLearnJS.backbuttonEnabled = b;
     if(b) {
         $('#navigation').addClass("back-enabled");
     }
     else {
         $('#navigation').removeClass("back-enabled");
     }
-    updateNavBarWidth();
-}
+    eLearnJS.updateNavBarWidth();
+};
 
 /**
 * Gibt aus ob der backbutton aktiviert ist.
 */
-function isBackButtonEnabled() {
-    return backbuttonEnabled;
-}
+eLearnJS.isBackbuttonEnabled = function() {
+    return eLearnJS.backbuttonEnabled;
+};
 
 
 /**
 * Ändert die Beschriftung des Back-Buttons.
 * Standardmäßig "Zurück"
 */
-function setBackButtonText(text) {
+eLearnJS.setBackButtonText = function(text) {
     $('#btnBackText').text(text);
-    updateNavBarWidth();
-}
+    eLearnJS.updateNavBarWidth();
+};
 
 
 /**
-* Zeigt die interpretierte backpage und öffnet sie je nachdem welcher
-* backpagetype eingestellt wurde
+* Zeigt die interpretierte eLearnJS.backPage und öffnet sie je nachdem welcher
+* eLearnJS.backPageType eingestellt wurde
 * Standardmäßig wird die erste <section> angezeigt
 */
-function backButtonPressed() {
-    if(backpagetype === "name") {
-        var idx = $('section').index($('section[name="' + backpage + '"]').get(0));
-        overviewShowSection(idx);
+eLearnJS.backButtonPressed = function() {
+    if(eLearnJS.backPageType === "name") {
+        var idx = $('section').index($('section[name="' + eLearnJS.backPage + '"]').get(0));
+        eLearnJS.overviewShowSection(idx);
     }
-    else if(backpagetype === "index") {
-        overviewShowSection(backpage);
+    else if(eLearnJS.backPageType === "index") {
+        eLearnJS.overviewShowSection(eLearnJS.backPage);
     }
-    else if(backpagetype === "link") {
-        window.open(backpage, "_self")
+    else if(eLearnJS.backPageType === "link") {
+        window.open(eLearnJS.backPage, "_self")
     }
-}
+};
 
 /**
 * Stellt ein worauf der Back-Button verlinkt. Dabei kann auf verschiedene
@@ -325,13 +325,13 @@ function backButtonPressed() {
 *               Seite verlinken wie zB. "../andereSeite" oder auf eine
 *               auf eine ganz andere Seite verlinken wie "http://google.com"
 *
-* Beispiel: setBackPage("http://google.com", "link"); verlinkt auf Google.
+* Beispiel: seteLearnJS.backPage("http://google.com", "link"); verlinkt auf Google.
 * Standardmäßig wird die erste <section> angezeigt
 */
-function setBackPage(val, type) {
-    backpagetype = type;
-    backpage = val;
-}
+eLearnJS.setBackPage = function(val, type) {
+    eLearnJS.backPageType = type;
+    eLearnJS.backPage = val;
+};
 
 
 // ----------------------------------------------------------------------------
@@ -343,11 +343,11 @@ function setBackPage(val, type) {
 * Funktioniert nur, wenn nicht alle Sections angezeigt werden.
 * @event: Fires "ejspageinteraction" event on document when done successfully.
 */
-function showPrev() {
-    var ret = showSection(visSection-1);
+eLearnJS.showPrev = function() {
+    var ret = eLearnJS.showSection(eLearnJS.visSection-1);
     // Ausführen registrierter Funktionen
     if(ret) {
-        fireEvent(document, createEvent("ejspageinteraction", {}));
+        eLearnJS.fireEvent(document, eLearnJS.createEvent("ejspageinteraction", {}));
     }
 };
 
@@ -356,15 +356,15 @@ function showPrev() {
 * Funktioniert nur, wenn nicht alle Sections angezeigt werden.
 * @event: Fires "ejspageinteraction" event on document when done successfully.
 */
-function showNext() {
+eLearnJS.showNext = function() {
 
     // nur wenn entweder nicht blockiert bei unbeantworteter Frage
     // oder alle (sichtbaren) Fragen beantwortet
-    if(!checkBlockProgress()) {
-        var ret = showSection(visSection+1);
+    if(!eLearnJS.checkBlockProgress()) {
+        var ret = eLearnJS.showSection(eLearnJS.visSection+1);
         // Ausführen registrierter Funktionen
         if(ret) {
-            fireEvent(document, createEvent("ejspageinteraction", {}));
+            eLearnJS.fireEvent(document, eLearnJS.createEvent("ejspageinteraction", {}));
         }
     }
 };
@@ -374,14 +374,14 @@ function showNext() {
 * Wird von der section overview ausgeführt. (Ausklappbares Inhaltsverzeichnis)
 * @event: Fires "ejspageinteraction" event on document when done successfully.
 */
-function overviewShowSection(i) {
-    var ret = showSection(i);
+eLearnJS.overviewShowSection = function(i) {
+    var ret = eLearnJS.showSection(i);
 
     // Ausführen registrierter Funktionen
     if(ret) {
-        fireEvent(document, createEvent("ejspageinteraction", {}));
+        eLearnJS.fireEvent(document, eLearnJS.createEvent("ejspageinteraction", {}));
     }
-}
+};
 
 /**
 * Zeigt eine bestimmte Section (nach Index)
@@ -389,11 +389,11 @@ function overviewShowSection(i) {
 * @event: Fires "ejssectionchange" + "ejssectionchangelate" event on
 *   document when done successfully.
 */
-function showSection(i) {
-    overviewShown = true;
-    showSectionOverview();
+eLearnJS.showSection = function(i) {
+    eLearnJS.overviewShown = true;
+    eLearnJS.showSectionOverview();
 
-    var sectionBefore = visSection;
+    var sectionBefore = eLearnJS.visSection;
 
     // get section to name
     if(typeof i === 'string' || i instanceof String) {
@@ -401,7 +401,7 @@ function showSection(i) {
     }
 
     // show only this section
-    if(!allShown && i >= 0 && i < $('section').length) {
+    if(!eLearnJS.allShown && i >= 0 && i < $('section').length) {
         $('section').hide();
 
         $($('section')[i]).show();
@@ -412,11 +412,11 @@ function showSection(i) {
         }
 
         $('#nav-title').text($($('section')[i]).attr('name'));
-        allShown = false;
-        calcProgress(i);
+        eLearnJS.allShown = false;
+        eLearnJS.calcProgress(i);
     }
     // scroll to that section
-    else if(allShown) {
+    else if(eLearnJS.allShown) {
         var topPos = $($('section')[i]).position().top - $('#navigation').height();
         $(document).scrollTop(topPos);
     }
@@ -426,22 +426,22 @@ function showSection(i) {
 
     // section was updated
     if(i >= 0 && i < $('section').length) {
-        visSection = i;
-        updateContentOverview();
-        stopVideos();
+        eLearnJS.visSection = i;
+        eLearnJS.updateContentOverview();
+        eLearnJS.stopVideos();
     }
 
-    if(!allShown) {
-        setDirectionButtonsEnabledIdx(visSection);
+    if(!eLearnJS.allShown) {
+        eLearnJS.setDirectionButtonsEnabledIdx(eLearnJS.visSection);
     }
 
     var sectionChange = {
-        "section": visSection,
+        "section": eLearnJS.visSection,
         "sectionbefore" : sectionBefore,
-        "changed" : visSection !== sectionBefore,
+        "changed" : eLearnJS.visSection !== sectionBefore,
         "allShownChange" : false};
-    fireEvent(document, createEvent("ejssectionchange", sectionChange));
-    fireEvent(document, createEvent("ejssectionchangelate", sectionChange));
+    eLearnJS.fireEvent(document, eLearnJS.createEvent("ejssectionchange", sectionChange));
+    eLearnJS.fireEvent(document, eLearnJS.createEvent("ejssectionchangelate", sectionChange));
 
     return true;
 };
@@ -453,14 +453,14 @@ function showSection(i) {
 * @deprecated Since version 1.0.0. Simply add the event listener yourself.
 *   this makes better event handling possible.
 */
-function registerAfterShow(key, fnc, late) {
+eLearnJS.registerAfterShow = function(key, fnc, late) {
     if(late) {
         document.addEventListener("ejssectionchangelate", fnc);
     }
     else {
         document.addEventListener("ejssectionchange", fnc);
     }
-}
+};
 
 /**
 * Registriert eine Funktion, die ausgeführt wird, nachdem ein sectionwechsel
@@ -470,9 +470,9 @@ function registerAfterShow(key, fnc, late) {
 * @deprecated Since version 1.0.0. Simply add the event listener yourself.
 *   this makes better event handling possible.
 */
-function registerAfterPageInteraction(key, fnc) {
+eLearnJS.registerAfterPageInteraction = function(key, fnc) {
     document.addEventListener("ejspageinteraction", fnc);
-}
+};
 
 /**
 * Registriert eine Funktion, die ausgeführt wird, nachdem ein neuer Tab
@@ -481,9 +481,9 @@ function registerAfterPageInteraction(key, fnc) {
 * @deprecated Since version 1.0.0. Simply add the event listener yourself.
 *   this makes better event handling possible.
 */
-function registerAfterTabChange(key, fnc) {
+eLearnJS.registerAfterTabChange = function(key, fnc) {
     document.addEventListener("ejstabchange", fnc);
-}
+};
 
 /**
 * Registriert eine Funktion, die ausgeführt wird, wenn die Fenstergröße
@@ -495,14 +495,14 @@ function registerAfterTabChange(key, fnc) {
 * @deprecated Since version 1.0.0. Simply add the event listener yourself.
 *   this makes better event handling possible.
 */
-function registerAfterWindowResize(key, fnc, late) {
+eLearnJS.registerAfterWindowResize = function(key, fnc, late) {
     if(late) {
         window.addEventListener("ejswindowresizelate", fnc);
     }
     else {
         window.addEventListener("ejswindowresize", fnc);
     }
-}
+};
 
 /**
 * Registriert eine Funktion, die ausgeführt wird, nachdem alle Slider
@@ -511,34 +511,34 @@ function registerAfterWindowResize(key, fnc, late) {
 * @deprecated Since version 1.0.0. Simply add the event listener yourself.
 *   this makes better event handling possible.
 */
-function registerAfterSliderResize(key, fnc) {
+eLearnJS.registerAfterSliderResize = function(key, fnc) {
     document.addEventListener("ejssliderresize", fnc);
-}
+};
 
 /**
 * Fügt einen Zustand in die Browser-Historie ein. Hierbei werden benötigte
 * Parameter automatisch gesetzt.
 */
-function pushHistoryState() {
-    if(!allShown) {
+eLearnJS.pushHistoryState = function() {
+    if(!eLearnJS.allShown) {
         try {
             if(window.history.state == undefined
                 || (window.history.state.p != undefined
                     && window.history.state.p != null
-                    && window.history.state.p != visSection)) {
-                window.history.pushState({p: visSection}, "State", "?p="+visSection);
+                    && window.history.state.p != eLearnJS.visSection)) {
+                window.history.pushState({p: eLearnJS.visSection}, "State", "?p="+eLearnJS.visSection);
             }
         } catch (e) {
 
-            //window.location = "?p="+visSection;
+            //window.location = "?p="+eLearnJS.visSection;
         }
     }
-}
+};
 
 /**
 * Aktualisiert den Fortschritt der progressbar
 */
-function calcProgress(i) {
+eLearnJS.calcProgress = function(i) {
     var p = ((i)*100)/($('section').length);
     $('#progressbar').css('left', p + "%");
 };
@@ -548,28 +548,28 @@ function calcProgress(i) {
 * @event: Fires "ejssectionchange" + "ejssectionchangelate" event on
 *   document when done successfully.
 */
-function toggleAllSections() {
-    setDirectionButtonsEnabled(allShown);
-    setProgressbarEnabled(allShown);
-    $('#nav-title').text(navigationTitle);
+eLearnJS.toggleAllSections = function() {
+    eLearnJS.setDirectionButtonsEnabled(eLearnJS.allShown);
+    eLearnJS.setProgressbarEnabled(eLearnJS.allShown);
+    $('#nav-title').text(eLearnJS.navigationTitle);
 
-    if(allShown) {
-        allShown = false;
-        showSection(visSection);
+    if(eLearnJS.allShown) {
+        eLearnJS.allShown = false;
+        eLearnJS.showSection(eLearnJS.visSection);
     }
     else {
         $('section').show();
-        $(document).scrollTop($($('section')[visSection]).position().top - $('#navigation').height() - 10);
-        allShown = true;
-        resizeAllSliders();
+        $(document).scrollTop($($('section')[eLearnJS.visSection]).position().top - $('#navigation').height() - 10);
+        eLearnJS.allShown = true;
+        eLearnJS.resizeAllSliders();
 
         var sectionChange = {
-            "section": visSection,
-            "sectionbefore" : visSection,
+            "section": eLearnJS.visSection,
+            "sectionbefore" : eLearnJS.visSection,
             "changed" : false,
             "allShownChange" : true};
-        fireEvent(document, createEvent("ejssectionchange", sectionChange));
-        fireEvent(document, createEvent("ejssectionchangelate", sectionChange));
+        eLearnJS.fireEvent(document, eLearnJS.createEvent("ejssectionchange", sectionChange));
+        eLearnJS.fireEvent(document, eLearnJS.createEvent("ejssectionchangelate", sectionChange));
     }
 };
 
@@ -577,21 +577,21 @@ function toggleAllSections() {
 * Aktiviert oder deaktiviert generell Richtungsknöpfe.
 * Zum manuellen aktivieren oder deaktivieren durch den Ersteller der Seite
 */
-function generalDirectionButtonsEnabled(b) {
+eLearnJS.generalDirectionButtonsEnabled = function(b) {
     if(b) {
-        setDirectionButtonsEnabledIdx(visSection);
+        eLearnJS.setDirectionButtonsEnabledIdx(eLearnJS.visSection);
     }
     else {
-        setDirectionButtonsEnabled(false);
+        eLearnJS.setDirectionButtonsEnabled(false);
     }
-    dirButtonsEnabled = b;
-}
+    eLearnJS.dirButtonsEnabled = b;
+};
 
 /**
 * Aktiviert die Frage vor und zurück Buttons wenn b == true. deaktiviert sie sonst.
 */
-function setDirectionButtonsEnabled(b) {
-    if(dirButtonsEnabled) {
+eLearnJS.setDirectionButtonsEnabled = function(b) {
+    if(eLearnJS.dirButtonsEnabled) {
         if(b) {
             $('#btnPrev').show();
             $('#btnNext').show();
@@ -606,33 +606,33 @@ function setDirectionButtonsEnabled(b) {
 /**
 * Aktiviert die Frage vor und zurück Buttons je nach Index.
 */
-function setDirectionButtonsEnabledIdx(i) {
-    if(dirButtonsEnabled) {
+eLearnJS.setDirectionButtonsEnabledIdx = function(i) {
+    if(eLearnJS.dirButtonsEnabled) {
         $('#btnPrev').show();
         $('#btnNext').show();
-        if(i == 0 || overviewShown) {
+        if(i == 0 || eLearnJS.overviewShown) {
             $('#btnPrev').hide();
         }
-        if(i == ($('section').length - 1) || overviewShown) {
+        if(i == ($('section').length - 1) || eLearnJS.overviewShown) {
             $('#btnNext').hide();
         }
     }
-}
+};
 
 
 /**
 * Generelles aktivieren/deaktivieren der Fortschrittsleiste
 */
-function generalProgressbarEnabled(b) {
-    setProgressbarEnabled(b);
-    progressbarEnabled = b;
-}
+eLearnJS.generalProgressbarEnabled = function(b) {
+    eLearnJS.setProgressbarEnabled(b);
+    eLearnJS.progressbarEnabled = b;
+};
 
 /**
 * Aktiviert die Progressbar wenn b == true. deaktiviert sie sonst.
 */
-function setProgressbarEnabled(b) {
-    if(progressbarEnabled) {
+eLearnJS.setProgressbarEnabled = function(b) {
+    if(eLearnJS.progressbarEnabled) {
         if(b) {
             $('#progressback').show();
             $('.menu-wrap').css('top', $('#navigation').height() + "px");
@@ -650,70 +650,70 @@ function setProgressbarEnabled(b) {
 
 
 /**
-* Aktiviert oder deaktiviert das Blocken des Weitergehens (in showNext())
+* Aktiviert oder deaktiviert das Blocken des Weitergehens (in eLearnJS.showNext())
 */
-function setBlockProgressIfQuestionsNotAnswered(b) {
-    blockProgressQuizJS = b;
-}
+eLearnJS.setBlockProgressIfQuestionsNotAnswered = function(b) {
+    eLearnJS.blockProgressQuizJS = b;
+};
 
 /**
 * Gibt zurück ob der Fortschritt geblockt werden soll.
 * Zeigt außerdem Blocknachrichten an.
 */
-function checkBlockProgress() {
-    var block = blockProgressQuizJS && !getVisibleQuestionsAnswered();
+eLearnJS.checkBlockProgress = function() {
+    var block = eLearnJS.blockProgressQuizJS && !getVisibleQuestionsAnswered();
 
     if(block) {
         // Zeigt alert
-        if(blockProgressAlertActivated) {
-            alert(blockProgressAlertText);
+        if(eLearnJS.blockProgressAlertActivated) {
+            alert(eLearnJS.blockProgressAlertText);
         }
 
         // zeigt gesetztes Element an
-        if(blockProgressShowElementActivated) {
-            $(blockProgressShowElementText).show();
+        if(eLearnJS.blockProgressShowElementActivated) {
+            $(eLearnJS.blockProgressShowElementText).show();
         }
     }
     else {
         // blendet gesetztes Element wieder aus
-        if(blockProgressShowElementActivated) {
-            $(blockProgressShowElementText).hide();
+        if(eLearnJS.blockProgressShowElementActivated) {
+            $(eLearnJS.blockProgressShowElementText).hide();
         }
     }
 
     return block;
-}
+};
 
 /**
 * Aktiviert oder deaktiviert einen Alert im Blockfall und setzt ggf. die
 * Nachricht die angezeigt wird.
 */
-function setBlockProgressAlert(enabled, text) {
-    blockProgressAlertActivated = enabled;
-    blockProgressAlertText = text;
-}
+eLearnJS.setBlockProgressAlert = function(enabled, text) {
+    eLearnJS.blockProgressAlertActivated = enabled;
+    eLearnJS.blockProgressAlertText = text;
+};
 
 /**
 * Aktiviert oder deaktiviert ein Element mit dem @param text als selector.
-* Beispiel: setBlockProgressShowElement(true, "#blocktext") aktiviert das
+* Beispiel: eLearnJS.setBlockProgressShowElement(true, "#blocktext") aktiviert das
 * einblenden des Elements mit der ID="blocktext", wenn der Fortschritt blockiert
 * wurde.
 */
-function setBlockProgressShowElement(enabled, text) {
-    blockProgressShowElementActivated = enabled;
-    blockProgressShowElementText = text;
-}
+eLearnJS.setBlockProgressShowElement = function(enabled, text) {
+    eLearnJS.blockProgressShowElementActivated = enabled;
+    eLearnJS.blockProgressShowElementText = text;
+};
 
 
 // -------------------------------------------------------------------------------------
 // Navigation Title
 // -------------------------------------------------------------------------------------
 
-function setNavigationTitle(text) {
-    if(allShown) $('#nav-title').text(text);
+eLearnJS.setNavigationTitle = function(text) {
+    if(eLearnJS.allShown) $('#nav-title').text(text);
     // default navigation title (when no single section is open)
-    navigationTitle = text;
-}
+    eLearnJS.navigationTitle = text;
+};
 
 
 // -------------------------------------------------------------------------------------
@@ -721,12 +721,12 @@ function setNavigationTitle(text) {
 // -------------------------------------------------------------------------------------
 
 // beinhaltet eine Liste alle bereits betrachteten Sections.
-var sectionsVisited = [];
+eLearnJS.sectionsVisited = [];
 
 /**
 * Erstellt ein Inhaltsverzeichnis. Wird #content-overview hinzugefügt.
 */
-function createContentOverview() {
+eLearnJS.createContentOverview = function() {
     if($('#content-overview').length > 0) {
         var text = "<ul>";
         var level = 0;
@@ -774,7 +774,7 @@ function createContentOverview() {
                 }
             }
 
-            text += "<li onclick='overviewShowSection("+i+"); event.stopPropagation();'>";
+            text += "<li onclick='eLearnJS.overviewShowSection("+i+"); event.stopPropagation();'>";
 
             text += "<div class='sectionRead'><div class='img'></div></div>";
             text += "<span class='title'>" + sec.attr('name') + "</span>";
@@ -785,7 +785,7 @@ function createContentOverview() {
 
             text += "</li>";
 
-            sectionsVisited.push(false);
+            eLearnJS.sectionsVisited.push(false);
         }
         // close all open ul's
         while(level >= 0) {
@@ -803,14 +803,14 @@ function createContentOverview() {
             e.preventDefault();
         });
     }
-}
+};
 
 /**
 * Aktualisiert die "gelesen" Anzeige in dem Inhaltsverzeichnis,
 * welches in #content-overview erstellt wurde.
 */
-function updateContentOverview() {
-    sectionsVisited[visSection] = true;
+eLearnJS.updateContentOverview = function() {
+    eLearnJS.sectionsVisited[eLearnJS.visSection] = true;
     var li_idx = 0;
     for(var i=0; i<$('section').length; i++) {
 
@@ -818,7 +818,7 @@ function updateContentOverview() {
             continue;
         }
 
-        if(sectionsVisited[i] && !$('#content-overview').is('.hide-read')) {
+        if(eLearnJS.sectionsVisited[i] && !$('#content-overview').is('.hide-read')) {
             $($('#content-overview').find('li').get(li_idx)).children('.sectionRead').first().addClass('read');
         }
         else {
@@ -827,12 +827,12 @@ function updateContentOverview() {
 
         li_idx++;
     }
-}
+};
 
 /**
 * Erstellt ein Inhaltsverzeichnis. (Für die Nav-Leiste)
 */
-function createSectionOverview() {
+eLearnJS.createSectionOverview = function() {
     var text = "<div>";
 
     for(var i=0; i<$('section').length; i++) {
@@ -841,40 +841,40 @@ function createSectionOverview() {
         if(sec.is('.sub')) cls=" sub";
         if(sec.is('.subsub')) cls=" subsub";
 
-        text += "<label><div class='section-overview-element btn"+cls+"' onclick='overviewShowSection("+i+");'>"
+        text += "<label><div class='section-overview-element btn"+cls+"' onclick='eLearnJS.overviewShowSection("+i+");'>"
                     + sec.attr('name')
                 +"</div></label>";
     }
     text+="</div>";
 
     $('.section-overview').html(text);
-}
+};
 
 
 /**
 * Zeigt oder versteckt die Kapitelübersicht aus der Navigationsleiste.
 * Wird bei einem klick auf das jeweilige Symbol ausgeführt.
 */
-function showSectionOverview() {
-    overviewShown = !overviewShown;
-    if(!overviewShown) {
+eLearnJS.showSectionOverview = function() {
+    eLearnJS.overviewShown = !eLearnJS.overviewShown;
+    if(!eLearnJS.overviewShown) {
         $('.section-overview').hide();
         $('#btnExpSym').removeClass("mirrorY");
-        if(!allShown) {
-            setDirectionButtonsEnabledIdx(visSection);
+        if(!eLearnJS.allShown) {
+            eLearnJS.setDirectionButtonsEnabledIdx(eLearnJS.visSection);
         }
         else {
-            setDirectionButtonsEnabled(false);
+            eLearnJS.setDirectionButtonsEnabled(false);
         }
     }
     else {
         $('.section-overview').show();
         $('.section-overview').find(".section-overview-element").removeClass("active");
-        $($('.section-overview').find(".section-overview-element")[visSection]).addClass("active");
+        $($('.section-overview').find(".section-overview-element")[eLearnJS.visSection]).addClass("active");
         $('#btnExpSym').addClass("mirrorY");
-        setDirectionButtonsEnabled(false);
+        eLearnJS.setDirectionButtonsEnabled(false);
     }
-}
+};
 
 /**
 * Bei einem Klick neben die Elemente Kapitelübersicht, Side-Menu, Lightbox (für
@@ -884,14 +884,14 @@ $(document).on("click", function(e){
     if(!$(e.target).is(".section-overview *")
         && !$(e.target).is("#btnExp")
         && !$(e.target).is("#btnExp *")
-        && overviewShown) {
-        showSectionOverview();
+        && eLearnJS.overviewShown) {
+        eLearnJS.showSectionOverview();
     }
     if(!$(e.target).is("#sideMenu")
         && !$(e.target).is("#sideMenu *")
         && !$(e.target).is("#btnMenu")
-        && isSideMenuVisible()) {
-        toggleSideMenu();
+        && eLearnJS.isSideMenuVisible()) {
+        eLearnJS.toggleSideMenu();
     }
     if(!$(e.target).is(".lb-wrap *")
         && !$(e.target).is("#sideMenu *")) {
@@ -907,9 +907,9 @@ $(document).on("click", function(e){
 /**
 * Öffnet und Schließt das Menü an der rechten Seite
 */
-function toggleSideMenu(isVisible) {
+eLearnJS.toggleSideMenu = function(isVisible) {
     $('.menu-wrap').css('top', $('#navigation').height() + "px");
-    if (isSideMenuVisible()) {
+    if (eLearnJS.isSideMenuVisible()) {
         $('#sideMenu').animate({
             right: "-="+($('#sideMenu').width()+10),
             }, 200,
@@ -925,29 +925,23 @@ function toggleSideMenu(isVisible) {
                 $('#sideMenu').css("right", "0");
         });
     }
-}
+};
 
 /**
 * Gibt zurück ob das Menü sichtbar ist.
 * true = sichtbar
 */
-function isSideMenuVisible() {
+eLearnJS.isSideMenuVisible = function() {
     return ($('#sideMenu').css('right') == (0 + "px"));
-}
+};
 
 
 /**
 * Initialisiert den footer des Info Bereichs.
 */
-function initiateInfo() {
+eLearnJS.initiateInfo = function() {
     $('#info').find('.lightbox').append('<div class="elearn-info">'
-        + 'Benutzt das eLearn.js Script Version ' + VERSION_NR + ' | ' + VERSION_DATE + '. '
-        + '<br>'
-        + '<span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">elearn.js Template</span> '
-        + 'von <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">Universität Hamburg</span> '
-        + 'ist lizenziert unter einer <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">'
-        + 'Creative Commons Namensnennung</a> - Weitergabe unter gleichen Bedingungen 4.0 International Lizenz'
-        + '<br>'
+        + 'Benutzt das eLearn.js Script Version ' + eLearnJS.VERSION_NR + ' | ' + eLearnJS.VERSION_DATE + ' | '
         + '<a href="https://www.min.uni-hamburg.de/de/imprint.html">Impressum</a>'
         + '</div>');
     $('#info').find('.lightbox').append("<div class='support'><small>Dieses "
@@ -957,31 +951,31 @@ function initiateInfo() {
         + "Bildung und Forschung unter dem Förderkennzeichen 01PL12033 "
         + "gefördert. Die Verantwortung für den Inhalt dieser Veröffentlichung "
         + "liegt bei den Autor/-innen.</small>"
-        + '<img src="assets/img/logo-bmbf.gif" alt="Logo vom Bundesministerium für Bildung und Forschung">'
-        + '<div style="clear: both;">'
-        + '<a href="http://www.uni-hamburg.de" target="_blank"><img src="assets/img/logo-uhh.gif" alt="Logo der Universität Hamburg" style="padding:1em 1em 2em 1em;"></a>'
-        + "</div>");
-}
+        + "<div style='clear: both;'></div>"
+        + '<div class="img logo-bmbf" alt="Logo vom Bundesministerium für Bildung und Forschung"></div>'
+        + '<a href="http://www.uni-hamburg.de" target="_blank"><div class="img logo-uhh" alt="Logo der Universität Hamburg"></div></a>'
+        + "<div style='clear: both;'></div>");
+};
 
 /**
 * Zeigt die Info-Lightbox an, welche die ID "info" hat.
 */
-function openInfo() {
+eLearnJS.openInfo = function() {
     $('#info').show();
     $('#sideMenu').animate({
         right: "-="+($('#sideMenu').width()+10),
         }, 200,
         function() {
     });
-}
+};
 
 
 /**
 * Herunterladen der zip Datei download.zip
 */
-function startDownload(url) {
+eLearnJS.startDownload = function(url) {
     window.open(url,'_blank');
-}
+};
 
 
 
@@ -995,21 +989,21 @@ function startDownload(url) {
 * der oberste Slider im Quelltext)
 * An dem Index steht dann welches Bild aktuell sichtbar ist.
 */
-var visibleImage = {};
-var lastSliderDimensions = {};
-var ulTransitionDuration = "0.5s";
+eLearnJS.visibleImage = {};
+eLearnJS.lastSliderDimensions = {};
+eLearnJS.ulTransitionDuration = "0.5s";
 
 
 /**
 * Initialisiert alle Slider
 * Fügt Buttons hinzu. Stellt die Größe richtig ein...
 */
-function initiateGalleries() {
+eLearnJS.initiateGalleries = function() {
     // Container für Zoom-Funktion
     $('body').prepend('<div class="image-zoom-container">'
-                        + '<div class="lb-bg" onclick="closeZoom(this);"></div>'
+                        + '<div class="lb-bg" onclick="eLearnJS.closeZoom(this);"></div>'
                         + '<div class="img-lightbox">'
-                            + '<div class="close btn" onclick="closeZoom($(this).parent());">x</div>'
+                            + '<div class="close btn" onclick="eLearnJS.closeZoom($(this).parent());">x</div>'
                         + '</div>'
                     + '</div>');
     $('.slider').wrap("<div class='slider-con'></div>");
@@ -1018,21 +1012,21 @@ function initiateGalleries() {
 
         // initiate preview if activated
         if($(this).filter('.preview-nav').length > 0) {
-            initiateSliderPreview($(this).parent());
+            eLearnJS.initiateSliderPreview($(this).parent());
         }
 
         // initiate gallery buttons
-        $(this).after('<div class="slider-back-area btn" onclick="goLeft(this);">'
+        $(this).after('<div class="slider-back-area btn" onclick="eLearnJS.goLeft(this);">'
                         + '<div class="icon-back slider-back btn"></div>'
                     + '</div>'
-                    + '<div class="slider-next-area btn" onclick="goRight(this);">'
+                    + '<div class="slider-next-area btn" onclick="eLearnJS.goRight(this);">'
                         + '<div class="icon-next slider-next btn"></div>'
                     + '</div>'
-                    + '<div class="slider-zoom-area btn" onclick="zoomImage(this);">'
+                    + '<div class="slider-zoom-area btn" onclick="eLearnJS.zoomImage(this);">'
                         + '<div class="icon-zoom slider-zoom btn"></div>'
                     + '</div>');
         ul.children('li').prepend("<span class='helper'></span>");
-        showSlideButtons(ul, 0, false);
+        eLearnJS.showSlideButtons(ul, 0, false);
 
         // add index as loopid for loop
         ul.children('li').each(function(i,e) {
@@ -1040,26 +1034,26 @@ function initiateGalleries() {
         });
 
         if(ul.not('.fixed-size').length > 0) {
-            getImageSize($(ul.children('li')[0]).children("img"), function(width, height){
+            eLearnJS.getImageSize($(ul.children('li')[0]).children("img"), function(width, height){
                 ul.parent().css("height", height + "px");
             });
         }
         $(this).parent().after("<div class='slider-description'></div>");
 
         if(ul.parent().filter('.loop').length > 0)
-            createLoopFor(ul, $('.img-gallery').index(ul), 0);
+            eLearnJS.createLoopFor(ul, $('.img-gallery').index(ul), 0);
         var visImage = ul.children('li').index(ul.children('li').not('.loop_clone').first());
-        showSlide(ul, visImage, true, false, "0s");
+        eLearnJS.showSlide(ul, visImage, true, false, "0s");
     });
-    window.addEventListener("ejswindowresize", resizeAllSliders);
-    resizeAllSliders();
-}
+    window.addEventListener("ejswindowresize", eLearnJS.resizeAllSliders);
+    eLearnJS.resizeAllSliders();
+};
 
 /**
 * Erstellt eine SliderPreview, wenn ein Slider (übergebenes div) die
 * Klasse "preview-nav" hat.
 */
-function initiateSliderPreview(div) {
+eLearnJS.initiateSliderPreview = function(div) {
     var fullWidth = div.width();
     var liWidth = fullWidth / 4.5;
     var liHeight = fullWidth / 6.0;
@@ -1077,57 +1071,57 @@ function initiateSliderPreview(div) {
             var parentIdx = parentUl.children('li').index(
                 parentUl.children('li')
                     .not('.loop_clone').filter('[loopid="' + idx+ '"]'));
-            showSlide(parentUl, parentIdx, true, true);
+            eLearnJS.showSlide(parentUl, parentIdx, true, true);
         });
     });
     $(ul.children('li')[0]).addClass("active");
-    sliderNav.after('<div class="slider-back-area btn" onclick="goLeft(this);">'
+    sliderNav.after('<div class="slider-back-area btn" onclick="eLearnJS.goLeft(this);">'
                         + '<div class="icon-back slider-back btn"></div>'
                     + '</div>'
-                    + '<div class="slider-next-area btn" onclick="goRight(this);">'
+                    + '<div class="slider-next-area btn" onclick="eLearnJS.goRight(this);">'
                         + '<div class="icon-next slider-next btn"></div>'
                     + '</div>');
 
-    showSlideButtons(ul, 0, true);
-    visibleImage[visibleImage.length] = 0;
-}
+    eLearnJS.showSlideButtons(ul, 0, true);
+    eLearnJS.visibleImage[eLearnJS.visibleImage.length] = 0;
+};
 
 /**
 * Hinterlegt für ein ul (aus einem Slider) die Dimensionen in einem Array.
 * Wird genutzt, um zu bestimmen ob eine Neuberechnung nötig ist.
 */
-function updateSliderDimensions(ul) {
+eLearnJS.updateSliderDimensions = function(ul) {
     var ul_id = $('.img-gallery').index(ul);
     var slider = ul.closest('.slider');
     if(slider.length == 0) slider = ul.closest('.slider-nav');
     if(slider.length == 0) return;
-    lastSliderDimensions[ul_id] = {width: slider.width(), height: slider.height()};
-}
+    eLearnJS.lastSliderDimensions[ul_id] = {width: slider.width(), height: slider.height()};
+};
 
 /**
 * Zeigt das Bild weiter links an.
 * @param button - der Button der diese Funktion aufruft. (Der Button befindet
 * sich in dem Slider)
 */
-function goLeft(button) {
+eLearnJS.goLeft = function(button) {
     var ul = $(button).prevAll('div').find('.img-gallery').first();
-    showSlide(ul, visibleImage[$('.img-gallery').index(ul)]-1, true, true);
-}
+    eLearnJS.showSlide(ul, eLearnJS.visibleImage[$('.img-gallery').index(ul)]-1, true, true);
+};
 
 /**
 * Zeigt das Bild weiter rechts an.
 * @param button - der Button der diese Funktion aufruft. (Der Button befindet
 * sich in dem Slider)
 */
-function goRight(button) {
+eLearnJS.goRight = function(button) {
     var ul = $(button).prevAll('div').find('.img-gallery').first();
-    showSlide(ul, visibleImage[$('.img-gallery').index(ul)]+1, true, true);
-}
+    eLearnJS.showSlide(ul, eLearnJS.visibleImage[$('.img-gallery').index(ul)]+1, true, true);
+};
 
 // Wird benutzt, um eine Höhenveränderungsanimation zu starten, wenn das neue
 // Bild komplett angezeigt wird.
-var slideSwitchTimeouts = {};
-var loopTimeouts = {};
+eLearnJS.slideSwitchTimeouts = {};
+eLearnJS.loopTimeouts = {};
 
 /**
 * Zeigt ein bestimmtes Bild in einem Slider an.
@@ -1135,7 +1129,7 @@ var loopTimeouts = {};
 * @param ul - das <ul> in dem sich das Bild an Stelle "slide" befindet
 * @param slide - die Stelle / Nummer des Bildes im <ul> (startet mit 0)
 */
-function showSlide(ul, slide, updatePreview, animate, duration) {
+eLearnJS.showSlide = function(ul, slide, updatePreview, animate, duration) {
     var ul_id = $('.img-gallery').index(ul);
 
     var slide_intended = (ul.children('li').not('.loop_clone').length + slide) % ul.children('li').not('.loop_clone').length;
@@ -1145,32 +1139,32 @@ function showSlide(ul, slide, updatePreview, animate, duration) {
     // "x.length" an Stelle 0
     if(ul.parent().filter('.loop').length > 0) {
         if(slide <= 0 || slide >= ul.children('li').length - 1) {
-            slide = createLoopFor(ul, ul_id, slide);
+            slide = eLearnJS.createLoopFor(ul, ul_id, slide);
         }
 
         // clear loop timeout
         if(animate) {
-            if(duration == undefined) duration = ulTransitionDuration;
+            if(duration == undefined) duration = eLearnJS.ulTransitionDuration;
             var timeoutDuration = parseFloat(duration.replace(/[^\d\.]/g, "")) * 1000;
-            clearTimeout(loopTimeouts[ul_id]);
-            loopTimeouts[ul_id] = setTimeout(function() {
-                clearLoop(ul);
+            clearTimeout(eLearnJS.loopTimeouts[ul_id]);
+            eLearnJS.loopTimeouts[ul_id] = setTimeout(function() {
+                eLearnJS.clearLoop(ul);
             }, timeoutDuration);
         }
     }
 
-    // Für alle Slider, falls showSlide möglich
+    // Für alle Slider, falls eLearnJS.showSlide möglich
     if((ul.parent().is('.slider') && (slide >= 0 && slide < ul.children('li').length))
        || (ul.parent().is('.slider-nav') && (slide >= 0 && slide*4 < ul.children('li').length))) {
-        showSlideLi(ul, ul_id, slide, animate, duration);
+        eLearnJS.showSlideLi(ul, ul_id, slide, animate, duration);
 
     }
 
-    var actual_slide = ul.children('li').eq(visibleImage[ul_id]).attr('loopid');
+    var actual_slide = ul.children('li').eq(eLearnJS.visibleImage[ul_id]).attr('loopid');
 
     // Bildbeschreibung laden, wenn es sich nicht um einen navigations-slider handelt
     if(!ul.parent().is(".slider-nav")) {
-        showSlideDescription(ul, slide);
+        eLearnJS.showSlideDescription(ul, slide);
     }
 
     // Zusätzlich für Slider mit Preview Nav
@@ -1179,18 +1173,18 @@ function showSlide(ul, slide, updatePreview, animate, duration) {
         var previeNavLis = ul.parent().parent().nextAll('.preview-con').find('.slider-nav').first().children('ul.img-gallery').children('li');
         previeNavLis.removeClass('active');
         previeNavLis.eq(actual_slide).addClass('active');
-        showSlide(previeNavLis.parent(), Math.floor(actual_slide/4), false, animate, duration);
+        eLearnJS.showSlide(previeNavLis.parent(), Math.floor(actual_slide/4), false, animate, duration);
     }
 
-    showSlideButtons(ul, slide, ul.parent().filter('.slider-nav').length > 0);
-}
+    eLearnJS.showSlideButtons(ul, slide, ul.parent().filter('.slider-nav').length > 0);
+};
 
 /**
 * Fügt für "Loop" benötigte Elemente in den Slider ein, damit eine sprunglose
 * Übergänge zwischen den Elementen in eine Richtung möglich sind.
 */
-function createLoopFor(ul, ul_id, slide) {
-    var active_slide = visibleImage[ul_id];
+eLearnJS.createLoopFor = function(ul, ul_id, slide) {
+    var active_slide = eLearnJS.visibleImage[ul_id];
 
     // moving right
     if(slide == ul.children('li').length - 1) {
@@ -1228,18 +1222,18 @@ function createLoopFor(ul, ul_id, slide) {
         "width": ul.children('li').outerWidth(true) * ul.children('li').length + 10 + "px"
     });
     ul[0].offsetHeight; // apply css changes
-    ul.css("transition-duration", ulTransitionDuration);
+    ul.css("transition-duration", eLearnJS.ulTransitionDuration);
 
     return slide;
-}
+};
 
 /**
 * Entfernt nicht benötigte Elemente aus dem Slider und springt an die korrekte
 * Position auf einem Originalelement
 */
-function clearLoop(ul) {
+eLearnJS.clearLoop = function(ul) {
     var ul_id = $('.img-gallery').index(ul);
-    var visibleLi = ul.children('li').eq(visibleImage[ul_id]);
+    var visibleLi = ul.children('li').eq(eLearnJS.visibleImage[ul_id]);
     var originalSlide = ul.children('li').not('.loop_clone').filter('[loopid="' + visibleLi.attr('loopid') + '"]');
 
     ul.find('.loop_clone').not(originalSlide.prev()).not(originalSlide.next()).remove();
@@ -1255,12 +1249,12 @@ function clearLoop(ul) {
     });
 
     ul[0].offsetHeight; // apply css changes
-    ul.css("transition-duration", ulTransitionDuration);
+    ul.css("transition-duration", eLearnJS.ulTransitionDuration);
 
     var toShow = ul.children('li').index(originalSlide);
-    // always show, to update visibleImage[...], preview should be set already
-    showSlide(ul, parseInt(toShow), false, false);
-}
+    // always show, to update eLearnJS.visibleImage[...], preview should be set already
+    eLearnJS.showSlide(ul, parseInt(toShow), false, false);
+};
 
 /**
 * Zeigt in einem Slider das korrekte slide an.
@@ -1270,11 +1264,11 @@ function clearLoop(ul) {
 * @param slide: Index des anzuzeigenden Slides (0 - X)
 * @param animate: bool if animation should be done or not (optional)
 * @param duration: animation duration, only necessary if animation is true.
-*   If not set, this will be the standard ulTransitionDuration
+*   If not set, this will be the standard eLearnJS.ulTransitionDuration
 */
-function showSlideLi(ul, ul_id, slide, animate, duration) {
+eLearnJS.showSlideLi = function(ul, ul_id, slide, animate, duration) {
     // set animation
-    if(duration == undefined) duration = ulTransitionDuration;
+    if(duration == undefined) duration = eLearnJS.ulTransitionDuration;
     if(animate) {
         ul.css("transition-duration", duration);
     }
@@ -1283,9 +1277,9 @@ function showSlideLi(ul, ul_id, slide, animate, duration) {
     }
     ul[0].offsetHeight; // apply css changes
 
-    var hasScroll = hasScrollbar();
+    var hasScroll = eLearnJS.hasScrollbar();
     if(animate && ul.not('fixed-size').length > 0 && ul.parent().is('.slider')) ul.parent().addClass("switching");
-    visibleImage[ul_id] = slide;
+    eLearnJS.visibleImage[ul_id] = slide;
     // Die X-Position an die die Transformation stattfindet
     var x = ul.children('li').outerWidth(true)*slide*-1
         + parseFloat(ul.css('margin-left').replace(/[^\d\.]/g, ""));
@@ -1299,24 +1293,24 @@ function showSlideLi(ul, ul_id, slide, animate, duration) {
 
 
     // set timeout to wait for sliding animation
-    var oldTimeout = slideSwitchTimeouts[ul_id];
+    var oldTimeout = eLearnJS.slideSwitchTimeouts[ul_id];
     var timeoutDuration = parseFloat(duration.replace(/[^\d\.]/g, "")) * 1000;
     if(!animate) timeoutDuration = 0;
 
     clearTimeout(oldTimeout);
     var newTimeout = setTimeout(function() {
-        var height = $(ul.children('li')[visibleImage[ul_id]]).height();
+        var height = $(ul.children('li')[eLearnJS.visibleImage[ul_id]]).height();
         // start height change animation; only for variable height sliders
         if(ul.not('fixed-size').length > 0 && ul.parent().is('.slider')){
             var animationDuration = 500;
             if(!animate) {
-                // will be ulTransitionDuration if duration is not set explicitly
+                // will be eLearnJS.ulTransitionDuration if duration is not set explicitly
                 animationDuration = parseFloat(duration.replace(/[^\d\.]/g, "")) * 1000;
             }
             ul.parent().animate({height: height + "px"}, animationDuration, function() {
                 ul.parent().removeClass("switching");
-                if(hasScrollbar() != hasScroll) {
-                    resizeAllSliders();
+                if(eLearnJS.hasScrollbar() != hasScroll) {
+                    eLearnJS.resizeAllSliders();
                 }
             });
         }
@@ -1324,11 +1318,11 @@ function showSlideLi(ul, ul_id, slide, animate, duration) {
             ul.parent().removeClass("switching");
         }
     }, timeoutDuration);
-    slideSwitchTimeouts[ul_id] = newTimeout;
+    eLearnJS.slideSwitchTimeouts[ul_id] = newTimeout;
 
     ul[0].offsetHeight; // apply css changes
-    ul.css("transition-duration", ulTransitionDuration);
-}
+    ul.css("transition-duration", eLearnJS.ulTransitionDuration);
+};
 
 /**
 * Zeigt den Beschreibungstext zu einem bestimmten Slide in einem bestimmten ul
@@ -1336,7 +1330,7 @@ function showSlideLi(ul, ul_id, slide, animate, duration) {
 * @param ul: Element als JQuery element
 * @param slide: Index des anzuzeigenden Slides (0 - X)
 */
-function showSlideDescription(ul, slide) {
+eLearnJS.showSlideDescription = function(ul, slide) {
     var p = ul.children('li').eq(slide).children('p');
     var descDiv = ul.parent().parent().nextAll('.slider-description').first();
     if(p.length > 0) {
@@ -1347,7 +1341,7 @@ function showSlideDescription(ul, slide) {
         descDiv.text("");
         descDiv.hide();
     }
-}
+};
 
 /**
 * Zeigt nur die Links und Rechts Buttons an die Möglich sind.
@@ -1355,7 +1349,7 @@ function showSlideDescription(ul, slide) {
 * @param slide - die Stelle / Nummer des Bildes im <ul> (startet mit 0)
 * @param isNavigation - true wenn Navigations/Preview-Slider, false sonst.
 */
-function showSlideButtons(ul, slide, isNavigation) {
+eLearnJS.showSlideButtons = function(ul, slide, isNavigation) {
     if(slide > 0 || ul.parent().filter('.loop').length > 0) {
         ul.parent().nextAll('.slider-back-area').show();
     }
@@ -1369,7 +1363,7 @@ function showSlideButtons(ul, slide, isNavigation) {
     else {
         ul.parent().nextAll('.slider-next-area').hide();
     }
-}
+};
 
 /**
 * Gibt die originale Dimension der Bilddatei zurück
@@ -1377,7 +1371,7 @@ function showSlideButtons(ul, slide, isNavigation) {
 * @param callback - function(width, height) in der etwas mit der Größe
 *   gemacht werden kann.
 */
-function getImageSize(img, callback){
+eLearnJS.getImageSize = function(img, callback){
     img = $(img);
 
     var wait = setInterval(function(){
@@ -1407,14 +1401,14 @@ function getImageSize(img, callback){
 
         callback.apply(this, arguments);
     }
-}
+};
 
 /**
 * Zoomt in ein Bild aus einem Slider. (Lightbox mit Bild)
 */
-function zoomImage(button) {
+eLearnJS.zoomImage = function(button) {
     var ul = $(button).prevAll('div').find('.img-gallery').first();
-    var vimg = visibleImage[$('.img-gallery').index(ul)];
+    var vimg = eLearnJS.visibleImage[$('.img-gallery').index(ul)];
     $('.img-lightbox').append($(ul.find('img')[vimg]).clone().css('max-height', ''));
     $('.image-zoom-container').show();
     var img = $('.img-lightbox').find('img');
@@ -1424,57 +1418,57 @@ function zoomImage(button) {
     $('.img-lightbox').find('.close').css('left', leftmargin + "px");
     var bottommargin = parseInt(img.css('margin-bottom').replace("px",""))+img.height()-20;
     $('.img-lightbox').find('.close').css('bottom', bottommargin + "px");
-}
+};
 
 /**
 * Schließt das Zoom fenster, wenn nicht auf das Bild geklickt wurde.
 */
-function closeZoom(button) {
+eLearnJS.closeZoom = function(button) {
     $(button).parent().hide();
     var lb = $(button).parent().find('.img-lightbox');
     lb.find('img').remove();
-}
+};
 
 // var für Timeout des resizes
-var resizeTimerSliders = null;
+eLearnJS.resizeTimerSliders = null;
 
 /**
 * Passt alle Slider und auch das Zoom Fenster an die Fenstergröße des Browsers
 * an.
 * @event: Fires "ejssliderresize"event on document when done successfully.
 */
-function resizeAllSliders() {
-    clearTimeout(resizeTimerSliders);
-    resizeTimerSliders = setTimeout(function() {
-        resizeSliders();
-        resizeNavigationSliders();
-        resizeZoomContainer();
+eLearnJS.resizeAllSliders = function() {
+    clearTimeout(eLearnJS.resizeTimerSliders);
+    eLearnJS.resizeTimerSliders = setTimeout(function() {
+        eLearnJS.resizeSliders();
+        eLearnJS.resizeNavigationSliders();
+        eLearnJS.resizeZoomContainer();
 
-        fireEvent(document, createEvent("ejssliderresize", {}));
+        eLearnJS.fireEvent(document, eLearnJS.createEvent("ejssliderresize", {}));
     }, 250);
 
-}
+};
 
 /**
 * Passt alle Bildergallerien (normalen Slider) an neue Fenstergröße an.
 */
-function resizeSliders() {
+eLearnJS.resizeSliders = function() {
     $('.slider:visible').each(function() {
         var slider = $(this);
         var ul = slider.children('ul.img-gallery');
         var ul_id = $('.img-gallery').index(ul);
 
         // width did not change since last update
-        if(lastSliderDimensions[ul_id] != undefined
-            && lastSliderDimensions[ul_id].width == slider.width()) {
+        if(eLearnJS.lastSliderDimensions[ul_id] != undefined
+            && eLearnJS.lastSliderDimensions[ul_id].width == slider.width()) {
             // continue
             return true;
         }
 
         // clear timeouts
         if(slider.is('.switching')) {
-            clearTimeout(slideSwitchTimeouts[ul_id]);
-            clearTimeout(loopTimeouts[ul_id]);
+            clearTimeout(eLearnJS.slideSwitchTimeouts[ul_id]);
+            clearTimeout(eLearnJS.loopTimeouts[ul_id]);
             slider.removeClass("switching");
         }
 
@@ -1482,13 +1476,13 @@ function resizeSliders() {
         ul[0].offsetHeight; // apply css changes
         ul.find('img').css({'max-height': ''});
 
-        var slide = visibleImage[ul_id];
+        var slide = eLearnJS.visibleImage[ul_id];
         var heights = 0;
         var testedImages = 0;
         slider.children('ul.img-gallery').children('li').each(function(i, e) {
             var li = $(this);
             li.css("width", slider.width() + "px");
-            getImageSize(li.children("img"), function(width, height){
+            eLearnJS.getImageSize(li.children("img"), function(width, height){
                 if(li.children('p').length > 0) {
                     li.children('p').height();
                 }
@@ -1536,29 +1530,29 @@ function resizeSliders() {
             transform: "translate3d(" + x + "px, 0px, 0px)"
         });
         ul[0].offsetHeight; // apply css changes
-        ul.css("transition-duration", ulTransitionDuration);
-        showSlide(ul, visibleImage[ul_id], false, false, "0s");
+        ul.css("transition-duration", eLearnJS.ulTransitionDuration);
+        eLearnJS.showSlide(ul, eLearnJS.visibleImage[ul_id], false, false, "0s");
 
-        updateSliderDimensions(ul);
+        eLearnJS.updateSliderDimensions(ul);
     });
-}
+};
 
 /**
 * Passt alle Slider Navigationen an neue Fenstergröße an.
 */
-function resizeNavigationSliders() {
+eLearnJS.resizeNavigationSliders = function() {
     $('.slider-nav:visible').each(function() {
         var slider = $(this);
         var ul = slider.children('ul.img-gallery');
         var ul_id = $('.img-gallery').index(ul);
-        var slide = visibleImage[$('.img-gallery').index(ul)];
+        var slide = eLearnJS.visibleImage[$('.img-gallery').index(ul)];
         var fullWidth = slider.width();
         var liWidth = fullWidth / 4.5;
         var liHeight = fullWidth / 6.0;
 
         // width did not change since last update
-        if(lastSliderDimensions[ul_id] != undefined
-            && lastSliderDimensions[ul_id].width == slider.width()) {
+        if(eLearnJS.lastSliderDimensions[ul_id] != undefined
+            && eLearnJS.lastSliderDimensions[ul_id].width == slider.width()) {
             // continue
             return true;
         }
@@ -1583,7 +1577,7 @@ function resizeNavigationSliders() {
         ul.children('li').find('img').css({"width":"", "height":""});
         ul.children('li').find('img').each(function(i,e) {
             var img = $(this);
-            getImageSize(img, function(width, height){
+            eLearnJS.getImageSize(img, function(width, height){
                 if(liHeight > 0) {
                     var ratio = width/height;
                     if(ratio > 4/3) {
@@ -1608,16 +1602,16 @@ function resizeNavigationSliders() {
 
         // reset transition duration
         ul[0].offsetHeight;
-        ul.css("transition-duration", ulTransitionDuration);
+        ul.css("transition-duration", eLearnJS.ulTransitionDuration);
 
-        updateSliderDimensions(ul);
+        eLearnJS.updateSliderDimensions(ul);
     });
-}
+};
 
 /**
 * Passt Zoom Container an neue Fenstergröße an.
 */
-function resizeZoomContainer() {
+eLearnJS.resizeZoomContainer = function() {
     if($('.image-zoom-container:visible').is(':visible')) {
         var img = $('.img-lightbox').find('img');
         img.css('margin-left', "");
@@ -1627,14 +1621,14 @@ function resizeZoomContainer() {
         var bottommargin = parseInt(img.css('margin-bottom').replace("px",""))+img.height()-20;
         $('.img-lightbox').find('.close').css('bottom', bottommargin + "px");
     }
-}
+};
 
 
 // --------------------------------------------------------------------------------------
 // Tooltips
 // --------------------------------------------------------------------------------------
 
-var activeTooltip = 0;
+eLearnJS.activeTooltip = 0;
 /*
 * One tooltip is an object containing following keys:
 * Necessary:
@@ -1651,13 +1645,13 @@ var activeTooltip = 0;
 *   this offset will be set as margin added to the anchor position.
 *   All key-values are optional, so e.g. only top can be defined
 */
-var tooltips =
+eLearnJS.tooltips =
 [
     {
         html : '<div id="tooltipBack" class="tooltip fixed">'
             + 'Verlinkt normalerweise auf eine <br>vorangegane Seite oder den Anfang <br>des Dokuments.'
             + '</div>',
-        condition : isBackButtonEnabled,
+        condition : eLearnJS.isBackbuttonEnabled,
         anchor : "#btnBack"
     },
     {
@@ -1694,13 +1688,13 @@ var tooltips =
         html : '<div id="tooltipTouchRight" class="tooltip fixed right">'
             + 'Wischen, um auf die nächste Seite zu wechseln.'
             + '</div>',
-        condition: isTouchSupported
+        condition: function() {return eLearnJS.isTouchSupported()}
     },
     {
         html : '<div id="tooltipTouchLeft" class="tooltip fixed left">'
             + 'Wischen, um auf die vorherige Seite zu wechseln.'
             + '</div>',
-        condition: isTouchSupported
+        condition: function() {return eLearnJS.isTouchSupported()}
     }
 ];
 
@@ -1708,43 +1702,43 @@ var tooltips =
 * Fügt die Buttons und die Funktionen der Buttons hinzu, die zum Durchklicken der
 * Tooltips bzw. zum Schließen nötig sind.
 */
-function initiateTooltips() {
-    for(var i=0, tt=tooltips[0]; i<tooltips.length; i++, tt=tooltips[i]) {
+eLearnJS.initiateTooltips = function() {
+    for(var i=0, tt=eLearnJS.tooltips[0]; i<eLearnJS.tooltips.length; i++, tt=eLearnJS.tooltips[i]) {
         $('.page').before(tt.html);
     }
     $('.tooltip').prepend('<div id="cancel">x</div>');
     $('.tooltip').append('<div><button id="next">Nächster</button></div>');
     $('.tooltip').find('#cancel').click(function() {
-        activeTooltip = 0;
-        closeTooltips();
+        eLearnJS.activeTooltip = 0;
+        eLearnJS.closeTooltips();
     });
     $('.tooltip').find('#next').click(function() {
-        nextTooltip();
+        eLearnJS.nextTooltip();
     });
-}
+};
 
 /**
 * Wird von dem "Hilfe" Button aufgerufen. Öffnet den ersten Tooltip.
 */
-function startHelp() {
-    showTooltip(0);
-}
+eLearnJS.startHelp = function() {
+    eLearnJS.showTooltip(0);
+};
 
 /**
 * Zeigt den Tooltip mit der übergebenen Nummer an.
 * (id = "tooltipX" : mit X - Nummer des Tooltips)
 */
-function showTooltip(nr) {
-    var tooltip = tooltips[nr];
+eLearnJS.showTooltip = function(nr) {
+    var tooltip = eLearnJS.tooltips[nr];
 
-    closeTooltips();
+    eLearnJS.closeTooltips();
     // invalid tooltip
     if($('.tooltip').length <= nr || nr < 0) {
-        activeTooltip = 0;
+        eLearnJS.activeTooltip = 0;
         return;
     }
 
-    activeTooltip = nr;
+    eLearnJS.activeTooltip = nr;
     // Tooltip condition is true and anchor is visible if defined
     if((tooltip.condition == undefined
             || tooltip.condition())
@@ -1787,23 +1781,23 @@ function showTooltip(nr) {
             }
         }
 
-        setTooltipMargin(nr, margin);
+        eLearnJS.setTooltipMargin(nr, margin);
 
         // display the tooltip
         $($('.tooltip')[nr]).show();
     }
     // tooltip condition is false, try to display next
     else {
-        nextTooltip();
+        eLearnJS.nextTooltip();
         return;
     }
-}
+};
 
 /**
 * Setzt den Tooltip margin am tatsächlichen HTML Element. Nutzt @param nr als
-* index des tooltips
+* index des eLearnJS.tooltips
 */
-function setTooltipMargin(nr, margin) {
+eLearnJS.setTooltipMargin = function(nr, margin) {
     if(margin == undefined) return;
 
     if(margin.top != undefined) {
@@ -1818,21 +1812,21 @@ function setTooltipMargin(nr, margin) {
     if(margin.right != undefined) {
         $($('.tooltip')[nr]).css("margin-right", margin.right);
     }
-}
+};
 
 /**
 * Zeigt den nächsten Tooltip an. (Eine Nummer weiter)
 */
-function nextTooltip() {
-    showTooltip(activeTooltip+1);
-}
+eLearnJS.nextTooltip = function() {
+    eLearnJS.showTooltip(eLearnJS.activeTooltip+1);
+};
 
 /**
 * Schließt alle Tooltips.
 */
-function closeTooltips() {
+eLearnJS.closeTooltips = function() {
     $('.tooltip').hide();
-}
+};
 
 
 
@@ -1840,19 +1834,19 @@ function closeTooltips() {
 // Hideables
 // --------------------------------------------------------------------------------------
 
-function initiateHideables() {
+eLearnJS.initiateHideables = function() {
     $('.hideable').each(function() {
         var div = $(this);
         div.wrap('<div class="hideable-container"></div>');
-        div.before('<button onclick="toggleHideable(this);">'
+        div.before('<button onclick="eLearnJS.toggleHideable(this);">'
                         + div.attr('show') + " " + div.attr('name')
                         + '</button>');
 
         div.hide();
     });
-}
+};
 
-function toggleHideable(element) {
+eLearnJS.toggleHideable = function(element) {
     var div = $(element).nextAll().first('.hideable');
 
     // hide
@@ -1865,19 +1859,19 @@ function toggleHideable(element) {
         div.show();
         $(element).html(div.attr('hide') + " " + div.attr('name'));
     }
-}
+};
 
 // --------------------------------------------------------------------------------------
 // Tabbed boxes
 // --------------------------------------------------------------------------------------
 
-function initiateTabbedBoxes() {
+eLearnJS.initiateTabbedBoxes = function() {
     $('.tabbed-box').each(function() {
-        initiateTabbedBox($(this));
+        eLearnJS.initiateTabbedBox($(this));
     });
-}
+};
 
-function initiateTabbedBox(box) {
+eLearnJS.initiateTabbedBox = function(box) {
     var div = box;
 
     div.wrap('<div class="tabbed-container"></div>');
@@ -1888,7 +1882,7 @@ function initiateTabbedBox(box) {
 
     div.find('.tab').each(function() {
         var tab = $(this);
-        tabs.append('<div class="tab-select" onclick="selectTab(this);">'
+        tabs.append('<div class="tab-select" onclick="eLearnJS.selectTab(this);">'
                         + tab.attr('name')
                         + '</div>');
     });
@@ -1898,15 +1892,15 @@ function initiateTabbedBox(box) {
     div.find('.tab').first().show();
     tabs.find('.tab-select').first().addClass('act');
 
-    div.closest('.tabbed-container')[0].addEventListener("ejstabchange", resizeAllSliders);
-}
+    div.closest('.tabbed-container')[0].addEventListener("ejstabchange", eLearnJS.resizeAllSliders);
+};
 
 /**
 * Selects a tab of a tabbed box
 * @param elemt, the tab element clicked on
 * @event: Fires "ejstabchange"event on the .tabbed-container when done successfully.
 */
-function selectTab(element) {
+eLearnJS.selectTab = function(element) {
     var e = $(element);
     var div = e.parent().nextAll().first('.tabbed-box');
 
@@ -1921,15 +1915,15 @@ function selectTab(element) {
     var eventObj = {
         "tab": e.html(),
         "tabbefore" : tabbefore};
-    fireEvent(div.closest('.tabbed-container')[0], createEvent("ejstabchange", eventObj));
-}
+    eLearnJS.fireEvent(div.closest('.tabbed-container')[0], eLearnJS.createEvent("ejstabchange", eventObj));
+};
 
 
 // --------------------------------------------------------------------------------------
 // Hover Infos
 // --------------------------------------------------------------------------------------
 
-function initiateHoverInfos() {
+eLearnJS.initiateHoverInfos = function() {
     $('.hover-info').each(function() {
         var div = $(this);
 
@@ -1948,25 +1942,25 @@ function initiateHoverInfos() {
         info.addClass("hover-info-block");
 
         div.on('mouseenter', function(event) {
-            if(!isTouchSupported())
-                hoverInfoShow(div);
+            if(!eLearnJS.isTouchSupported())
+                eLearnJS.hoverInfoShow(div);
         });
         div.on('mouseleave', function(event) {
-            hoverInfoHide(div);
+            eLearnJS.hoverInfoHide(div);
         });
         title.on('click', function(event) {
-            hoverInfoTrigger(div);
+            eLearnJS.hoverInfoTrigger(div);
         });
     });
-}
+};
 
-function hoverInfoSetPositions() {
+eLearnJS.hoverInfoSetPositions = function() {
     $('.hover-info').each(function() {
-        hoverInfoSetPosition($(this));
+        eLearnJS.hoverInfoSetPosition($(this));
     });
-}
+};
 
-function hoverInfoSetPosition(div) {
+eLearnJS.hoverInfoSetPosition = function(div) {
     var min_width = 200;
     var perc_from = 400;
 
@@ -2005,29 +1999,29 @@ function hoverInfoSetPosition(div) {
         "margin": margin,
         "max-width": width
     });
-}
+};
 
-function hoverInfoShow(div) {
+eLearnJS.hoverInfoShow = function(div) {
     var info = div.children('div.hover-info-block');
     info.removeClass("hide");
 
-    hoverInfoSetPosition(div);
-}
+    eLearnJS.hoverInfoSetPosition(div);
+};
 
-function hoverInfoHide(div) {
+eLearnJS.hoverInfoHide = function(div) {
     var info = div.children('div.hover-info-block');
     info.addClass("hide");
-}
+};
 
-function hoverInfoTrigger(div) {
+eLearnJS.hoverInfoTrigger = function(div) {
     var info = div.children('div.hover-info-block');
     if(info.is('.hide')) {
-        hoverInfoShow(div);
+        eLearnJS.hoverInfoShow(div);
     }
     else {
-        hoverInfoHide(div);
+        eLearnJS.hoverInfoHide(div);
     }
-}
+};
 
 // --------------------------------------------------------------------------------------
 // Stop Videos
@@ -2036,7 +2030,7 @@ function hoverInfoTrigger(div) {
 /**
 * Stops all videos on the page. Usually called when another section is displayed.
 */
-function stopVideos() {
+eLearnJS.stopVideos = function() {
     // stop all HTML5 videos
     $('video').each(function() {this.pause()});
     $('audio').each(function() {this.pause()});
@@ -2068,7 +2062,7 @@ function stopVideos() {
         }
     });
     */
-}
+};
 
 // --------------------------------------------------------------------------------------
 // Window RESIZING
@@ -2079,14 +2073,14 @@ var resizeTimer;
 * Berechnet alle notwendigen Größen neu.
 */
 $(window).resize(function() {
-    windowOnResize();
+    eLearnJS.windowOnResize();
 });
 
 $(window).on('scrollbarVisible', function() {
-    windowOnResize();
+    eLearnJS.windowOnResize();
 });
 $(window).on('scrollbarHidden', function() {
-    windowOnResize();
+    eLearnJS.windowOnResize();
 });
 
 /**
@@ -2094,22 +2088,22 @@ $(window).on('scrollbarHidden', function() {
 * @event: Fires "ejswindowresize" + " ejswindowresizelate"
 *   event on the window when done successfully.
 */
-function windowOnResize() {
+eLearnJS.windowOnResize = function() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function(){
-        if(isSideMenuVisible()) {
+        if(eLearnJS.isSideMenuVisible()) {
             $('#sideMenu').css('right', "0");
         }
         else {
             $('#sideMenu').css('right', "-"+($('#sideMenu').width()+10)+"px");
         }
 
-        fireEvent(window, createEvent("ejswindowresize", {}));
-        fireEvent(window, createEvent("ejswindowresizelate", {}));
+        eLearnJS.fireEvent(window, eLearnJS.createEvent("ejswindowresize", {}));
+        eLearnJS.fireEvent(window, eLearnJS.createEvent("ejswindowresizelate", {}));
     }, 250);
-    updateNavBarWidth();
-    hoverInfoSetPositions();
-}
+    eLearnJS.updateNavBarWidth();
+    eLearnJS.hoverInfoSetPositions();
+};
 
 // --------------------------------------------------------------------------------------
 // KeyPress Part (Arrow Left/Right)
@@ -2118,18 +2112,18 @@ function windowOnResize() {
 * Fügt Pfeiltastennavigation durch Sections hinzu.
 */
 $(document).keydown(function(e){
-    if(!allShown && keyNavigationEnabled) {
+    if(!eLearnJS.allShown && eLearnJS.keyNavigationEnabled) {
         if(e.keyCode == 37
             && !$(document.activeElement).is('input')
             && !$(document.activeElement).is('textarea')
             && $(document.activeElement).attr("contentEditable") != "true") {
-            showPrev();
+            eLearnJS.showPrev();
         }
         else if(e.keyCode == 39
             && !$(document.activeElement).is('input')
             && !$(document.activeElement).is('textarea')
             && $(document.activeElement).attr("contentEditable") != "true") {
-            showNext();
+            eLearnJS.showNext();
         }
     }
 });
@@ -2138,13 +2132,13 @@ $(document).keydown(function(e){
 /**
 * Aktiviert oder Deaktiviert Tastaturnavigation
 */
-function setKeyNavigationEnabled(b) {
-    keyNavigationEnabled = b;
-}
+eLearnJS.setKeyNavigationEnabled = function(b) {
+    eLearnJS.keyNavigationEnabled = b;
+};
 
-function isKeyNavigationEnabled() {
-    return keyNavigationEnabled;
-}
+eLearnJS.isKeyNavigationEnabled = function() {
+    return eLearnJS.keyNavigationEnabled;
+};
 
 
 
@@ -2154,7 +2148,7 @@ function isKeyNavigationEnabled() {
 * @param callback : function(exists) {...}
 *   wird aufgerufen, nachdem die Funktion abgeschlossen ist.
 */
-function doesURLExist(url, callback) {
+eLearnJS.doesURLExist = function(url, callback) {
     $.ajax({
         url: url,
         type:'HEAD',
@@ -2167,61 +2161,61 @@ function doesURLExist(url, callback) {
             callback(true);
         }
     });
-}
+};
 
 /**
 * Checks if an object is a function
 */
-function isFunction(functionToCheck) {
+eLearnJS.isFunction = function(functionToCheck) {
  var getType = {};
  return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
-}
+};
 
-var wrapDimensions = {width: 0, height: 0};
+eLearnJS.wrapDimensions = {width: 0, height: 0};
 
 /**
 * Checks the size of #wrap.
-* Will set the wrapDimensions object to the actual size
+* Will set the eLearnJS.wrapDimensions object to the actual size
 * @return whether it changed or not
 */
-function checkWrapResize() {
+eLearnJS.checkWrapResize = function() {
     var changed = false;
     var wrap = $('#wrap');
 
-    if(wrap.width() != wrapDimensions.width
-        || wrap.height() != wrapDimensions.height) {
+    if(wrap.width() != eLearnJS.wrapDimensions.width
+        || wrap.height() != eLearnJS.wrapDimensions.height) {
         changed = true;
-        wrapDimensions.width = wrap.width();
-        wrapDimensions.height = wrap.height();
+        eLearnJS.wrapDimensions.width = wrap.width();
+        eLearnJS.wrapDimensions.height = wrap.height();
     }
 
     return changed;
-}
+};
 
 /**
 * Will send a @param message to the windows parent
 */
-function notifyIFrameParent(message) {
+eLearnJS.notifyIFrameParent = function(message) {
     window.parent.postMessage(message, '*');
-}
+};
 
 /**
 * Will check the wrap size and notify IFrameParent if it did change
 */
-function updateWrapSize() {
-    if(checkWrapResize()) {
-        notifyIFrameParent({action: eLearnJS.actions.CONTENT_RESIZE, dimensions: wrapDimensions});
+eLearnJS.updateWrapSize = function() {
+    if(eLearnJS.checkWrapResize()) {
+        eLearnJS.notifyIFrameParent({action: eLearnJS.actions.CONTENT_RESIZE, dimensions: eLearnJS.wrapDimensions});
     }
-}
+};
 
 // --------------------------------------------------------------------------------------
 // Touch Scroll part
 // --------------------------------------------------------------------------------------
 
-var clickedAlready = false;
+eLearnJS.clickedAlready = false;
 
-var touchMouseChangeTimer = null;
-var lastTouch = undefined;
+eLearnJS.touchMouseChangeTimer = null;
+eLearnJS.lastTouch = undefined;
 
 /**
 * Simply returns the current touchSupported var value
@@ -2229,42 +2223,42 @@ var lastTouch = undefined;
 * actively used. So it returns if the last event was a touch event or a mouse
 * was used. This way it can swap, based on the users preference.
 */
-function isTouchSupported() {
-    return touchSupported;
-}
+eLearnJS.isTouchSupported = function() {
+    return eLearnJS.touchSupported;
+};
 
 /**
 * Initiates the touch detection.
 * This will set listeners to specific events which can detect
 */
-function initiateTouchDetection() {
+eLearnJS.initiateTouchDetection = function() {
     $(document).bind('touchstart', function(event) {
-        lastTouch = new Date().getTime();
-        clearTimeout(touchMouseChangeTimer);
-        if(!touchSupported) {
-            touchSupported = true;
-            touchSupportedChanged();
+        eLearnJS.lastTouch = new Date().getTime();
+        clearTimeout(eLearnJS.touchMouseChangeTimer);
+        if(!eLearnJS.touchSupported) {
+            eLearnJS.touchSupported = true;
+            eLearnJS.touchSupportedChanged();
         }
     });
     $(document).bind('mousemove', function(event) {
         // asynchronous for touch events fired afterwards
-        touchMouseChangeTimer = setTimeout(function() {
+        eLearnJS.touchMouseChangeTimer = setTimeout(function() {
             // more than 2s ago
-            if(touchSupported && lastTouch < new Date().getTime() - 2000) {
-                touchSupported = false;
-                touchSupportedChanged();
+            if(eLearnJS.touchSupported && eLearnJS.lastTouch < new Date().getTime() - 2000) {
+                eLearnJS.touchSupported = false;
+                eLearnJS.touchSupportedChanged();
             }
         }, 200);
     });
-}
+};
 
 /**
-* Will call all functions registered on touchSupportedChanged
+* Will call all functions registered on eLearnJS.touchSupportedChanged
 * @event: Fires "ejstouchmousechange" event on the window when done successfully.
 */
-function touchSupportedChanged() {
-    fireEvent(window, createEvent("ejstouchmousechange", {}));
-}
+eLearnJS.touchSupportedChanged = function() {
+    eLearnJS.fireEvent(window, eLearnJS.createEvent("ejstouchmousechange", {}));
+};
 
 /**
 * Adds a listener function called on touch support/usage changes.
@@ -2272,70 +2266,70 @@ function touchSupportedChanged() {
 * @deprecated Since version 1.0.0. Simply add the event listener yourself.
 *   this makes better event handling possible.
 */
-function addTouchMouseChangeListener(key, fnc) {
+eLearnJS.addTouchMouseChangeListener = function(key, fnc) {
     window.addEventListener("ejstouchmousechange", fnc);
-}
+};
 
 
 
 /**
 * Aktiviert oder deaktiviert generell den Sectionwechsel per touch
 */
-function generalSectionSwipeEnabled(b) {
-    secSwipeEnabled = b;
-}
+eLearnJS.generalSectionSwipeEnabled = function(b) {
+    eLearnJS.secSwipeEnabled = b;
+};
 
 /**
 * Gibt zurück, ob der Sectionwechsel per touch aktiviert ist.
 */
-function isSectionSwipeEnabled() {
-    return secSwipeEnabled;
-}
+eLearnJS.isSectionSwipeEnabled = function() {
+    return eLearnJS.secSwipeEnabled;
+};
 
 /**
 * Fügt allen Sections eine Touchabfrage hinzu.
 */
-function addTouchToSections() {
+eLearnJS.addTouchToSections = function() {
 
     document.addEventListener('touchstart',
     function(event) {
-        if(secSwipeEnabled) {
-            touchStart(event, this);
+        if(eLearnJS.secSwipeEnabled) {
+            eLearnJS.touchStart(event, this);
         }
     });
     document.addEventListener('touchmove',
         function(event) {
-            if(secSwipeEnabled) {
-                touchMove(event);
+            if(eLearnJS.secSwipeEnabled) {
+                eLearnJS.touchMove(event);
             }
         },
         {passive: false}
     );
     document.addEventListener('touchend', function(event) {
-        if(secSwipeEnabled) {
-            touchEnd(event);
+        if(eLearnJS.secSwipeEnabled) {
+            eLearnJS.touchEnd(event);
         }
     });
     document.addEventListener('touchcancel', function(event) {
-        if(secSwipeEnabled) {
-            touchCancel(event);
+        if(eLearnJS.secSwipeEnabled) {
+            eLearnJS.touchCancel(event);
         }
     });
 
-    resizeTouchArrows();
-    window.addEventListener("ejswindowresize", resizeTouchArrows);
+    eLearnJS.resizeTouchArrows();
+    window.addEventListener("ejswindowresize", eLearnJS.resizeTouchArrows);
 };
 
 /**
 * Sets max swipe width for section changes by swiping
 */
-function resizeTouchArrows() {
+eLearnJS.resizeTouchArrows = function() {
     var maxDiff = $("body").width()/4;
     $('#leftTouch').css('width', maxDiff-1);
     $('#rightTouch').css('width', maxDiff-1);
     $('#leftTouch').css('left', '-' + maxDiff + 'px');
     $('#rightTouch').css('right', '-' + maxDiff + 'px');
-}
+};
 
 
 // TOUCH-EVENTS SINGLE-FINGER SWIPE-SENSING JAVASCRIPT
@@ -2343,278 +2337,278 @@ function resizeTouchArrows() {
 
 // this script can be used with one or more page elements to perform actions based on them being swiped with a single finger
 
-var triggerElementID = null; // this variable is used to identity the triggering element
-var fingerCount = 0;
-var startX = -1;
-var startY = -1;
-var curX = -1;
-var curY = -1;
-var swipeLength = 0;
-var swipeAngle = null;
-var swipeDirection = null;
-var swipeStarted = false;
-var isHorizontalSwipe = true;
-var swipeDirectionSet = false;
-var swipeType = "normal";
-var swipeTarget = null;
-var lastSpeed = 0;
-var lastTime = undefined;
-var lastDif = undefined;
-var startScrollLeft = 0;
+eLearnJS.triggerElementID = null; // this variable is used to identity the triggering element
+eLearnJS.fingerCount = 0;
+eLearnJS.startX = -1;
+eLearnJS.startY = -1;
+eLearnJS.curX = -1;
+eLearnJS.curY = -1;
+eLearnJS.swipeLength = 0;
+eLearnJS.swipeAngle = null;
+eLearnJS.swipeDirection = null;
+eLearnJS.swipeStarted = false;
+eLearnJS.isHorizontalSwipe = true;
+eLearnJS.swipeDirectionSet = false;
+eLearnJS.swipeType = "normal";
+eLearnJS.swipeTarget = null;
+eLearnJS.lastSpeed = 0;
+eLearnJS.lastTime = undefined;
+eLearnJS.lastDif = undefined;
+eLearnJS.startScrollLeft = 0;
 
-var touchDeactivatedElements = {};
+eLearnJS.touchDeactivatedElements = {};
 
-function registerTouchDeactivatedElement(key, elem) {
-    if(touchDeactivatedElements[key] == undefined
-        || touchDeactivatedElements[key] == null) {
-        touchDeactivatedElements[key] = elem;
+eLearnJS.registerTouchDeactivatedElement = function(key, elem) {
+    if(eLearnJS.touchDeactivatedElements[key] == undefined
+        || eLearnJS.touchDeactivatedElements[key] == null) {
+        eLearnJS.touchDeactivatedElements[key] = elem;
     }
-    else if(!touchDeactivatedElements[key].is(elem)) {
-        Array.prototype.push.apply(touchDeactivatedElements[key], elem);
+    else if(!eLearnJS.touchDeactivatedElements[key].is(elem)) {
+        Array.prototype.push.apply(eLearnJS.touchDeactivatedElements[key], elem);
     }
-}
+};
 
-function removeTouchDeactivatedElement(key) {
-    delete touchDeactivatedElements[key];
-}
+eLearnJS.removeTouchDeactivatedElement = function(key) {
+    delete eLearnJS.touchDeactivatedElements[key];
+};
 
 /**
 * Überprüft, um welche Touchfunktion es sich handelt.
 * Abhängig davon, welches Element berührt wurde und in welche Richtung sich der Finger
 * bewegt.
 */
-function setSwipeType() {
+eLearnJS.setSwipeType = function() {
     var swipeTypeSet = false;
-    $.each(touchDeactivatedElements, function(key, elem) {
-        if(swipeTarget.is(elem)) {
-            swipeType = "normal";
+    $.each(eLearnJS.touchDeactivatedElements, function(key, elem) {
+        if(eLearnJS.swipeTarget.is(elem)) {
+            eLearnJS.swipeType = "normal";
             swipeTypeSet = true;
             return false;
         }
     });
 
     if(!swipeTypeSet) {
-        if(swipeTarget.is('.slider') || swipeTarget.is('.slider *')
-            || swipeTarget.is('.slider-nav') || swipeTarget.is('.slider-nav *')) {
-            swipeType = "slider";
+        if(eLearnJS.swipeTarget.is('.slider') || eLearnJS.swipeTarget.is('.slider *')
+            || eLearnJS.swipeTarget.is('.slider-nav') || eLearnJS.swipeTarget.is('.slider-nav *')) {
+            eLearnJS.swipeType = "slider";
 
-            var ul = $(swipeTarget);
+            var ul = $(eLearnJS.swipeTarget);
             while(ul.filter('.slider').length == 0 && ul.filter('.slider-nav').length == 0) {
                 ul = ul.parent();
             }
             ul = ul.children("ul.img-gallery");
-            swipeTarget = ul;
+            eLearnJS.swipeTarget = ul;
             ul.css("transition-duration", "0s");
         }
-        // else if($(window).width() - (event.touches[0].pageX - $(document).scrollLeft()) < 20 && !isSideMenuVisible()) {
-            // swipeType = "menu";
+        // else if($(window).width() - (event.touches[0].pageX - $(document).scrollLeft()) < 20 && !eLearnJS.isSideMenuVisible()) {
+            // eLearnJS.swipeType = "menu";
             // $('.menu-wrap').css('top', $('#navigation').height() + "px");
         // }
-        else if(isSideMenuVisible()) {
-            swipeType = "menu-back";
+        else if(eLearnJS.isSideMenuVisible()) {
+            eLearnJS.swipeType = "menu-back";
             $('.menu-wrap').css('top', $('#navigation').height() + "px");
         }
-        else if(!allShown
-            && !swipeTarget.is("code") // Kein Code Element
-            && (parseInt(swipeTarget.prop("scrollWidth")) <= Math.ceil(swipeTarget.innerWidth())
-                || swipeTarget.css("overflow-x") == 'hidden')) // Element nicht horizontal scrollbar
+        else if(!eLearnJS.allShown
+            && !eLearnJS.swipeTarget.is("code") // Kein Code Element
+            && (parseInt(eLearnJS.swipeTarget.prop("scrollWidth")) <= Math.ceil(eLearnJS.swipeTarget.innerWidth())
+                || eLearnJS.swipeTarget.css("overflow-x") == 'hidden')) // Element nicht horizontal scrollbar
         {
-            swipeType = "section";
+            eLearnJS.swipeType = "section";
         }
         else {
-            swipeType = "normal";
+            eLearnJS.swipeType = "normal";
         }
     }
-}
+};
 
 /**
 * Will reset swipe type if it is not an horizontal movement
 */
-function checkSwipeType() {
-    if(!isHorizontalSwipe) swipeType = "normal";
-}
+eLearnJS.checkSwipeType = function() {
+    if(!eLearnJS.isHorizontalSwipe) eLearnJS.swipeType = "normal";
+};
 
 /**
 * Called on touch start.
 * Will set inital values for movement. Or cancel if it is multi finger touch.
 */
-function touchStart(event,passedName) {
-    swipeTarget = $(event.target);
-    setSwipeType();
+eLearnJS.touchStart = function(event,passedName) {
+    eLearnJS.swipeTarget = $(event.target);
+    eLearnJS.setSwipeType();
 
-    startScrollLeft = $(document).scrollLeft();
+    eLearnJS.startScrollLeft = $(document).scrollLeft();
 
-    fingerCount = event.touches.length;
-    if (fingerCount == 1) {
-        swipeStarted = true;
-        startX = event.touches[0].pageX;
-        startY = event.touches[0].pageY;
-        curX = event.touches[0].pageX;
-        curY = event.touches[0].pageY;
-        triggerElementID = passedName;
+    eLearnJS.fingerCount = event.touches.length;
+    if (eLearnJS.fingerCount == 1) {
+        eLearnJS.swipeStarted = true;
+        eLearnJS.startX = event.touches[0].pageX;
+        eLearnJS.startY = event.touches[0].pageY;
+        eLearnJS.curX = event.touches[0].pageX;
+        eLearnJS.curY = event.touches[0].pageY;
+        eLearnJS.triggerElementID = passedName;
     } else {
-        touchCancel(event);
+        eLearnJS.touchCancel(event);
     }
-}
+};
 
 /**
 * Called on touch move.
 * Will update values and distinguish between swipe types for further processing.
 */
-function touchMove(event) {
-    fingerCount = event.touches.length;
-    if (swipeStarted && fingerCount == 1) {
-        curX = event.touches[0].pageX;
-        curY = event.touches[0].pageY;
+eLearnJS.touchMove = function(event) {
+    eLearnJS.fingerCount = event.touches.length;
+    if (eLearnJS.swipeStarted && eLearnJS.fingerCount == 1) {
+        eLearnJS.curX = event.touches[0].pageX;
+        eLearnJS.curY = event.touches[0].pageY;
 
-        if(!swipeDirectionSet) {
-            setSwipeDirection();
-            checkSwipeType();
+        if(!eLearnJS.swipeDirectionSet) {
+            eLearnJS.setSwipeDirection();
+            eLearnJS.checkSwipeType();
         }
 
-        if((isHorizontalSwipe && swipeType != "section" && swipeType != "normal")
-            || (isHorizontalSwipe && swipeType == "section" && Math.abs(lastDif) > 12)) {
+        if((eLearnJS.isHorizontalSwipe && eLearnJS.swipeType != "section" && eLearnJS.swipeType != "normal")
+            || (eLearnJS.isHorizontalSwipe && eLearnJS.swipeType == "section" && Math.abs(eLearnJS.lastDif) > 12)) {
             //event.preventDefault();
         }
 
-        var dif = startX - curX;
-        calcSpeed(dif);
+        var dif = eLearnJS.startX - eLearnJS.curX;
+        eLearnJS.calcSpeed(dif);
 
-        if(isHorizontalSwipe) {
-            if(swipeType == "section") {
-                touchMoveSection(dif);
+        if(eLearnJS.isHorizontalSwipe) {
+            if(eLearnJS.swipeType == "section") {
+                eLearnJS.touchMoveSection(dif);
                 event.preventDefault();
             }
-            if(swipeType == "menu" && dif > 0) {
-                touchMoveMenu(dif);
+            if(eLearnJS.swipeType == "menu" && dif > 0) {
+                eLearnJS.touchMoveMenu(dif);
             }
-            if(swipeType == "menu-back") {
-                touchMoveMenu($('#sideMenu').width() + dif);
+            if(eLearnJS.swipeType == "menu-back") {
+                eLearnJS.touchMoveMenu($('#sideMenu').width() + dif);
             }
-            if(swipeType == "slider") {
-                touchMoveSlider(dif, swipeTarget);
+            if(eLearnJS.swipeType == "slider") {
+                eLearnJS.touchMoveSlider(dif, eLearnJS.swipeTarget);
             }
         }
     } else {
-        touchCancel(event);
+        eLearnJS.touchCancel(event);
     }
-}
+};
 
 /**
 * Ends a touch event. Calculates speed and processes the whole touch movement
-* based on the swipeType
+* based on the eLearnJS.swipeType
 */
-function touchEnd(event) {
+eLearnJS.touchEnd = function(event) {
     var maxDiff = $("body").width()/4;
-    calcSpeed(startX - curX);
-    if (swipeStarted && fingerCount == 1 && curX >= 0 ) {
-        //swipeLength = Math.round(Math.sqrt(Math.pow(curX - startX,2) + Math.pow(curY - startY,2)));
-        if((swipeType == "menu" || swipeType == "menu-back") && !isSideMenuVisible()) {
-            touchEndMenu();
+    eLearnJS.calcSpeed(eLearnJS.startX - eLearnJS.curX);
+    if (eLearnJS.swipeStarted && eLearnJS.fingerCount == 1 && eLearnJS.curX >= 0 ) {
+        //eLearnJS.swipeLength = Math.round(Math.sqrt(Math.pow(eLearnJS.curX - eLearnJS.startX,2) + Math.pow(eLearnJS.curY - eLearnJS.startY,2)));
+        if((eLearnJS.swipeType == "menu" || eLearnJS.swipeType == "menu-back") && !eLearnJS.isSideMenuVisible()) {
+            eLearnJS.touchEndMenu();
         }
-        if(swipeType == "slider") {
-            touchEndSlider();
+        if(eLearnJS.swipeType == "slider") {
+            eLearnJS.touchEndSlider();
         }
-        if (swipeType == "section" && Math.abs(curX - startX) >= maxDiff) {
-            touchEndSection();
-            if(swipeDirection != -1) {
-                processingRoutine(swipeDirection, swipeType);
+        if (eLearnJS.swipeType == "section" && Math.abs(eLearnJS.curX - eLearnJS.startX) >= maxDiff) {
+            eLearnJS.touchEndSection();
+            if(eLearnJS.swipeDirection != -1) {
+                eLearnJS.processingRoutine(eLearnJS.swipeDirection, eLearnJS.swipeType);
             }
         }
     }
-    touchCancel(event);
-}
+    eLearnJS.touchCancel(event);
+};
 
 /**
 * Resets all touch values.
 */
-function touchCancel(event, dir) {
-    if(triggerElementID != null) {
-        fingerCount = 0;
-        startX = -1;
-        startY = -1;
-        curX = -1;
-        curY = -1;
-        swipeLength = 0;
-        swipeAngle = null;
-        swipeDirection = null;
-        triggerElementID = null;
-        isHorizontalSwipe = true;
-        swipeDirectionSet = false;
-        swipeStarted = false;
-        swipeTarget = null;
-        lastSpeed = 0;
-        lastTime = undefined;
-        lastDif = undefined;
-        startScrollLeft = 0;
+eLearnJS.touchCancel = function(event, dir) {
+    if(eLearnJS.triggerElementID != null) {
+        eLearnJS.fingerCount = 0;
+        eLearnJS.startX = -1;
+        eLearnJS.startY = -1;
+        eLearnJS.curX = -1;
+        eLearnJS.curY = -1;
+        eLearnJS.swipeLength = 0;
+        eLearnJS.swipeAngle = null;
+        eLearnJS.swipeDirection = null;
+        eLearnJS.triggerElementID = null;
+        eLearnJS.isHorizontalSwipe = true;
+        eLearnJS.swipeDirectionSet = false;
+        eLearnJS.swipeStarted = false;
+        eLearnJS.swipeTarget = null;
+        eLearnJS.lastSpeed = 0;
+        eLearnJS.lastTime = undefined;
+        eLearnJS.lastDif = undefined;
+        eLearnJS.startScrollLeft = 0;
         $('#leftTouch').animate({'margin-left':'0'}, { duration: 200, queue: false });
         $('#rightTouch').animate({'margin-right':'0'}, { duration: 200, queue: false });
         $('#leftTouch').animate({'opacity':'0'}, { duration: 200, queue: false });
         $('#rightTouch').animate({'opacity':'0'}, { duration: 200});
     }
-}
+};
 
 /**
 * Sets the value for swipe direction
 */
-function setSwipeDirection() {
-    if(curX != startX || curY != startY) {
-        caluculateAngle();
-        determineSwipeDirection();
-        if(swipeDirection == 'left' || swipeDirection == 'right') {
-            isHorizontalSwipe = true;
+eLearnJS.setSwipeDirection = function() {
+    if(eLearnJS.curX != eLearnJS.startX || eLearnJS.curY != eLearnJS.startY) {
+        eLearnJS.caluculateAngle();
+        eLearnJS.determineSwipeDirection();
+        if(eLearnJS.swipeDirection == 'left' || eLearnJS.swipeDirection == 'right') {
+            eLearnJS.isHorizontalSwipe = true;
         }
         else {
-            isHorizontalSwipe = false;
+            eLearnJS.isHorizontalSwipe = false;
         }
-        swipeDirectionSet = true;
+        eLearnJS.swipeDirectionSet = true;
     }
 };
 
 /**
 * Calculates and returns an angle for the swipe direction
 */
-function caluculateAngle() {
-    var X = startX-curX;
-    var Y = curY-startY;
+eLearnJS.caluculateAngle = function() {
+    var X = eLearnJS.startX-eLearnJS.curX;
+    var Y = eLearnJS.curY-eLearnJS.startY;
     var Z = Math.round(Math.sqrt(Math.pow(X,2)+Math.pow(Y,2)));
     var r = Math.atan2(Y,X);
-    swipeAngle = Math.round(r*180/Math.PI);
-    if ( swipeAngle < 0 ) { swipeAngle =  360 - Math.abs(swipeAngle); }
-}
+    eLearnJS.swipeAngle = Math.round(r*180/Math.PI);
+    if ( eLearnJS.swipeAngle < 0 ) { eLearnJS.swipeAngle =  360 - Math.abs(eLearnJS.swipeAngle); }
+};
 
 /**
-* Will set the swipe direction based on the current swipeAngle
+* Will set the swipe direction based on the current eLearnJS.swipeAngle
 */
-function determineSwipeDirection() {
-    if ( (swipeAngle <= 45) && (swipeAngle >= 0) ) {
-        swipeDirection = 'left';
-    } else if ( (swipeAngle <= 360) && (swipeAngle >= 315) ) {
-        swipeDirection = 'left';
-    } else if ( (swipeAngle >= 135) && (swipeAngle <= 225) ) {
-        swipeDirection = 'right';
-    } else if ( (swipeAngle > 45) && (swipeAngle < 135) ) {
-        swipeDirection = 'down';
+eLearnJS.determineSwipeDirection = function() {
+    if ( (eLearnJS.swipeAngle <= 45) && (eLearnJS.swipeAngle >= 0) ) {
+        eLearnJS.swipeDirection = 'left';
+    } else if ( (eLearnJS.swipeAngle <= 360) && (eLearnJS.swipeAngle >= 315) ) {
+        eLearnJS.swipeDirection = 'left';
+    } else if ( (eLearnJS.swipeAngle >= 135) && (eLearnJS.swipeAngle <= 225) ) {
+        eLearnJS.swipeDirection = 'right';
+    } else if ( (eLearnJS.swipeAngle > 45) && (eLearnJS.swipeAngle < 135) ) {
+        eLearnJS.swipeDirection = 'down';
     } else {
-        swipeDirection = 'up';
+        eLearnJS.swipeDirection = 'up';
     }
-}
+};
 
 /**
 * Processes section swipe based on the direction. Distance or speed
 * of swipe movement is not considered
 */
-function processingRoutine(dir, type) {
+eLearnJS.processingRoutine = function(dir, type) {
     if(type == "section") {
         if ( dir == 'left' ) {
-            showNext();
+            eLearnJS.showNext();
         } else if ( dir == 'right' ) {
-            showPrev();
+            eLearnJS.showPrev();
         } else if ( dir == 'up' ) {
         } else if ( dir == 'down' ) {
         }
     }
-}
+};
 
 // ---------------------------------------------------------------------------------------
 // Spezialisierte TouchMove Operationen.
@@ -2624,9 +2618,9 @@ function processingRoutine(dir, type) {
 /**
 * Wird aufgerufen, wenn wie die aktuelle Touchbewegung Horizontal ist und von einer Section ausgeht.
 */
-function touchMoveSection(dif) {
+eLearnJS.touchMoveSection = function(dif) {
     var maxDiff = $("body").width()/4;
-    if(dif >= 0 && visSection < $('section').length - 1) // nach Links streifen, rechts kommt raus
+    if(dif >= 0 && eLearnJS.visSection < $('section').length - 1) // nach Links streifen, rechts kommt raus
     {
         if(dif > maxDiff) {
             dif = maxDiff;
@@ -2643,7 +2637,7 @@ function touchMoveSection(dif) {
         }
         $('#rightTouch').find('div').find('p').css('opacity', innerOp);
     }
-    else if(dif < 0 && visSection > 0)  // nach rechts streifen, links kommt raus
+    else if(dif < 0 && eLearnJS.visSection > 0)  // nach rechts streifen, links kommt raus
     {
         dif = dif*(-1);
         if(dif > maxDiff) {
@@ -2661,52 +2655,52 @@ function touchMoveSection(dif) {
         }
         $('#leftTouch').find('div').find('p').css('opacity', innerOp);
     }
-}
+};
 
 /**
 * Wird aufgerufen wenn momentan die Touchfunktion für das Side-Menu läuft.
 */
-function touchMoveMenu(dif) {
+eLearnJS.touchMoveMenu = function(dif) {
     $('#sideMenu').show();
     var width = $('#sideMenu').width();
     if(dif > width) {
         dif = width;
     }
     $('#sideMenu').css("right", (dif - width)+"px");
-}
+};
 
 /**
 * Wird aufgerufen wenn momentan die Touchfunktion für Slider (Bildergallerien)
 * läuft.
 */
-function touchMoveSlider(dif, ul) {
-    var vimg = visibleImage[$('.img-gallery').index(ul)];
+eLearnJS.touchMoveSlider = function(dif, ul) {
+    var vimg = eLearnJS.visibleImage[$('.img-gallery').index(ul)];
     var marginLeft = ul.children('li').not('.loop_clone').first().prevAll('.loop_clone').length
                     * ul.children('li').outerWidth(true)
                     * -1;
     ul.css("margin-left", marginLeft-dif + "px");
-}
+};
 
 // ---------------------------------------------------------------------------------------
 // Spezialisierte TouchEnd Operationen.
 // (Werden aufgerufen, wenn sich der Finger vom Bildschirm löst.)
 // ---------------------------------------------------------------------------------------
 
-function touchEndSection() {
-    caluculateAngle();
-    determineSwipeDirection();
-}
+eLearnJS.touchEndSection = function() {
+    eLearnJS.caluculateAngle();
+    eLearnJS.determineSwipeDirection();
+};
 
-function touchEndSlider() {
-    var dif = startX - curX;
-    var ul = $(swipeTarget);
-    var vimg = visibleImage[$('.img-gallery').index(ul)];
+eLearnJS.touchEndSlider = function() {
+    var dif = eLearnJS.startX - eLearnJS.curX;
+    var ul = $(eLearnJS.swipeTarget);
+    var vimg = eLearnJS.visibleImage[$('.img-gallery').index(ul)];
     var marginLeft = ul.children('li').not('.loop_clone').first().prevAll('.loop_clone').length
                     * ul.children('li').outerWidth(true)
                     * -1;
     var margin = parseInt(ul.css("margin-left").replace("px", "")) - marginLeft;
     // set translate to last margin
-    var x = -vimg*parseFloat($(swipeTarget).children("li").outerWidth(true));
+    var x = -vimg*parseFloat($(eLearnJS.swipeTarget).children("li").outerWidth(true));
     if(ul.parent().is('.slider-nav')) {
         x = 4 * x;
     }
@@ -2717,24 +2711,24 @@ function touchEndSlider() {
         "margin-left": marginLeft + "px"
     });
 
-    // lastSpeed ist px/ms, berechne animationsdauer daraus
-    var duration = (ul.parent().width()-dif) / Math.abs(lastSpeed*1000);
+    // eLearnJS.lastSpeed ist px/ms, berechne animationsdauer daraus
+    var duration = (ul.parent().width()-dif) / Math.abs(eLearnJS.lastSpeed*1000);
 
     // finish swipe movement in direction
-    if(duration < 1 && lastSpeed > 0) {
+    if(duration < 1 && eLearnJS.lastSpeed > 0) {
         vimg++;
     }
     // finish swipe movement in direction
-    else if(duration < 1 && lastSpeed < 0) {
+    else if(duration < 1 && eLearnJS.lastSpeed < 0) {
         vimg--;
     }
     // atleast half way to next image
-    else if(dif > ul.children('li').outerWidth(true)/2 && lastSpeed >= 0) {
+    else if(dif > ul.children('li').outerWidth(true)/2 && eLearnJS.lastSpeed >= 0) {
         vimg++;
         duration = 0.5;
     }
     // atleast half way to prev image
-    else if(dif < -ul.children('li').outerWidth(true)/2 && lastSpeed <= 0) {
+    else if(dif < -ul.children('li').outerWidth(true)/2 && eLearnJS.lastSpeed <= 0) {
         vimg--;
         duration = 0.5;
     }
@@ -2743,12 +2737,12 @@ function touchEndSlider() {
         duration = 0.5;
     }
 
-    showSlide(ul, vimg, true, true, duration+"s");
-}
+    eLearnJS.showSlide(ul, vimg, true, true, duration+"s");
+};
 
 
-function touchEndMenu() {
-    if(lastSpeed > 0.3) {
+eLearnJS.touchEndMenu = function() {
+    if(eLearnJS.lastSpeed > 0.3) {
         $('#sideMenu').animate({
             right: 0,
             }, 200,
@@ -2762,7 +2756,7 @@ function touchEndMenu() {
             function() {
         });
     }
-}
+};
 
 // ---------------------------------------------------------------------------------------
 // Hilfsfunktionen für Touch-Funktion
@@ -2772,32 +2766,32 @@ function touchEndMenu() {
 * Berechnet die Slide-Geschwindigkeit
 * im px/ms
 */
-function calcSpeed(dif) {
+eLearnJS.calcSpeed = function(dif) {
     var d = new Date();
     var time = d.getTime();
 
-    if(lastDif === undefined || lastTime === undefined) {
-        lastDif = dif;
-        lastTime = time;
+    if(eLearnJS.lastDif === undefined || eLearnJS.lastTime === undefined) {
+        eLearnJS.lastDif = dif;
+        eLearnJS.lastTime = time;
     }
     else {
-        lastSpeed = getSpeed(lastDif, lastTime, dif, time);
-        if(time - lastTime > 50) //more than 1sec
+        eLearnJS.lastSpeed = eLearnJS.getSpeed(eLearnJS.lastDif, eLearnJS.lastTime, dif, time);
+        if(time - eLearnJS.lastTime > 50) //more than 1sec
         {
             //calculate dif 1s before
-            var timedif = time - lastTime;
-            lastDif = dif - ((50/timedif) * (dif-lastDif));
-            lastTime = time - 50;
+            var timedif = time - eLearnJS.lastTime;
+            eLearnJS.lastDif = dif - ((50/timedif) * (dif-eLearnJS.lastDif));
+            eLearnJS.lastTime = time - 50;
         }
     }
-}
+};
 
-function getSpeed(lastDif, lastTime, dif, time) {
+eLearnJS.getSpeed = function(lastDif, lastTime, dif, time) {
     return (dif-lastDif) / (time - lastTime);
-}
+};
 
 
-function createEvent(eventName, eventObj) {
+eLearnJS.createEvent = function(eventName, eventObj) {
     var event; // The custom event that will be created
 
     if (document.createEvent) {
@@ -2815,20 +2809,20 @@ function createEvent(eventName, eventObj) {
     });
 
     return event;
-}
+};
 
-function fireEvent(element, event) {
+eLearnJS.fireEvent = function(element, event) {
     if (document.createEvent) {
       element.dispatchEvent(event);
     } else {
       element.fireEvent("on" + event.eventType, event);
     }
-}
+};
 
-// Initiates the QueryString object, which contains all url parameters
-var QueryString = function () {
+// Initiates the eLearnJS.QueryString object, which contains all url parameters
+eLearnJS.QueryString = function () {
   // This function is anonymous, is executed immediately and
-  // the return value is assigned to QueryString!
+  // the return value is assigned to eLearnJS.QueryString!
   var query_string = {};
   var query = window.location.search.substring(1);
   var vars = query.split("&");
@@ -2849,7 +2843,7 @@ var QueryString = function () {
     return query_string;
 } ();
 
-var hasScrollbar = function() {
+eLearnJS.hasScrollbar = function() {
     // The Modern solution
   if (typeof window.innerWidth === 'number')
     return window.innerWidth > document.documentElement.clientWidth
@@ -2878,118 +2872,26 @@ var hasScrollbar = function() {
   var alwaysShowScroll = overflowStyle === 'scroll' || overflowYStyle === 'scroll'
 
   return (contentOverflows && overflowShown) || (alwaysShowScroll)
-}
+};
 
-var scrollbarBefore = false;
+eLearnJS.scrollbarBefore = false;
 
 /**
 * Initiates a scrollbar listener, checking for scrollbar changes regularly.
 * Triggers scrollbarVisible and scrollbarHidden events on the window element
 * on change.
 */
-function initiateScrollBarListener() {
-    var hasScroll = hasScrollbar();
-    if(hasScroll &&  !scrollbarBefore) {
+eLearnJS.initiateScrollBarListener = function() {
+    var hasScroll = eLearnJS.hasScrollbar();
+    if(hasScroll &&  !eLearnJS.scrollbarBefore) {
         $(window).trigger('scrollbarVisible');
     }
-    else if(!hasScroll && scrollbarBefore) {
+    else if(!hasScroll && eLearnJS.scrollbarBefore) {
         $(window).trigger('scrollbarHidden');
     }
-    scrollbarBefore = hasScroll;
-    setTimeout(initiateScrollBarListener, 500);
-}
-
-
-
-// --------------------------------------------------------------------------------------
-// JSON - CSV
-// --------------------------------------------------------------------------------------
-
-var CSV_COLUMN_DELIMITER = ";";
-var CSV_ROW_DELIMITER = "\n";
-
-/**
-* Returns a CSV string parsed from the JSON data.
-* JSONData can be a JSON string or object
-* Will return false if the json data is invalid
-*/
-function getCSVFromJSON(JSONData) {
-    //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
-    var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
-
-
-    var csv = '';
-
-    //This will generate the Label/Header
-    var row = "";
-
-    //This loop will extract the label from 1st index of on array
-    for (var index in arrData[0]) {
-        //Now convert each value to string and comma-seprated
-        row += '"' + index.replace(/"/g, '""') + '"' + CSV_COLUMN_DELIMITER;
-    }
-    //append Label row with line break
-    csv += row + CSV_ROW_DELIMITER;
-
-    //1st loop is to extract each row
-    for (var i = 0; i < arrData.length; i++) {
-        var row = "";
-
-        //2nd loop will extract each column and convert it in string comma-seprated
-        for (var index in arrData[i]) {
-            row += '"' + arrData[i][index].replace(/"/g, '""') + '"' + CSV_COLUMN_DELIMITER;
-        }
-        //add a line break after each row
-        csv += row + CSV_ROW_DELIMITER;
-    }
-
-    if (csv == '') {
-        return false;
-    }
-
-    return csv;
-}
-
-function getJSONFromCSV(CSVData) {
-    var lines=CSVData.replace(/\r/g, "").split(CSV_ROW_DELIMITER);
-
-    var result = [];
-
-    // extract header values: take quote blocks with trailing DELIMITER
-    var cells=lines[0].match(new RegExp('"(?:[^"]|(""))*"' + CSV_COLUMN_DELIMITER, "g"));
-    var headers = [];
-    // extract headers by removing trailing delimiter
-    for(var i=0; i<cells.length; i++) {
-        headers.push(
-            cells[i]
-                .replace(new RegExp(CSV_COLUMN_DELIMITER + "$", "g"), "")
-                .replace(/^"/g, "")
-                .replace(/"$/g, "")
-                .replace(/""/g, '"'));
-    }
-
-    // go through lines below header
-    for(var i=1;i<lines.length;i++) {
-        var obj = {};
-        var currentline=lines[i].match(new RegExp('"(?:[^"]|(""))*"' + CSV_COLUMN_DELIMITER, "g"));
-
-        if(!currentline ||
-            headers.length > currentline.length) break;
-
-        // go through cells
-        for(var j=0;j<headers.length;j++) {
-            obj[headers[j]] = currentline[j]
-                .replace(new RegExp(CSV_COLUMN_DELIMITER + "$", "g"), "")
-                .replace(/^"/g, "")
-                .replace(/"$/g, "")
-                .replace(/""/g, '"');
-        }
-
-        result.push(obj);
-    }
-
-    return JSON.stringify(result); //JavaScript object
-}
+    eLearnJS.scrollbarBefore = hasScroll;
+    setTimeout(eLearnJS.initiateScrollBarListener, 500);
+};
 
 
 // --------------------------------------------------------------------------------------
