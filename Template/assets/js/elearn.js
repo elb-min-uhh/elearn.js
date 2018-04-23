@@ -952,7 +952,6 @@ eLearnJS.initiateInfo = function() {
         + "gefördert. Die Verantwortung für den Inhalt dieser Veröffentlichung "
         + "liegt bei den Autor/-innen.</small>"
         + "<div style='clear: both;'></div>"
-        + '<div class="img logo-bmbf" alt="Logo vom Bundesministerium für Bildung und Forschung"></div>'
         + '<a href="http://www.uni-hamburg.de" target="_blank"><div class="img logo-uhh" alt="Logo der Universität Hamburg"></div></a>'
         + "<div style='clear: both;'></div>");
 };
