@@ -139,7 +139,12 @@ Diese sind durch die Erweiterung
 
 Hier ist ein Video von einem Streaming-Server als iFrame eingebunden.
 
-<iframe src='https://lecture2go.uni-hamburg.de/liferay-jedi-theme/javascript/strobe/embed.html?src=https://fms.rrz.uni-hamburg.de/vod/_definst_/mp4:8l2gbal1768/64.280_werz_2013-06-26_16-15.mp4/manifest.f4m&poster=https://lecture2go.uni-hamburg.de/images/64.280_werz_2013-06-26_16-15.jpg' class='strobemediaplayback-video-player' type='text/html' width='500' height='250'></iframe>
+<video controls>
+    <source
+        src='https://fms1.rrz.uni-hamburg.de/abo/00.000_MichaelHeinecke_2016-09-06_17-56.mp4'
+        type='video/mp4'>
+    Your browser does not support the video tag.
+</video>
 
 #### Audio-Files
 
