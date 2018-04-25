@@ -61,7 +61,7 @@ cc by-sa | 2015
 </div>
 
 
-## Überschrift 2. Ordnung
+## Überschrift 2. Ordnung <!--desc Beispielbeschreibung für einen kleinen _Textblock_. <br /> Sollte nicht zu lang sein.-->
 
 > Dies ist nur eine Template-Datei. Eine Erklärung und Dokumentation finden Sie im [Whitepaper „Digitale Skripte“](www.uni-hamburg.de).
 
