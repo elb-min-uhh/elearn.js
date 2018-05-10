@@ -128,7 +128,7 @@ Diese sind durch die Erweiterung
     <div class="video_note" timefrom="0m14s">
         Das war 's eigentlich auch schon damit.
     </div>
-    <div class="video_note" timefrom="0m3s" timeto="0m14s">
+    <div class="video_note hinted stopping" timefrom="0m3s" timeto="0m14s">
         Hallo! Hier nur ein kurzes Beispielvideo, um zu zeigen,
         wie man mit einem HTML-Video-Tag ein Video in ein Markdown
         Dokument einbinden kann.
