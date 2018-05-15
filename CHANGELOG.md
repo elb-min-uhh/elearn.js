@@ -1,8 +1,15 @@
-## Versionen
+### Changelog
 
-_Hinweis:_ Erweiterungen zum eLearn.js befinden sich in eigenen Repositories.
+* __1.0.3__:
+    * New:
+        * Support for localization including German and English language
+        with `<.. lang="en">` or `eLearnJS.setLanguage("en")`
+            * German is selected per default
 
-### eLearn.js
+_Hint:_ Extensions for _elearn.js_ were moved to their own repositories.
+
+#### Older versions (currently not available in _english_)
+
 * __1.0.2__:
   * Fehlerbehebungen:
     * Schriftarten zusätzlich als _.ttf_ hinzugefügt
