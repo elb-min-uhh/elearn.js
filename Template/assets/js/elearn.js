@@ -284,6 +284,7 @@ eLearnJS.setLanguage = function(langCode) {
         $('[lang-code],[lang-code-title]').each(function(i,e) {
             eLearnJS.localizeElement($(e));
         });
+        eLearnJS.windowOnResize();
     }
     else {
         throw "Unsupported language selected. Supported language codes are: "  + Object.keys(eLearnJS.localization).toString();
