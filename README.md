@@ -22,6 +22,10 @@ loaded will not change already localized elements. Use method _2_ for this.
 inside a script. You can use this for _atom-elearnjs_ projects in the
 _meta custom_ block. This may be overwritten by the first method if present.
 
+Available languages are:
+* _de_: German (default)
+* _en_: English
+
 ## Recommended Usage
 
 For the editor [Atom](https://atom.io) there is the package
