@@ -6,6 +6,7 @@
     * Fixes:
         * Undefined `lang-code`s will not overwrite element texts
         * Resize correctly after language change
+        * Gallery image zoom will be displayed and resized correctly
 * __1.0.3__:
     * New:
         * Support for localization including German and English language

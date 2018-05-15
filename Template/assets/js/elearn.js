@@ -1524,15 +1524,30 @@ eLearnJS.getImageSize = function(img, callback){
 eLearnJS.zoomImage = function(button) {
     var ul = $(button).prevAll('div').find('.img-gallery').first();
     var vimg = eLearnJS.visibleImage[$('.img-gallery').index(ul)];
-    $('.img-lightbox').append($(ul.find('img')[vimg]).clone().css('max-height', ''));
+    var lightbox = $('.img-lightbox');
+    var img = $(ul.find('img')[vimg]).clone();
+    img.css('max-height', '');
+    lightbox.prepend(img);
+
     $('.image-zoom-container').show();
-    var img = $('.img-lightbox').find('img');
-    img.css('margin-left', (parseInt(img.css('margin-left').replace("px","")) - $('.img-lightbox').find('.close').width() -1) + "px");
-    $('.img-lightbox').css('top', ($(document).scrollTop() + ($(window).height()-80)/2 - img.height()/2) + "px");
-    var leftmargin = parseInt(img.css('margin-left').replace("px",""))+img.width()-5;
-    $('.img-lightbox').find('.close').css('left', leftmargin + "px");
-    var bottommargin = parseInt(img.css('margin-bottom').replace("px",""))+img.height()-20;
-    $('.img-lightbox').find('.close').css('bottom', bottommargin + "px");
+
+    eLearnJS.getImageSize(img, function(width, height) {
+        // update height
+        if(height > lightbox.height()) {
+            img.css("height", lightbox.height());
+            height = img.height();
+            width = img.width();
+        }
+
+        // center
+        lightbox.css('top', ($(document).scrollTop() + (lightbox.height())/2 - height/2) + "px");
+
+        var right = 8 + img.position().left;
+        lightbox.find('.close').css('right', right + "px");
+
+        var top = 5 + img.position().top;
+        lightbox.find('.close').css('top', top + "px");
+    });
 };
 
 /**
@@ -1728,13 +1743,27 @@ eLearnJS.resizeNavigationSliders = function() {
 */
 eLearnJS.resizeZoomContainer = function() {
     if($('.image-zoom-container:visible').is(':visible')) {
-        var img = $('.img-lightbox').find('img');
-        img.css('margin-left', "");
-        img.css('margin-left', (parseInt(img.css('margin-left').replace("px","")) - $('.img-lightbox').find('.close').width() -1) + "px");
-        var leftmargin = parseInt(img.css('margin-left').replace("px",""))+img.width()-5;
-        $('.img-lightbox').find('.close').css('left', leftmargin + "px");
-        var bottommargin = parseInt(img.css('margin-bottom').replace("px",""))+img.height()-20;
-        $('.img-lightbox').find('.close').css('bottom', bottommargin + "px");
+        var lightbox = $('.img-lightbox');
+        var img = lightbox.find('img');
+        img.css('height', '');
+
+        eLearnJS.getImageSize(img, function(width, height) {
+            // update height
+            if(height > lightbox.height()) {
+                img.css("height", lightbox.height());
+                height = img.height();
+                width = img.width();
+            }
+
+            // center
+            lightbox.css('top', ($(document).scrollTop() + (lightbox.height())/2 - height/2) + "px");
+
+            var right = 8 + img.position().left;
+            lightbox.find('.close').css('right', right + "px");
+
+            var top = 5 + img.position().top;
+            lightbox.find('.close').css('top', top + "px");
+        });
     }
 };
 

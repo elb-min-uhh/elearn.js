@@ -1259,6 +1259,8 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     position: absolute;
     width: 100%;
     height: 100%;
+    padding: 40px;
+    box-sizing: border-box;
     z-index: 10;
     text-align: center;
     pointer-events: none;
@@ -1272,10 +1274,9 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
 .img-lightbox img {
     position: relative;
     box-sizing: border-box;
+    margin: 0;
     width: auto;
-    max-width: calc(100% - 80px);
-    max-height: calc(100% - 80px);
-    margin: 40px 40px;
+    max-width: 100%;
 }
 
 .lb-bg {
@@ -1289,10 +1290,12 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
 }
 
 .img-lightbox .close {
-    display: inline-block;
+    position: absolute;
     color: rgba(255, 255, 255, 0.8);
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.6);
-    position: relative;
+    text-shadow: -1px 0 2px rgba(0, 0, 0, 0.4),
+                0 1px 2px rgba(0, 0, 0, 0.4),
+                1px 0 2px rgba(0, 0, 0, 0.4),
+                0 -1px 2px rgba(0, 0, 0, 0.4);
     text-align: center;
     z-index: 1;
     font-size: 150%;
@@ -1437,10 +1440,8 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     .slider-back-area, .slider-next-area {
         width: 50px;
     }
-    .img-lightbox img {
-        margin: 40px 20px;
-        max-width: calc(100% - 40px);
-        max-height: calc(100% - 60px);
+    .img-lightbox {
+        padding: 40px 20px;
     }
     .section-overview-element {
         padding: 5px 0 5px 125px;
@@ -1529,10 +1530,8 @@ div.slider-con:hover .slider-back-area, div.preview-con:hover .slider-back-area,
     .slider-back-area, .slider-next-area {
         width: 40px;
     }
-    .img-lightbox img {
-        margin: 20px 10px;
-        max-width: calc(100% - 20px);
-        max-height: calc(100% - 30px);
+    .img-lightbox {
+        padding: 20px 10px;
     }
     .section-overview-element {
         padding: 5px 0 5px 82px;
