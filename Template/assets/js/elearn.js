@@ -15,6 +15,54 @@ eLearnJS.actions = {
     CONTENT_RESIZE : "ContentResize",
 };
 
+eLearnJS.localization = {
+    "de" : {
+        "backbutton" : "Zurück",
+        "backbutton.title" : "Zurück",
+        "togglesections" : "Ansicht",
+        "togglesections.title" : "Zeige/verstecke Bereiche",
+        "title" : "Übersicht",
+        "title.title" : "Inhaltsverzeichnis",
+        "menu.title" : "Menü",
+        "help" : "Hilfe",
+        "help.title" : "Zeige Hinweise",
+        "menu.print" : "Drucken",
+        "menu.share" : "Teilen",
+        "menu.imprint" : "Impressum",
+        "menu.source" : "Quelldateien herunterladen",
+        "menu.pdf" : "PDF herunterladen",
+        "menu.epub" : "EPUB herunterladen",
+        "imprint.uses" : 'Benutzt das eLearn.js Script Version ' + eLearnJS.VERSION_NR + ' | ' + eLearnJS.VERSION_DATE + ' | '
+                            + '<a href="https://www.min.uni-hamburg.de/de/imprint.html">Impressum</a>',
+        "imprint.footer" : "Die Verantwortung für den Inhalt dieser Veröffentlichung "
+            + "liegt bei den Autor/-innen.",
+        "tooltipnext" : "Weiter",
+    },
+    "en" : {
+        "backbutton" : "Back",
+        "backbutton.title" : "Back",
+        "togglesections" : "View",
+        "togglesections.title" : "Show/hide sections",
+        "title" : "Overview",
+        "title.title" : "Content Overview",
+        "menu.title" : "Menu",
+        "help" : "Help",
+        "help.title" : "Display Help",
+        "menu.print" : "Print",
+        "menu.share" : "Share",
+        "menu.imprint" : "Imprint",
+        "menu.source" : "Download Source",
+        "menu.pdf" : "Download PDF",
+        "menu.epub" : "Download EPUB",
+        "imprint.uses" : 'Uses the eLearn.js script v' + eLearnJS.VERSION_NR + ' | ' + eLearnJS.VERSION_DATE + ' | '
+                            + '<a href="https://www.min.uni-hamburg.de/en/imprint.html">Imprint</a>',
+        "imprint.footer" : "The author of this publication is responsible for the content.",
+        "tooltipnext" : "Next",
+    },
+};
+
+eLearnJS.selectedLocale = eLearnJS.selectedLocale || "de";
+
 // Will be set on first Touch event. See Help Functions at bottom
 eLearnJS.touchSupported = false;
 
@@ -70,7 +118,6 @@ $(document).ready(function() {
     eLearnJS.initiateTabbedBoxes();
     eLearnJS.initiateHoverInfos();
     eLearnJS.initiateScrollBarListener();
-    eLearnJS.updateNavBarWidth();
 
     // add listeners
     document.addEventListener("ejssectionchange", eLearnJS.resizeAllSliders);
@@ -93,6 +140,9 @@ $(document).ready(function() {
         "text": window.location.href
     });
     $('#qr_overlay').click(function() {$('#qr_overlay').hide();});
+
+    eLearnJS.setLanguage(eLearnJS.selectedLocale);
+    eLearnJS.updateNavBarWidth();
 });
 
 /**
@@ -108,11 +158,11 @@ eLearnJS.initiateELearnJS = function () {
             + "<div id='navigation' class='noselect'>"
                 // <!-- Grey Top Menu-bar - Reihenfolge wichtig -->
                 + "<div id='nav-bar'>"
-                    + "<div onclick='javascript: eLearnJS.backButtonPressed();' id='btnBackCon' class ='btn' title='Zurück zur Übersicht'><div class='icon-font' id='btnBack'>b</div><div id='btnBackText'>Zurück</div></div>"
-                    + "<div onclick='javascript: eLearnJS.toggleAllSections();' id='btnAllCon' class ='btn' title='Zeige/verstecke Bereiche'><div class='icon-font' id='btnAll'>s</div><div id='btnAllText'>Ansicht</div></div>"
-                    + "<div onclick='javascript: eLearnJS.showSectionOverview();' id='btnExp' class ='btn' title='Inhaltsverzeichnis'><div class='icon-font' id='btnExpSym'>c</div><div id='nav-title'>Übersicht</div></div>"
-                    + "<div onclick='javascript: eLearnJS.toggleSideMenu(eLearnJS.isSideMenuVisible());' id='btnMenu' class ='icon-font btn' title='Menü'>m</div>"
-                    + "<div onclick='javascript: eLearnJS.startHelp();' id='btnHelp' class ='btn' title='Zeige/verstecke Bereiche'><div class='icon-font' id='btnHelpSym'>q</div><div id='btnHelpText'>Hilfe</div></div>"
+                    + "<div onclick='javascript: eLearnJS.backButtonPressed();' id='btnBackCon' class ='btn' lang-code-title='backbutton.title'><div class='icon-font' id='btnBack'>b</div><div id='btnBackText' lang-code='backbutton'></div></div>"
+                    + "<div onclick='javascript: eLearnJS.toggleAllSections();' id='btnAllCon' class ='btn' lang-code-title='togglesections.title'><div class='icon-font' id='btnAll'>s</div><div id='btnAllText' lang-code='togglesections'></div></div>"
+                    + "<div onclick='javascript: eLearnJS.showSectionOverview();' id='btnExp' class ='btn' lang-code-title='title.title'><div class='icon-font' id='btnExpSym'>c</div><div id='nav-title' lang-code='title' localized='false'></div></div>"
+                    + "<div onclick='javascript: eLearnJS.toggleSideMenu(eLearnJS.isSideMenuVisible());' id='btnMenu' class ='icon-font btn' lang-code-title='menu.title'>m</div>"
+                    + "<div onclick='javascript: eLearnJS.startHelp();' id='btnHelp' class ='btn' lang-code-title='help.title'><div class='icon-font' id='btnHelpSym'>q</div><div id='btnHelpText' lang-code='help'></div></div>"
                     + "<div style='clear:both'></div>"
                 + "</div>"
                 // <!-- Touch Gesture Elements -->
@@ -182,27 +232,27 @@ eLearnJS.initiateSideMenu = function() {
                         + '<div><table>'
                             + '<tr class="side-menu-element" onclick="javascript: window.print();">'
                                 + '<td class="side-menu-icon"><div class="icon-print"></div></td> '
-                                + '<td class="side-menu-content"><div>Drucken</div></td>'
+                                + '<td class="side-menu-content" lang-code="menu.print"></td>'
                             + '</tr>'
                             + '<tr class="side-menu-element" onclick="javascript: $(\'#qr_overlay\').show();">'
                                 + '<td class="side-menu-icon"><div class="icon-share"></div></td> '
-                                + '<td class="side-menu-content">Teilen</td>'
+                                + '<td class="side-menu-content" lang-code="menu.share"></td>'
                             + '</tr>'
                             + '<tr class="side-menu-element" onclick="javascript: eLearnJS.openInfo();">'
                                 + '<td class="side-menu-icon"><div class="icon-info"></div></td> '
-                                + '<td class="side-menu-content">Impressum</td>'
+                                + '<td class="side-menu-content" lang-code="menu.imprint"></td>'
                             + '</tr>'
                             + '<tr class="side-menu-element" id="menu-item-download" onclick="javascript: eLearnJS.startDownload(\''+downloadUrl+'\');">'
                                 + '<td class="side-menu-icon"><div class="icon-zip"></div></td> '
-                                + '<td class="side-menu-content">Quelldateien herunterladen</td>'
+                                + '<td class="side-menu-content" lang-code="menu.source"></td>'
                             + '</tr>'
                             + '<tr class="side-menu-element" id="menu-item-download-pdf" onclick="javascript: eLearnJS.startDownload(\''+downloadPDF+'\');">'
                                 + '<td class="side-menu-icon"><div class="icon-pdf"></div></td> '
-                                + '<td class="side-menu-content">PDF herunterladen</td>'
+                                + '<td class="side-menu-content" lang-code="menu.pdf"></td>'
                             + '</tr>'
                             + '<tr class="side-menu-element" id="menu-item-download-epub" onclick="javascript: eLearnJS.startDownload(\''+downloadEPUB+'\');">'
                                 + '<td class="side-menu-icon"><div class="icon-epub"></div></td> '
-                                + '<td class="side-menu-content">EPUB herunterladen</td>'
+                                + '<td class="side-menu-content" lang-code="menu.epub"></td>'
                             + '</tr>'
                         + '</table></div>'
                         + '</div>');
@@ -223,6 +273,47 @@ eLearnJS.initiateSideMenu = function() {
     });
     $('#sideMenu').css('right', "-"+($('#sideMenu').width()+10)+"px");
 };
+
+/**
+* Sets the language for all elements.
+*/
+eLearnJS.setLanguage = function(langCode) {
+    langCode = langCode.toLowerCase();
+    if(eLearnJS.localization[langCode] !== undefined) {
+        eLearnJS.selectedLocale = langCode;
+        $('[lang-code],[lang-code-title]').each(function(i,e) {
+            eLearnJS.localizeElement($(e));
+        });
+    }
+    else {
+        throw "Unsupported language selected. Supported language codes are: "  + Object.keys(eLearnJS.localization).toString();
+    }
+}
+eLearnJS.selectLanguage = eLearnJS.setLanguage;
+
+/**
+* Localizes one specific element to match the selected language.
+* The selected language is the eLearnJS.selectedLocale if not specific
+* `lang` attribute is present in the HTML element
+*/
+eLearnJS.localizeElement = function(el, force) {
+    if($(el).attr('localized') === "false" && !force) return;
+
+    var loc = eLearnJS.selectedLocale;
+    if(el.closest('[lang]').length) {
+        var lang = el.closest('[lang]').attr('lang').toLowerCase();
+        if(eLearnJS.localization[lang]) loc = lang;
+    }
+
+    if(el.attr("lang-code")) {
+        var text = eLearnJS.localization[loc][el.attr("lang-code")];
+        if($(el).attr('localized') === "html") el.html(text);
+        else el.text(text);
+    }
+    if(el.attr("lang-code-title")) {
+        el.attr('title', eLearnJS.localization[loc][el.attr("lang-code-title")])
+    };
+}
 
 /**
 * Passt die Navigationsleiste an die Breite des window an
@@ -411,7 +502,6 @@ eLearnJS.showSection = function(i) {
             $(document).scrollTop(topPos);
         }
 
-        $('#nav-title').text($($('section')[i]).attr('name'));
         eLearnJS.allShown = false;
         eLearnJS.calcProgress(i);
     }
@@ -434,6 +524,8 @@ eLearnJS.showSection = function(i) {
     if(!eLearnJS.allShown) {
         eLearnJS.setDirectionButtonsEnabledIdx(eLearnJS.visSection);
     }
+
+    eLearnJS.updateNavigationTitle();
 
     var sectionChange = {
         "section": eLearnJS.visSection,
@@ -551,7 +643,6 @@ eLearnJS.calcProgress = function(i) {
 eLearnJS.toggleAllSections = function() {
     eLearnJS.setDirectionButtonsEnabled(eLearnJS.allShown);
     eLearnJS.setProgressbarEnabled(eLearnJS.allShown);
-    $('#nav-title').text(eLearnJS.navigationTitle);
 
     if(eLearnJS.allShown) {
         eLearnJS.allShown = false;
@@ -571,6 +662,8 @@ eLearnJS.toggleAllSections = function() {
         eLearnJS.fireEvent(document, eLearnJS.createEvent("ejssectionchange", sectionChange));
         eLearnJS.fireEvent(document, eLearnJS.createEvent("ejssectionchangelate", sectionChange));
     }
+
+    eLearnJS.updateNavigationTitle();
 };
 
 /**
@@ -710,10 +803,23 @@ eLearnJS.setBlockProgressShowElement = function(enabled, text) {
 // -------------------------------------------------------------------------------------
 
 eLearnJS.setNavigationTitle = function(text) {
-    if(eLearnJS.allShown) $('#nav-title').text(text);
     // default navigation title (when no single section is open)
     eLearnJS.navigationTitle = text;
+    eLearnJS.updateNavigationTitle();
 };
+
+eLearnJS.updateNavigationTitle = function() {
+    var title = $('#nav-title');
+    if(eLearnJS.navigationTitle && eLearnJS.allShown) {
+        title.text(eLearnJS.navigationTitle);
+    }
+    else if(eLearnJS.allShown){
+        eLearnJS.localizeElement(title, true);
+    }
+    else {
+        title.text($($('section')[eLearnJS.visSection]).attr('name'));
+    }
+}
 
 
 // -------------------------------------------------------------------------------------
@@ -940,20 +1046,14 @@ eLearnJS.isSideMenuVisible = function() {
 * Initialisiert den footer des Info Bereichs.
 */
 eLearnJS.initiateInfo = function() {
-    $('#info').find('.lightbox').append('<div class="elearn-info">'
-        + 'Benutzt das eLearn.js Script Version ' + eLearnJS.VERSION_NR + ' | ' + eLearnJS.VERSION_DATE + ' | '
-        + '<a href="https://www.min.uni-hamburg.de/de/imprint.html">Impressum</a>'
-        + '</div>');
-    $('#info').find('.lightbox').append("<div class='support'><small>Dieses "
-        + "Vorhaben wird innerhalb "
-        + "des gemeinsamen Bund-Länder-Programms für bessere Studienbedingungen "
-        + "und mehr Qualität in der Lehre aus Mitteln des Bundesministerium für "
-        + "Bildung und Forschung unter dem Förderkennzeichen 01PL12033 "
-        + "gefördert. Die Verantwortung für den Inhalt dieser Veröffentlichung "
-        + "liegt bei den Autor/-innen.</small>"
-        + "<div style='clear: both;'></div>"
-        + '<a href="http://www.uni-hamburg.de" target="_blank"><div class="img logo-uhh" alt="Logo der Universität Hamburg"></div></a>'
-        + "<div style='clear: both;'></div>");
+    $('#info').find('.lightbox').append('<div class="elearn-info" lang-code="imprint.uses" localized="html"></div>');
+    $('#info').find('.lightbox').append(
+        "<div class='support'>"
+            + "<small lang-code='imprint.footer' localized='html'></small>"
+            + "<div style='clear: both;'></div>"
+            + '<a href="http://www.uni-hamburg.de" target="_blank"><div class="img logo-uhh" alt="Logo der Universität Hamburg"></div></a>'
+            + "<div style='clear: both;'></div>"
+        + "</div>");
 };
 
 /**
@@ -1647,53 +1747,77 @@ eLearnJS.activeTooltip = 0;
 eLearnJS.tooltips =
 [
     {
-        html : '<div id="tooltipBack" class="tooltip fixed">'
-            + 'Verlinkt normalerweise auf eine <br>vorangegane Seite oder den Anfang <br>des Dokuments.'
-            + '</div>',
+        html : '<div id="tooltipBack" class="tooltip fixed"></div>',
+        lang_code : "tooltip.back",
+        localization : {
+            "de" : 'Verlinkt normalerweise auf eine <br>vorangegane Seite oder den Anfang <br>des Dokuments.',
+            "en" : 'Usually links to the previous <br>page or the beginning <br>of the document.',
+        },
         condition : eLearnJS.isBackbuttonEnabled,
         anchor : "#btnBack"
     },
     {
-        html : '<div id="tooltipShowAll" class="tooltip fixed">'
-            + 'Alle Inhalte auf einer Seite anzeigen <br>oder horizontal navigierbar machen.'
-            + '</div>',
+        html : '<div id="tooltipShowAll" class="tooltip fixed"></div>',
+        lang_code : "tooltip.showall",
+        localization : {
+            "de" : 'Alle Inhalte auf einer Seite anzeigen <br>oder horizontal navigierbar machen.',
+            "en" : 'Display all the content on one page <br>or enable horizontal navigation.',
+        },
         anchor : "#btnAll"
     },
     {
-        html : '<div id="tooltipChapter" class="tooltip fixed">'
-            + 'Klappt die Kapitelübersicht zur schnellen <br>Navigation aus bzw. ein.'
-            + '</div>',
+        html : '<div id="tooltipChapter" class="tooltip fixed"></div>',
+        lang_code : "tooltip.chapter",
+        localization : {
+            "de" : 'Klappt die Kapitelübersicht zur schnellen <br>Navigation aus bzw. ein.',
+            "en" : 'Displays the content overview <br> for simple navigation.',
+        },
         anchor : "#btnExp"
     },
     {
-        html : '<div id="tooltipMenu" class="tooltip fixed right">'
-            + 'Öffnet ein Menü mit Optionen zum Drucken <br>und Teilen der Seite sowie der Anzeige von <br>Informationen.'
-            + '</div>',
+        html : '<div id="tooltipMenu" class="tooltip fixed right"></div>',
+        lang_code : "tooltip.menu",
+        localization : {
+            "de" : 'Öffnet ein Menü mit Optionen zum Drucken <br>und Teilen der Seite sowie der Anzeige von <br>Informationen.',
+            "en" : 'Displays the page menu <br> for printing, sharing and an imprint.',
+        },
         anchor : "#btnMenu"
     },
     {
-        html : '<div id="tooltipArrowRight" class="tooltip fixed right">'
-            + 'Klicken, um auf die nächste Seite zu wechseln.'
-            + '</div>',
-        condition: function() {return $(window).width() > 440}
+        html : '<div id="tooltipArrowRight" class="tooltip fixed right"></div>',
+        lang_code : "tooltip.arrowright",
+        localization : {
+            "de" : 'Klicken, um auf die nächste Seite zu wechseln.',
+            "en" : 'Click to get to the next page.',
+        },
+        condition: function() {return !eLearnJS.allShown && $(window).width() > 440 && eLearnJS.visSection < $('section').length - 1}
     },
     {
-        html : '<div id="tooltipArrowLeft" class="tooltip fixed left">'
-            + 'Klicken, um auf die vorherige Seite zu wechseln.'
-            + '</div>',
-        condition: function() {return $(window).width() > 440}
+        html : '<div id="tooltipArrowLeft" class="tooltip fixed left"></div>',
+        lang_code : "tooltip.arrowleft",
+        localization : {
+            "de" : 'Klicken, um auf die vorherige Seite zu wechseln.',
+            "en" : 'Click to get to the previous page.',
+        },
+        condition: function() {return !eLearnJS.allShown && $(window).width() > 440 && eLearnJS.visSection > 0}
     },
     {
-        html : '<div id="tooltipTouchRight" class="tooltip fixed right">'
-            + 'Wischen, um auf die nächste Seite zu wechseln.'
-            + '</div>',
-        condition: function() {return eLearnJS.isTouchSupported()}
+        html : '<div id="tooltipTouchRight" class="tooltip fixed right"></div>',
+        lang_code : "tooltip.touchright",
+        localization : {
+            "de" : 'Wischen, um auf die nächste Seite zu wechseln.',
+            "en" : 'Swipe to get to the next page.',
+        },
+        condition: function() {return !eLearnJS.allShown && eLearnJS.isTouchSupported()}
     },
     {
-        html : '<div id="tooltipTouchLeft" class="tooltip fixed left">'
-            + 'Wischen, um auf die vorherige Seite zu wechseln.'
-            + '</div>',
-        condition: function() {return eLearnJS.isTouchSupported()}
+        html : '<div id="tooltipTouchLeft" class="tooltip fixed left"></div>',
+        lang_code : "tooltip.touchleft",
+        localization : {
+            "de" : 'Wischen, um auf die vorherige Seite zu wechseln.',
+            "en" : 'Swipe to get to the previous page.',
+        },
+        condition: function() {return !eLearnJS.allShown && eLearnJS.isTouchSupported()}
     }
 ];
 
@@ -1703,10 +1827,19 @@ eLearnJS.tooltips =
 */
 eLearnJS.initiateTooltips = function() {
     for(var i=0, tt=eLearnJS.tooltips[0]; i<eLearnJS.tooltips.length; i++, tt=eLearnJS.tooltips[i]) {
-        $('.page').before(tt.html);
+        var tooltip = $(tt.html);
+        $('.page').before(tooltip);
+
+        eLearnJS.initiateTooltipLocalization(tt);
+
+        var contentSpan = $('<span class="tooltipText">');
+        tooltip.prepend(contentSpan);
+        contentSpan.attr("lang-code", tt.lang_code);
+        contentSpan.attr("localized", "html");
+        eLearnJS.localizeElement(contentSpan);
     }
     $('.tooltip').prepend('<div id="cancel">x</div>');
-    $('.tooltip').append('<div><button id="next">Nächster</button></div>');
+    $('.tooltip').append('<div><button id="next" lang-code="tooltipnext"></button></div>');
     $('.tooltip').find('#cancel').click(function() {
         eLearnJS.activeTooltip = 0;
         eLearnJS.closeTooltips();
@@ -1715,6 +1848,17 @@ eLearnJS.initiateTooltips = function() {
         eLearnJS.nextTooltip();
     });
 };
+
+/**
+* Adds the localization of the tooltip to
+*/
+eLearnJS.initiateTooltipLocalization = function(tt) {
+    var languages = Object.keys(tt.localization);
+    for(var i=0; i<languages.length; i++) {
+        var loc = languages[i];
+        eLearnJS.localization[loc][tt.lang_code] = tt.localization[loc];
+    }
+}
 
 /**
 * Wird von dem "Hilfe" Button aufgerufen. Öffnet den ersten Tooltip.
@@ -1837,9 +1981,16 @@ eLearnJS.initiateHideables = function() {
     $('.hideable').each(function() {
         var div = $(this);
         div.wrap('<div class="hideable-container"></div>');
-        div.before('<button onclick="eLearnJS.toggleHideable(this);">'
-                        + div.attr('show') + " " + div.attr('name')
-                        + '</button>');
+
+        var button = $('<button></button>');
+        button.click(function(e) {
+            eLearnJS.toggleHideable(this);
+        });
+        var text = div.attr('show') ? div.attr('show') : "";
+        text += div.attr('show') && div.attr('name') ? " " : "";
+        text += div.attr('name') ? div.attr('name') : "";
+        button.html(text);
+        div.before(button);
 
         div.hide();
     });
@@ -1851,12 +2002,18 @@ eLearnJS.toggleHideable = function(element) {
     // hide
     if(div.is(':visible')) {
         div.hide();
-        $(element).html(div.attr('show') + " " + div.attr('name'));
+        var text = div.attr('show') ? div.attr('show') : "";
+        text += div.attr('show') && div.attr('name') ? " " : "";
+        text += div.attr('name') ? div.attr('name') : "";
+        $(element).html(text);
     }
     // show
     else {
         div.show();
-        $(element).html(div.attr('hide') + " " + div.attr('name'));
+        var text = div.attr('hide') ? div.attr('hide') : "";
+        text += div.attr('hide') && div.attr('name') ? " " : "";
+        text += div.attr('name') ? div.attr('name') : "";
+        $(element).html(text);
     }
 };
 

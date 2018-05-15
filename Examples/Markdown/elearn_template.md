@@ -206,7 +206,7 @@ Informationen angezeigt werden.
 
 Der folgende Block ist mit einem Knopf aus- und einklappbar.
 
-<div class="hideable" name="Übersetzung" show="Zeige" hide="Verberge">
+<div class="hideable" show="Zeige Übersetzung" hide="Verberge Übersetzung">
     Hier steht ein Beispieltext.
 </div>
 
@@ -215,6 +215,8 @@ Dabei wird dem ganzen ein __name__ gegeben, der in
 dem Knopf immer eingesetzt wird. Zustäzlich werden
 die Wörter für __show__ und __hide__ angegeben.
 So kann man hier auch bspw. andere Sprachen verwenden.
+Es ist auch möglich das Feld __name__ wegzulassen
+und nur __show__ und __hide__ zu verwenden.
 
 #### Multiboxes
 
