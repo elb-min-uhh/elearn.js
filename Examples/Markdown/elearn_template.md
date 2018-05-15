@@ -9,7 +9,6 @@ Author: Name Autor
 Description: Hier Beschreibung einfügen
 Keywords: Key, Words
 Custom: "<script>
-            quizJS.setLanguage('de');
             window.onload = function() {
                 eLearnJS.setNavigationTitle('Template Überschrift');
             }
