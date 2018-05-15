@@ -1,5 +1,5 @@
 /*
-* v1.0.2 18/05/04 JavaScript eLearn.js - by Arne Westphal
+* v1.0.3 18/05/15 JavaScript eLearn.js - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 * uses ResizeSensor by Marc J. Schmidt. https://github.com/marcj/css-element-queries/
@@ -8,7 +8,7 @@
 // For more intuitive usage of functions. (e.g. eLearnJS.showNext())
 var eLearnJS = eLearnJS || {};
 
-eLearnJS.VERSION_NR = "1.0.2";
+eLearnJS.VERSION_NR = "1.0.3";
 eLearnJS.VERSION_DATE = "05/2018";
 
 eLearnJS.actions = {
@@ -32,7 +32,7 @@ eLearnJS.localization = {
         "menu.source" : "Quelldateien herunterladen",
         "menu.pdf" : "PDF herunterladen",
         "menu.epub" : "EPUB herunterladen",
-        "imprint.uses" : 'Benutzt das eLearn.js Script Version ' + eLearnJS.VERSION_NR + ' | ' + eLearnJS.VERSION_DATE + ' | '
+        "imprint.uses" : 'Benutzt das eLearn.js Script v' + eLearnJS.VERSION_NR + ' | ' + eLearnJS.VERSION_DATE + ' | '
                             + '<a href="https://www.min.uni-hamburg.de/de/imprint.html">Impressum</a>',
         "imprint.footer" : "Die Verantwortung für den Inhalt dieser Veröffentlichung "
             + "liegt bei den Autor/-innen.",
