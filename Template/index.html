@@ -141,7 +141,23 @@
                     <h5>Wenn man noch eine fünfte Ebene braucht</h5>
                     <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
 
-                </section><section name="Abbildungen">
+                </section>
+                <section name="Sprache"><h3 id="sprache">Sprache</h3>
+                    <p>Die Sprache des <em>elearn.js</em> lässt sich anpassen.
+                    Hierzu kann man beliebigen Elementen das Attribut <code>lang</code> ergänzen, was
+                    hauptsächlich für das <em>quiz.js</em> interessant sein könnte. Möglich ist aber auch
+                    <code>&lt;html lang="de"&gt;</code> zu verwenden, um so die Sprache für das gesamte Dokument
+                    einzustellen. Dies muss jedoch vor dem Laden der Seite bereits geschehen sein.
+                    Ansonsten lässt sich die Sprache mit <code>eLearnJS.setLanguage("de")</code> auf Deutsch
+                    und mit <code>eLearnJS.setLanguage("en")</code> interaktiv auf Englisch stellen.</p>
+
+                    <p>Beispiel:</p>
+                    <p>
+                        <button onclick="eLearnJS.setLanguage('de')">Deutsch/German</button>
+                        <button onclick="eLearnJS.setLanguage('en')">Englisch/English</button>
+                    </p>
+                </section>
+                <section name="Abbildungen">
                     <h3>Bilder</h3>
                     <p>Bilder können als einzelne Abbildungen oder als Galerien eingebunden werden. Für die Galerien wird das elearn.js benötigt. es bietet verschiedene Varianten. Das erste Beispiel zeigt eine Slideshow mit Vorschau und Loop-Funktion.</p>
                     <div class="slider preview-nav loop" style="max-height: 500px">

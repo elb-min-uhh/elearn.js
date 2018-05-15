@@ -80,6 +80,22 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
 
 At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.
 
+### Sprache
+
+Die Sprache des _elearn.js_ lässt sich anpassen.
+Hierzu kann man beliebigen Elementen das Attribut `lang` ergänzen, was
+hauptsächlich für das _quiz.js_ interessant sein könnte. Möglich ist aber auch
+`<html lang="de">` zu verwenden, um so die Sprache für das gesamte Dokument
+einzustellen. Dies muss jedoch vor dem Laden der Seite bereits geschehen sein.
+Ansonsten lässt sich die Sprache mit `eLearnJS.setLanguage("de")` auf Deutsch
+und mit `eLearnJS.setLanguage("en")` interaktiv auf Englisch stellen.
+
+Beispiel:
+
+<button onclick="eLearnJS.setLanguage('de')">Deutsch/German</button>
+<button onclick="eLearnJS.setLanguage('en')">Englisch/English</button>
+
+
 ### Bilder
 
 Bilder können als einzelne Abbildungen oder als Galerien eingebunden werden.Für die Galerien wird das elearn.js benötigt. es bietet verschiedene Varianten. Das erste Beispiel zeigt eine Slideshow mit Vorschau und Loop-Funktion.
