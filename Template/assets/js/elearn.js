@@ -281,7 +281,7 @@ eLearnJS.setLanguage = function(langCode) {
     langCode = langCode.toLowerCase();
     if(eLearnJS.localization[langCode] !== undefined) {
         eLearnJS.selectedLocale = langCode;
-        $('[lang-code],[lang-code-title]').each(function(i,e) {
+        $('[lang-code],[lang-code-title],[lang-code-tab]').each(function(i,e) {
             eLearnJS.localizeElement($(e));
         });
         eLearnJS.windowOnResize();
@@ -308,12 +308,27 @@ eLearnJS.localizeElement = function(el, force) {
 
     if(el.attr("lang-code")) {
         var text = eLearnJS.localization[loc][el.attr("lang-code")];
-        if($(el).attr('localized') === "html") el.html(text);
-        else el.text(text);
+        if(text) {
+            if($(el).attr('localized') === "html") el.html(text);
+            else el.text(text);
+        }
     }
+
     if(el.attr("lang-code-title")) {
-        el.attr('title', eLearnJS.localization[loc][el.attr("lang-code-title")])
-    };
+        var text = eLearnJS.localization[loc][el.attr("lang-code-title")];
+        if(text) {
+            el.attr('title', text);
+        }
+    }
+
+    if(el.attr("lang-code-tab")) {
+        var text = eLearnJS.localization[loc][el.attr("lang-code-tab")];
+        if(text) {
+            var index = el.parent().children().index(el);
+            var tabs = el.closest('.tabbed-container').children('.tabs').children('.tab-select');
+            tabs.eq(index).text(text);
+        }
+    }
 }
 
 /**
@@ -2059,13 +2074,14 @@ eLearnJS.initiateTabbedBox = function(box) {
 */
 eLearnJS.selectTab = function(element) {
     var e = $(element);
-    var div = e.parent().nextAll().first('.tabbed-box');
+    var index = e.parent().children().index(e);
+    var div = e.parent().nextAll('.tabbed-box').first();
 
     var tabbefore = div.find('.tab:visible').attr("name");
 
     // show only new
     div.find('.tab').hide();
-    div.find('.tab').filter('[name="' + e.html() + '"]').show();
+    div.find('.tab').eq(index).show();
     e.parent().find('.tab-select').removeClass("act");
     e.addClass("act");
 
