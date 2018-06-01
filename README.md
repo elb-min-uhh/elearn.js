@@ -32,7 +32,7 @@ For the editor [Atom](https://atom.io) there is the package
 [atom-elearnjs](https://github.com/elb-min-uhh/atom-elearnjs).
 This package converts Markdown files to HTML and PDF and is specifically
 designed to use _elearn.js_ for styling and interactive elements.
-Using makes the creation of scripts more simple and faster.
+Using it makes the creation of scripts more simple and fast.
 
 The markdown example
 [Examples/Markdown/elearn_template.md](/Examples/Markdown/elearn_template.md)
