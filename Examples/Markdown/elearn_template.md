@@ -42,8 +42,8 @@ Universität Hamburg
 
 # Template elearn.js <!--hide-in-overview-->
 
-**Name des Autors**    
-Institution des Autors     
+**Name des Autors**
+Institution des Autors
 cc by-sa | 2015
 
 ![Titelbild](images/illu-concept.png)
@@ -69,7 +69,7 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
 
 ### Überschrift dritter Ordung <!--no-section-->
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.   
+Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 
 #### Und hier ist die vierte Ordnung
 
@@ -199,6 +199,35 @@ welches MathJax wiederum als _escape_ für das darauffolgende `$` sieht.
 
 ### Textblöcke
 
+#### Hervorgehobene Blöcke
+
+Es existieren verschieden Blöcke, welche bestimmten Text
+hervorheben können.
+
+<blockquote class="task">
+    <p>
+        Überschrift
+        <br>
+        Dies ist ein Aufgabenblock.
+    </p>
+</blockquote>
+
+<blockquote class="hint">
+    <p>
+        Überschrift
+        <br>
+        Dies ist ein Hinweisblock.
+    </p>
+</blockquote>
+
+<blockquote class="links">
+    <p>
+        Überschrift
+        <br>
+        Dies ist ein Block für Links.
+    </p>
+</blockquote>
+
 #### Informationen per Mouseover/Klick
 
 Bei solchen Blöcken werden zusätzliche
@@ -225,7 +254,7 @@ Der folgende Block ist mit einem Knopf aus- und einklappbar.
     Hier steht ein Beispieltext.
 </div>
 
-Das entscheidende hierbei sind die Attribute.  
+Das entscheidende hierbei sind die Attribute.
 Dabei wird dem ganzen ein __name__ gegeben, der in
 dem Knopf immer eingesetzt wird. Zustäzlich werden
 die Wörter für __show__ und __hide__ angegeben.
