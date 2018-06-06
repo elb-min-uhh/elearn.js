@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*
 * CSS for eLearn.js
 * Created by Michael Heinecke
@@ -12,28 +13,28 @@
     font-family: 'eLearn-Icons';
     font-style: normal;
     font-weight: normal;
-    src: url('../font/eLearn-Icons.woff') format('woff'), url('../font/eLearn-Icons.ttf') format('truetype');
+    src: url("../font/eLearn-Icons.woff") format("woff"), url("../font/eLearn-Icons.ttf") format("truetype");
 }
 
 @font-face {
     font-family: 'Open Sans';
     font-style: normal;
     font-weight: 400;
-    src: url('../font/OpenSans-Regular-webfont.woff') format('woff'), url('../font/OpenSans-Regular-webfont.ttf') format('truetype');
+    src: url("../font/OpenSans-Regular-webfont.woff") format("woff"), url("../font/OpenSans-Regular-webfont.ttf") format("truetype");
 }
 
 @font-face {
     font-family: 'Open Sans';
     font-style: normal;
     font-weight: 700;
-    src: url('../font/OpenSans-Bold-webfont.woff') format('woff'), url('../font/OpenSans-Bold-webfont.ttf') format('truetype');
+    src: url("../font/OpenSans-Bold-webfont.woff") format("woff"), url("../font/OpenSans-Bold-webfont.ttf") format("truetype");
 }
 
 @font-face {
     font-family: 'Open Sans';
     font-style: italic;
     font-weight: 400;
-    src: url('../font/OpenSans-Italic-webfont.woff') format('woff'), url('../font/OpenSans-Italic-webfont.ttf') format('truetype');
+    src: url("../font/OpenSans-Italic-webfont.woff") format("woff"), url("../font/OpenSans-Italic-webfont.ttf") format("truetype");
 }
 
 /*Seitenaufbau*/
@@ -41,7 +42,7 @@
 body {
     font-family: Open Sans, sans-serif;
     line-height: 164%;
-    background-color: rgb(214, 214, 214);
+    background-color: #d6d6d6;
     font-size: 93.75%;
     margin: 0;
     margin: auto;
@@ -90,7 +91,7 @@ video {
     margin: 0em auto 0em auto;
     text-align: left;
     font-size: 0.8em;
-    color: rgb(204, 204, 204);
+    color: #cccccc;
     z-index: 5;
 }
 
@@ -98,7 +99,7 @@ video {
     z-index: 5;
     padding-top: 0.6em;
     padding-bottom: 0.6em;
-    background-color: rgb(102, 102, 102);
+    background-color: #666666;
     height: auto;
 }
 
@@ -112,7 +113,7 @@ video {
 #btnExpSym,
 #btnMenu,
 #btnHelpSym {
-    color: rgb(204, 204, 204);
+    color: #cccccc;
     font-size: 180%;
     display: inline-block;
 }
@@ -246,7 +247,7 @@ video {
 /*Absatzformate*/
 
 p {
-    color: rgb(51, 51, 51);
+    color: #333333;
 }
 
 h1 {
@@ -262,7 +263,7 @@ h2 {
     font-size: 2em;
     line-height: 130%;
     font-weight: 700;
-    color: rgb(51, 51, 51);
+    color: #333333;
 }
 
 h3 {
@@ -439,7 +440,7 @@ a:active {
     right: 3px;
     width: 12px;
     height: 12px;
-    background: url('../img/haken.svg');
+    background: url("../img/haken.svg");
     background-size: 100% 100%;
 }
 
@@ -677,7 +678,7 @@ a:active {
     text-align: left;
     margin-top: 12px;
     margin-bottom: 5px;
-    background-color: rgb(240, 240, 240);
+    background-color: #f0f0f0;
 }
 
 .section-overview {
@@ -698,8 +699,8 @@ a:active {
 .section-overview-element,
 .side-menu-element {
     width: calc(100% - 130px);
-    color: rgb(140, 140, 140);
-    background-color: rgb(240, 240, 240);
+    color: #8c8c8c;
+    background-color: #f0f0f0;
     text-align: left;
     padding: 5px 0 5px 130px;
 }
@@ -716,7 +717,7 @@ a:active {
 
 .section-overview-element.active {
     border-left: 3px solid #e2001a;
-    background: rgb(220, 220, 220);
+    background: #dcdcdc;
     padding: 5px 0 5px 127px;
 }
 
@@ -730,7 +731,7 @@ a:active {
 
 .section-overview-element:hover,
 .side-menu-element:hover {
-    background: rgb(220, 220, 220);
+    background: #dcdcdc;
 }
 
 .touchScroll {
@@ -789,7 +790,7 @@ a:active {
 .side-menu {
     pointer-events: all;
     height: 100%;
-    background-color: rgb(240, 240, 240);
+    background-color: #f0f0f0;
     position: absolute;
     top: 0;
     right: 0;
@@ -797,7 +798,7 @@ a:active {
     min-width: 200px;
     max-width: 40%;
     z-index: 10;
-    color: rgb(140, 140, 140);
+    color: #8c8c8c;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
 
@@ -840,8 +841,8 @@ button {
     margin: 0.2em;
     padding: 0.5em 0.5em 0.5em 1.3em;
     border: 1px solid #dcdcdc;
-    background-color: rgb(240, 240, 240);
-    color: rgb(140, 140, 140);
+    background-color: #f0f0f0;
+    color: #8c8c8c;
     text-align: left;
     width: 50%;
     width: calc(50% - 0.4em);
@@ -849,8 +850,8 @@ button {
 
 button:hover,
 button:active {
-    background: rgb(220, 220, 220);
-    color: rgb(140, 140, 140);
+    background: #dcdcdc;
+    color: #8c8c8c;
 }
 
 /*Diverses*/
@@ -862,7 +863,7 @@ button:active {
 
 .logo {
     width: 12em;
-    margin-left: 2em
+    margin-left: 2em;
 }
 
 .license img {
@@ -884,7 +885,7 @@ button:active {
 
 #btnNext,
 #btnPrev {
-    color: rgb(200, 200, 200);
+    color: #c8c8c8;
     position: absolute;
     height: 100%;
     width: 75px;
@@ -895,7 +896,7 @@ button:active {
 
 #btnNext:hover,
 #btnPrev:hover {
-    color: rgb(150, 150, 150);
+    color: #969696;
 }
 
 #btnPrev {
@@ -1103,7 +1104,7 @@ QR Overlay
     display: inline-block;
     width: 213px;
     height: 69px;
-    background: url('../img/logo-uhh.gif');
+    background: url("../img/logo-uhh.gif");
     background-repeat: no-repeat;
 }
 
@@ -1236,7 +1237,7 @@ div.slider-con:hover .slider-zoom-area {
 .slider-back-area:hover .slider-back,
 .slider-next-area:hover .slider-next,
 .slider-zoom-area:hover .slider-zoom {
-    color: rgba(255, 255, 255, 1);
+    color: white;
 }
 
 .slider-back {
@@ -1338,12 +1339,12 @@ div.slider-con:hover .slider-zoom-area {
 }
 
 .img-lightbox .close:hover {
-    color: rgba(255, 255, 255, 1);
+    color: white;
 }
 
 /*Media-Querys für Responsivität*/
 
-@media screen and (max-width:1100px) {
+@media screen and (max-width: 1100px) {
     .tooltip {
         left: 0;
     }
@@ -1362,7 +1363,7 @@ div.slider-con:hover .slider-zoom-area {
     }
 }
 
-@media screen and (max-width:940px) {
+@media screen and (max-width: 940px) {
     .page {
         padding: 45px 13% 68px 13%;
     }
@@ -1399,7 +1400,7 @@ div.slider-con:hover .slider-zoom-area {
     }
 }
 
-@media screen and (max-width:800px) {
+@media screen and (max-width: 800px) {
     body {
         font-size: 87.5%;
     }
@@ -1508,7 +1509,7 @@ div.slider-con:hover .slider-zoom-area {
     }
 }
 
-@media screen and (max-width:440px) {
+@media screen and (max-width: 440px) {
     body {
         font-size: 81.4%;
     }
