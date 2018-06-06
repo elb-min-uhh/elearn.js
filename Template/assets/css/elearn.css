@@ -652,6 +652,69 @@ a:active {
   content: none;
 }
 
+/* ---------------------------------- Blockquotes ---------------------------------- */
+blockquote.hint {
+  background-color: #eee;
+  border-left: 12px solid #e2001a;
+  padding: 1em 1em 1em 4em;
+  font-style: normal;
+}
+
+blockquote.hint:before {
+  font-family: 'eLearn-icons';
+  font-weight: normal;
+  content: "h";
+  color: #e2001a;
+  font-size: 3em;
+  line-height: 1em;
+  margin-top: 0.2em;
+  margin-left: -1.2em;
+  float: left;
+}
+
+blockquote.hint p:first-line {
+  color: #e2001a;
+  font-size: 1.2em;
+  font-weight: bold;
+  line-height: 1.5em;
+}
+
+blockquote.task {
+  border-left: 12px solid #888;
+  padding: 1em 1em 1em 4em;
+  font-style: normal;
+}
+
+blockquote.task:before {
+  font-family: 'eLearn-icons';
+  font-weight: normal;
+  content: "t";
+  color: #888;
+  font-size: 3em;
+  line-height: 1em;
+  margin-top: 0.2em;
+  margin-left: -1.2em;
+  float: left;
+}
+
+blockquote.links {
+  border-left: 12px solid #888;
+  padding: 1em 1em 1em 4em;
+  font-style: normal;
+}
+
+blockquote.links:before {
+  font-family: 'eLearn-icons';
+  font-weight: normal;
+  content: "l";
+  color: #888;
+  font-size: 3em;
+  line-height: 1em;
+  margin-top: 0.2em;
+  margin-left: -1.2em;
+  float: left;
+}
+
 /* ------------------------------------ Anderes ------------------------------------ */
 .navbar {
   position: relative;
@@ -1644,4 +1707,3 @@ div.slider-con:hover .slider-zoom-area {
     display: none !important;
   }
 }
-/*# sourceMappingURL=elearn.css.map */

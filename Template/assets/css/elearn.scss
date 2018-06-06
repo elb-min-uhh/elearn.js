@@ -10,6 +10,7 @@
 /* Color Variables */
 
 /* Greys */
+
 $dark_white: #eee;
 $lightest_grey: #dcdcdc;
 $lighter_grey: #b4b4b4;
@@ -17,16 +18,15 @@ $light_grey: #888;
 $mid_grey: #666;
 $dark_grey: #444;
 $darker_grey: #333;
-
 /* Colors */
+
 $uhh_red: #e2001a;
 $dark_blue: #3c4c60;
-
 /* Transparents */
+
 $white_light_transparent: rgba(255, 255, 255, 0.8);
 $mid_grey_transparent: rgba(102, 102, 102, 0);
 $black_half_transparent: rgba(0, 0, 0, 0.4);
-
 /*Einbindung der benötigtren Schriften*/
 
 @font-face {
@@ -676,6 +676,70 @@ a:active {
 .hover-info>div.hover-info-block:before,
 .hover-info>div.hover-info-block:after {
     content: none;
+}
+
+/* ---------------------------------- Blockquotes ---------------------------------- */
+
+blockquote.hint {
+    background-color: $dark_white;
+    border-left: 12px solid $uhh_red;
+    padding: 1em 1em 1em 4em;
+    font-style: normal;
+}
+
+blockquote.hint:before {
+    font-family: 'eLearn-icons';
+    font-weight: normal;
+    content: "h";
+    color: $uhh_red;
+    font-size: 3em;
+    line-height: 1em;
+    margin-top: 0.2em;
+    margin-left: -1.2em;
+    float: left;
+}
+
+blockquote.hint p:first-line {
+    color: $uhh_red;
+    font-size: 1.2em;
+    font-weight: bold;
+    line-height: 1.5em;
+}
+
+blockquote.task {
+    border-left: 12px solid $light_grey;
+    padding: 1em 1em 1em 4em;
+    font-style: normal;
+}
+
+blockquote.task:before {
+    font-family: 'eLearn-icons';
+    font-weight: normal;
+    content: "t";
+    color: $light_grey;
+    font-size: 3em;
+    line-height: 1em;
+    margin-top: 0.2em;
+    margin-left: -1.2em;
+    float: left;
+}
+
+blockquote.links {
+    border-left: 12px solid $light_grey;
+    padding: 1em 1em 1em 4em;
+    font-style: normal;
+}
+
+blockquote.links:before {
+    font-family: 'eLearn-icons';
+    font-weight: normal;
+    content: "l";
+    color: $light_grey;
+    font-size: 3em;
+    line-height: 1em;
+    margin-top: 0.2em;
+    margin-left: -1.2em;
+    float: left;
 }
 
 /* ------------------------------------ Anderes ------------------------------------ */
