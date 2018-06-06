@@ -144,7 +144,6 @@ video {
 
 .back-enabled #btnBackCon {
     float: left;
-    display: inline-block;
     overflow-y: auto;
     margin-left: 20px;
 }
@@ -152,7 +151,6 @@ video {
 .back-enabled #btnBack {
     float: left;
     width: 22px;
-    display: inline-block;
 }
 
 .back-enabled #btnBackText {
@@ -162,7 +160,6 @@ video {
 
 #btnAllCon {
     float: left;
-    display: inline-block;
     overflow-y: auto;
     margin-left: 20px;
 }
@@ -174,7 +171,6 @@ video {
 #btnAll {
     float: left;
     width: 22px;
-    display: inline-block;
 }
 
 #btnAllText {
@@ -223,7 +219,6 @@ video {
 
 #btnHelp {
     float: right;
-    display: inline-block;
     overflow-y: auto;
     margin-right: 20px;
 }
@@ -231,7 +226,6 @@ video {
 #btnHelpSym {
     float: left;
     width: 22px;
-    display: inline-block;
 }
 
 #btnHelpText {
@@ -516,7 +510,6 @@ a:active {
 
 .tooltip #cancel {
     position: relative;
-    display: inline-block;
     top: -15px;
     right: -5px;
     margin: 0 0 0 20px;
