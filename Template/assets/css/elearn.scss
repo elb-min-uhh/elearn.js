@@ -7,6 +7,26 @@
 * v1.0.3 18/05/15 cc-by-sa
 */
 
+/* Color Variables */
+
+/* Greys */
+$dark_white: #eee;
+$lightest_grey: #dcdcdc;
+$lighter_grey: #b4b4b4;
+$light_grey: #888;
+$mid_grey: #666;
+$dark_grey: #444;
+$darker_grey: #333;
+
+/* Colors */
+$uhh_red: #e2001a;
+$dark_blue: #3c4c60;
+
+/* Transparents */
+$white_light_transparent: rgba(255, 255, 255, 0.8);
+$mid_grey_transparent: rgba(102, 102, 102, 0);
+$black_half_transparent: rgba(0, 0, 0, 0.4);
+
 /*Einbindung der benötigtren Schriften*/
 
 @font-face {
@@ -42,7 +62,7 @@
 body {
     font-family: Open Sans, sans-serif;
     line-height: 164%;
-    background-color: #d6d6d6;
+    background-color: $lightest_grey;
     font-size: 93.75%;
     margin: 0;
     margin: auto;
@@ -91,7 +111,7 @@ video {
     margin: 0em auto 0em auto;
     text-align: left;
     font-size: 0.8em;
-    color: #cccccc;
+    color: $lightest_grey;
     z-index: 5;
 }
 
@@ -99,7 +119,7 @@ video {
     z-index: 5;
     padding-top: 0.6em;
     padding-bottom: 0.6em;
-    background-color: #666666;
+    background-color: $mid_grey;
     height: auto;
 }
 
@@ -113,7 +133,7 @@ video {
 #btnExpSym,
 #btnMenu,
 #btnHelpSym {
-    color: #cccccc;
+    color: $lightest_grey;
     font-size: 180%;
     display: inline-block;
 }
@@ -179,13 +199,13 @@ video {
     width: 10px;
     position: absolute;
     right: 0;
-    background: -webkit-linear-gradient(right, #666666, rgba(102, 102, 102, 0));
+    background: -webkit-linear-gradient(right, $mid_grey, $mid_grey_transparent);
     /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(right, #666666, rgba(102, 102, 102, 0));
+    background: -o-linear-gradient(right, $mid_grey, $mid_grey_transparent);
     /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(right, #666666, rgba(102, 102, 102, 0));
+    background: -moz-linear-gradient(right, $mid_grey, $mid_grey_transparent);
     /* For Firefox 3.6 to 15 */
-    background: linear-gradient(to left, #666666, rgba(102, 102, 102, 0));
+    background: linear-gradient(to left, $mid_grey, $mid_grey_transparent);
     /* Standard syntax */
 }
 
@@ -235,19 +255,19 @@ video {
 #btnMenu:hover,
 #btnHelp:hover * {
     text-decoration: none;
-    color: #fff;
+    color: white;
 }
 
 .page {
     padding: 50px 17.272727% 96px 17.272727%;
     margin: 0;
-    background-color: #fff;
+    background-color: white;
 }
 
 /*Absatzformate*/
 
 p {
-    color: #333333;
+    color: $darker_grey;
 }
 
 h1 {
@@ -255,7 +275,7 @@ h1 {
     font-size: 3em;
     font-weight: 700;
     line-height: 110%;
-    color: #e2001a;
+    color: $uhh_red;
 }
 
 h2 {
@@ -263,7 +283,7 @@ h2 {
     font-size: 2em;
     line-height: 130%;
     font-weight: 700;
-    color: #333333;
+    color: $darker_grey;
 }
 
 h3 {
@@ -297,14 +317,14 @@ audio {
 }
 
 hr {
-    color: #b4b4b4;
-    background-color: #b4b4b4;
+    color: $lighter_grey;
+    background-color: $lighter_grey;
 }
 
 blockquote {
     font-style: italic;
-    color: #888;
-    border-left: 12px solid #888;
+    color: $light_grey;
+    border-left: 12px solid $light_grey;
     padding-left: 20px;
     line-height: 130%;
     margin: 2.6em 2em 2.2em 2em;
@@ -316,7 +336,7 @@ blockquote {
 }
 
 pre {
-    background-color: #eee;
+    background-color: $dark_white;
     padding: 1.8em;
     overflow: auto;
     max-width: 100%;
@@ -329,24 +349,24 @@ table {
 }
 
 table th {
-    background-color: #b4b4b4;
+    background-color: $lighter_grey;
     text-align: left;
     padding: 0.4em;
 }
 
 table td {
-    border-bottom: 1px solid #b4b4b4;
+    border-bottom: 1px solid $lighter_grey;
     border-collapse: collapse;
     padding: 0.4em;
 }
 
 a:link {
-    color: #e2001a;
+    color: $uhh_red;
     text-decoration: none;
 }
 
 a:visited {
-    color: #e2001a;
+    color: $uhh_red;
     text-decoration: none;
 }
 
@@ -365,7 +385,7 @@ a:active {
 }
 
 #content-overview span {
-    color: #e2001a;
+    color: $uhh_red;
     cursor: pointer;
 }
 
@@ -389,7 +409,7 @@ a:active {
 
 .kachel ul li {
     position: relative;
-    background: #e7e7e7;
+    background: $dark_white;
     min-width: 150px;
     max-width: 100%;
     max-width: calc(100% - 10px);
@@ -408,14 +428,8 @@ a:active {
 
 .kachel ul li ul li {
     padding: 2px;
-    border: 1px solid #cecece;
+    border: 1px solid $lighter_grey;
 }
-
-/*
-.kachel ul li ul li ul li {
-    border: #cecece;
-}
-*/
 
 .kachel ul li>span,
 .kachel ul li>p {
@@ -452,12 +466,12 @@ a:active {
     height: 0px;
     width: 0px;
     border: 15px solid transparent;
-    border-top-color: #3c4c60;
-    border-right-color: #3c4c60;
+    border-top-color: $dark_blue;
+    border-right-color: $dark_blue;
 }
 
 .kachel span.title {
-    color: #666 !important;
+    color: $mid_grey !important;
     padding: 10px 35px 10px 20px;
     display: inline-block;
 }
@@ -468,7 +482,7 @@ a:active {
 
 .kachel p {
     display: block !important;
-    color: #666;
+    color: $mid_grey;
     font-weight: normal;
     text-align: left;
     line-height: 120%;
@@ -479,14 +493,14 @@ a:active {
 
 .kachel ul li:hover {
     padding-bottom: 0;
-    border-bottom: 3px solid #e2501a;
+    border-bottom: 3px solid $uhh_red;
 }
 
 /* ------------------------------------------ TOOLTIPS ------------------------------------------ */
 
 .tooltip {
     display: none;
-    background: #dcdcdc;
+    background: $lightest_grey;
     padding: 20px 15px 0;
     margin: 5px;
     min-width: 100px;
@@ -518,13 +532,13 @@ a:active {
     margin-right: -15px;
     margin-top: 15px;
     margin-bottom: 0;
-    background: #444;
-    color: #fff;
+    background: $dark_grey;
+    color: white;
     border: 0;
 }
 
 .tooltip #next:hover {
-    background: #666;
+    background: $mid_grey;
 }
 
 .tooltip.fixed {
@@ -540,7 +554,7 @@ a:active {
     width: 0;
     position: absolute;
     pointer-events: none;
-    border-color: transparent transparent #dcdcdc;
+    border-color: transparent transparent $lightest_grey;
     border-width: 10px;
     margin-left: -10px;
     margin-right: -10px;
@@ -586,7 +600,7 @@ a:active {
 
 .hideable-container .hideable {
     margin-top: 5px;
-    background-color: #eee;
+    background-color: $dark_white;
     padding: 1.8em;
 }
 
@@ -595,10 +609,10 @@ a:active {
 .tabs .tab-select {
     display: inline-block;
     padding: 5px 8px;
-    color: #888;
+    color: $light_grey;
     cursor: pointer;
-    background-color: #eee;
-    border-right: 1px solid #dcdcdc;
+    background-color: $dark_white;
+    border-right: 1px solid $lightest_grey;
     -webkit-touch-callout: none;
     /* iOS Safari */
     -webkit-user-select: none;
@@ -619,11 +633,11 @@ a:active {
 }
 
 .tabs .tab-select.act {
-    background-color: #dcdcdc;
+    background-color: $lightest_grey;
 }
 
 .tabbed-box {
-    background-color: #dcdcdc;
+    background-color: $lightest_grey;
     padding: 1.8em;
 }
 
@@ -636,16 +650,16 @@ a:active {
 }
 
 .hover-info .title {
-    background: #888;
-    color: #fff;
+    background: $light_grey;
+    color: white;
     padding: 0 3px;
     cursor: pointer;
 }
 
 .hover-info .hover-info-block {
     position: absolute;
-    background: #888;
-    color: #fff;
+    background: $light_grey;
+    color: white;
     padding: 5px;
 }
 
@@ -678,7 +692,7 @@ a:active {
     text-align: left;
     margin-top: 12px;
     margin-bottom: 5px;
-    background-color: #f0f0f0;
+    background-color: $dark_white;
 }
 
 .section-overview {
@@ -688,7 +702,7 @@ a:active {
     width: 1100px;
     max-width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: $black_half_transparent;
     z-index: 10;
 }
 
@@ -699,8 +713,8 @@ a:active {
 .section-overview-element,
 .side-menu-element {
     width: calc(100% - 130px);
-    color: #8c8c8c;
-    background-color: #f0f0f0;
+    color: $light_grey;
+    background-color: $dark_white;
     text-align: left;
     padding: 5px 0 5px 130px;
 }
@@ -716,8 +730,8 @@ a:active {
 }
 
 .section-overview-element.active {
-    border-left: 3px solid #e2001a;
-    background: #dcdcdc;
+    border-left: 3px solid $uhh_red;
+    background: $lightest_grey;
     padding: 5px 0 5px 127px;
 }
 
@@ -731,24 +745,22 @@ a:active {
 
 .section-overview-element:hover,
 .side-menu-element:hover {
-    background: #dcdcdc;
+    background: $lightest_grey;
 }
 
 .touchScroll {
     height: 100%;
-    /* background-color: #dcdcdc; */
     position: fixed;
     top: 0;
     z-index: 10;
-    color: #ffffff;
-    /* border:1px solid #888888; */
+    color: white;
 }
 
 .touchScroll div {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 5px $black_half_transparent;
     position: relative;
     top: calc(50% - 25px);
-    background-color: #fff;
+    background-color: white;
     border-radius: 50%;
     width: 50px;
     height: 50px;
@@ -772,7 +784,7 @@ a:active {
     font-family: eLearn-icons;
     text-align: center;
     font-size: 35px;
-    color: #888;
+    color: $light_grey;
 }
 
 .menu-wrap {
@@ -790,7 +802,7 @@ a:active {
 .side-menu {
     pointer-events: all;
     height: 100%;
-    background-color: #f0f0f0;
+    background-color: $dark_white;
     position: absolute;
     top: 0;
     right: 0;
@@ -798,8 +810,8 @@ a:active {
     min-width: 200px;
     max-width: 40%;
     z-index: 10;
-    color: #8c8c8c;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    color: $light_grey;
+    box-shadow: 0 0 10px $black_half_transparent;
 }
 
 .side-menu-element {
@@ -827,22 +839,22 @@ a:active {
     position: relative;
     height: 3px;
     width: 100%;
-    background-color: #dcdcdc;
+    background-color: $lightest_grey;
 }
 
 #progressbar {
     height: 100%;
     width: 0%;
-    background-color: #e2001a;
+    background-color: $uhh_red;
     position: relative;
 }
 
 button {
     margin: 0.2em;
     padding: 0.5em 0.5em 0.5em 1.3em;
-    border: 1px solid #dcdcdc;
-    background-color: #f0f0f0;
-    color: #8c8c8c;
+    border: 1px solid $lightest_grey;
+    background-color: $dark_white;
+    color: $light_grey;
     text-align: left;
     width: 50%;
     width: calc(50% - 0.4em);
@@ -850,8 +862,7 @@ button {
 
 button:hover,
 button:active {
-    background: #dcdcdc;
-    color: #8c8c8c;
+    background: $lightest_grey;
 }
 
 /*Diverses*/
@@ -885,7 +896,7 @@ button:active {
 
 #btnNext,
 #btnPrev {
-    color: #c8c8c8;
+    color: $lighter_grey;
     position: absolute;
     height: 100%;
     width: 75px;
@@ -896,7 +907,7 @@ button:active {
 
 #btnNext:hover,
 #btnPrev:hover {
-    color: #969696;
+    color: $mid_grey;
 }
 
 #btnPrev {
@@ -1035,15 +1046,15 @@ QR Overlay
     width: 100%;
     height: 100%;
     z-index: 10;
-    background: rgba(0, 0, 0, 0.5);
+    background: $black_half_transparent;
 }
 
 #qrcode {
     position: absolute;
     top: calc(50% - 128px);
     left: calc(50% - 128px);
-    border: 5px solid #fff;
-    background-color: #fff;
+    border: 5px solid white;
+    background-color: white;
     line-height: 0;
 }
 
@@ -1055,7 +1066,7 @@ QR Overlay
     width: 100%;
     max-width: 1100px;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: $black_half_transparent;
     z-index: 10;
 }
 
@@ -1064,13 +1075,13 @@ QR Overlay
     min-width: 50%;
     overflow-y: auto;
     margin: auto;
-    background: #fff;
+    background: white;
     max-height: calc(100% - 120px);
     margin-top: 60px;
-    border: 1px solid #b4b4b4;
-    -webkit-box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.5);
-    box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.5);
+    border: 1px solid $lighter_grey;
+    -webkit-box-shadow: 0px 0px 25px 0px $black_half_transparent;
+    -moz-box-shadow: 0px 0px 25px 0px $black_half_transparent;
+    box-shadow: 0px 0px 25px 0px $black_half_transparent;
 }
 
 #info .info-wrapper {
@@ -1080,7 +1091,7 @@ QR Overlay
 #info .elearn-info {
     margin-top: 20px;
     font-size: 80%;
-    background: #dcdcdc;
+    background: $lightest_grey;
     padding: 10px 20px 10px;
 }
 
@@ -1113,7 +1124,7 @@ QR Overlay
 div.slider-con {
     position: relative;
     padding: 20px 60px 20px;
-    background: #888;
+    background: $light_grey;
     border-radius: 5px;
     margin: 1em 0 0;
 }
@@ -1121,7 +1132,7 @@ div.slider-con {
 div.preview-con {
     position: relative;
     padding: 10px 60px 10px;
-    background: #444;
+    background: $dark_grey;
     border-radius: 0 0 5px 5px;
     margin: -5px 0 1em;
 }
@@ -1130,14 +1141,14 @@ div.slider,
 div.slider-nav {
     overflow: hidden;
     position: relative;
-    /*border: 3px solid #dcdcdc;
+    /*border: 3px solid $lightest_grey;
     border-radius: 5px; */
-    background: #888;
+    background: $light_grey;
 }
 
 div.slider-nav {
     margin: 0;
-    background: #444;
+    background: $dark_grey;
 }
 
 ul.img-gallery {
@@ -1181,7 +1192,7 @@ ul.img-gallery li>* {
 }
 
 div.slider-nav ul.img-gallery li {
-    border-right: 5px solid #444;
+    border-right: 5px solid $dark_grey;
     box-sizing: border-box;
     opacity: 0.5;
     overflow: hidden;
@@ -1220,7 +1231,7 @@ div.slider-con:hover .slider-zoom-area {
     position: absolute;
     top: 50%;
     margin-top: -0.8em;
-    color: rgba(255, 255, 255, 0.8);
+    color: $white_light_transparent;
 }
 
 .slider-back-area,
@@ -1281,12 +1292,12 @@ div.slider-con:hover .slider-zoom-area {
     display: none;
     position: relative;
     color: white;
-    background: #888;
+    background: $light_grey;
     margin: -5px 0 0;
     text-align: left;
     padding: 10px 60px 10px;
     border-radius: 0 0 5px 5px;
-    border-bottom: 15px solid #888;
+    border-bottom: 15px solid $light_grey;
 }
 
 /* BIDLER LIGHTBOX */
@@ -1322,7 +1333,7 @@ div.slider-con:hover .slider-zoom-area {
 .lb-bg {
     position: fixed;
     top: 0;
-    background: #000;
+    background: black;
     opacity: 0.5;
     height: 200%;
     width: 200%;
@@ -1331,8 +1342,8 @@ div.slider-con:hover .slider-zoom-area {
 
 .img-lightbox .close {
     position: absolute;
-    color: rgba(255, 255, 255, 0.8);
-    text-shadow: -1px 0 2px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.4), 1px 0 2px rgba(0, 0, 0, 0.4), 0 -1px 2px rgba(0, 0, 0, 0.4);
+    color: $white_light_transparent;
+    text-shadow: -1px 0 2px $black_half_transparent, 0 1px 2px $black_half_transparent, 1px 0 2px $black_half_transparent, 0 -1px 2px $black_half_transparent;
     text-align: center;
     z-index: 1;
     font-size: 150%;
