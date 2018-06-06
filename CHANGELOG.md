@@ -2,6 +2,8 @@
 
 * __1.0.4__:
     * New:
+        * CSS -> SASS/SCSS: use variables for color styling
+        * Changed a few colors
         * Support for localized tabbed boxes with `lang-code-tab` instead of name
     * Fixes:
         * Undefined `lang-code`s will not overwrite element texts
