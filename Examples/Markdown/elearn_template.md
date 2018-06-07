@@ -340,30 +340,16 @@ interaktive Grafiken zu erstellen. Hier ein Beispiel:
     <div class="pininfo">
         <div>
             <h3><span class="highlight">Aufgabe 1</span> Wie lauten die Bestandteile des Kopfes?</h3>
-            <p class="task">
-            Wie jedes Insekt hat auch eine Biene insgesamt 6 Beine. Die Biene
-            benutzt ihre Beine nicht nur zum Laufen, sondern auch zur Körperpflege
-            und beim Transport der Pollen zum Stock. Jedes Bein ist in fünf Glieder
-            unterteilt. Vom Körper aus betrachtet nennt man sie Hüfte (Coxa),
-            Schenkelring (Trochanter), Schenkel (Femur), Schiene (Tibia) und Fuß
-            (Tarsus). Der Fuß ist widerum in 4 kleinere Glieder unterteilt. Das
-            letzte Fußglied trägt eine Kralle und Haftlappen, mit denen sich
-            Bienen auch auf sehr glatten Oberflächen, wie zum Beispiel Glas
-            festhalten können.</p>
-            <p class="hint">Hinweis<br>Wie jedes Insekt hat auch eine Biene
-            insgesamt 6 Beine. Die Biene benutzt ihre Beine nicht nur zum
-            Laufen, sondern auch zur Körperpflege und beim Transport der Pollen
-            zum Stock.</p>
-            <ul class="links">
-                <li>
-                <a href="https://de.wikipedia.org/wiki/The_Bird_and_the_Bee">https://de.wikipedia.org/wiki/The_Bird_and_the_Bee</a>
-                <br>Dies ist eine Link-Beschreibung, die weitere Informationen zu der zugehörigen URL liefert
-                </li>
-                <li>
-                <a href="https://de.wikipedia.org/wiki/The_Bird_and_the_Bee">https://de.wikipedia.org/wiki/The_Bird_and_the_Bee</a>
-                <br>Dies ist eine Link-Beschreibung, die weitere Informationen zu der zugehörigen URL liefert
-                </li>
-            </ul>
+            <blockquote class="task"><p>Wie jedes Insekt hat auch eine Biene insgesamt 6 Beine. Die Biene benutzt ihre Beine nicht nur zum Laufen, sondern auch zur Körperpflege und beim Transport der Pollen zum Stock. Jedes Bein ist in fünf Glieder unterteilt. Vom Körper aus betrachtet nennt man sie Hüfte (Coxa), Schenkelring (Trochanter), Schenkel (Femur), Schiene (Tibia) und Fuß (Tarsus). Der Fuß ist widerum in 4 kleinere Glieder unterteilt. Das letzte Fußglied trägt eine Kralle und Haftlappen, mit denen sich Bienen auch auf sehr glatten Oberflächen, wie zum Beispiel Glas festhalten können.</p></blockquote>
+            <blockquote class="hint"><p>Hinweis<br>Wie jedes Insekt hat auch eine Biene insgesamt 6 Beine. Die Biene benutzt ihre Beine nicht nur zum Laufen, sondern auch zur Körperpflege und beim Transport der Pollen zum Stock.</p></blockquote>
+            <blockquote class="links">
+                <p>
+                    <ul class="links">
+                        <li><a href="https://de.wikipedia.org/wiki/The_Bird_and_the_Bee">https://de.wikipedia.org/wiki/The_Bird_and_the_Bee</a><br>Dies ist eine Link-Beschreibung, die weitere Informationen zu der zugehörigen URL liefert</li>
+                        <li><a href="https://de.wikipedia.org/wiki/The_Bird_and_the_Bee">https://de.wikipedia.org/wiki/The_Bird_and_the_Bee</a><br>Dies ist eine Link-Beschreibung, die weitere Informationen zu der zugehörigen URL liefert</li>
+                    </ul>
+                </p>
+            </blockquote>
         </div>
         <div>
             <h3><span class="highlight">Aufgabe 2</span> Wie lauten die Bestandteile des Rumpfes?</h3>
