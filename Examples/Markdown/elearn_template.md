@@ -4,46 +4,46 @@ anything else but the files linked in here to convert this .md to HTML or PDF.
 -->
 
 <!--meta
-Title: elearn.js Template
-Author: Name Autor
-Description: Hier Beschreibung einfügen
-Keywords: Key, Words
-Custom: "<script>
-            window.onload = function() {
-                eLearnJS.setNavigationTitle('Template Überschrift');
-            }
-        </script>
-        <script type=\"text/x-mathjax-config\">
-            MathJax.Hub.Config({
-                extensions: [\"tex2jax.js\"],
-                jax: [\"input/TeX\", \"output/HTML-CSS\"],
-                tex2jax: {
-                    inlineMath: [ ['$','$'], [\"\\(\",\"\\)\"] ],
-                    displayMath: [ ['$$','$$'], [\"\\[\",\"\\]\"] ],
-                    processEscapes: true
-                },
-                \"HTML-CSS\": { availableFonts: [\"TeX\"] }
-            });
-        </script>
-        <script type=\"text/javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js\"></script>"
+    Title: elearn.js Template
+    Author: Name Autor
+    Description: Hier Beschreibung einfügen
+    Keywords: Key, Words
+    Custom: "<script>
+                window.onload = function() {
+                    eLearnJS.setNavigationTitle('Template Überschrift');
+                }
+            </script>
+            <script type=\"text/x-mathjax-config\">
+                MathJax.Hub.Config({
+                    extensions: [\"tex2jax.js\"],
+                    jax: [\"input/TeX\", \"output/HTML-CSS\"],
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], [\"\\(\",\"\\)\"] ],
+                        displayMath: [ ['$$','$$'], [\"\\[\",\"\\]\"] ],
+                        processEscapes: true
+                    },
+                    \"HTML-CSS\": { availableFonts: [\"TeX\"] }
+                });
+            </script>
+            <script type=\"text/javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js\"></script>"
 -->
 
 <!--imprint
-#### elearn.js Template
-Universität Hamburg
+    #### elearn.js Template
+    Universität Hamburg
 
-<small>
-    Das <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">elearn.js Template</span>
-    von <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">Universität Hamburg</span>
-    ist lizenziert unter einer <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
-    Creative Commons Namensnennung</a> - Weitergabe unter gleichen Bedingungen 4.0 International Lizenz
-</small>
+    <small>
+        Das <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">elearn.js Template</span>
+        von <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">Universität Hamburg</span>
+        ist lizenziert unter einer <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+        Creative Commons Namensnennung</a> - Weitergabe unter gleichen Bedingungen 4.0 International Lizenz
+    </small>
 -->
 
 # Template elearn.js <!--hide-in-overview-->
 
-**Name des Autors**
-Institution des Autors
+**Name des Autors**  
+Institution des Autors  
 cc by-sa | 2015
 
 ![Titelbild](images/illu-concept.png)
