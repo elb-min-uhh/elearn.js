@@ -280,7 +280,7 @@ eLearnJS.loadLanguage = function(langCode, callback) {
     script.addEventListener('load', function(event) {
         if(eLearnJS.localization[langCode]) {
             if(eLearnJS.unaddedTranslations[langCode]) {
-                eLearnJS.localization[langCode] = Object.assign(eLearnJS.localization[langCode], eLearnJS.unaddedTranslations[langCode]);
+                eLearnJS.localization[langCode] = eLearnJS.objectAssign(eLearnJS.localization[langCode], eLearnJS.unaddedTranslations[langCode]);
                 delete eLearnJS.unaddedTranslations[langCode];
             }
             callback();
@@ -320,11 +320,11 @@ eLearnJS.loadLanguages = function(langCodes, callback) {
  */
 eLearnJS.addTranslation = function(langCode, localeObject) {
     if(eLearnJS.localization[langCode]) {
-        eLearnJS.localization[langCode] = Object.assign(eLearnJS.localization[langCode], localeObject);
+        eLearnJS.localization[langCode] = eLearnJS.objectAssign(eLearnJS.localization[langCode], localeObject);
     }
     else {
         if(!eLearnJS.unaddedTranslations[langCode]) eLearnJS.unaddedTranslations[langCode] = {};
-        eLearnJS.unaddedTranslations[langCode] = Object.assign(eLearnJS.unaddedTranslations[langCode], localeObject);
+        eLearnJS.unaddedTranslations[langCode] = eLearnJS.objectAssign(eLearnJS.unaddedTranslations[langCode], localeObject);
     }
 };
 
@@ -3258,6 +3258,26 @@ eLearnJS.initiateScrollBarListener = function() {
     }
     eLearnJS.scrollbarBefore = hasScroll;
     setTimeout(eLearnJS.initiateScrollBarListener, 500);
+};
+
+eLearnJS.objectAssign = function(obj1, obj2) {
+    try {
+        ret = Object.assign(obj1, obj2);
+    }
+    catch(e) {
+        var objs = [obj1, obj2];
+        ret = {};
+
+        for(var objIdx = 0; objIdx < objs.length; objIdx++) {
+            var obj = objs[objIdx];
+            var keys = Object.keys(obj);
+            for(var i = 0; i < keys.length; i++) {
+                ret[keys[i]] = obj[keys[i]];
+            }
+        }
+    }
+
+    return ret;
 };
 
 
