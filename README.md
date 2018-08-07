@@ -21,6 +21,8 @@ loaded will not change already localized elements. Use method _2_ for this.
 2. The `eLearnJS.setLanguage()` function can be used to set the language from
 inside a script. You can use this for _atom-elearnjs_ projects in the
 _meta custom_ block. This may be overwritten by the first method if present.
+A callback is fired after the asynchronous language change is done. It is
+asynchronous because it might have to load the language files first.
 
 Available languages are:
 * _de_: German (default)

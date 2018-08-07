@@ -95,6 +95,37 @@ Beispiel:
 <button onclick="eLearnJS.setLanguage('en')">Englisch/English</button>
 
 
+#### Eigene Übersetzungen einfügen
+
+Um eigene Übersetzungen hinzuzufügen kann man die Funktion `addTranslation` oder
+`addTranslations` verwenden. Hier ein Beispiel:
+
+    eLearnJS.addTranslation("de", { "loading": "Lädt..." });
+    eLearnJS.addTranslation("en", { "loading": "Loading..." });
+
+oder
+
+    eLearnJS.addTranslations({
+        "de": { "loading": "Lädt..." },
+        "en": { "loading": "Loading..." },
+    });
+
+Beide Blöcke tun dasselbe.
+
+<script>
+eLearnJS.addTranslation("de", { "loading": "Lädt..." });
+eLearnJS.addTranslation("en", { "loading": "Loading..." });
+</script>
+
+Beispiel mit
+<span lang-code="loading"></span>
+Anzeige (nur während des Ladevorgangs):
+
+<button onclick="$('#lang-loading').show(); eLearnJS.setLanguage('de', function() { $('#lang-loading').hide(); })">Deutsch/German</button>
+<button onclick="$('#lang-loading').show(); eLearnJS.setLanguage('en', function() { $('#lang-loading').hide(); })">Englisch/English</button>
+<div id="lang-loading" style="display: none;" lang-code="loading"></div>
+
+
 ### Bilder
 
 Bilder können als einzelne Abbildungen oder als Galerien eingebunden werden.Für die Galerien wird das elearn.js benötigt. es bietet verschiedene Varianten. Das erste Beispiel zeigt eine Slideshow mit Vorschau und Loop-Funktion.

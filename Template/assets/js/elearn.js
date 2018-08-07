@@ -15,51 +15,13 @@ eLearnJS.actions = {
     CONTENT_RESIZE : "ContentResize",
 };
 
-eLearnJS.localization = {
-    "de" : {
-        "backbutton" : "Zurück",
-        "backbutton.title" : "Zurück",
-        "togglesections" : "Ansicht",
-        "togglesections.title" : "Zeige/verstecke Bereiche",
-        "title" : "Übersicht",
-        "title.title" : "Inhaltsverzeichnis",
-        "menu.title" : "Menü",
-        "help" : "Hilfe",
-        "help.title" : "Zeige Hinweise",
-        "menu.print" : "Drucken",
-        "menu.share" : "Teilen",
-        "menu.imprint" : "Impressum",
-        "menu.source" : "Quelldateien herunterladen",
-        "menu.pdf" : "PDF herunterladen",
-        "menu.epub" : "EPUB herunterladen",
-        "imprint.uses" : 'Benutzt das eLearn.js Script v' + eLearnJS.VERSION_NR + ' | ' + eLearnJS.VERSION_DATE + ' | '
-                            + '<a href="https://www.min.uni-hamburg.de/de/imprint.html">Impressum</a>',
-        "imprint.footer" : "Die Verantwortung für den Inhalt dieser Veröffentlichung "
-            + "liegt bei den Autor/-innen.",
-        "tooltipnext" : "Weiter",
-    },
-    "en" : {
-        "backbutton" : "Back",
-        "backbutton.title" : "Back",
-        "togglesections" : "View",
-        "togglesections.title" : "Show/hide sections",
-        "title" : "Overview",
-        "title.title" : "Content Overview",
-        "menu.title" : "Menu",
-        "help" : "Help",
-        "help.title" : "Display Help",
-        "menu.print" : "Print",
-        "menu.share" : "Share",
-        "menu.imprint" : "Imprint",
-        "menu.source" : "Download Source",
-        "menu.pdf" : "Download PDF",
-        "menu.epub" : "Download EPUB",
-        "imprint.uses" : 'Uses the eLearn.js script v' + eLearnJS.VERSION_NR + ' | ' + eLearnJS.VERSION_DATE + ' | '
-                            + '<a href="https://www.min.uni-hamburg.de/en/imprint.html">Imprint</a>',
-        "imprint.footer" : "The author of this publication is responsible for the content.",
-        "tooltipnext" : "Next",
-    },
-};
+// localization is in seperate files in ../lang/elearnjs-*.js
+eLearnJS.localization = {};
+eLearnJS.asyncLangs = {};
+eLearnJS.setLangID = 0;
+eLearnJS.setLangQueue = [];
+eLearnJS.unsupportedLanguages = [];
+eLearnJS.unaddedTranslations = {};
 
 eLearnJS.selectedLocale = eLearnJS.selectedLocale || "de";
 
@@ -141,7 +103,9 @@ $(document).ready(function() {
     });
     $('#qr_overlay').click(function() {$('#qr_overlay').hide();});
 
-    eLearnJS.setLanguage(eLearnJS.selectedLocale);
+    // if no other language change is already in queue, set the language to the
+    // selected one. This will initialize all texts, which would be empty otherwise.
+    if(!eLearnJS.setLangQueue.length) eLearnJS.setLanguage(eLearnJS.selectedLocale);
     eLearnJS.updateNavBarWidth();
 });
 
@@ -275,22 +239,192 @@ eLearnJS.initiateSideMenu = function() {
 };
 
 /**
-* Sets the language for all elements.
-*/
-eLearnJS.setLanguage = function(langCode) {
+ * Loads a language asynchronous.
+ * @param {*} langCode The language to load.
+ * @param {function(error)} callback Callback called after loading.
+ */
+eLearnJS.loadLanguage = function(langCode, callback) {
+    // does not exist (from previous load attempt)
+    if(eLearnJS.unsupportedLanguages.indexOf(langCode) >= 0) {
+        callback("Unsupported Language '" + langCode + "'.");
+        return;
+    }
+
+    var script;
+    // already created
+    if($('script#loc-' + langCode).length) {
+        // already loaded
+        if(eLearnJS.localization[langCode]) {
+            callback();
+            return;
+        }
+        // wait for load done
+        var script = $('script#loc-' + langCode).get(0);
+    }
+    // not created
+    else {
+        var script = document.createElement('script');
+        var jsFileLocation = $('script[src*="elearn.js"]').attr('src');
+        var langLocation = jsFileLocation.replace("elearn.js", "../lang/");
+        script.id = "loc-" + langCode;
+        script.src = langLocation + "elearnjs-" + langCode + ".js";
+    }
+
+    var onError = function() {
+        eLearnJS.unsupportedLanguages.push(langCode);
+        callback("Unsupported Language '" + langCode + "'.");
+    };
+    // on error
+    script.addEventListener('error', onError);
+    // on success
+    script.addEventListener('load', function(event) {
+        if(eLearnJS.localization[langCode]) {
+            if(eLearnJS.unaddedTranslations[langCode]) {
+                eLearnJS.localization[langCode] = Object.assign(eLearnJS.localization[langCode], eLearnJS.unaddedTranslations[langCode]);
+                delete eLearnJS.unaddedTranslations[langCode];
+            }
+            callback();
+        }
+        else {
+            onError();
+        }
+    });
+    document.head.appendChild(script);
+};
+
+/**
+ * Loads an array of languages asynchronous.
+ * @param {String[]} langCode The languages to load.
+ * @param {function(error)} callback Callback called after loading.
+ */
+eLearnJS.loadLanguages = function(langCodes, callback) {
+    if(langCodes && langCodes.length) {
+        eLearnJS.loadLanguage(langCodes.shift(), function(err) {
+            if(err) {
+                callback(err);
+            }
+            else {
+                eLearnJS.loadLanguages(langCodes, callback);
+            }
+        });
+    }
+    else {
+        if(callback && typeof callback === "function") callback();
+    }
+};
+
+/**
+ * Adds custom localization keys to the storage.
+ * @param {String} langCode The language to add keys to.
+ * @param {Object} localeObject The localization object of type { key1: translation1, key2: ... }
+ */
+eLearnJS.addTranslation = function(langCode, localeObject) {
+    if(eLearnJS.localization[langCode]) {
+        eLearnJS.localization[langCode] = Object.assign(eLearnJS.localization[langCode], localeObject);
+    }
+    else {
+        if(!eLearnJS.unaddedTranslations[langCode]) eLearnJS.unaddedTranslations[langCode] = {};
+        eLearnJS.unaddedTranslations[langCode] = Object.assign(eLearnJS.unaddedTranslations[langCode], localeObject);
+    }
+};
+
+/**
+ * Adds custom localization keys to the storage.
+ * @param {*} localizationObject The localization object of type { langCode1: localeObject1, langCode2: ... }
+ */
+eLearnJS.addTranslations = function(localizationObject) {
+    var langCodes = Object.keys(localizationObject);
+    for(var i=0; i<langCodes.length; i++) {
+        eLearnJS.addTranslation(langCodes[i], localizationObject[langCodes[i]]);
+    }
+};
+
+/**
+ * Sets the language for all elements.
+ * @param {String} langCode The language to set all elements to (if not overwritten)
+ * by 'lang' attributes.
+ * @param {function(err?)} callback Called when done.
+ */
+eLearnJS.setLanguage = function(langCode, callback) {
     langCode = langCode.toLowerCase();
+
+    // language is loaded and queue is empty, localize elements
+    if(eLearnJS.localization[langCode] !== undefined
+        && (!eLearnJS.setLangQueue || eLearnJS.setLangQueue.length == 0)) {
+        eLearnJS.localizeAll(langCode);
+        if(callback && typeof callback === "function") callback();
+    }
+    // language is not loaded
+    else {
+        eLearnJS.setLanguageAsync(langCode, callback);
+    }
+};
+eLearnJS.selectLanguage = eLearnJS.setLanguage;
+
+/**
+ * Sets the language for all elements. If already loaded only.
+ * @param {} langCode The language to set all elements to (if not overwritten)
+ * by 'lang' attributes.
+ */
+eLearnJS.localizeAll = function(langCode) {
+    var localized = true;
     if(eLearnJS.localization[langCode] !== undefined) {
         eLearnJS.selectedLocale = langCode;
-        $('[lang-code],[lang-code-title],[lang-code-tab]').each(function(i,e) {
+        $('[lang-code],[lang-code-title],[lang-code-tab]').each(function(i, e) {
             eLearnJS.localizeElement($(e));
         });
         eLearnJS.windowOnResize();
     }
     else {
-        throw "Unsupported language selected. Supported language codes are: "  + Object.keys(eLearnJS.localization).toString();
+        localized = false;
     }
-}
-eLearnJS.selectLanguage = eLearnJS.setLanguage;
+    return localized;
+};
+
+/**
+ * Tries to load the language and will set it after.
+ * Multiple calls before resolving will be done in a queue.
+ * @param {*} langCode The language to set all elements to (if not overwritten)
+ * by 'lang' attributes.
+ * @param {function(err?)} callback Called when done.
+ */
+eLearnJS.setLanguageAsync = function(langCode, callback) {
+    var id = eLearnJS.setLangID;
+    eLearnJS.setLangQueue.push(id);
+    eLearnJS.asyncLangs[id] = {
+        "langCode": langCode,
+        "loaded": false,
+        "callback": callback
+    };
+    eLearnJS.setLangID++;
+
+    eLearnJS.loadLanguage(langCode, function(err) {
+        eLearnJS.asyncLangs[id].loaded = true;
+        eLearnJS.setLanguageAsyncPopQueue();
+    });
+};
+
+/**
+ * Removes one element from the asyncLangs queue, assuming it is done loading.
+ * Will set the language accordingly if it is loaded successfully.
+ * @param {function(err?)} callback Called when done.
+ */
+eLearnJS.setLanguageAsyncPopQueue = function() {
+    // dequeue all loaded ones
+    while(eLearnJS.setLangQueue.length
+        && eLearnJS.asyncLangs[eLearnJS.setLangQueue[0]].loaded) {
+        var id = eLearnJS.setLangQueue.shift();
+        var obj = eLearnJS.asyncLangs[id];
+        if(eLearnJS.localization[obj.langCode]) {
+            eLearnJS.localizeAll(obj.langCode);
+            if(obj.callback && typeof obj.callback === "function") obj.callback();
+        } else {
+            if(obj.callback && typeof obj.callback === "function")
+                obj.callback("Unsupported language '" + obj.langCode + "'");
+        }
+        delete eLearnJS.asyncLangs[id];
+    }
+};
 
 /**
 * Localizes one specific element to match the selected language.
@@ -303,7 +437,30 @@ eLearnJS.localizeElement = function(el, force) {
     var loc = eLearnJS.selectedLocale;
     if(el.closest('[lang]').length) {
         var lang = el.closest('[lang]').attr('lang').toLowerCase();
-        if(eLearnJS.localization[lang]) loc = lang;
+        // not logged as unsupported (yet)
+        if(eLearnJS.unsupportedLanguages.indexOf(lang) < 0) {
+            // already loaded
+            if(eLearnJS.localization[lang]) loc = lang;
+            // try to load and restart after
+            else {
+                eLearnJS.loadLanguage(lang, function(err) {
+                    if(!err && eLearnJS.localization[lang]) {
+                        eLearnJS.localizeElement(el, force);
+                    }
+                });
+                return;
+            }
+        }
+    }
+
+    // load if not loaded yet
+    if(!eLearnJS.localization[loc]) {
+        eLearnJS.loadLanguage(loc, function(err) {
+            if(!err && eLearnJS.localization[loc]) {
+                eLearnJS.localizeElement(el, force);
+            }
+        });
+        return;
     }
 
     if(el.attr("lang-code")) {
@@ -329,7 +486,7 @@ eLearnJS.localizeElement = function(el, force) {
             tabs.eq(index).text(text);
         }
     }
-}
+};
 
 /**
 * Passt die Navigationsleiste an die Breite des window an
@@ -414,7 +571,7 @@ eLearnJS.backButtonPressed = function() {
         eLearnJS.overviewShowSection(eLearnJS.backPage);
     }
     else if(eLearnJS.backPageType === "link") {
-        window.open(eLearnJS.backPage, "_self")
+        window.open(eLearnJS.backPage, "_self");
     }
 };
 
@@ -538,6 +695,7 @@ eLearnJS.showSection = function(i) {
     }
 
     if(!eLearnJS.allShown) {
+        $('#nav-title').attr('localized', 'false');
         eLearnJS.setDirectionButtonsEnabledIdx(eLearnJS.visSection);
     }
 
@@ -667,6 +825,7 @@ eLearnJS.toggleAllSections = function() {
     else {
         $('section').show();
         $(document).scrollTop($($('section')[eLearnJS.visSection]).position().top - $('#navigation').height() - 10);
+        $('#nav-title').attr('localized', 'true');
         eLearnJS.allShown = true;
         eLearnJS.resizeAllSliders();
 
@@ -835,7 +994,7 @@ eLearnJS.updateNavigationTitle = function() {
     else {
         title.text($($('section')[eLearnJS.visSection]).attr('name'));
     }
-}
+};
 
 
 // -------------------------------------------------------------------------------------
@@ -1835,7 +1994,7 @@ eLearnJS.tooltips =
             "de" : 'Klicken, um auf die nächste Seite zu wechseln.',
             "en" : 'Click to get to the next page.',
         },
-        condition: function() {return !eLearnJS.allShown && $(window).width() > 440 && eLearnJS.visSection < $('section').length - 1}
+        condition: function() {return !eLearnJS.allShown && $(window).width() > 440 && eLearnJS.visSection < $('section').length - 1;}
     },
     {
         html : '<div id="tooltipArrowLeft" class="tooltip fixed left"></div>',
@@ -1844,7 +2003,7 @@ eLearnJS.tooltips =
             "de" : 'Klicken, um auf die vorherige Seite zu wechseln.',
             "en" : 'Click to get to the previous page.',
         },
-        condition: function() {return !eLearnJS.allShown && $(window).width() > 440 && eLearnJS.visSection > 0}
+        condition: function() {return !eLearnJS.allShown && $(window).width() > 440 && eLearnJS.visSection > 0;}
     },
     {
         html : '<div id="tooltipTouchRight" class="tooltip fixed right"></div>',
@@ -1853,7 +2012,7 @@ eLearnJS.tooltips =
             "de" : 'Wischen, um auf die nächste Seite zu wechseln.',
             "en" : 'Swipe to get to the next page.',
         },
-        condition: function() {return !eLearnJS.allShown && eLearnJS.isTouchSupported()}
+        condition: function() {return !eLearnJS.allShown && eLearnJS.isTouchSupported();}
     },
     {
         html : '<div id="tooltipTouchLeft" class="tooltip fixed left"></div>',
@@ -1862,7 +2021,7 @@ eLearnJS.tooltips =
             "de" : 'Wischen, um auf die vorherige Seite zu wechseln.',
             "en" : 'Swipe to get to the previous page.',
         },
-        condition: function() {return !eLearnJS.allShown && eLearnJS.isTouchSupported()}
+        condition: function() {return !eLearnJS.allShown && eLearnJS.isTouchSupported();}
     }
 ];
 
@@ -1871,7 +2030,8 @@ eLearnJS.tooltips =
 * Tooltips bzw. zum Schließen nötig sind.
 */
 eLearnJS.initiateTooltips = function() {
-    for(var i=0, tt=eLearnJS.tooltips[0]; i<eLearnJS.tooltips.length; i++, tt=eLearnJS.tooltips[i]) {
+    // parse all tooltips
+    for(var i = 0, tt = eLearnJS.tooltips[0]; i < eLearnJS.tooltips.length; i++ , tt = eLearnJS.tooltips[i]) {
         var tooltip = $(tt.html);
         $('.page').before(tooltip);
 
@@ -1883,8 +2043,11 @@ eLearnJS.initiateTooltips = function() {
         contentSpan.attr("localized", "html");
         eLearnJS.localizeElement(contentSpan);
     }
+
     $('.tooltip').prepend('<div id="cancel">x</div>');
     $('.tooltip').append('<div><button id="next" lang-code="tooltipnext"></button></div>');
+    eLearnJS.localizeElement($('.tooltip #next'));
+
     $('.tooltip').find('#cancel').click(function() {
         eLearnJS.activeTooltip = 0;
         eLearnJS.closeTooltips();
@@ -1901,9 +2064,11 @@ eLearnJS.initiateTooltipLocalization = function(tt) {
     var languages = Object.keys(tt.localization);
     for(var i=0; i<languages.length; i++) {
         var loc = languages[i];
-        eLearnJS.localization[loc][tt.lang_code] = tt.localization[loc];
+        var localeObject = {};
+        localeObject[tt.lang_code] = tt.localization[loc];
+        eLearnJS.addTranslation(loc, localeObject);
     }
-}
+};
 
 /**
 * Wird von dem "Hilfe" Button aufgerufen. Öffnet den ersten Tooltip.
@@ -2234,8 +2399,8 @@ eLearnJS.hoverInfoTrigger = function(div) {
 */
 eLearnJS.stopVideos = function() {
     // stop all HTML5 videos
-    $('video').each(function() {this.pause()});
-    $('audio').each(function() {this.pause()});
+    $('video').each(function() {this.pause();});
+    $('audio').each(function() {this.pause();});
 
     /*
     // set hsrc from src and set src to "" so the video stops
