@@ -1,19 +1,22 @@
 ### Changelog
 
+* __1.0.5__:
+  * New:
+    * Localization languages are loaded asynchronously
 * __1.0.4__:
-    * New:
-        * CSS -> SASS/SCSS: use variables for color styling
-        * Changed a few colors
-        * Support for localized tabbed boxes with `lang-code-tab` instead of name
-    * Fixes:
-        * Undefined `lang-code`s will not overwrite element texts
-        * Resize correctly after language change
-        * Gallery image zoom will be displayed and resized correctly
+  * New:
+    * CSS -> SASS/SCSS: use variables for color styling
+    * Changed a few colors
+    * Support for localized tabbed boxes with `lang-code-tab` instead of name
+  * Fixes:
+    * Undefined `lang-code`s will not overwrite element texts
+    * Resize correctly after language change
+    * Gallery image zoom will be displayed and resized correctly
 * __1.0.3__:
-    * New:
-        * Support for localization including German and English language
-        with `<.. lang="en">` or `eLearnJS.setLanguage("en")`
-            * German is selected per default
+  * New:
+    * Support for localization including German and English language
+    with `<.. lang="en">` or `eLearnJS.setLanguage("en")`
+      * German is selected per default
 
 _Hint:_ Extensions for _elearn.js_ were moved to their own repositories.
 
