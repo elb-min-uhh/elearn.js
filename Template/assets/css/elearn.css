@@ -56,8 +56,6 @@ video {
 
 .notransition {
   -webkit-transition: none !important;
-  -moz-transition: none !important;
-  -o-transition: none !important;
   transition: none !important;
 }
 
@@ -66,7 +64,6 @@ video {
   /* iOS Safari */
   -webkit-user-select: none;
   /* Safari */
-  -khtml-user-select: none;
   /* Konqueror HTML */
   -moz-user-select: none;
   /* Firefox */
@@ -176,12 +173,10 @@ video {
   width: 10px;
   position: absolute;
   right: 0;
-  background: -webkit-linear-gradient(right, #666, rgba(102, 102, 102, 0));
   /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(right, #666, rgba(102, 102, 102, 0));
   /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(right, #666, rgba(102, 102, 102, 0));
   /* For Firefox 3.6 to 15 */
+  background: -webkit-gradient(linear, right top, left top, from(#666), to(rgba(102, 102, 102, 0)));
   background: linear-gradient(to left, #666, rgba(102, 102, 102, 0));
   /* Standard syntax */
 }
@@ -314,7 +309,8 @@ pre {
   padding: 1.8em;
   overflow: auto;
   max-width: 100%;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 table {
@@ -371,13 +367,15 @@ a:active {
   margin: 0;
   list-style: none;
   display: -webkit-box;
-  display: -moz-box;
   display: -ms-flexbox;
-  display: -webkit-flex;
   display: flex;
-  flex-flow: row wrap;
-  -webkit-flex-flow: row wrap;
-  justify-content: flex-start;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row wrap;
+          flex-flow: row wrap;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
 }
 
 .kachel ul li {
@@ -386,16 +384,20 @@ a:active {
   min-width: 150px;
   max-width: 100%;
   max-width: calc(100% - 10px);
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   margin: 5px 5px;
   padding-bottom: 3px;
   text-align: left;
   font-weight: bold;
   cursor: pointer;
   word-wrap: break-word;
-  flex-shrink: 0;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
   -webkit-flex-shrink: 0;
-  flex-grow: 1;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
   -webkit-flex-grow: 1;
 }
 
@@ -585,7 +587,6 @@ a:active {
   /* iOS Safari */
   -webkit-user-select: none;
   /* Safari */
-  -khtml-user-select: none;
   /* Konqueror HTML */
   -moz-user-select: none;
   /* Firefox */
@@ -786,7 +787,8 @@ blockquote.links:before {
 }
 
 .touchScroll div {
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+          box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
   position: relative;
   top: calc(50% - 25px);
   background-color: white;
@@ -840,7 +842,8 @@ blockquote.links:before {
   max-width: 40%;
   z-index: 10;
   color: #888;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
 
 .side-menu-element {
@@ -1105,7 +1108,6 @@ QR Overlay
   margin-top: 60px;
   border: 1px solid #b4b4b4;
   -webkit-box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.4);
-  -moz-box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.4);
   box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.4);
 }
 
@@ -1180,8 +1182,10 @@ ul.img-gallery {
   margin: 0;
   padding: 0;
   display: block;
-  transition-duration: 0.5s;
-  transition-timing-function: ease-out;
+  -webkit-transition-duration: 0.5s;
+          transition-duration: 0.5s;
+  -webkit-transition-timing-function: ease-out;
+          transition-timing-function: ease-out;
 }
 
 ul.img-gallery:after {
@@ -1217,7 +1221,8 @@ ul.img-gallery li > * {
 
 div.slider-nav ul.img-gallery li {
   border-right: 5px solid #444;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   opacity: 0.5;
   overflow: hidden;
   cursor: pointer;
@@ -1250,7 +1255,8 @@ div.slider-con:hover .slider-zoom-area {
 .slider-back,
 .slider-next,
 .slider-zoom {
-  transition-duration: 0.25s;
+  -webkit-transition-duration: 0.25s;
+          transition-duration: 0.25s;
   position: absolute;
   top: 50%;
   margin-top: -0.8em;
@@ -1265,7 +1271,8 @@ div.slider-con:hover .slider-zoom-area {
   top: 0;
   width: 60px;
   height: 100%;
-  transition-duration: 0.25s;
+  -webkit-transition-duration: 0.25s;
+          transition-duration: 0.25s;
 }
 
 .slider-back-area:hover .slider-back,
@@ -1333,7 +1340,8 @@ div.slider-con:hover .slider-zoom-area {
   width: 100%;
   height: 100%;
   padding: 40px;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   z-index: 10;
   text-align: center;
   pointer-events: none;
@@ -1346,7 +1354,8 @@ div.slider-con:hover .slider-zoom-area {
 
 .img-lightbox img {
   position: relative;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   margin: 0;
   width: auto;
   max-width: 100%;
@@ -1683,10 +1692,12 @@ div.slider-con:hover .slider-zoom-area {
     font-size: 10pt;
     max-height: none !important;
     list-style: none !important;
-    transition-duration: 0s !important;
+    -webkit-transition-duration: 0s !important;
+            transition-duration: 0s !important;
     margin-left: 0 !important;
     width: auto !important;
-    transform: none !important;
+    -webkit-transform: none !important;
+            transform: none !important;
   }
   .slider-con ul.img-gallery li {
     max-height: none !important;
