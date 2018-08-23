@@ -1608,11 +1608,11 @@ eLearnJS.showSlideDescription = function(ul, slide) {
     var p = ul.children('li').eq(slide).children('p');
     var descDiv = ul.parent().parent().nextAll('.slider-description').first();
     if(p.length > 0) {
-        descDiv.text(p.text());
+        descDiv.html(p.html());
         descDiv.show();
     }
     else {
-        descDiv.text("");
+        descDiv.html("");
         descDiv.hide();
     }
 };

@@ -2,6 +2,8 @@
 
 * __1.0.5__:
   * New:
+    * Image Slider descriptions can include HTML elements and are no longer only
+    text based
     * Localization languages are loaded asynchronously
 * __1.0.4__:
   * New:
