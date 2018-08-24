@@ -366,7 +366,7 @@ interaktive Grafiken zu erstellen. Hier ein Beispiel:
 
 <div class="clickimage">
     <div class="imagebox invert">
-        <img src="images/schiff.jpg" alt="Schiff" onload="clickimagePins(this,[[10,10,'right'],[50,60,'left'],[42,25],[80,80,'top']])">
+        <img src="images/schiff.jpg" alt="Schiff" data-pins="10,10,'right'; 50,60,'left'; 42,25; 80,80,'top'">
     </div>
     <div class="pininfo">
         <div>
