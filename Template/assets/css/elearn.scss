@@ -391,13 +391,15 @@ a:active {
     padding: 0;
     margin: 0;
     list-style: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
     display: -webkit-flex;
-    display: flex;
-    flex-flow: row wrap;
-    -webkit-flex-flow: row wrap;
+    -webkit-flex-direction: row;
+    -webkit-flex-wrap: wrap;
     justify-content: flex-start;
 }
 
