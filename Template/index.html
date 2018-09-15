@@ -230,19 +230,29 @@
 
                 </section><section name="Mathematische Formeln">
                     <h3>Mathematische Formeln</h3>
-                    <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.</p>
+                    <p>Mathematische Formeln finden in vielen Texten Verwendung, können aber nicht immer vernünftig dargestellt werden.</p>
                     <h4>Formeldarstellung via MathJax</h4>
-                    <p>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.</p>
-                    <p>\(M = \begin{bmatrix}
-                         \frac{5}{6} &amp; \frac{1}{6} &amp; 0           \\[0.3em]
-                         \frac{5}{6} &amp; 0           &amp; \frac{1}{6} \\[0.3em]
-                         0           &amp; \frac{5}{6} &amp; \frac{1}{6}
-                    \end{bmatrix}
-                    \)</p>
-                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.   </p>
-                    <p>\(P\left(A=2\middle|\frac{A^2}{B}&gt;4\right)\)</p>
-                    <p>At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur</p>
-
+                    <p>MathJax kann genutzt werden, um mathematische Formeln darzustellen. Hierzu wird die LaTeX Syntax verwendet. Es existieren Blockformeln wie diese</p>
+                    <p>$$
+                        M_i = \begin{bmatrix}
+                             \frac{5}{6} &amp; \frac{1}{6} &amp; 0           \\[0.3em]
+                             \frac{5}{6} &amp; 0           &amp; \frac{1}{6} \\[0.3em]
+                             0           &amp; \frac{5}{6} &amp; \frac{1}{6}
+                        \end{bmatrix}_i
+                    $$</p>
+                    <p>
+                        und auch Inline-Formeln wie $P\left(A=2\middle|\frac{A^2}{B}&gt;4\right)$,
+                        welche in einem Fließtext angezeigt werden können.
+                        Um im Text dennoch ein \$ verwenden zu können, muss dieses escaped werden.
+                        Hierzu schreibt man <code>\\$</code> anstatt des einfachen <code>$</code> Symbols, für jedes einzelne
+                        anzuzeigende Zeichen, um durch das <code>\\</code> in der Ausgabe ein <code>\</code> zu erzeugen,
+                        welches MathJax wiederum als <em>escape</em> für das darauffolgende <code>$</code> sieht.
+                        Weitere Formeln wie $x_{i}$ = $y_{i}$, mit enhaltener Markdown Syntax,
+                        können auch im Template verwendet werden, wenn die Escape Syntax korrekt
+                        verwendet wird. Hierbei müssen keine doppelten Backslashs <code>\</code> verwendet werden,
+                        da das Zeichen für den ersten Schritt der Bearbeitung des Codes gedacht ist
+                        und selbst nicht im HTML Code auftauchen soll.
+                    </p>
                 </section><section name="Textblöcke">
 
                     <h3>Textblöcke</h3>

@@ -214,11 +214,11 @@ MathJax kann genutzt werden, um mathematische Formeln darzustellen.
 Hierzu wird die LaTeX Syntax verwendet. Es existieren Blockformeln wie diese
 
 $$
-M = \\begin{bmatrix}
+M\_i = \\begin{bmatrix}
        \\frac{5}{6} & \\frac{1}{6} & 0           \\\\[0.3em]
        \\frac{5}{6} & 0           & \\frac{1}{6} \\\\[0.3em]
        0           & \\frac{5}{6} & \\frac{1}{6}
-     \\end{bmatrix}
+     \\end{bmatrix}\_i
 $$
 
 und auch Inline-Formeln wie $P\\left(A=2\\middle|\\frac{A^2}{B}>4\\right)$,
@@ -227,6 +227,11 @@ Um im Text dennoch ein \\$ verwenden zu können, muss dieses escaped werden.
 Hierzu schreibt man `\\$` anstatt des einfachen `$` Symbols, für jedes einzelne
 anzuzeigende Zeichen, um durch das `\\` in der Ausgabe ein `\` zu erzeugen,
 welches MathJax wiederum als _escape_ für das darauffolgende `$` sieht.
+Weitere Formeln wie $x\_{i}$ = $y\_{i}$, mit enhaltener Markdown Syntax,
+können auch im Template verwendet werden, wenn die Escape Syntax korrekt
+verwendet wird. Hierbei müssen keine doppelten Backslashs `\` verwendet werden,
+da das Zeichen für den ersten Schritt der Bearbeitung des Codes gedacht ist
+und selbst nicht im HTML Code auftauchen soll.
 
 ### Textblöcke
 
