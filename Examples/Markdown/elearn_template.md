@@ -60,14 +60,13 @@ cc by-sa | 2015
     -->
 </div>
 
-
 ## Überschrift 2. Ordnung <!--desc Beispielbeschreibung für einen kleinen _Textblock_. <br /> Sollte nicht zu lang sein.-->
 
 > Dies ist nur eine Template-Datei. Eine Erklärung und Dokumentation finden Sie im [Whitepaper „Digitale Skripte“](www.uni-hamburg.de).
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
-### Überschrift dritter Ordung <!--no-section-->
+### Überschrift dritter Ordnung <!--no-section-->
 
 Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 
@@ -128,7 +127,7 @@ Anzeige (nur während des Ladevorgangs):
 
 ### Bilder
 
-Bilder können als einzelne Abbildungen oder als Galerien eingebunden werden.Für die Galerien wird das elearn.js benötigt. es bietet verschiedene Varianten. Das erste Beispiel zeigt eine Slideshow mit Vorschau und Loop-Funktion.
+Bilder können als einzelne Abbildungen oder als Galerien eingebunden werden. Für die Galerien wird das elearn.js benötigt. es bietet verschiedene Varianten. Das erste Beispiel zeigt eine Slideshow mit Vorschau und Loop-Funktion.
 
 <div class="slider preview-nav loop">
 <ul class="img-gallery" id="x" style="list-style:none;">
@@ -146,7 +145,7 @@ Die Galerie kann mit oder ohne Vorschaubilder sowie mit oder ohne Loop genutzt w
 * `<div class="slider preview-nav">` ist mit Vorschaubildern und ohne Loop
 * `<div class="slider preview-nav loop">` ist mit Vorschaubildern und mit Loop
 
-Die Höhe der Gaalerie kann vorgegeben werden, damit der Content unter der Galerie nicht springt. Dies geht in Abhängigkeit des größten Bildes oder einer vorgegebenen maximalen Höhe. Dies wird durch die Klasse des umschließenden `ul`-Elements definiert.
+Die Höhe der Galerie kann vorgegeben werden, damit der Content unter der Galerie nicht springt. Dies geht in Abhängigkeit des größten Bildes oder einer vorgegebenen maximalen Höhe. Dies wird durch die Klasse des umschließenden `ul`-Elements definiert.
 
 * `<ul class="img-gallery">` ist eine Galerie mit unterschiedlicher Bilderhöhe.
 * `<ul class="img-gallery fixed-size">` ist eine Galerie mit der Höhe des größten Bildes.
@@ -158,7 +157,7 @@ Hier sollen vor allem Video und Audio-Einbindung demonstriert werden. At vero eo
 
 #### Videos als Asset
 
-Hier wird ein Video eingebunden, welches sich direkt im Asset-Ordner des Skrips befindet.
+Hier wird ein Video eingebunden, welches sich direkt im Asset-Ordner des Skripts befindet.
 Diese Lösung ist nur für relativ kurze Videos empfehlenswert (max. fünf Minuten).
 Zusätzlich enthält das Video Anmerkungen, die unter dem Video angezeigt werden.
 Diese sind durch die Erweiterung
@@ -195,7 +194,7 @@ Hier ist ein Video von einem Streaming-Server als iFrame eingebunden.
 
 #### Audio-Files
 
-Da Audio-Dateien als mp3s in der Regel nicht so groß sind, dass ein Streaming-Server benötigt wird, können diese aus dem Assets-Ordner progressiv als Download eingebunden worden. Hier ein Beispiel:
+Da Audio-Dateien als mp3s in der Regel nicht so groß sind, dass ein Streaming-Server benötigt wird, können diese aus dem Assets-Ordner progressiv als Download eingebunden werden. Hier ein Beispiel:
 
 <audio preload="auto" controls="controls">
     <source src="images/beispiel-audio.mp3" type="audio/mpeg">
@@ -227,7 +226,7 @@ Um im Text dennoch ein \\$ verwenden zu können, muss dieses escaped werden.
 Hierzu schreibt man `\\$` anstatt des einfachen `$` Symbols, für jedes einzelne
 anzuzeigende Zeichen, um durch das `\\` in der Ausgabe ein `\` zu erzeugen,
 welches MathJax wiederum als _escape_ für das darauffolgende `$` sieht.
-Weitere Formeln wie $x\_{i}$ = $y\_{i}$, mit enhaltener Markdown Syntax,
+Weitere Formeln wie $x\_{i}$ = $y\_{i}$, mit enthaltener Markdown Syntax,
 können auch im Template verwendet werden, wenn die Escape Syntax korrekt
 verwendet wird. Hierbei müssen keine doppelten Backslashs `\` verwendet werden,
 da das Zeichen für den ersten Schritt der Bearbeitung des Codes gedacht ist
@@ -292,7 +291,7 @@ Der folgende Block ist mit einem Knopf aus- und einklappbar.
 
 Das entscheidende hierbei sind die Attribute.
 Dabei wird dem ganzen ein __name__ gegeben, der in
-dem Knopf immer eingesetzt wird. Zustäzlich werden
+dem Knopf immer eingesetzt wird. Zusätzlich werden
 die Wörter für __show__ und __hide__ angegeben.
 So kann man hier auch bspw. andere Sprachen verwenden.
 Es ist auch möglich das Feld __name__ wegzulassen
@@ -307,7 +306,7 @@ Der folgende Block besteht aus mehreren Boxen, zwischen denen man wählen kann.
         Dieser Block wird unter dem deutschen Tab angezeigt.
     </div>
     <div class="tab" name="English">
-        This block will be visible when english is selected.
+        This block will be visible when English is selected.
     </div>
 </div>
 
@@ -376,7 +375,7 @@ interaktive Grafiken zu erstellen. Hier ein Beispiel:
     <div class="pininfo">
         <div>
             <h3><span class="highlight">Aufgabe 1</span> Wie lauten die Bestandteile des Kopfes?</h3>
-            <blockquote class="task"><p>Wie jedes Insekt hat auch eine Biene insgesamt 6 Beine. Die Biene benutzt ihre Beine nicht nur zum Laufen, sondern auch zur Körperpflege und beim Transport der Pollen zum Stock. Jedes Bein ist in fünf Glieder unterteilt. Vom Körper aus betrachtet nennt man sie Hüfte (Coxa), Schenkelring (Trochanter), Schenkel (Femur), Schiene (Tibia) und Fuß (Tarsus). Der Fuß ist widerum in 4 kleinere Glieder unterteilt. Das letzte Fußglied trägt eine Kralle und Haftlappen, mit denen sich Bienen auch auf sehr glatten Oberflächen, wie zum Beispiel Glas festhalten können.</p></blockquote>
+            <blockquote class="task"><p>Wie jedes Insekt hat auch eine Biene insgesamt 6 Beine. Die Biene benutzt ihre Beine nicht nur zum Laufen, sondern auch zur Körperpflege und beim Transport der Pollen zum Stock. Jedes Bein ist in fünf Glieder unterteilt. Vom Körper aus betrachtet nennt man sie Hüfte (Coxa), Schenkelring (Trochanter), Schenkel (Femur), Schiene (Tibia) und Fuß (Tarsus). Der Fuß ist wiederum in 4 kleinere Glieder unterteilt. Das letzte Fußglied trägt eine Kralle und Haftlappen, mit denen sich Bienen auch auf sehr glatten Oberflächen, wie zum Beispiel Glas festhalten können.</p></blockquote>
             <blockquote class="hint"><p>Hinweis<br>Wie jedes Insekt hat auch eine Biene insgesamt 6 Beine. Die Biene benutzt ihre Beine nicht nur zum Laufen, sondern auch zur Körperpflege und beim Transport der Pollen zum Stock.</p></blockquote>
             <blockquote class="links">
                 <p>
@@ -395,7 +394,7 @@ interaktive Grafiken zu erstellen. Hier ein Beispiel:
             Körperpflege und beim Transport der Pollen zum Stock. Jedes Bein ist
             in fünf Glieder unterteilt. Vom Körper aus betrachtet nennt man sie
             Hüfte (Coxa), Schenkelring (Trochanter), Schenkel (Femur), Schiene
-            (Tibia) und Fuß (Tarsus). Der Fuß ist widerum in 4 kleinere Glieder
+            (Tibia) und Fuß (Tarsus). Der Fuß ist wiederum in 4 kleinere Glieder
             unterteilt. Das letzte Fußglied trägt eine Kralle und Haftlappen,
             mit denen sich Bienen auch auf sehr glatten Oberflächen, wie zum
             Beispiel Glas festhalten können.
@@ -415,7 +414,7 @@ interaktive Grafiken zu erstellen. Hier ein Beispiel:
             Körperpflege und beim Transport der Pollen zum Stock. Jedes Bein ist
             in fünf Glieder unterteilt. Vom Körper aus betrachtet nennt man sie
             Hüfte (Coxa), Schenkelring (Trochanter), Schenkel (Femur), Schiene
-            (Tibia) und Fuß (Tarsus). Der Fuß ist widerum in 4 kleinere Glieder
+            (Tibia) und Fuß (Tarsus). Der Fuß ist wiederum in 4 kleinere Glieder
             unterteilt. Das letzte Fußglied trägt eine Kralle und Haftlappen,
             mit denen sich Bienen auch auf sehr glatten Oberflächen, wie zum
             Beispiel Glas festhalten können.
