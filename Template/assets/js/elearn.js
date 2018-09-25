@@ -264,8 +264,14 @@ eLearnJS.loadLanguage = function(langCode, callback) {
     // not created
     else {
         var script = document.createElement('script');
-        var jsFileLocation = $('script[src*="elearn.js"]').attr('src');
-        var langLocation = jsFileLocation.replace("elearn.js", "../lang/");
+        var jsFileLocation;
+        $('script[src*="elearn.js"]').each(function(i, e) {
+            if($(e).attr("src").match(/elearn\.js$/)) {
+                jsFileLocation = $(e).attr("src");
+                return false;
+            }
+        });
+        var langLocation = jsFileLocation.replace(/elearn\.js$/, "../lang/");
         script.id = "loc-" + langCode;
         script.src = langLocation + "elearnjs-" + langCode + ".js";
     }

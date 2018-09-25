@@ -1,5 +1,8 @@
 ### Changelog
 
+* __1.0.7__:
+  * Fixes:
+    * Fixed a problem with incorrect language loading with duplicate "elearn.js" in link
 * __1.0.6__:
   * Fixes:
     * Fixed a problem with the back-button not being displayed
