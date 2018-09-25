@@ -2,6 +2,7 @@
 
 * __1.0.6__:
   * Fixes:
+    * Fixed a problem with the back-button not being displayed
     * Fixed a problem with overview of style `Kachel` not being displayed
     correctly in webkit browsers
 * __1.0.5__:
