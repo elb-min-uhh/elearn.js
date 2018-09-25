@@ -143,6 +143,7 @@ video {
 }
 
 .back-enabled #btnBackCon {
+    display: block;
     float: left;
     overflow-y: auto;
     margin-left: 20px;
