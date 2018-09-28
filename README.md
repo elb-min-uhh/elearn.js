@@ -6,8 +6,16 @@ It can be used for higher education and Open Educational Ressources.
 
 ## Documentation
 
-The comprehensive documentation is only available in german at the moment.
-http://www.sumo.uni-hamburg.de/DigitaleSkripte/.
+Please check the [Wiki](https://github.com/elb-min-uhh/elearn.js/wiki) for
+a documentation of the project. Information on how to use this project are
+focused in this. A basic understanding of HTML (, CSS and JavaScript) is
+recommended.
+If you want to minimize the usage of HTML, CSS and JavaScript, check the
+[recommended usage](#recommended-usage).
+
+The older comprehensive documentation is only available in german at the moment.
+http://www.sumo.uni-hamburg.de/DigitaleSkripte/. The information in this might
+not be up to date.
 
 ## Supported Languages
 
@@ -28,6 +36,10 @@ Available languages are:
 * _de_: German (default)
 * _en_: English
 
+You can always create Pull-Requests with your translations. Please check the
+[settings Wiki](https://github.com/elb-min-uhh/elearn.js/wiki/Settings#language)
+on how to do so.
+
 ## Recommended Usage
 
 For the editor [Atom](https://atom.io) there is the package
@@ -35,11 +47,15 @@ For the editor [Atom](https://atom.io) there is the package
 This package converts Markdown files to HTML and PDF and is specifically
 designed to use _elearn.js_ for styling and interactive elements.
 Using it makes the creation of scripts more simple and fast.
+Another plugin for [Visual Studio Code](https://code.visualstudio.com/) is
+in progress. Check the status in the
+[vsc-elearnjs repository](https://github.com/elb-min-uhh/vsc-elearnjs).
 
 The markdown example
 [Examples/Markdown/elearn_template.md](/Examples/Markdown/elearn_template.md)
 uses _atom-elearnjs_ functions and uses nearly everything _elearn.js_ can do.
-This file is a good start to get going.
+This file is a good start to get going. Also explanations of what is done are
+included in the example file.
 
 ### Examples
 
@@ -58,7 +74,10 @@ Following examples are included:
 
 ### Settings
 
-The _elearn.js_ supports a few settings. Those have to be done by using
+The _elearn.js_ supports a few settings. Check the
+[settings Wiki](https://github.com/elb-min-uhh/elearn.js/wiki/Settings)
+for an overview and more detailed information.
+Those have to be set by using
 `JavaScript`. Examples for those settings can be viewed in the file  
 [Template/index.html](/Template/index.html). The commands are contained
 as comments in a `<script>` block in the file's `<head>`. Comments are currently
@@ -69,40 +88,6 @@ __Hint__: Using _atom-elearnjs_ you can use these settings as done in
 More information about the necessary tag `Custom` in the _meta block_
 can be found in the documentation of
 [atom-elearnjs](https://github.com/elb-min-uhh/atom-elearnjs).
-
-
-## Manual Creation without _atom-elearnjs_
-
-If you do not want to use the package _atom-elearnjs_ you can include
-_elearn.js_ in your `html` file directly. It is recommended to write all
-user changes in seperate files to not be overwritten by an _elearn.js_ update.
-So do not change the files _elearn.js_ and _elearn.css_.
-Which files might be overwritten by an update is described in the following
-section.
-
-You should include style changes (CSS) in the `html` page itself or a separate
-file.
-
-### Update an _elearn.js_ script manually
-
-The most simple way is to use a markdown file and the _atom-elearnjs_ package
-as described before. The _atom-elearnjs_ pacakge will always include the
-latest stable releases.
-
-Updating a script manually needs a few more steps.
-1. Download the repository (as zip or clone)
-2. Copy the `Template/assets/` in your script overwriting your `assets` folder
-3. You can delete the folder `assets/img/template-media`
-4. Check if the version displayed in the script imprint matches the current
-version:
-    * Open your script in a browser
-    * Select the menu (top right) and then the _imprint_
-    * The version is displayed in a grey bar at the bottom
-    * The version of the downloaded script can be found in `assets/js/elearn.js`
-    at the top
-
-If you have changed some of the _elearn.js_ assets you downloaded, these changes
-will be overwritten and lost.
 
 ## Extensions
 
