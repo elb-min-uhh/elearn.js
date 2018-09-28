@@ -1705,7 +1705,7 @@ eLearnJS.zoomImage = function(button) {
         }
 
         // center
-        lightbox.css('top', ($(document).scrollTop() + (lightbox.height())/2 - height/2) + "px");
+        lightbox.css('top', ul.offset().top + "px");
 
         var right = 8 + img.position().left;
         lightbox.find('.close').css('right', right + "px");

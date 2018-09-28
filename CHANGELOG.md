@@ -3,6 +3,10 @@
 * __1.0.7__:
   * Fixes:
     * Fixed a problem with incorrect language loading with duplicate "elearn.js" in link
+    * Positioning of "Share" QR Code is now anchored to the top of the window.
+    Will work better in long iframes
+    * Zoom containers of image galleries will be placed anchored to their
+    corresponding gallery
 * __1.0.6__:
   * Fixes:
     * Fixed a problem with the back-button not being displayed
