@@ -1290,6 +1290,8 @@ eLearnJS.initiateGalleries = function() {
     $('.slider').each(function() {
         var ul = $($(this).children('ul.img-gallery')[0]);
 
+        if($(this).is('.fixed-size')) ul.addClass('fixed-size');
+
         // initiate preview if activated
         if($(this).filter('.preview-nav').length > 0) {
             eLearnJS.initiateSliderPreview($(this).parent());
@@ -1558,7 +1560,7 @@ eLearnJS.showSlideLi = function(ul, ul_id, slide, animate, duration) {
     ul[0].offsetHeight; // apply css changes
 
     var hasScroll = eLearnJS.hasScrollbar();
-    if(animate && ul.not('fixed-size').length > 0 && ul.parent().is('.slider')) ul.parent().addClass("switching");
+    if(animate && ul.not('.fixed-size').length > 0 && ul.parent().is('.slider')) ul.parent().addClass("switching");
     eLearnJS.visibleImage[ul_id] = slide;
     // Die X-Position an die die Transformation stattfindet
     var x = ul.children('li').outerWidth(true)*slide*-1
@@ -1581,7 +1583,7 @@ eLearnJS.showSlideLi = function(ul, ul_id, slide, animate, duration) {
     var newTimeout = setTimeout(function() {
         var height = $(ul.children('li')[eLearnJS.visibleImage[ul_id]]).height();
         // start height change animation; only for variable height sliders
-        if(ul.not('fixed-size').length > 0 && ul.parent().is('.slider')){
+        if(ul.not('.fixed-size').length > 0 && ul.parent().is('.slider')){
             var animationDuration = 500;
             if(!animate) {
                 // will be eLearnJS.ulTransitionDuration if duration is not set explicitly

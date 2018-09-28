@@ -1,5 +1,8 @@
 ### Changelog
 
+* __1.0.8__:
+  * New:
+    * `fixed-size` for image galleries can now be set on the `div.slider`
 * __1.0.7__:
   * Fixes:
     * Fixed a problem with incorrect language loading with duplicate "elearn.js" in link
