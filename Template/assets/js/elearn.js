@@ -1,5 +1,5 @@
 /*
-* v1.0.6 18/09/25 JavaScript eLearn.js - by Arne Westphal
+* v1.0.7 18/09/28 JavaScript eLearn.js - by Arne Westphal
 * eLearning Buero MIN-Fakultaet - Universitaet Hamburg
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 * uses ResizeSensor by Marc J. Schmidt. https://github.com/marcj/css-element-queries/
@@ -8,7 +8,7 @@
 // For more intuitive usage of functions. (e.g. eLearnJS.showNext())
 var eLearnJS = eLearnJS || {};
 
-eLearnJS.VERSION_NR = "1.0.6";
+eLearnJS.VERSION_NR = "1.0.7";
 eLearnJS.VERSION_DATE = "09/2018";
 
 eLearnJS.actions = {
