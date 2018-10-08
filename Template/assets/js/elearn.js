@@ -2396,7 +2396,7 @@ eLearnJS.hoverInfoSetFullPosition = function(div) {
     // calculate max width
     var maxWidth = parent.width();
     if(dataset.fullWidth
-        && parseInt(dataset.fullWidth) < $(window).width()
+        && parseFloat(dataset.fullWidth) < $(window).width()
         && dataset.width) {
         // in percent
         if(dataset.width.match(/^\d+(\.\d+)?%$/)) {
@@ -2415,18 +2415,19 @@ eLearnJS.hoverInfoSetFullPosition = function(div) {
 
     var left = "auto";
     var right = "auto";
+    var width = Math.min(info.outerWidth(), maxWidth);
     if(($(window).width() - div.offset().left)
         > (div.offset().left + div.outerWidth(true))) {
-        if(maxWidth > div.offset().left - parent.offset().left + div.outerWidth())
+        if(width > div.offset().left - parent.offset().left + div.outerWidth())
             left = parent.offset().left;
         else
-            left = div.offset().left + div.outerWidth() - maxWidth;
+            left = div.offset().left + div.outerWidth() - width;
     }
     else {
-        if(maxWidth > $(window).width() - parent.offset().left - div.offset().left)
+        if(width > $(window).width() - parent.offset().left - div.offset().left)
             right = parent.offset().left;
         else
-            right = ($(window).width() - div.offset().left) - maxWidth;
+            right = ($(window).width() - div.offset().left) - width;
     }
 
     info.css({
