@@ -300,7 +300,19 @@
                     darauf klickt. Dazu wird in einem <b>div.hover-info</b>
                     zunächst der markierte Bereich angegeben. In einem zusätzlichen
                     <b>div</b> direkt dahinter können darauf hin die weiterführenden
-                    Informationen angezeigt werden.
+                    Informationen angezeigt werden. Diese können auch eine bestimmte maximale
+
+                    <div class="hover-info full" id="info-full-1" data-width="80%" data-full-width="440">
+                        Breite
+                        <div>
+                            Die maximale Breite wird durch die <code>data-width="80%"</code> auf 80% der verfügbaren Breite
+                            festgelegt. Ab einer Fensterbreite von <code>440px</code>
+                            (<code>data-full-width="440"</code>, immer in px) wird automatisch die volle Breite verwendet.
+                        </div>
+                    </div>
+
+                    füllen, wenn man die Klasse <code>full</code> ergänzt.
+                    Die <code>data-width</code> kann in % und px angegeben werden.
 
                     <h4>Ausklappbare Bereiche</h4>
 

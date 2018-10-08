@@ -3,6 +3,7 @@
 * __1.0.8__:
   * New:
     * image galleries can be `.back-loop` instead of loop to jump to the actual first/last image
+    * `hover-info` can now be `.full`, to support more dynamic width
     * `fixed-size` for image galleries can now be set on the `div.slider`
 * __1.0.7__:
   * Fixes:

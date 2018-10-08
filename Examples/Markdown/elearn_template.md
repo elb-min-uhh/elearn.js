@@ -281,7 +281,18 @@ angezeigt, wenn man mit der Maus hinüber geht oder bei Touch-Geräten
 darauf klickt. Dazu wird in einem __div.hover-info__
 zunächst der markierte Bereich angegeben. In einem zusätzlichen
 __div__ direkt dahinter können darauf hin die weiterführenden
-Informationen angezeigt werden.
+Informationen angezeigt werden. Diese können auch eine bestimmte maximale
+
+<div class="hover-info full" data-width="80%" data-full-width="440">
+    Breite
+    <div>
+        Die maximale Breite wird durch die <code>data-width="80%"</code> auf 80% der verfügbaren Breite
+        festgelegt. Ab einer Fensterbreite von <code>440px</code>
+        (<code>data-full-width="440"</code>, immer in px) wird automatisch die volle Breite verwendet.
+    </div>
+</div>
+
+füllen, wenn man die Klasse `full` ergänzt. Die `data-width` kann in % und px angegeben werden.
 
 #### Ausklappbare Bereiche
 

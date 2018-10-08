@@ -2344,6 +2344,11 @@ eLearnJS.hoverInfoSetPositions = function() {
 };
 
 eLearnJS.hoverInfoSetPosition = function(div) {
+    if(div.is('.full')) eLearnJS.hoverInfoSetFullPosition(div);
+    else eLearnJS.hoverInfoSetSmallPosition(div);
+};
+
+eLearnJS.hoverInfoSetSmallPosition = function(div) {
     var min_width = 200;
     var perc_from = 400;
 
@@ -2351,18 +2356,18 @@ eLearnJS.hoverInfoSetPosition = function(div) {
     if(div.closest('section').width() > perc_from) {
         width = div.closest('section').width() * 0.5;
     }
-    else if(div.closest('section').width() < min_width){
+    else if(div.closest('section').width() < min_width) {
         width = min_width;
     }
     else {
-        var fact = 1 - ((div.closest('section').width() - min_width) / ((perc_from - min_width)*2));
+        var fact = 1 - ((div.closest('section').width() - min_width) / ((perc_from - min_width) * 2));
         width = div.closest('section').width() * fact;
     }
 
     var left = "auto";
     var right = "auto";
     if(($(window).width() - div.offset().left)
-            > (div.offset().left + div.outerWidth(true))) {
+        > (div.offset().left + div.outerWidth(true))) {
         left = div.offset().left;
         margin = "0 1em 0 0";
     }
@@ -2370,8 +2375,6 @@ eLearnJS.hoverInfoSetPosition = function(div) {
         right = $(window).width() - div.offset().left - div.outerWidth(true);
         margin = "0 0 0 1em";
     }
-
-    var parent = div.closest('section');
 
     var info = div.children('div.hover-info-block');
 
@@ -2381,6 +2384,56 @@ eLearnJS.hoverInfoSetPosition = function(div) {
         "right": right,
         "margin": margin,
         "max-width": width
+    });
+};
+
+eLearnJS.hoverInfoSetFullPosition = function(div) {
+    var dataset = div.get(0).dataset;
+    var parent = div.closest('section');
+
+    var info = div.children('div.hover-info-block');
+
+    // calculate max width
+    var maxWidth = parent.width();
+    if(dataset.fullWidth
+        && parseInt(dataset.fullWidth) < $(window).width()
+        && dataset.width) {
+        // in percent
+        if(dataset.width.match(/^\d+(\.\d+)?%$/)) {
+            var maxWidthPercent = parseFloat(dataset.width.replace(/\D+$/g, ""));
+            maxWidth = parent.width() * (maxWidthPercent / 100);
+        }
+        // in px
+        else if(dataset.width.match(/^\d+(\.\d+)?(px)?$/)) {
+            maxWidth = parseFloat(dataset.width.replace(/\D+$/g, ""));
+        }
+        else {
+            console.error("Unknown `data-width` syntax in", div);
+            return;
+        }
+    }
+
+    var left = "auto";
+    var right = "auto";
+    if(($(window).width() - div.offset().left)
+        > (div.offset().left + div.outerWidth(true))) {
+        if(maxWidth > div.offset().left - parent.offset().left + div.outerWidth())
+            left = parent.offset().left;
+        else
+            left = div.offset().left + div.outerWidth() - maxWidth;
+    }
+    else {
+        if(maxWidth > $(window).width() - parent.offset().left - div.offset().left)
+            right = parent.offset().left;
+        else
+            right = ($(window).width() - div.offset().left) - maxWidth;
+    }
+
+    info.css({
+        "top": div.offset().top + div.outerHeight(true),
+        "left": left,
+        "right": right,
+        "max-width": maxWidth,
     });
 };
 
