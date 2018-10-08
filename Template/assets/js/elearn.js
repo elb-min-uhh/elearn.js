@@ -1413,13 +1413,14 @@ eLearnJS.loopTimeouts = {};
 */
 eLearnJS.showSlide = function(ul, slide, updatePreview, animate, duration) {
     var ul_id = $('.img-gallery').index(ul);
+    var slider = ul.parent();
 
     var slide_intended = (ul.children('li').not('.loop_clone').length + slide) % ul.children('li').not('.loop_clone').length;
     var slideChanged = false;
 
     // Falls Loop aktiviert springt es mit -1 an die letzte Stelle und mit
     // "x.length" an Stelle 0
-    if(ul.parent().filter('.loop').length > 0) {
+    if(slider.filter('.loop').length > 0) {
         if(slide <= 0 || slide >= ul.children('li').length - 1) {
             slide = eLearnJS.createLoopFor(ul, ul_id, slide);
         }
@@ -1435,30 +1436,36 @@ eLearnJS.showSlide = function(ul, slide, updatePreview, animate, duration) {
         }
     }
 
-    // Für alle Slider, falls eLearnJS.showSlide möglich
-    if((ul.parent().is('.slider') && (slide >= 0 && slide < ul.children('li').length))
-       || (ul.parent().is('.slider-nav') && (slide >= 0 && slide*4 < ul.children('li').length))) {
-        eLearnJS.showSlideLi(ul, ul_id, slide, animate, duration);
+    // if back-loop: jump last -> first, first -> last
+    if(slide < 0 && slider.is('.back-loop'))
+        slide += ul.children('li').not('.loop_clone').length;
+    if(slide >= ul.children('li').not('.loop_clone').length && slider.is('.back-loop'))
+        slide -= ul.children('li').not('.loop_clone').length;
 
+
+    // Für alle Slider, falls eLearnJS.showSlide möglich
+    if((slider.is('.slider') && (slide >= 0 && slide < ul.children('li').length))
+       || (slider.is('.slider-nav') && (slide >= 0 && slide*4 < ul.children('li').length))) {
+        eLearnJS.showSlideLi(ul, ul_id, slide, animate, duration);
     }
 
     var actual_slide = ul.children('li').eq(eLearnJS.visibleImage[ul_id]).attr('loopid');
 
     // Bildbeschreibung laden, wenn es sich nicht um einen navigations-slider handelt
-    if(!ul.parent().is(".slider-nav")) {
+    if(!slider.is(".slider-nav")) {
         eLearnJS.showSlideDescription(ul, slide);
     }
 
     // Zusätzlich für Slider mit Preview Nav
     if(updatePreview
-        && ul.parent().filter('.preview-nav').length > 0) {
-        var previeNavLis = ul.parent().parent().nextAll('.preview-con').find('.slider-nav').first().children('ul.img-gallery').children('li');
+        && slider.filter('.preview-nav').length > 0) {
+        var previeNavLis = slider.parent().nextAll('.preview-con').find('.slider-nav').first().children('ul.img-gallery').children('li');
         previeNavLis.removeClass('active');
         previeNavLis.eq(actual_slide).addClass('active');
         eLearnJS.showSlide(previeNavLis.parent(), Math.floor(actual_slide/4), false, animate, duration);
     }
 
-    eLearnJS.showSlideButtons(ul, slide, ul.parent().filter('.slider-nav').length > 0);
+    eLearnJS.showSlideButtons(ul, slide, slider.filter('.slider-nav').length > 0);
 };
 
 /**
@@ -1632,18 +1639,19 @@ eLearnJS.showSlideDescription = function(ul, slide) {
 * @param isNavigation - true wenn Navigations/Preview-Slider, false sonst.
 */
 eLearnJS.showSlideButtons = function(ul, slide, isNavigation) {
-    if(slide > 0 || ul.parent().filter('.loop').length > 0) {
-        ul.parent().nextAll('.slider-back-area').show();
+    var slider = ul.parent();
+    if(slide > 0 || slider.is('.loop') || slider.is('.back-loop')) {
+        slider.nextAll('.slider-back-area').show();
     }
     else {
-        ul.parent().nextAll('.slider-back-area').hide();
+        slider.nextAll('.slider-back-area').hide();
     }
     if((isNavigation && (slide+1)*4 < ul.children('li').length) || (!isNavigation && slide+1 < ul.children('li').length)
-        || ul.parent().filter('.loop').length > 0) {
-        ul.parent().nextAll('.slider-next-area').show();
+        || slider.is('.loop') || slider.is('.back-loop')) {
+        slider.nextAll('.slider-next-area').show();
     }
     else {
-        ul.parent().nextAll('.slider-next-area').hide();
+        slider.nextAll('.slider-next-area').hide();
     }
 };
 
