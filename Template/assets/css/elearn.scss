@@ -59,6 +59,10 @@ $black_half_transparent: rgba(0, 0, 0, 0.4);
 
 /*Seitenaufbau*/
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: Open Sans, sans-serif;
     line-height: 164%;
@@ -240,7 +244,7 @@ video {
 
 #btnMenu {
     margin-right: 20px;
-    width: 22px;
+    width: 32px;
     float: right;
 }
 
@@ -772,7 +776,6 @@ blockquote.links:before {
 
 .section-overview-element,
 .side-menu-element {
-    width: calc(100% - 130px);
     color: $light_grey;
     background-color: $dark_white;
     text-align: left;
@@ -780,12 +783,10 @@ blockquote.links:before {
 }
 
 .section-overview-element.sub {
-    width: calc(100% - 150px);
     padding: 5px 0 5px 150px;
 }
 
 .section-overview-element.subsub {
-    width: calc(100% - 170px);
     padding: 5px 0 5px 170px;
 }
 
@@ -887,7 +888,7 @@ blockquote.links:before {
 }
 
 .side-menu table td:nth-child(1) {
-    width: 40px;
+    width: 54px;
     text-align: center;
 }
 
@@ -1555,15 +1556,12 @@ div.slider-con:hover .slider-zoom-area {
     }
     .section-overview-element {
         padding: 5px 0 5px 125px;
-        width: calc(100% - 125px);
     }
     .section-overview-element.sub {
         padding: 5px 0 5px 145px;
-        width: calc(100% - 145px);
     }
     .section-overview-element.subsub {
         padding: 5px 0 5px 165px;
-        width: calc(100% - 165px);
     }
     .section-overview-element.active {
         padding: 5px 0 5px 122px;
@@ -1646,15 +1644,12 @@ div.slider-con:hover .slider-zoom-area {
     }
     .section-overview-element {
         padding: 5px 0 5px 82px;
-        width: calc(100% - 82px);
     }
     .section-overview-element.sub {
         padding: 5px 0 5px 92px;
-        width: calc(100% - 92px);
     }
     .section-overview-element.subsub {
         padding: 5px 0 5px 102px;
-        width: calc(100% - 102px);
     }
     .section-overview-element.active {
         padding: 5px 0 5px 79px;

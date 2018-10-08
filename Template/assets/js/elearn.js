@@ -498,12 +498,12 @@ eLearnJS.localizeElement = function(el, force) {
 * Passt die Navigationsleiste an die Breite des window an
 */
 eLearnJS.updateNavBarWidth = function() {
-    var headerSpace = 15.0; // standard wert
-    $('#nav-bar').children(':visible').not('#btnExp').each(function(i,e){
+    var headerSpace = 5; // standard wert
+    $('#nav-bar').children(':visible').not('#btnExp').each(function(i, e) {
         if($(this).attr("id") != undefined)
             headerSpace += $(this).outerWidth(true);
     });
-    $('#btnExp').css("width", "calc(100% - " + (headerSpace+5) + "px)");
+    $('#btnExp').css("width", "calc(100% - " + (headerSpace) + "px)");
 };
 
 
