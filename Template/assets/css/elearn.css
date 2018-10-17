@@ -664,6 +664,12 @@ a:active {
 }
 
 /* ---------------------------------- Blockquotes ---------------------------------- */
+blockquote.emph-heading p:first-line {
+  font-size: 1.2em;
+  font-weight: bold;
+  line-height: 1.5em;
+}
+
 blockquote.hint {
   background-color: #eee;
   border-left: 12px solid #e2001a;
@@ -683,11 +689,8 @@ blockquote.hint:before {
   float: left;
 }
 
-blockquote.hint p:first-line {
+blockquote.hint.emph-heading p:first-line {
   color: #e2001a;
-  font-size: 1.2em;
-  font-weight: bold;
-  line-height: 1.5em;
 }
 
 blockquote.task {

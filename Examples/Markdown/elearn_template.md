@@ -249,7 +249,7 @@ hervorheben können.
     </p>
 </blockquote>
 
-<blockquote class="hint">
+<blockquote class="hint emph-heading">
     <p>
         Überschrift
         <br>
@@ -257,7 +257,7 @@ hervorheben können.
     </p>
 </blockquote>
 
-<blockquote class="links">
+<blockquote class="links emph-heading">
     <p>
         Überschrift
         <br>
