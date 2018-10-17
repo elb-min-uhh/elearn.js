@@ -2212,21 +2212,24 @@ eLearnJS.initiateHideables = function() {
         button.click(function(e) {
             eLearnJS.toggleHideable(this);
         });
-        var text = div.attr('show') ? div.attr('show') : "";
-        text += div.attr('show') && div.attr('name') ? " " : "";
-        text += div.attr('name') ? div.attr('name') : "";
-        button.html(text);
         div.before(button);
 
-        div.hide();
+        // set not visible on default
+        eLearnJS.toggleHideable(button, false);
+
+        if(div.is('.visible')) eLearnJS.toggleHideable(button, true);
     });
 };
 
-eLearnJS.toggleHideable = function(element) {
+eLearnJS.toggleHideable = function(element, bool) {
     var div = $(element).nextAll().first('.hideable');
+    var visibility = bool;
+    if(visibility === undefined) {
+        visibility = !div.is(':visible');
+    }
 
     // hide
-    if(div.is(':visible')) {
+    if(!visibility) {
         div.hide();
         var text = div.attr('show') ? div.attr('show') : "";
         text += div.attr('show') && div.attr('name') ? " " : "";

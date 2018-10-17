@@ -298,7 +298,7 @@ füllen, wenn man die Klasse `full` ergänzt. Die `data-width` kann in % und px 
 
 Der folgende Block ist mit einem Knopf aus- und einklappbar.
 
-<div class="hideable" show="Zeige Übersetzung" hide="Verberge Übersetzung">
+<div class="hideable visible" show="Zeige Übersetzung" hide="Verberge Übersetzung">
     Hier steht ein Beispieltext.
 </div>
 
