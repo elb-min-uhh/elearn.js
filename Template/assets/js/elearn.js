@@ -2398,23 +2398,28 @@ eLearnJS.hoverInfoSetFullPosition = function(div) {
 
     // calculate max width
     var maxWidth = parent.width();
-    if(dataset.fullWidth
-        && parseFloat(dataset.fullWidth) < $(window).width()
-        && dataset.width) {
-        // in percent
-        if(dataset.width.match(/^\d+(\.\d+)?%$/)) {
-            var maxWidthPercent = parseFloat(dataset.width.replace(/\D+$/g, ""));
-            maxWidth = parent.width() * (maxWidthPercent / 100);
-        }
-        // in px
-        else if(dataset.width.match(/^\d+(\.\d+)?(px)?$/)) {
-            maxWidth = parseFloat(dataset.width.replace(/\D+$/g, ""));
+    if(dataset.width) {
+        if(dataset.fullWidth && parseFloat(dataset.fullWidth) > $(window).width()) {
+            // do nothing
         }
         else {
-            console.error("Unknown `data-width` syntax in", div);
-            return;
+            // in percent
+            if(dataset.width.match(/^\d+(\.\d+)?%$/)) {
+                var maxWidthPercent = parseFloat(dataset.width.replace(/\D+$/g, ""));
+                maxWidth = parent.width() * (maxWidthPercent / 100);
+            }
+            // in px
+            else if(dataset.width.match(/^\d+(\.\d+)?(px)?$/)) {
+                maxWidth = parseFloat(dataset.width.replace(/\D+$/g, ""));
+            }
+            else {
+                console.error("Unknown `data-width` syntax in", div);
+                return;
+            }
         }
     }
+
+    console.log(maxWidth, parent.width());
 
     var left = "auto";
     var right = "auto";

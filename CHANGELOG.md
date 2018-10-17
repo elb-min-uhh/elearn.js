@@ -1,5 +1,8 @@
 ### Changelog
 
+* __1.0.10__:
+  * Fixes:
+    * `hover-info` attribute `data-width` can be used without setting `data-full-width`
 * __1.0.9__:
   * Changed:
     * blockquote elements will only emphasize their first line as heading if
