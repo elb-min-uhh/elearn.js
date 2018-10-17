@@ -1,5 +1,12 @@
 ### Changelog
 
+* __1.0.9__:
+  * Changed:
+    * blockquote elements will only emphasize their first line as heading if
+    the class `emph-heading` is present
+    * `.hideable` elements can be visible on load with `.visible`
+  * Fixes:
+    * `.hover-info` blocks are aligned correctly at any size
 * __1.0.8__:
   * New:
     * image galleries can be `.back-loop` instead of loop to jump to the actual first/last image
