@@ -22,7 +22,7 @@ $darker_grey: #333;
 
 $uhh_red: #e2001a;
 $dark_blue: #3c4c60;
-/* Transparents */
+/* transparent colors */
 
 $white_light_transparent: rgba(255, 255, 255, 0.8);
 $mid_grey_transparent: rgba(102, 102, 102, 0);
@@ -497,7 +497,7 @@ a:active {
     border-bottom: 3px solid $uhh_red;
 }
 
-/* ------------------------------------------ TOOLTIPS ------------------------------------------ */
+/* ------------------------------------------ Tooltips ------------------------------------------ */
 
 .tooltip {
     display: none;
@@ -685,7 +685,7 @@ a:active {
     content: none;
 }
 
-/* ---------------------------------- Blockquotes ---------------------------------- */
+/* ---------------------------------- Blockquote ---------------------------------- */
 
 blockquote.emph-heading p:first-line {
     font-size: 1.2em;
@@ -1417,7 +1417,7 @@ div.slider-con:hover .slider-zoom-area {
     color: white;
 }
 
-/*Media-Querys für Responsivität*/
+/*Media-Queries für Responsivität*/
 
 @media screen and (max-width: 1100px) {
     .tooltip {

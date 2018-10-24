@@ -9,7 +9,7 @@
 /* Color Variables */
 /* Greys */
 /* Colors */
-/* Transparents */
+/* transparent colors */
 /*Einbindung der benötigtren Schriften*/
 @font-face {
   font-family: 'eLearn-Icons';
@@ -481,7 +481,7 @@ a:active {
   border-bottom: 3px solid #e2001a;
 }
 
-/* ------------------------------------------ TOOLTIPS ------------------------------------------ */
+/* ------------------------------------------ Tooltips ------------------------------------------ */
 .tooltip {
   display: none;
   background: #dcdcdc;
@@ -663,7 +663,7 @@ a:active {
   content: none;
 }
 
-/* ---------------------------------- Blockquotes ---------------------------------- */
+/* ---------------------------------- Blockquote ---------------------------------- */
 blockquote.emph-heading p:first-line {
   font-size: 1.2em;
   font-weight: bold;
@@ -1394,7 +1394,7 @@ div.slider-con:hover .slider-zoom-area {
   color: white;
 }
 
-/*Media-Querys für Responsivität*/
+/*Media-Queries für Responsivität*/
 @media screen and (max-width: 1100px) {
   .tooltip {
     left: 0;
