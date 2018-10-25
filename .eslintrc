@@ -1,0 +1,25 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "script"
+    },
+    "env": {
+        "browser": true,
+        "es6": true,
+        "jquery": true
+    },
+    "globals": {
+        "ResizeSensor": true,
+        "quizJS": true,
+        "eLearnVideoJS": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "strict": "off",
+        "no-console": "off",
+        "no-var": "off",
+        "semi": "warn",
+        "no-unused-vars": "warn",
+        "block-scoped-var": "warn"
+    }
+}

@@ -1,6 +1,6 @@
 /*
 * v1.0.9 18/10/17 JavaScript eLearn.js - by Arne Westphal
-* eLearning Buero MIN-Fakultaet - Universitaet Hamburg
+* dl.min MIN-Fakultaet - Universitaet Hamburg
 * touch-script base by PADILICIOUS.COM and MACOSXAUTOMATION.COM
 * uses ResizeSensor by Marc J. Schmidt. https://github.com/marcj/css-element-queries/
 */
@@ -15,7 +15,7 @@ eLearnJS.actions = {
     CONTENT_RESIZE : "ContentResize",
 };
 
-// localization is in seperate files in ../lang/elearnjs-*.js
+// localization is in separate files in ../lang/elearnjs-*.js
 eLearnJS.localization = {};
 eLearnJS.asyncLangs = {};
 eLearnJS.setLangID = 0;
@@ -85,7 +85,7 @@ $(document).ready(function() {
     document.addEventListener("ejssectionchange", eLearnJS.resizeAllSliders);
     document.addEventListener("ejspageinteraction", eLearnJS.pushHistoryState);
 
-    new ResizeSensor(document.body, function(dimensions) {
+    new ResizeSensor(document.body, function(dimensions) { // eslint-disable-line no-unused-vars
         eLearnJS.updateWrapSize();
     });
 
@@ -125,7 +125,7 @@ eLearnJS.initiateELearnJS = function () {
                     + "<div onclick='javascript: eLearnJS.backButtonPressed();' id='btnBackCon' class ='btn' lang-code-title='backbutton.title'><div class='icon-font' id='btnBack'>b</div><div id='btnBackText' lang-code='backbutton'></div></div>"
                     + "<div onclick='javascript: eLearnJS.toggleAllSections();' id='btnAllCon' class ='btn' lang-code-title='togglesections.title'><div class='icon-font' id='btnAll'>s</div><div id='btnAllText' lang-code='togglesections'></div></div>"
                     + "<div onclick='javascript: eLearnJS.showSectionOverview();' id='btnExp' class ='btn' lang-code-title='title.title'><div class='icon-font' id='btnExpSym'>c</div><div id='nav-title' lang-code='title' localized='false'></div></div>"
-                    + "<div onclick='javascript: eLearnJS.toggleSideMenu(eLearnJS.isSideMenuVisible());' id='btnMenu' class ='icon-font btn' lang-code-title='menu.title'>m</div>"
+                    + "<div onclick='javascript: eLearnJS.toggleSideMenu();' id='btnMenu' class ='icon-font btn' lang-code-title='menu.title'>m</div>"
                     + "<div onclick='javascript: eLearnJS.startHelp();' id='btnHelp' class ='btn' lang-code-title='help.title'><div class='icon-font' id='btnHelpSym'>q</div><div id='btnHelpText' lang-code='help'></div></div>"
                     + "<div style='clear:both'></div>"
                 + "</div>"
@@ -259,11 +259,11 @@ eLearnJS.loadLanguage = function(langCode, callback) {
             return;
         }
         // wait for load done
-        var script = $('script#loc-' + langCode).get(0);
+        script = $('script#loc-' + langCode).get(0);
     }
     // not created
     else {
-        var script = document.createElement('script');
+        script = document.createElement('script');
         var jsFileLocation;
         $('script[src*="elearn.js"]').each(function(i, e) {
             if($(e).attr("src").match(/elearn\.js$/)) {
@@ -283,7 +283,7 @@ eLearnJS.loadLanguage = function(langCode, callback) {
     // on error
     script.addEventListener('error', onError);
     // on success
-    script.addEventListener('load', function(event) {
+    script.addEventListener('load', function(event) { // eslint-disable-line no-unused-vars
         if(eLearnJS.localization[langCode]) {
             if(eLearnJS.unaddedTranslations[langCode]) {
                 eLearnJS.localization[langCode] = eLearnJS.objectAssign(eLearnJS.localization[langCode], eLearnJS.unaddedTranslations[langCode]);
@@ -404,7 +404,7 @@ eLearnJS.setLanguageAsync = function(langCode, callback) {
     };
     eLearnJS.setLangID++;
 
-    eLearnJS.loadLanguage(langCode, function(err) {
+    eLearnJS.loadLanguage(langCode, function(err) { // eslint-disable-line no-unused-vars
         eLearnJS.asyncLangs[id].loaded = true;
         eLearnJS.setLanguageAsyncPopQueue();
     });
@@ -469,8 +469,9 @@ eLearnJS.localizeElement = function(el, force) {
         return;
     }
 
+    var text;
     if(el.attr("lang-code")) {
-        var text = eLearnJS.localization[loc][el.attr("lang-code")];
+        text = eLearnJS.localization[loc][el.attr("lang-code")];
         if(text) {
             if($(el).attr('localized') === "html") el.html(text);
             else el.text(text);
@@ -478,14 +479,14 @@ eLearnJS.localizeElement = function(el, force) {
     }
 
     if(el.attr("lang-code-title")) {
-        var text = eLearnJS.localization[loc][el.attr("lang-code-title")];
+        text = eLearnJS.localization[loc][el.attr("lang-code-title")];
         if(text) {
             el.attr('title', text);
         }
     }
 
     if(el.attr("lang-code-tab")) {
-        var text = eLearnJS.localization[loc][el.attr("lang-code-tab")];
+        text = eLearnJS.localization[loc][el.attr("lang-code-tab")];
         if(text) {
             var index = el.parent().children().index(el);
             var tabs = el.closest('.tabbed-container').children('.tabs').children('.tab-select');
@@ -499,7 +500,7 @@ eLearnJS.localizeElement = function(el, force) {
 */
 eLearnJS.updateNavBarWidth = function() {
     var headerSpace = 5; // standard wert
-    $('#nav-bar').children(':visible').not('#btnExp').each(function(i, e) {
+    $('#nav-bar').children(':visible').not('#btnExp').each(function(i, e) { // eslint-disable-line no-unused-vars
         if($(this).attr("id") != undefined)
             headerSpace += $(this).outerWidth(true);
     });
@@ -595,7 +596,7 @@ eLearnJS.backButtonPressed = function() {
 *               Seite verlinken wie zB. "../andereSeite" oder auf eine
 *               auf eine ganz andere Seite verlinken wie "http://google.com"
 *
-* Beispiel: seteLearnJS.backPage("http://google.com", "link"); verlinkt auf Google.
+* Beispiel: eLearnJS.setBackPage("http://google.com", "link"); verlinkt auf Google.
 * Standardmäßig wird die erste <section> angezeigt
 */
 eLearnJS.setBackPage = function(val, type) {
@@ -671,12 +672,13 @@ eLearnJS.showSection = function(i) {
     }
 
     // show only this section
+    var topPos;
     if(!eLearnJS.allShown && i >= 0 && i < $('section').length) {
         $('section').hide();
 
         $($('section')[i]).show();
 
-        var topPos = $($('section')[i]).position().top - $('#navigation').height() - 10;
+        topPos = $($('section')[i]).position().top - $('#navigation').height() - 10;
         if($(document).scrollTop() > topPos) {
             $(document).scrollTop(topPos);
         }
@@ -686,7 +688,7 @@ eLearnJS.showSection = function(i) {
     }
     // scroll to that section
     else if(eLearnJS.allShown) {
-        var topPos = $($('section')[i]).position().top - $('#navigation').height();
+        topPos = $($('section')[i]).position().top - $('#navigation').height();
         $(document).scrollTop(topPos);
     }
     else {
@@ -735,7 +737,7 @@ eLearnJS.registerAfterShow = function(key, fnc, late) {
 };
 
 /**
-* Registriert eine Funktion, die ausgeführt wird, nachdem ein sectionwechsel
+* Registriert eine Funktion, die ausgeführt wird, nachdem ein Section-Wechsel
 * durchgeführt wurde. Im gegensatz zu "afterShow" nur, wenn die section
 * tatsächlich verändert wurde.
 *
@@ -760,7 +762,7 @@ eLearnJS.registerAfterTabChange = function(key, fnc) {
 /**
 * Registriert eine Funktion, die ausgeführt wird, wenn die Fenstergröße
 * sich verändert hat. Alle hier registrierten Funktionen werden nicht direkt,
-* sondern mit einer kurzen Verzörung ausgeführt, damit sie bei einer
+* sondern mit einer kurzen Verzögerung ausgeführt, damit sie bei einer
 * kontinuierlichen Veränderung nicht ständig sondern nur einmal ausgeführt
 * werden.
 *
@@ -935,7 +937,14 @@ eLearnJS.setBlockProgressIfQuestionsNotAnswered = function(b) {
 * Zeigt außerdem Blocknachrichten an.
 */
 eLearnJS.checkBlockProgress = function() {
-    var block = eLearnJS.blockProgressQuizJS && !getVisibleQuestionsAnswered();
+
+    var block;
+    try {
+        block = eLearnJS.blockProgressQuizJS && (!quizJS || !quizJS.getVisibleQuestionsAnswered());
+    }
+    catch(err) {
+        return false;
+    }
 
     if(block) {
         // Zeigt alert
@@ -1074,14 +1083,14 @@ eLearnJS.createContentOverview = function() {
 
             eLearnJS.sectionsVisited.push(false);
         }
-        // close all open ul's
+        // close all open ULs
         while(level >= 0) {
             text+="</ul>";
             level--;
         }
 
         $('#content-overview').html(text);
-        $('#content-overview').find('li').each(function(i,e) {
+        $('#content-overview').find('li').each(function(i, e) { // eslint-disable-line no-unused-vars
             if($(this).children('ul').length != 0) {
                 $(this).addClass("wide");
             }
@@ -1194,7 +1203,7 @@ $(document).on("click", function(e){
 /**
 * Öffnet und Schließt das Menü an der rechten Seite
 */
-eLearnJS.toggleSideMenu = function(isVisible) {
+eLearnJS.toggleSideMenu = function() {
     $('.menu-wrap').css('top', $('#navigation').height() + "px");
     if (eLearnJS.isSideMenuVisible()) {
         $('#sideMenu').animate({
@@ -1261,7 +1270,7 @@ eLearnJS.startDownload = function(url) {
 
 // --------------------------------------------------------------------------------------
 // Slider Part. Initialization and functions to interact.
-// Touch part is integretated in the older touch functions.
+// Touch part is integrated in the older touch functions.
 // --------------------------------------------------------------------------------------
 
 /**
@@ -1311,7 +1320,7 @@ eLearnJS.initiateGalleries = function() {
         eLearnJS.showSlideButtons(ul, 0, false);
 
         // add index as loopid for loop
-        ul.children('li').each(function(i,e) {
+        ul.children('li').each(function(i,e) { // eslint-disable-line no-unused-vars
             $(this).attr('loopid', i);
         });
 
@@ -1336,9 +1345,6 @@ eLearnJS.initiateGalleries = function() {
 * Klasse "preview-nav" hat.
 */
 eLearnJS.initiateSliderPreview = function(div) {
-    var fullWidth = div.width();
-    var liWidth = fullWidth / 4.5;
-    var liHeight = fullWidth / 6.0;
     div.after("<div class='slider-nav'></div>");
     var sliderNav = div.next('.slider-nav');
     sliderNav.wrap('<div class="preview-con"></div>');
@@ -1415,9 +1421,6 @@ eLearnJS.showSlide = function(ul, slide, updatePreview, animate, duration) {
     var ul_id = $('.img-gallery').index(ul);
     var slider = ul.parent();
 
-    var slide_intended = (ul.children('li').not('.loop_clone').length + slide) % ul.children('li').not('.loop_clone').length;
-    var slideChanged = false;
-
     // Falls Loop aktiviert springt es mit -1 an die letzte Stelle und mit
     // "x.length" an Stelle 0
     if(slider.filter('.loop').length > 0) {
@@ -1428,7 +1431,7 @@ eLearnJS.showSlide = function(ul, slide, updatePreview, animate, duration) {
         // clear loop timeout
         if(animate) {
             if(duration == undefined) duration = eLearnJS.ulTransitionDuration;
-            var timeoutDuration = parseFloat(duration.replace(/[^\d\.]/g, "")) * 1000;
+            var timeoutDuration = parseFloat(duration.replace(/[^\d.]/g, "")) * 1000;
             clearTimeout(eLearnJS.loopTimeouts[ul_id]);
             eLearnJS.loopTimeouts[ul_id] = setTimeout(function() {
                 eLearnJS.clearLoop(ul);
@@ -1459,10 +1462,10 @@ eLearnJS.showSlide = function(ul, slide, updatePreview, animate, duration) {
     // Zusätzlich für Slider mit Preview Nav
     if(updatePreview
         && slider.filter('.preview-nav').length > 0) {
-        var previeNavLis = slider.parent().nextAll('.preview-con').find('.slider-nav').first().children('ul.img-gallery').children('li');
-        previeNavLis.removeClass('active');
-        previeNavLis.eq(actual_slide).addClass('active');
-        eLearnJS.showSlide(previeNavLis.parent(), Math.floor(actual_slide/4), false, animate, duration);
+        var previewNavLis = slider.parent().nextAll('.preview-con').find('.slider-nav').first().children('ul.img-gallery').children('li');
+        previewNavLis.removeClass('active');
+        previewNavLis.eq(actual_slide).addClass('active');
+        eLearnJS.showSlide(previewNavLis.parent(), Math.floor(actual_slide/4), false, animate, duration);
     }
 
     eLearnJS.showSlideButtons(ul, slide, slider.filter('.slider-nav').length > 0);
@@ -1472,27 +1475,25 @@ eLearnJS.showSlide = function(ul, slide, updatePreview, animate, duration) {
 * Fügt für "Loop" benötigte Elemente in den Slider ein, damit eine sprunglose
 * Übergänge zwischen den Elementen in eine Richtung möglich sind.
 */
-eLearnJS.createLoopFor = function(ul, ul_id, slide) {
-    var active_slide = eLearnJS.visibleImage[ul_id];
-
+eLearnJS.createLoopFor = function(ul, ul_id, slide) { // eslint-disable-line no-unused-vars
     // moving right
+    var nextSlideIndex, originalSlide, newSlide;
     if(slide == ul.children('li').length - 1) {
-        var slide_next = parseInt(ul.children('li').eq(slide).attr('loopid')) + 1;
+        nextSlideIndex = parseInt(ul.children('li').eq(slide).attr('loopid')) + 1;
         // create loop li
-        var originalSlide = ul.children('li').not('.loop_clone').eq(slide_next % ul.children('li').not('.loop_clone').length);
-        var newSlide = originalSlide.clone();
+        originalSlide = ul.children('li').not('.loop_clone').eq(nextSlideIndex % ul.children('li').not('.loop_clone').length);
+        newSlide = originalSlide.clone();
         newSlide.addClass('loop_clone');
         ul.children('li').last().after(newSlide);
     }
     // moving left
     else if(slide == 0){
-        var slide_next = parseInt(ul.children('li').eq(slide).attr('loopid')) - 1 + ul.children('li').not('.loop_clone').length;
+        nextSlideIndex = parseInt(ul.children('li').eq(slide).attr('loopid')) - 1 + ul.children('li').not('.loop_clone').length;
         // create loop li
-        var originalSlide = ul.children('li').not('.loop_clone').eq(slide_next % ul.children('li').not('.loop_clone').length);
-        var newSlide = originalSlide.clone();
+        originalSlide = ul.children('li').not('.loop_clone').eq(nextSlideIndex % ul.children('li').not('.loop_clone').length);
+        newSlide = originalSlide.clone();
         newSlide.addClass('loop_clone');
         ul.children('li').first().before(newSlide);
-        active_slide++;
         slide++;
 
         var marginLeft = ul.children('li').not('.loop_clone').first().prevAll('.loop_clone').length
@@ -1571,10 +1572,10 @@ eLearnJS.showSlideLi = function(ul, ul_id, slide, animate, duration) {
     eLearnJS.visibleImage[ul_id] = slide;
     // Die X-Position an die die Transformation stattfindet
     var x = ul.children('li').outerWidth(true)*slide*-1
-        + parseFloat(ul.css('margin-left').replace(/[^\d\.]/g, ""));
+        + parseFloat(ul.css('margin-left').replace(/[^\d.]/g, ""));
     if(ul.parent().filter('.slider-nav').length > 0) {
         x = ul.children('li').outerWidth(true)*slide*-4
-            + parseFloat(ul.css('margin-left').replace(/[^\d\.]/g, ""));
+            + parseFloat(ul.css('margin-left').replace(/[^\d.]/g, ""));
     }
     ul.css({
         transform: "translate3d(" + x + "px, 0px, 0px)"
@@ -1583,7 +1584,7 @@ eLearnJS.showSlideLi = function(ul, ul_id, slide, animate, duration) {
 
     // set timeout to wait for sliding animation
     var oldTimeout = eLearnJS.slideSwitchTimeouts[ul_id];
-    var timeoutDuration = parseFloat(duration.replace(/[^\d\.]/g, "")) * 1000;
+    var timeoutDuration = parseFloat(duration.replace(/[^\d.]/g, "")) * 1000;
     if(!animate) timeoutDuration = 0;
 
     clearTimeout(oldTimeout);
@@ -1594,7 +1595,7 @@ eLearnJS.showSlideLi = function(ul, ul_id, slide, animate, duration) {
             var animationDuration = 500;
             if(!animate) {
                 // will be eLearnJS.ulTransitionDuration if duration is not set explicitly
-                animationDuration = parseFloat(duration.replace(/[^\d\.]/g, "")) * 1000;
+                animationDuration = parseFloat(duration.replace(/[^\d.]/g, "")) * 1000;
             }
             ul.parent().animate({height: height + "px"}, animationDuration, function() {
                 ul.parent().removeClass("switching");
@@ -1755,7 +1756,7 @@ eLearnJS.resizeAllSliders = function() {
 };
 
 /**
-* Passt alle Bildergallerien (normalen Slider) an neue Fenstergröße an.
+* Passt alle Bildergalerie (normalen Slider) an neue Fenstergröße an.
 */
 eLearnJS.resizeSliders = function() {
     $('.slider:visible').each(function() {
@@ -1784,7 +1785,7 @@ eLearnJS.resizeSliders = function() {
         var slide = eLearnJS.visibleImage[ul_id];
         var heights = 0;
         var testedImages = 0;
-        slider.children('ul.img-gallery').children('li').each(function(i, e) {
+        slider.children('ul.img-gallery').children('li').each(function(i, e) { // eslint-disable-line no-unused-vars
             var li = $(this);
             li.css("width", slider.width() + "px");
             eLearnJS.getImageSize(li.children("img"), function(width, height){
@@ -1843,7 +1844,7 @@ eLearnJS.resizeSliders = function() {
 };
 
 /**
-* Passt alle Slider Navigationen an neue Fenstergröße an.
+* Passt alle Slider-Navigations an neue Fenstergröße an.
 */
 eLearnJS.resizeNavigationSliders = function() {
     $('.slider-nav:visible').each(function() {
@@ -1877,10 +1878,9 @@ eLearnJS.resizeNavigationSliders = function() {
             transform: "translate3d(" + x + "px, 0px, 0px)"
         });
         // Set Image Size
-        var alerted = false;
         // Zur korrekten größen Berechnung muss das zurückgesetzt werden.
         ul.children('li').find('img').css({"width":"", "height":""});
-        ul.children('li').find('img').each(function(i,e) {
+        ul.children('li').find('img').each(function(i, e) { // eslint-disable-line no-unused-vars
             var img = $(this);
             eLearnJS.getImageSize(img, function(width, height){
                 if(liHeight > 0) {
@@ -1970,7 +1970,7 @@ eLearnJS.tooltips =
         html : '<div id="tooltipBack" class="tooltip fixed"></div>',
         lang_code : "tooltip.back",
         localization : {
-            "de" : 'Verlinkt normalerweise auf eine <br>vorangegane Seite oder den Anfang <br>des Dokuments.',
+            "de" : 'Verlinkt normalerweise auf eine <br>vorangegangene Seite oder den Anfang <br>des Dokuments.',
             "en" : 'Usually links to the previous <br>page or the beginning <br>of the document.',
         },
         condition : eLearnJS.isBackbuttonEnabled,
@@ -2209,7 +2209,7 @@ eLearnJS.initiateHideables = function() {
         div.wrap('<div class="hideable-container"></div>');
 
         var button = $('<button></button>');
-        button.click(function(e) {
+        button.click(function(e) { // eslint-disable-line no-unused-vars
             eLearnJS.toggleHideable(this);
         });
         div.before(button);
@@ -2228,10 +2228,11 @@ eLearnJS.toggleHideable = function(element, bool) {
         visibility = !div.is(':visible');
     }
 
+    var text;
     // hide
     if(!visibility) {
         div.hide();
-        var text = div.attr('show') ? div.attr('show') : "";
+        text = div.attr('show') ? div.attr('show') : "";
         text += div.attr('show') && div.attr('name') ? " " : "";
         text += div.attr('name') ? div.attr('name') : "";
         $(element).html(text);
@@ -2239,7 +2240,7 @@ eLearnJS.toggleHideable = function(element, bool) {
     // show
     else {
         div.show();
-        var text = div.attr('hide') ? div.attr('hide') : "";
+        text = div.attr('hide') ? div.attr('hide') : "";
         text += div.attr('hide') && div.attr('name') ? " " : "";
         text += div.attr('name') ? div.attr('name') : "";
         $(element).html(text);
@@ -2282,7 +2283,7 @@ eLearnJS.initiateTabbedBox = function(box) {
 
 /**
 * Selects a tab of a tabbed box
-* @param elemt, the tab element clicked on
+* @param element, the tab element clicked on
 * @event: Fires "ejstabchange"event on the .tabbed-container when done successfully.
 */
 eLearnJS.selectTab = function(element) {
@@ -2290,7 +2291,7 @@ eLearnJS.selectTab = function(element) {
     var index = e.parent().children().index(e);
     var div = e.parent().nextAll('.tabbed-box').first();
 
-    var tabbefore = div.find('.tab:visible').attr("name");
+    var tabBefore = div.find('.tab:visible').attr("name");
 
     // show only new
     div.find('.tab').hide();
@@ -2300,7 +2301,7 @@ eLearnJS.selectTab = function(element) {
 
     var eventObj = {
         "tab": e.html(),
-        "tabbefore" : tabbefore};
+        "tabbefore" : tabBefore};
     eLearnJS.fireEvent(div.closest('.tabbed-container')[0], eLearnJS.createEvent("ejstabchange", eventObj));
 };
 
@@ -2327,14 +2328,14 @@ eLearnJS.initiateHoverInfos = function() {
         info.addClass("hide");
         info.addClass("hover-info-block");
 
-        div.on('mouseenter', function(event) {
+        div.on('mouseenter', function(event) { // eslint-disable-line no-unused-vars
             if(!eLearnJS.isTouchSupported())
                 eLearnJS.hoverInfoShow(div);
         });
-        div.on('mouseleave', function(event) {
+        div.on('mouseleave', function(event) { // eslint-disable-line no-unused-vars
             eLearnJS.hoverInfoHide(div);
         });
-        title.on('click', function(event) {
+        title.on('click', function(event) { // eslint-disable-line no-unused-vars
             eLearnJS.hoverInfoTrigger(div);
         });
     });
@@ -2369,6 +2370,7 @@ eLearnJS.hoverInfoSetSmallPosition = function(div) {
 
     var left = "auto";
     var right = "auto";
+    var margin = "";
     if(($(window).width() - div.offset().left)
         > (div.offset().left + div.outerWidth(true))) {
         left = div.offset().left;
@@ -2479,34 +2481,6 @@ eLearnJS.stopVideos = function() {
     // stop all HTML5 videos
     $('video').each(function() {this.pause();});
     $('audio').each(function() {this.pause();});
-
-    /*
-    // set hsrc from src and set src to "" so the video stops
-    // cannot be reset directly because it only loads if visible.
-    $('.strobemediaplayback-video-player').not(':visible').each(function() {
-
-        // if not set already
-        if($(this).attr("hsrc") == undefined
-            || $(this).attr("hsrc") == null
-            || $(this).attr("hsrc").length == 0)
-        {
-            $(this).attr("hsrc", this.src);
-            this.src = "";
-        }
-    });
-
-    // reload sources for every lecture2go video
-    // set source from hsrc (hidden source, set below)
-    $('.strobemediaplayback-video-player:visible').each(function() {
-        if($(this).attr("hsrc") != undefined
-            && $(this).attr("hsrc") != null
-            && $(this).attr("hsrc").length > 0)
-        {
-            this.src = $(this).attr("hsrc");
-            $(this).attr("hsrc", "");
-        }
-    });
-    */
 };
 
 // --------------------------------------------------------------------------------------
@@ -2677,7 +2651,7 @@ eLearnJS.isTouchSupported = function() {
 * This will set listeners to specific events which can detect
 */
 eLearnJS.initiateTouchDetection = function() {
-    $(document).bind('touchstart', function(event) {
+    $(document).bind('touchstart', function(event) { // eslint-disable-line no-unused-vars
         eLearnJS.lastTouch = new Date().getTime();
         clearTimeout(eLearnJS.touchMouseChangeTimer);
         if(!eLearnJS.touchSupported) {
@@ -2685,7 +2659,7 @@ eLearnJS.initiateTouchDetection = function() {
             eLearnJS.touchSupportedChanged();
         }
     });
-    $(document).bind('mousemove', function(event) {
+    $(document).bind('mousemove', function(event) { // eslint-disable-line no-unused-vars
         // asynchronous for touch events fired afterwards
         eLearnJS.touchMouseChangeTimer = setTimeout(function() {
             // more than 2s ago
@@ -2718,14 +2692,14 @@ eLearnJS.addTouchMouseChangeListener = function(key, fnc) {
 
 
 /**
-* Aktiviert oder deaktiviert generell den Sectionwechsel per touch
+* Aktiviert oder deaktiviert generell den Section-Wechsel per touch
 */
 eLearnJS.generalSectionSwipeEnabled = function(b) {
     eLearnJS.secSwipeEnabled = b;
 };
 
 /**
-* Gibt zurück, ob der Sectionwechsel per touch aktiviert ist.
+* Gibt zurück, ob der Section-Wechsel per touch aktiviert ist.
 */
 eLearnJS.isSectionSwipeEnabled = function() {
     return eLearnJS.secSwipeEnabled;
@@ -2875,7 +2849,7 @@ eLearnJS.checkSwipeType = function() {
 
 /**
 * Called on touch start.
-* Will set inital values for movement. Or cancel if it is multi finger touch.
+* Will set initial values for movement. Or cancel if it is multi finger touch.
 */
 eLearnJS.touchStart = function(event,passedName) {
     eLearnJS.swipeTarget = $(event.target);
@@ -2967,7 +2941,7 @@ eLearnJS.touchEnd = function(event) {
 /**
 * Resets all touch values.
 */
-eLearnJS.touchCancel = function(event, dir) {
+eLearnJS.touchCancel = function(event) { // eslint-disable-line no-unused-vars
     if(eLearnJS.triggerElementID != null) {
         eLearnJS.fingerCount = 0;
         eLearnJS.startX = -1;
@@ -2998,7 +2972,7 @@ eLearnJS.touchCancel = function(event, dir) {
 */
 eLearnJS.setSwipeDirection = function() {
     if(eLearnJS.curX != eLearnJS.startX || eLearnJS.curY != eLearnJS.startY) {
-        eLearnJS.caluculateAngle();
+        eLearnJS.calculateAngle();
         eLearnJS.determineSwipeDirection();
         if(eLearnJS.swipeDirection == 'left' || eLearnJS.swipeDirection == 'right') {
             eLearnJS.isHorizontalSwipe = true;
@@ -3013,10 +2987,9 @@ eLearnJS.setSwipeDirection = function() {
 /**
 * Calculates and returns an angle for the swipe direction
 */
-eLearnJS.caluculateAngle = function() {
+eLearnJS.calculateAngle = function() {
     var X = eLearnJS.startX-eLearnJS.curX;
     var Y = eLearnJS.curY-eLearnJS.startY;
-    var Z = Math.round(Math.sqrt(Math.pow(X,2)+Math.pow(Y,2)));
     var r = Math.atan2(Y,X);
     eLearnJS.swipeAngle = Math.round(r*180/Math.PI);
     if ( eLearnJS.swipeAngle < 0 ) { eLearnJS.swipeAngle =  360 - Math.abs(eLearnJS.swipeAngle); }
@@ -3050,7 +3023,9 @@ eLearnJS.processingRoutine = function(dir, type) {
         } else if ( dir == 'right' ) {
             eLearnJS.showPrev();
         } else if ( dir == 'up' ) {
+            // do nothing
         } else if ( dir == 'down' ) {
+            // do nothing
         }
     }
 };
@@ -3065,6 +3040,7 @@ eLearnJS.processingRoutine = function(dir, type) {
 */
 eLearnJS.touchMoveSection = function(dif) {
     var maxDiff = $("body").width()/4;
+    var innerOp;
     if(dif >= 0 && eLearnJS.visSection < $('section').length - 1) // nach Links streifen, rechts kommt raus
     {
         if(dif > maxDiff) {
@@ -3073,7 +3049,7 @@ eLearnJS.touchMoveSection = function(dif) {
         $('#rightTouch').css('margin-right', dif.toFixed(2)+'px');
         $('#rightTouch').css('opacity', dif/maxDiff);
 
-        var innerOp = dif/maxDiff;
+        innerOp = dif/maxDiff;
         if(innerOp < 0.90) {
             innerOp = 0.25;
         }
@@ -3091,7 +3067,7 @@ eLearnJS.touchMoveSection = function(dif) {
         $('#leftTouch').css('margin-left', dif.toFixed(2)+'px');
         $('#leftTouch').css('opacity', dif/maxDiff);
 
-        var innerOp = dif/maxDiff;
+        innerOp = dif/maxDiff;
         if(innerOp < 0.90) {
             innerOp = 0.25;
         }
@@ -3115,11 +3091,10 @@ eLearnJS.touchMoveMenu = function(dif) {
 };
 
 /**
-* Wird aufgerufen wenn momentan die Touchfunktion für Slider (Bildergallerien)
+* Wird aufgerufen wenn momentan die Touchfunktion für Slider (Bildergalerien)
 * läuft.
 */
 eLearnJS.touchMoveSlider = function(dif, ul) {
-    var vimg = eLearnJS.visibleImage[$('.img-gallery').index(ul)];
     var marginLeft = ul.children('li').not('.loop_clone').first().prevAll('.loop_clone').length
                     * ul.children('li').outerWidth(true)
                     * -1;
@@ -3132,7 +3107,7 @@ eLearnJS.touchMoveSlider = function(dif, ul) {
 // ---------------------------------------------------------------------------------------
 
 eLearnJS.touchEndSection = function() {
-    eLearnJS.caluculateAngle();
+    eLearnJS.calculateAngle();
     eLearnJS.determineSwipeDirection();
 };
 
@@ -3167,12 +3142,12 @@ eLearnJS.touchEndSlider = function() {
     else if(duration < 1 && eLearnJS.lastSpeed < 0) {
         vimg--;
     }
-    // atleast half way to next image
+    // at least half way to next image
     else if(dif > ul.children('li').outerWidth(true)/2 && eLearnJS.lastSpeed >= 0) {
         vimg++;
         duration = 0.5;
     }
-    // atleast half way to prev image
+    // at least half way to prev image
     else if(dif < -ul.children('li').outerWidth(true)/2 && eLearnJS.lastSpeed <= 0) {
         vimg--;
         duration = 0.5;
@@ -3224,8 +3199,8 @@ eLearnJS.calcSpeed = function(dif) {
         if(time - eLearnJS.lastTime > 50) //more than 1sec
         {
             //calculate dif 1s before
-            var timedif = time - eLearnJS.lastTime;
-            eLearnJS.lastDif = dif - ((50/timedif) * (dif-eLearnJS.lastDif));
+            var timeDif = time - eLearnJS.lastTime;
+            eLearnJS.lastDif = dif - ((50/timeDif) * (dif-eLearnJS.lastDif));
             eLearnJS.lastTime = time - 50;
         }
     }
@@ -3339,6 +3314,7 @@ eLearnJS.initiateScrollBarListener = function() {
 };
 
 eLearnJS.objectAssign = function(obj1, obj2) {
+    var ret;
     try {
         ret = Object.assign(obj1, obj2);
     }
@@ -3366,42 +3342,14 @@ eLearnJS.objectAssign = function(obj1, obj2) {
 // Jquery QRCode Generation. Minified.
 // from: http://jeromeetienne.github.io/jquery-qrcode/
 
-/* jshint ignore: start */
-(function(r){r.fn.qrcode=function(h){var s;function u(a){this.mode=s;this.data=a}function o(a,c){this.typeNumber=a;this.errorCorrectLevel=c;this.modules=null;this.moduleCount=0;this.dataCache=null;this.dataList=[]}function q(a,c){if(void 0==a.length)throw Error(a.length+"/"+c);for(var d=0;d<a.length&&0==a[d];)d++;this.num=Array(a.length-d+c);for(var b=0;b<a.length-d;b++)this.num[b]=a[b+d]}function p(a,c){this.totalCount=a;this.dataCount=c}function t(){this.buffer=[];this.length=0}u.prototype={getLength:function(){return this.data.length},
-write:function(a){for(var c=0;c<this.data.length;c++)a.put(this.data.charCodeAt(c),8)}};o.prototype={addData:function(a){this.dataList.push(new u(a));this.dataCache=null},isDark:function(a,c){if(0>a||this.moduleCount<=a||0>c||this.moduleCount<=c)throw Error(a+","+c);return this.modules[a][c]},getModuleCount:function(){return this.moduleCount},make:function(){if(1>this.typeNumber){for(var a=1,a=1;40>a;a++){for(var c=p.getRSBlocks(a,this.errorCorrectLevel),d=new t,b=0,e=0;e<c.length;e++)b+=c[e].dataCount;
-for(e=0;e<this.dataList.length;e++)c=this.dataList[e],d.put(c.mode,4),d.put(c.getLength(),j.getLengthInBits(c.mode,a)),c.write(d);if(d.getLengthInBits()<=8*b)break}this.typeNumber=a}this.makeImpl(!1,this.getBestMaskPattern())},makeImpl:function(a,c){this.moduleCount=4*this.typeNumber+17;this.modules=Array(this.moduleCount);for(var d=0;d<this.moduleCount;d++){this.modules[d]=Array(this.moduleCount);for(var b=0;b<this.moduleCount;b++)this.modules[d][b]=null}this.setupPositionProbePattern(0,0);this.setupPositionProbePattern(this.moduleCount-
-7,0);this.setupPositionProbePattern(0,this.moduleCount-7);this.setupPositionAdjustPattern();this.setupTimingPattern();this.setupTypeInfo(a,c);7<=this.typeNumber&&this.setupTypeNumber(a);null==this.dataCache&&(this.dataCache=o.createData(this.typeNumber,this.errorCorrectLevel,this.dataList));this.mapData(this.dataCache,c)},setupPositionProbePattern:function(a,c){for(var d=-1;7>=d;d++)if(!(-1>=a+d||this.moduleCount<=a+d))for(var b=-1;7>=b;b++)-1>=c+b||this.moduleCount<=c+b||(this.modules[a+d][c+b]=
-0<=d&&6>=d&&(0==b||6==b)||0<=b&&6>=b&&(0==d||6==d)||2<=d&&4>=d&&2<=b&&4>=b?!0:!1)},getBestMaskPattern:function(){for(var a=0,c=0,d=0;8>d;d++){this.makeImpl(!0,d);var b=j.getLostPoint(this);if(0==d||a>b)a=b,c=d}return c},createMovieClip:function(a,c,d){a=a.createEmptyMovieClip(c,d);this.make();for(c=0;c<this.modules.length;c++)for(var d=1*c,b=0;b<this.modules[c].length;b++){var e=1*b;this.modules[c][b]&&(a.beginFill(0,100),a.moveTo(e,d),a.lineTo(e+1,d),a.lineTo(e+1,d+1),a.lineTo(e,d+1),a.endFill())}return a},
-setupTimingPattern:function(){for(var a=8;a<this.moduleCount-8;a++)null==this.modules[a][6]&&(this.modules[a][6]=0==a%2);for(a=8;a<this.moduleCount-8;a++)null==this.modules[6][a]&&(this.modules[6][a]=0==a%2)},setupPositionAdjustPattern:function(){for(var a=j.getPatternPosition(this.typeNumber),c=0;c<a.length;c++)for(var d=0;d<a.length;d++){var b=a[c],e=a[d];if(null==this.modules[b][e])for(var f=-2;2>=f;f++)for(var i=-2;2>=i;i++)this.modules[b+f][e+i]=-2==f||2==f||-2==i||2==i||0==f&&0==i?!0:!1}},setupTypeNumber:function(a){for(var c=
-j.getBCHTypeNumber(this.typeNumber),d=0;18>d;d++){var b=!a&&1==(c>>d&1);this.modules[Math.floor(d/3)][d%3+this.moduleCount-8-3]=b}for(d=0;18>d;d++)b=!a&&1==(c>>d&1),this.modules[d%3+this.moduleCount-8-3][Math.floor(d/3)]=b},setupTypeInfo:function(a,c){for(var d=j.getBCHTypeInfo(this.errorCorrectLevel<<3|c),b=0;15>b;b++){var e=!a&&1==(d>>b&1);6>b?this.modules[b][8]=e:8>b?this.modules[b+1][8]=e:this.modules[this.moduleCount-15+b][8]=e}for(b=0;15>b;b++)e=!a&&1==(d>>b&1),8>b?this.modules[8][this.moduleCount-
-b-1]=e:9>b?this.modules[8][15-b-1+1]=e:this.modules[8][15-b-1]=e;this.modules[this.moduleCount-8][8]=!a},mapData:function(a,c){for(var d=-1,b=this.moduleCount-1,e=7,f=0,i=this.moduleCount-1;0<i;i-=2)for(6==i&&i--;;){for(var g=0;2>g;g++)if(null==this.modules[b][i-g]){var n=!1;f<a.length&&(n=1==(a[f]>>>e&1));j.getMask(c,b,i-g)&&(n=!n);this.modules[b][i-g]=n;e--; -1==e&&(f++,e=7)}b+=d;if(0>b||this.moduleCount<=b){b-=d;d=-d;break}}}};o.PAD0=236;o.PAD1=17;o.createData=function(a,c,d){for(var c=p.getRSBlocks(a,
-c),b=new t,e=0;e<d.length;e++){var f=d[e];b.put(f.mode,4);b.put(f.getLength(),j.getLengthInBits(f.mode,a));f.write(b)}for(e=a=0;e<c.length;e++)a+=c[e].dataCount;if(b.getLengthInBits()>8*a)throw Error("code length overflow. ("+b.getLengthInBits()+">"+8*a+")");for(b.getLengthInBits()+4<=8*a&&b.put(0,4);0!=b.getLengthInBits()%8;)b.putBit(!1);for(;!(b.getLengthInBits()>=8*a);){b.put(o.PAD0,8);if(b.getLengthInBits()>=8*a)break;b.put(o.PAD1,8)}return o.createBytes(b,c)};o.createBytes=function(a,c){for(var d=
-0,b=0,e=0,f=Array(c.length),i=Array(c.length),g=0;g<c.length;g++){var n=c[g].dataCount,h=c[g].totalCount-n,b=Math.max(b,n),e=Math.max(e,h);f[g]=Array(n);for(var k=0;k<f[g].length;k++)f[g][k]=255&a.buffer[k+d];d+=n;k=j.getErrorCorrectPolynomial(h);n=(new q(f[g],k.getLength()-1)).mod(k);i[g]=Array(k.getLength()-1);for(k=0;k<i[g].length;k++)h=k+n.getLength()-i[g].length,i[g][k]=0<=h?n.get(h):0}for(k=g=0;k<c.length;k++)g+=c[k].totalCount;d=Array(g);for(k=n=0;k<b;k++)for(g=0;g<c.length;g++)k<f[g].length&&
-(d[n++]=f[g][k]);for(k=0;k<e;k++)for(g=0;g<c.length;g++)k<i[g].length&&(d[n++]=i[g][k]);return d};s=4;for(var j={PATTERN_POSITION_TABLE:[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,
-78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],G15:1335,G18:7973,G15_MASK:21522,getBCHTypeInfo:function(a){for(var c=a<<10;0<=j.getBCHDigit(c)-j.getBCHDigit(j.G15);)c^=j.G15<<j.getBCHDigit(c)-j.getBCHDigit(j.G15);return(a<<10|c)^j.G15_MASK},getBCHTypeNumber:function(a){for(var c=a<<12;0<=j.getBCHDigit(c)-
-j.getBCHDigit(j.G18);)c^=j.G18<<j.getBCHDigit(c)-j.getBCHDigit(j.G18);return a<<12|c},getBCHDigit:function(a){for(var c=0;0!=a;)c++,a>>>=1;return c},getPatternPosition:function(a){return j.PATTERN_POSITION_TABLE[a-1]},getMask:function(a,c,d){switch(a){case 0:return 0==(c+d)%2;case 1:return 0==c%2;case 2:return 0==d%3;case 3:return 0==(c+d)%3;case 4:return 0==(Math.floor(c/2)+Math.floor(d/3))%2;case 5:return 0==c*d%2+c*d%3;case 6:return 0==(c*d%2+c*d%3)%2;case 7:return 0==(c*d%3+(c+d)%2)%2;default:throw Error("bad maskPattern:"+
-a);}},getErrorCorrectPolynomial:function(a){for(var c=new q([1],0),d=0;d<a;d++)c=c.multiply(new q([1,l.gexp(d)],0));return c},getLengthInBits:function(a,c){if(1<=c&&10>c)switch(a){case 1:return 10;case 2:return 9;case s:return 8;case 8:return 8;default:throw Error("mode:"+a);}else if(27>c)switch(a){case 1:return 12;case 2:return 11;case s:return 16;case 8:return 10;default:throw Error("mode:"+a);}else if(41>c)switch(a){case 1:return 14;case 2:return 13;case s:return 16;case 8:return 12;default:throw Error("mode:"+
-a);}else throw Error("type:"+c);},getLostPoint:function(a){for(var c=a.getModuleCount(),d=0,b=0;b<c;b++)for(var e=0;e<c;e++){for(var f=0,i=a.isDark(b,e),g=-1;1>=g;g++)if(!(0>b+g||c<=b+g))for(var h=-1;1>=h;h++)0>e+h||c<=e+h||0==g&&0==h||i==a.isDark(b+g,e+h)&&f++;5<f&&(d+=3+f-5)}for(b=0;b<c-1;b++)for(e=0;e<c-1;e++)if(f=0,a.isDark(b,e)&&f++,a.isDark(b+1,e)&&f++,a.isDark(b,e+1)&&f++,a.isDark(b+1,e+1)&&f++,0==f||4==f)d+=3;for(b=0;b<c;b++)for(e=0;e<c-6;e++)a.isDark(b,e)&&!a.isDark(b,e+1)&&a.isDark(b,e+
-2)&&a.isDark(b,e+3)&&a.isDark(b,e+4)&&!a.isDark(b,e+5)&&a.isDark(b,e+6)&&(d+=40);for(e=0;e<c;e++)for(b=0;b<c-6;b++)a.isDark(b,e)&&!a.isDark(b+1,e)&&a.isDark(b+2,e)&&a.isDark(b+3,e)&&a.isDark(b+4,e)&&!a.isDark(b+5,e)&&a.isDark(b+6,e)&&(d+=40);for(e=f=0;e<c;e++)for(b=0;b<c;b++)a.isDark(b,e)&&f++;a=Math.abs(100*f/c/c-50)/5;return d+10*a}},l={glog:function(a){if(1>a)throw Error("glog("+a+")");return l.LOG_TABLE[a]},gexp:function(a){for(;0>a;)a+=255;for(;256<=a;)a-=255;return l.EXP_TABLE[a]},EXP_TABLE:Array(256),
-LOG_TABLE:Array(256)},m=0;8>m;m++)l.EXP_TABLE[m]=1<<m;for(m=8;256>m;m++)l.EXP_TABLE[m]=l.EXP_TABLE[m-4]^l.EXP_TABLE[m-5]^l.EXP_TABLE[m-6]^l.EXP_TABLE[m-8];for(m=0;255>m;m++)l.LOG_TABLE[l.EXP_TABLE[m]]=m;q.prototype={get:function(a){return this.num[a]},getLength:function(){return this.num.length},multiply:function(a){for(var c=Array(this.getLength()+a.getLength()-1),d=0;d<this.getLength();d++)for(var b=0;b<a.getLength();b++)c[d+b]^=l.gexp(l.glog(this.get(d))+l.glog(a.get(b)));return new q(c,0)},mod:function(a){if(0>
-this.getLength()-a.getLength())return this;for(var c=l.glog(this.get(0))-l.glog(a.get(0)),d=Array(this.getLength()),b=0;b<this.getLength();b++)d[b]=this.get(b);for(b=0;b<a.getLength();b++)d[b]^=l.gexp(l.glog(a.get(b))+c);return(new q(d,0)).mod(a)}};p.RS_BLOCK_TABLE=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],
-[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,
-116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,
-43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,
-3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,
-55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,
-45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]];p.getRSBlocks=function(a,c){var d=p.getRsBlockTable(a,c);if(void 0==d)throw Error("bad rs block @ typeNumber:"+a+"/errorCorrectLevel:"+c);for(var b=d.length/3,e=[],f=0;f<b;f++)for(var h=d[3*f+0],g=d[3*f+1],j=d[3*f+2],l=0;l<h;l++)e.push(new p(g,j));return e};p.getRsBlockTable=function(a,c){switch(c){case 1:return p.RS_BLOCK_TABLE[4*(a-1)+0];case 0:return p.RS_BLOCK_TABLE[4*(a-1)+1];case 3:return p.RS_BLOCK_TABLE[4*
-(a-1)+2];case 2:return p.RS_BLOCK_TABLE[4*(a-1)+3]}};t.prototype={get:function(a){return 1==(this.buffer[Math.floor(a/8)]>>>7-a%8&1)},put:function(a,c){for(var d=0;d<c;d++)this.putBit(1==(a>>>c-d-1&1))},getLengthInBits:function(){return this.length},putBit:function(a){var c=Math.floor(this.length/8);this.buffer.length<=c&&this.buffer.push(0);a&&(this.buffer[c]|=128>>>this.length%8);this.length++}};"string"===typeof h&&(h={text:h});h=r.extend({},{render:"canvas",width:256,height:256,typeNumber:-1,
-correctLevel:2,background:"#ffffff",foreground:"#000000"},h);return this.each(function(){var a;if("canvas"==h.render){a=new o(h.typeNumber,h.correctLevel);a.addData(h.text);a.make();var c=document.createElement("canvas");c.width=h.width;c.height=h.height;for(var d=c.getContext("2d"),b=h.width/a.getModuleCount(),e=h.height/a.getModuleCount(),f=0;f<a.getModuleCount();f++)for(var i=0;i<a.getModuleCount();i++){d.fillStyle=a.isDark(f,i)?h.foreground:h.background;var g=Math.ceil((i+1)*b)-Math.floor(i*b),
-j=Math.ceil((f+1)*b)-Math.floor(f*b);d.fillRect(Math.round(i*b),Math.round(f*e),g,j)}}else{a=new o(h.typeNumber,h.correctLevel);a.addData(h.text);a.make();c=r("<table></table>").css("width",h.width+"px").css("height",h.height+"px").css("border","0px").css("border-collapse","collapse").css("background-color",h.background);d=h.width/a.getModuleCount();b=h.height/a.getModuleCount();for(e=0;e<a.getModuleCount();e++){f=r("<tr></tr>").css("height",b+"px").appendTo(c);for(i=0;i<a.getModuleCount();i++)r("<td></td>").css("width",
-d+"px").css("background-color",a.isDark(e,i)?h.foreground:h.background).appendTo(f)}}a=c;jQuery(a).appendTo(this)})}})(jQuery);
-/* jshint ignore: end */
+// eslint-disable-next-line
+(function(r){r.fn.qrcode=function(h){var s;function u(a){this.mode=s;this.data=a}function o(a,c){this.typeNumber=a;this.errorCorrectLevel=c;this.modules=null;this.moduleCount=0;this.dataCache=null;this.dataList=[]}function q(a,c){if(void 0==a.length){throw Error(a.length+"/"+c)}for(var d=0;d<a.length&&0==a[d];){d+=1}this.num=Array(a.length-d+c);for(var b=0;b<a.length-d;b+=1){this.num[b]=a[b+d]}}function p(a,c){this.totalCount=a;this.dataCount=c}function t(){this.buffer=[];this.length=0}u.prototype={getLength:function(){return this.data.length},write:function(a){for(var c=0;c<this.data.length;c+=1){a.put(this.data.charCodeAt(c),8)}}};o.prototype={addData:function(a){this.dataList.push(new u(a));this.dataCache=null},isDark:function(a,c){if(0>a||this.moduleCount<=a||0>c||this.moduleCount<=c){throw Error(a+","+c)}return this.modules[a][c]},getModuleCount:function(){return this.moduleCount},make:function(){if(1>this.typeNumber){for(var a=1,a=1;40>a;a+=1){for(var c=p.getRSBlocks(a,this.errorCorrectLevel),d=new t,b=0,e=0;e<c.length;e+=1){b+=c[e].dataCount}for(e=0;e<this.dataList.length;e+=1){c=this.dataList[e],d.put(c.mode,4),d.put(c.getLength(),j.getLengthInBits(c.mode,a)),c.write(d)}if(d.getLengthInBits()<=8*b){break}}this.typeNumber=a}this.makeImpl(!1,this.getBestMaskPattern())},makeImpl:function(a,c){this.moduleCount=4*this.typeNumber+17;this.modules=Array(this.moduleCount);for(var d=0;d<this.moduleCount;d+=1){this.modules[d]=Array(this.moduleCount);for(var b=0;b<this.moduleCount;b+=1){this.modules[d][b]=null}}this.setupPositionProbePattern(0,0);this.setupPositionProbePattern(this.moduleCount-7,0);this.setupPositionProbePattern(0,this.moduleCount-7);this.setupPositionAdjustPattern();this.setupTimingPattern();this.setupTypeInfo(a,c);7<=this.typeNumber&&this.setupTypeNumber(a);null==this.dataCache&&(this.dataCache=o.createData(this.typeNumber,this.errorCorrectLevel,this.dataList));this.mapData(this.dataCache,c)},setupPositionProbePattern:function(a,c){for(var d=-1;7>=d;d+=1){if(!(-1>=a+d||this.moduleCount<=a+d)){for(var b=-1;7>=b;b+=1){-1>=c+b||this.moduleCount<=c+b||(this.modules[a+d][c+b]=0<=d&&6>=d&&(0==b||6==b)||0<=b&&6>=b&&(0==d||6==d)||2<=d&&4>=d&&2<=b&&4>=b?!0:!1)}}}},getBestMaskPattern:function(){for(var a=0,c=0,d=0;8>d;d+=1){this.makeImpl(!0,d);var b=j.getLostPoint(this);if(0==d||a>b){a=b,c=d}}return c},createMovieClip:function(a,c,d){a=a.createEmptyMovieClip(c,d);this.make();for(c=0;c<this.modules.length;c+=1){for(var d=1*c,b=0;b<this.modules[c].length;b+=1){var e=1*b;this.modules[c][b]&&(a.beginFill(0,100),a.moveTo(e,d),a.lineTo(e+1,d),a.lineTo(e+1,d+1),a.lineTo(e,d+1),a.endFill())}}return a},setupTimingPattern:function(){for(var a=8;a<this.moduleCount-8;a+=1){null==this.modules[a][6]&&(this.modules[a][6]=0==a%2)}for(a=8;a<this.moduleCount-8;a+=1){null==this.modules[6][a]&&(this.modules[6][a]=0==a%2)}},setupPositionAdjustPattern:function(){for(var a=j.getPatternPosition(this.typeNumber),c=0;c<a.length;c+=1){for(var d=0;d<a.length;d+=1){var b=a[c],e=a[d];if(null==this.modules[b][e]){for(var f=-2;2>=f;f+=1){for(var i=-2;2>=i;i+=1){this.modules[b+f][e+i]=-2==f||2==f||-2==i||2==i||0==f&&0==i?!0:!1}}}}}},setupTypeNumber:function(a){for(var c=j.getBCHTypeNumber(this.typeNumber),d=0;18>d;d+=1){var b=!a&&1==(c>>d&1);this.modules[Math.floor(d/3)][d%3+this.moduleCount-8-3]=b}for(d=0;18>d;d+=1){b=!a&&1==(c>>d&1),this.modules[d%3+this.moduleCount-8-3][Math.floor(d/3)]=b}},setupTypeInfo:function(a,c){for(var d=j.getBCHTypeInfo(this.errorCorrectLevel<<3|c),b=0;15>b;b+=1){var e=!a&&1==(d>>b&1);6>b?this.modules[b][8]=e:8>b?this.modules[b+1][8]=e:this.modules[this.moduleCount-15+b][8]=e}for(b=0;15>b;b+=1){e=!a&&1==(d>>b&1),8>b?this.modules[8][this.moduleCount-b-1]=e:9>b?this.modules[8][15-b-1+1]=e:this.modules[8][15-b-1]=e}this.modules[this.moduleCount-8][8]=!a},mapData:function(a,c){for(var d=-1,b=this.moduleCount-1,e=7,f=0,i=this.moduleCount-1;0<i;i-=2){for(6==i&&i--;;){for(var g=0;2>g;g+=1){if(null==this.modules[b][i-g]){var n=!1;f<a.length&&(n=1==(a[f]>>>e&1));j.getMask(c,b,i-g)&&(n=!n);this.modules[b][i-g]=n;e-=1;-1==e&&(f++,e=7)}}b+=d;if(0>b||this.moduleCount<=b){b-=d;d= -d;break}}}}};o.PAD0=236;o.PAD1=17;o.createData=function(a,c,d){for(var c=p.getRSBlocks(a,c),b=new t,e=0;e<d.length;e+=1){var f=d[e];b.put(f.mode,4);b.put(f.getLength(),j.getLengthInBits(f.mode,a));f.write(b)}for(e=a=0;e<c.length;e+=1){a+=c[e].dataCount}if(b.getLengthInBits()>8*a){throw Error("code length overflow. ("+b.getLengthInBits()+">"+8*a+")")}for(b.getLengthInBits()+4<=8*a&&b.put(0,4);0!=b.getLengthInBits()%8;){b.putBit(!1)}for(;!(b.getLengthInBits()>=8*a);){b.put(o.PAD0,8);if(b.getLengthInBits()>=8*a){break}b.put(o.PAD1,8)}return o.createBytes(b,c)};o.createBytes=function(a,c){for(var d=0,b=0,e=0,f=Array(c.length),i=Array(c.length),g=0;g<c.length;g+=1){var n=c[g].dataCount,h=c[g].totalCount-n,b=Math.max(b,n),e=Math.max(e,h);f[g]=Array(n);for(var k=0;k<f[g].length;k+=1){f[g][k]=255&a.buffer[k+d]}d+=n;k=j.getErrorCorrectPolynomial(h);n=(new q(f[g],k.getLength()-1)).mod(k);i[g]=Array(k.getLength()-1);for(k=0;k<i[g].length;k+=1){h=k+n.getLength()-i[g].length,i[g][k]=0<=h?n.get(h):0}}for(k=g=0;k<c.length;k+=1){g+=c[k].totalCount}d=Array(g);for(k=n=0;k<b;k+=1){for(g=0;g<c.length;g+=1){k<f[g].length&&(d[n++]=f[g][k])}}for(k=0;k<e;k+=1){for(g=0;g<c.length;g+=1){k<i[g].length&&(d[n++]=i[g][k])}}return d};s=4;for(var j={PATTERN_POSITION_TABLE:[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],G15:1335,G18:7973,G15_MASK:21522,getBCHTypeInfo:function(a){for(var c=a<<10;0<=j.getBCHDigit(c)-j.getBCHDigit(j.G15);){c^=j.G15<<j.getBCHDigit(c)-j.getBCHDigit(j.G15)}return(a<<10|c)^j.G15_MASK},getBCHTypeNumber:function(a){for(var c=a<<12;0<=j.getBCHDigit(c)-j.getBCHDigit(j.G18);){c^=j.G18<<j.getBCHDigit(c)-j.getBCHDigit(j.G18)}return a<<12|c},getBCHDigit:function(a){for(var c=0;0!=a;){c++,a>>>=1}return c},getPatternPosition:function(a){return j.PATTERN_POSITION_TABLE[a-1]},getMask:function(a,c,d){switch(a){case 0:return 0==(c+d)%2;case 1:return 0==c%2;case 2:return 0==d%3;case 3:return 0==(c+d)%3;case 4:return 0==(Math.floor(c/2)+Math.floor(d/3))%2;case 5:return 0==c*d%2+c*d%3;case 6:return 0==(c*d%2+c*d%3)%2;case 7:return 0==(c*d%3+(c+d)%2)%2;default:throw Error("bad maskPattern:"+a)}},getErrorCorrectPolynomial:function(a){for(var c=new q([1],0),d=0;d<a;d+=1){c=c.multiply(new q([1,l.gexp(d)],0))}return c},getLengthInBits:function(a,c){if(1<=c&&10>c){switch(a){case 1:return 10;case 2:return 9;case s:return 8;case 8:return 8;default:throw Error("mode:"+a)}}else if(27>c){switch(a){case 1:return 12;case 2:return 11;case s:return 16;case 8:return 10;default:throw Error("mode:"+a)}}else if(41>c){switch(a){case 1:return 14;case 2:return 13;case s:return 16;case 8:return 12;default:throw Error("mode:"+a)}}else{throw Error("type:"+c)}},getLostPoint:function(a){for(var c=a.getModuleCount(),d=0,b=0;b<c;b+=1){for(var e=0;e<c;e+=1){for(var f=0,i=a.isDark(b,e),g=-1;1>=g;g+=1){if(!(0>b+g||c<=b+g)){for(var h=-1;1>=h;h+=1){0>e+h||c<=e+h||0==g&&0==h||i==a.isDark(b+g,e+h)&&f++}}}5<f&&(d+=3+f-5)}}for(b=0;b<c-1;b+=1){for(e=0;e<c-1;e+=1){if(f=0,a.isDark(b,e)&&f++,a.isDark(b+1,e)&&f++,a.isDark(b,e+1)&&f++,a.isDark(b+1,e+1)&&f++,0==f||4==f){d+=3}}}for(b=0;b<c;b+=1){for(e=0;e<c-6;e+=1){a.isDark(b,e)&&!a.isDark(b,e+1)&&a.isDark(b,e+2)&&a.isDark(b,e+3)&&a.isDark(b,e+4)&&!a.isDark(b,e+5)&&a.isDark(b,e+6)&&(d+=40)}}for(e=0;e<c;e+=1){for(b=0;b<c-6;b+=1){a.isDark(b,e)&&!a.isDark(b+1,e)&&a.isDark(b+2,e)&&a.isDark(b+3,e)&&a.isDark(b+4,e)&&!a.isDark(b+5,e)&&a.isDark(b+6,e)&&(d+=40)}}for(e=f=0;e<c;e+=1){for(b=0;b<c;b+=1){a.isDark(b,e)&&f++}}a=Math.abs(100*f/c/c-50)/5;return d+10*a}},l={glog:function(a){if(1>a){throw Error("glog("+a+")")}return l.LOG_TABLE[a]},gexp:function(a){for(;0>a;){a+=255}for(;256<=a;){a-=255}return l.EXP_TABLE[a]},EXP_TABLE:Array(256),LOG_TABLE:Array(256)},m=0;8>m;m+=1){l.EXP_TABLE[m]=1<<m}for(m=8;256>m;m+=1){l.EXP_TABLE[m]=l.EXP_TABLE[m-4]^l.EXP_TABLE[m-5]^l.EXP_TABLE[m-6]^l.EXP_TABLE[m-8]}for(m=0;255>m;m+=1){l.LOG_TABLE[l.EXP_TABLE[m]]=m}q.prototype={get:function(a){return this.num[a]},getLength:function(){return this.num.length},multiply:function(a){for(var c=Array(this.getLength()+a.getLength()-1),d=0;d<this.getLength();d+=1){for(var b=0;b<a.getLength();b+=1){c[d+b]^=l.gexp(l.glog(this.get(d))+l.glog(a.get(b)))}}return new q(c,0)},mod:function(a){if(0>this.getLength()-a.getLength()){return this}for(var c=l.glog(this.get(0))-l.glog(a.get(0)),d=Array(this.getLength()),b=0;b<this.getLength();b+=1){d[b]=this.get(b)}for(b=0;b<a.getLength();b+=1){d[b]^=l.gexp(l.glog(a.get(b))+c)}return(new q(d,0)).mod(a)}};p.RS_BLOCK_TABLE=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]];p.getRSBlocks=function(a,c){var d=p.getRsBlockTable(a,c);if(void 0==d){throw Error("bad rs block @ typeNumber:"+a+"/errorCorrectLevel:"+c)}for(var b=d.length/3,e=[],f=0;f<b;f+=1){for(var h=d[3*f+0],g=d[3*f+1],j=d[3*f+2],l=0;l<h;l+=1){e.push(new p(g,j))}}return e};p.getRsBlockTable=function(a,c){switch(c){case 1:return p.RS_BLOCK_TABLE[4*(a-1)+0];case 0:return p.RS_BLOCK_TABLE[4*(a-1)+1];case 3:return p.RS_BLOCK_TABLE[4*(a-1)+2];case 2:return p.RS_BLOCK_TABLE[4*(a-1)+3]}};t.prototype={get:function(a){return 1==(this.buffer[Math.floor(a/8)]>>>7-a%8&1)},put:function(a,c){for(var d=0;d<c;d+=1){this.putBit(1==(a>>>c-d-1&1))}},getLengthInBits:function(){return this.length},putBit:function(a){var c=Math.floor(this.length/8);this.buffer.length<=c&&this.buffer.push(0);a&&(this.buffer[c]|=128>>>this.length%8);this.length+=1}};"string"===typeof h&&(h={text:h});h=r.extend({},{render:"canvas",width:256,height:256,typeNumber:-1,correctLevel:2,background:"#ffffff",foreground:"#000000"},h);return this.each(function(){var a;if("canvas"==h.render){a=new o(h.typeNumber,h.correctLevel);a.addData(h.text);a.make();var c=document.createElement("canvas");c.width=h.width;c.height=h.height;for(var d=c.getContext("2d"),b=h.width/a.getModuleCount(),e=h.height/a.getModuleCount(),f=0;f<a.getModuleCount();f+=1){for(var i=0;i<a.getModuleCount();i+=1){d.fillStyle=a.isDark(f,i)?h.foreground:h.background;var g=Math.ceil((i+1)*b)-Math.floor(i*b),j=Math.ceil((f+1)*b)-Math.floor(f*b);d.fillRect(Math.round(i*b),Math.round(f*e),g,j)}}}else{a=new o(h.typeNumber,h.correctLevel);a.addData(h.text);a.make();c=r("<table></table>").css("width",h.width+"px").css("height",h.height+"px").css("border","0px").css("border-collapse","collapse").css("background-color",h.background);d=h.width/a.getModuleCount();b=h.height/a.getModuleCount();for(e=0;e<a.getModuleCount();e+=1){f=r("<tr></tr>").css("height",b+"px").appendTo(c);for(i=0;i<a.getModuleCount();i+=1){r("<td></td>").css("width",d+"px").css("background-color",a.isDark(e,i)?h.foreground:h.background).appendTo(f)}}}a=c;jQuery(a).appendTo(this)})}})(jQuery);
 
 /**
  * Copyright Marc J. Schmidt. See the LICENSE file at the top-level
  * directory of this distribution and at
  * https://github.com/marcj/css-element-queries/blob/master/LICENSE.
  */
-/* jshint ignore: start */
+
+// eslint-disable-next-line
 "use strict";!function(e,t){"function"==typeof define&&define.amd?define(t):"object"==typeof exports?module.exports=t():e.ResizeSensor=t()}("undefined"!=typeof window?window:this,function(){function e(e,t){var i=Object.prototype.toString.call(e),n="[object Array]"===i||"[object NodeList]"===i||"[object HTMLCollection]"===i||"[object Object]"===i||"undefined"!=typeof jQuery&&e instanceof jQuery||"undefined"!=typeof Elements&&e instanceof Elements,o=0,s=e.length;if(n)for(;o<s;o++)t(e[o]);else t(e)}function t(e){if(!e.getBoundingClientRect)return{width:e.offsetWidth,height:e.offsetHeight};var t=e.getBoundingClientRect();return{width:Math.round(t.width),height:Math.round(t.height)}}if("undefined"==typeof window)return null;var i=window.requestAnimationFrame||window.mozRequestAnimationFrame||window.webkitRequestAnimationFrame||function(e){return window.setTimeout(e,20)},n=function(o,s){function r(){var e=[];this.add=function(t){e.push(t)};var t,i;this.call=function(n){for(t=0,i=e.length;t<i;t++)e[t].call(this,n)},this.remove=function(n){var o=[];for(t=0,i=e.length;t<i;t++)e[t]!==n&&o.push(e[t]);e=o},this.length=function(){return e.length}}function d(e,n){if(e){if(e.resizedAttached)return void e.resizedAttached.add(n);e.resizedAttached=new r,e.resizedAttached.add(n),e.resizeSensor=document.createElement("div"),e.resizeSensor.dir="ltr",e.resizeSensor.className="resize-sensor";var o="position: absolute; left: -10px; top: -10px; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;",s="position: absolute; left: 0; top: 0; transition: 0s;";e.resizeSensor.style.cssText=o,e.resizeSensor.innerHTML='<div class="resize-sensor-expand" style="'+o+'"><div style="'+s+'"></div></div><div class="resize-sensor-shrink" style="'+o+'"><div style="'+s+' width: 200%; height: 200%"></div></div>',e.appendChild(e.resizeSensor);var d=window.getComputedStyle(e).getPropertyValue("position");"absolute"!==d&&"relative"!==d&&"fixed"!==d&&(e.style.position="relative");var c,h,l,f=e.resizeSensor.childNodes[0],u=f.childNodes[0],a=e.resizeSensor.childNodes[1],v=t(e),z=v.width,p=v.height,w=!0,g=function(){u.style.width="100000px",u.style.height="100000px",f.scrollLeft=1e5,f.scrollTop=1e5,a.scrollLeft=1e5,a.scrollTop=1e5},y=function(){if(w){if(!f.scrollTop&&!f.scrollLeft)return g(),void(l||(l=i(function(){l=0,y()})));w=!1}g()};e.resizeSensor.resetSensor=y;var S=function(){h=0,c&&(z=v.width,p=v.height,e.resizedAttached&&e.resizedAttached.call(v))},m=function(){v=t(e),c=v.width!==z||v.height!==p,c&&!h&&(h=i(S)),y()},b=function(e,t,i){e.attachEvent?e.attachEvent("on"+t,i):e.addEventListener(t,i)};b(f,"scroll",m),b(a,"scroll",m),i(y)}}var c;"undefined"!=typeof ResizeObserver?(c=new ResizeObserver(function(t){e(t,function(e){s.call(this,{width:e.contentRect.width,height:e.contentRect.height})})}),void 0!==o&&e(o,function(e){c.observe(e)})):e(o,function(e){d(e,s)}),this.detach=function(t){"undefined"!=typeof ResizeObserver?e(o,function(e){c.unobserve(e)}):n.detach(o,t)},this.reset=function(){o.resizeSensor.resetSensor()}};return n.reset=function(t,i){e(t,function(e){e.resizeSensor.resetSensor()})},n.detach=function(t,i){e(t,function(e){e&&(e.resizedAttached&&"function"==typeof i&&(e.resizedAttached.remove(i),e.resizedAttached.length())||e.resizeSensor&&(e.contains(e.resizeSensor)&&e.removeChild(e.resizeSensor),delete e.resizeSensor,delete e.resizedAttached))})},n});
-/* jshint ignore: end */

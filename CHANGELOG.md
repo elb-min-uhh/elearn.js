@@ -3,6 +3,7 @@
 * __1.0.10__:
   * Fixes:
     * `hover-info` attribute `data-width` can be used without setting `data-full-width`
+    * code refactoring, fixing typos, remove unnecessary code
 * __1.0.9__:
   * Changed:
     * blockquote elements will only emphasize their first line as heading if
@@ -72,9 +73,9 @@ _Hint:_ Extensions for _elearn.js_ were moved to their own repositories.
     Größenveränderungen korrekt gefeuert
 * __1.0.0__:
   * Neuerungen:
-    * Die Pfeile für die Sectionwechsel wurden neu positioniert und die
+    * Die Pfeile für die Section-Wechsel wurden neu positioniert und die
     klickbaren Bereiche umfassen nun die volle Fensterhöhe
-    * Für Sectionwechsel, Berechnungen bei Fenstergrößenveränderungen,
+    * Für Section-Wechsel, Berechnungen bei Fenstergrößenveränderungen,
     Touch-Maus-Wechsel, Tab-Wechsel (für Tabbed-Boxes) werden nun Events
     gesendet
       * alle Funktionen die Events senden sind mit _@event_ gekennzeichnet
@@ -84,12 +85,12 @@ _Hint:_ Extensions for _elearn.js_ were moved to their own repositories.
     * Im Template wurde die MathJax-Verlinkung angepasst
 * __0.9.9__:
   * Neuerungen:
-    * Bildergallerien springen bei einem Loop nicht mehr, sondern behalten
+    * Bildergalerien springen bei einem Loop nicht mehr, sondern behalten
     die Bewegungsrichtung bei
     * Stil der Kacheln im Inhaltsverzeichnis angepasst
     * Stil von Slider, Multiboxes und ausklappbaren Bereichen angepasst
   * Fehlerbehebungen:
-    * Fehler der Bildergallerien behoben
+    * Fehler der Bildergalerien behoben
     * Auswahl von Text durch mehrfaches Klicken auf bestimmte Buttons entfernt
 * __0.9.8__:
   * Neuerungen:
@@ -103,7 +104,7 @@ _Hint:_ Extensions for _elearn.js_ were moved to their own repositories.
   * Neuerungen:
     * Einzelne Sections werden automatisch in den Browserverlauf aufgenommen
   * Fehlerbehebungen:
-    * Fehler der Darstellung von Bildergallerien wurde behoben
+    * Fehler der Darstellung von Bildergalerien wurde behoben
     * Fehler bei der Gestensteuerung zum Seitenwechsel wurde behoben
     * Fehler, welche zu nicht funktionsfähigen Multiboxes und
     Mouseover-Informationsblöcken führten, wurden behoben
@@ -130,7 +131,7 @@ _Hint:_ Extensions for _elearn.js_ were moved to their own repositories.
     * Eine Section lässt sich durch ihren Namen öffnen per _showSection(NAME)_
 * __0.9.2__:
   * Fehlerbehebungen:
-    * Gestensteuerung zum Sectionwechsel verbessert
+    * Gestensteuerung zum Section-Wechsel verbessert
     * Bilder werden nicht zwangsläufig auf 100% gestreckt, sondern bekommen dies
     als Maximalbreite
 * __0.9.1__:
@@ -163,15 +164,15 @@ _Hint:_ Extensions for _elearn.js_ were moved to their own repositories.
     _PDF_
     * Menü kann nur noch per Button geöffnet werden
     * Umbenennung einzelner Menüpunkte
-    * Videos stoppen beim Sectionwechsel
-    * Tooltip für Gestensteuerung zum Sectionwechsel
+    * Videos stoppen beim Section-Wechsel
+    * Tooltip für Gestensteuerung zum Section-Wechsel
   * Fehlerbehebungen:
     * Die Inhaltsübersicht der Navigationsleiste ist scrollbar, wenn sie zu
     lang ist
     * isTouchSupported korrekt funktionsfähig
     * Ein Fehler bei der Tastatursteuerung wurde behoben
     * Performanceverbesserung durch weniger Größenberechnungen
-    * Kein Sectionwechsel wenn Element vertikal gescrollt werden sollte
+    * Kein Section-Wechsel wenn Element vertikal gescrollt werden sollte
 * __0.6__:
   * Statische Elemente nicht mehr in der HTML Datei sondern Fest im JavaScript
   * Tooltips für Grundelemente des eLearn.js

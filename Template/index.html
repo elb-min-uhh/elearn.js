@@ -156,6 +156,36 @@
                         <button onclick="eLearnJS.setLanguage('de')">Deutsch/German</button>
                         <button onclick="eLearnJS.setLanguage('en')">Englisch/English</button>
                     </p>
+
+                    <h4 id="eigenebersetzungeneinfgen">Eigene Übersetzungen einfügen</h4>
+                    <p>
+                        Um eigene Übersetzungen hinzuzufügen kann man die Funktion <code>addTranslation</code> oder
+                        <code>addTranslations</code> verwenden. Hier ein Beispiel:
+                    </p>
+                    <pre><code>eLearnJS.addTranslation("de", { "loading": "Lädt..." });
+eLearnJS.addTranslation("en", { "loading": "Loading..." });</code></pre>
+                    <p>oder</p>
+                    <pre><code>eLearnJS.addTranslations({
+    "de": { "loading": "Lädt..." },
+    "en": { "loading": "Loading..." },
+});</code></pre>
+                    <p>
+                        Beide Blöcke tun dasselbe.
+                    </p>
+
+                    <script>
+                        eLearnJS.addTranslation("de", { "loading": "Lädt..." });
+                        eLearnJS.addTranslation("en", { "loading": "Loading..." });
+                    </script>
+
+                    <p>
+                        Beispiel mit <span lang-code="loading"></span> Anzeige (nur während des Ladevorgangs):
+                    </p>
+                    <p>
+                        <button onclick="$('#lang-loading').show(); eLearnJS.setLanguage('de', function() { $('#lang-loading').hide(); })">Deutsch/German</button>
+                        <button onclick="$('#lang-loading').show(); eLearnJS.setLanguage('en', function() { $('#lang-loading').hide(); })">Englisch/English</button>
+                    </p>
+                    <div id="lang-loading" style="display: none;" lang-code="loading"></div>
                 </section>
                 <section name="Abbildungen">
                     <h3>Bilder</h3>

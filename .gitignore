@@ -1,6 +1,6 @@
 *~
-.*
 !/.gitignore
 *.pdf
 *.psd
+.vscode
 Dokumenation/eLearnJS_Dokumentation.html
