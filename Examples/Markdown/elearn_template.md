@@ -214,13 +214,15 @@ immer vernünftig dargestellt werden.
 MathJax kann genutzt werden, um mathematische Formeln darzustellen.
 Hierzu wird die LaTeX Syntax verwendet. Es existieren Blockformeln wie diese
 
+<!--markdown-disable-->
 $$
-M\_i = \\begin{bmatrix}
-       \\frac{5}{6} & \\frac{1}{6} & 0           \\\\[0.3em]
-       \\frac{5}{6} & 0           & \\frac{1}{6} \\\\[0.3em]
-       0           & \\frac{5}{6} & \\frac{1}{6}
-     \\end{bmatrix}\_i
+M_i =   \begin{bmatrix}
+        \frac{5}{6} & \frac{1}{6} & 0           \\[0.3em]
+        \frac{5}{6} & 0           & \frac{1}{6} \\[0.3em]
+        0           & \frac{5}{6} & \frac{1}{6}
+        \end{bmatrix}_i
 $$
+<!--markdown-enable-->
 
 und auch Inline-Formeln wie $P\\left(A=2\\middle|\\frac{A^2}{B}>4\\right)$,
 welche in einem Fließtext angezeigt werden können.
