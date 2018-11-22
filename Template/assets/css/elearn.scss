@@ -1207,12 +1207,10 @@ div.slider-nav {
     position: relative;
     /*border: 3px solid $lightest_grey;
     border-radius: 5px; */
-    background: $light_grey;
 }
 
 div.slider-nav {
     margin: 0;
-    background: $dark_grey;
 }
 
 ul.img-gallery {
@@ -1256,7 +1254,9 @@ ul.img-gallery li>* {
 }
 
 div.slider-nav ul.img-gallery li {
-    border-right: 5px solid $dark_grey;
+    border-right: 7px solid $dark_grey;
+    border-right: 7px solid transparent;
+    margin-right: 0;
     box-sizing: border-box;
     opacity: 0.5;
     overflow: hidden;

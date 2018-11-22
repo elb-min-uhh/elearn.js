@@ -1179,12 +1179,10 @@ div.slider-nav {
   position: relative;
   /*border: 3px solid $lightest_grey;
     border-radius: 5px; */
-  background: #888;
 }
 
 div.slider-nav {
   margin: 0;
-  background: #444;
 }
 
 ul.img-gallery {
@@ -1230,7 +1228,9 @@ ul.img-gallery li > * {
 }
 
 div.slider-nav ul.img-gallery li {
-  border-right: 5px solid #444;
+  border-right: 7px solid #444;
+  border-right: 7px solid transparent;
+  margin-right: 0;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   opacity: 0.5;

@@ -1967,6 +1967,9 @@ eLearnJS.resizeNavigationSliders = function() {
             height: liHeight + "px",
             transform: "translate3d(" + x + "px, 0px, 0px)"
         });
+        ul[0].offsetHeight; // apply css changes
+
+        var liInnerWidth = ul.children('li').innerWidth();
         // Set Image Size
         // Zur korrekten größen Berechnung muss das zurückgesetzt werden.
         ul.children('li').find('img').css({"width":"", "height":""});
@@ -1975,17 +1978,19 @@ eLearnJS.resizeNavigationSliders = function() {
             eLearnJS.getImageSize(img, function(width, height){
                 if(liHeight > 0) {
                     var ratio = width/height;
-                    if(ratio >= 4/3) {
+                    // wide images
+                    if(ratio >= liInnerWidth/liHeight) {
                         var newWidth = (liHeight * ratio);
-                        var leftPx = liWidth/2 - newWidth/2;
+                        var leftPx = (liInnerWidth - newWidth)*.5;
                         img.css("height", "100%");
-                        img.css("width", 75*ratio + "%");
+                        img.css("width", newWidth + "px");
                         img.css("left", leftPx + "px");
                         img.css("top", "");
                     }
-                    else if(ratio < 4/3) {
+                    // small images
+                    else {
                         img.css("width", "100%");
-                        var topPx = liHeight/2 - (liWidth * (1/ratio))/2;
+                        var topPx = (liHeight - (liInnerWidth / ratio))*.5;
                         img.css("height", "");
                         img.css("left", "");
                         img.css("top", topPx + "px");
@@ -2510,8 +2515,6 @@ eLearnJS.hoverInfoSetFullPosition = function(div) {
             }
         }
     }
-
-    console.log(maxWidth, parent.width());
 
     var left = "auto";
     var right = "auto";
