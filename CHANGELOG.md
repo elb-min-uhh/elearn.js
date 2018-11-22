@@ -1,7 +1,7 @@
 ### Changelog
 
 
-* __1.0.10__:
+* __1.0.11__:
   * Fixes:
     * exactly 4:3 images are scaled correctly in the navigation slider of image galleries
 * __1.0.10__:
