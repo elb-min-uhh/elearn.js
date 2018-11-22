@@ -1,5 +1,9 @@
 ### Changelog
 
+
+* __1.0.10__:
+  * Fixes:
+    * exactly 4:3 images are scaled correctly in the navigation slider of image galleries
 * __1.0.10__:
   * Fixes:
     * `hover-info` attribute `data-width` can be used without setting `data-full-width`

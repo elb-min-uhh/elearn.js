@@ -1885,7 +1885,7 @@ eLearnJS.resizeNavigationSliders = function() {
             eLearnJS.getImageSize(img, function(width, height){
                 if(liHeight > 0) {
                     var ratio = width/height;
-                    if(ratio > 4/3) {
+                    if(ratio >= 4/3) {
                         var newWidth = (liHeight * ratio);
                         var leftPx = liWidth/2 - newWidth/2;
                         img.css("height", "100%");
