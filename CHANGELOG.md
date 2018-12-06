@@ -1,6 +1,9 @@
 ### Changelog
 
 * __1.0.11__:
+  * Changed:
+    * On section change the section name is appended as parameter to the URL
+    instead of the section index to make it better human readable
   * Fixes:
     * exactly 4:3 images are scaled correctly in the navigation slider of image galleries
     * images in the navigation slider of image galleries are placed correctly
