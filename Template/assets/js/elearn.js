@@ -834,6 +834,14 @@ eLearnJS.showSection = function(i) {
 };
 
 /**
+ * Return the name of the section given by its index `visSection`.
+ * @param visSection the index of the section to get the name of
+ */
+eLearnJS.getSectionName = function(visSection) {
+    return $('section').eq(visSection).attr("name");
+};
+
+/**
 * Registriert eine Funktion, die ausgeführt wird, nachdem eine neue Section
 * angezeigt wurde.
 *
@@ -908,12 +916,13 @@ eLearnJS.registerAfterSliderResize = function(key, fnc) {
 */
 eLearnJS.pushHistoryState = function() {
     if(!eLearnJS.allShown) {
+        var sectionName = eLearnJS.getSectionName(eLearnJS.visSection);
         try {
             if(window.history.state == undefined
                 || (window.history.state.p != undefined
                     && window.history.state.p != null
-                    && window.history.state.p != eLearnJS.visSection)) {
-                window.history.pushState({p: eLearnJS.visSection}, "State", "?p="+eLearnJS.visSection);
+                && window.history.state.p != sectionName)) {
+                window.history.pushState({ p: eLearnJS.visSection }, "State", "?s=" + encodeURI(sectionName));
             }
         } catch (e) {
 
