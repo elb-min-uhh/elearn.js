@@ -4,3 +4,4 @@
 *.psd
 .vscode
 Dokumenation/eLearnJS_Dokumentation.html
+.DS_Store
