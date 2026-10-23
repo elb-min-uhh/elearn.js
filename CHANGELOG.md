@@ -1,5 +1,10 @@
 ### Changelog
 
+* __1.0.12__:
+  * Changed:
+    * Updated bundled jQuery from 3.1.1 to 3.7.1
+    * Replaced dead rawgit CDN links in the template with jsdelivr
+
 * __1.0.11__:
   * Changed:
     * On section change the section name is appended as parameter to the URL
